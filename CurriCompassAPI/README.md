@@ -1,66 +1,81 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Backend Side for CurriCompass
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Directory Structure
 
-## About Laravel
+```shell
+CurriCompassAPI
+  |_ app
+  |  |_ Console
+  |  |_ Exceptions
+  |  |_ Http
+  |  |  |
+  |  |  |
+  |  |  |_ Controllers
+  |  |  |_ Middleware
+  |  |
+  |  |_ Models
+  |  |_ Providers
+  |   
+  |_ bootstrap
+  |_ config
+  |_ database
+  |  |
+  |  |_ factories
+  |  |_ migrations
+  |  |_ seeders
+  |
+  |_ public
+  |_ resources
+  |  |
+  |  |_ css
+  |  |_ js
+  |  |_ views
+  |
+  |_ routes
+  |_ storage
+  |  |
+  |  |_ app
+  |     |
+  |     |_ public
+  |  
+  |_ tests
+  |  |
+  |  |_ Feature
+  |  |_ Unit
+  |  
+  |_ vendor
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Please Be Guided:
+- app - the main directory.
+- app/Console - stores developer-defined console commands. 
+- app/Exceptions - stores developer-defined exception handlers.
+- app/Http - contains important codes for the MVC architecture.
+- Http/Controllers - contains developer-defined controllers namely in the method of GET, POST, PUT, PATCH, DELETE, OPTION.
+- Http/Middleware - contains developer-defined interceptors before controller is called.
+- app/Models - stores class representation of a table.
+- app/Providers - stores third-party services that requires provider.
+- bootstrap - contains  code for bootstrapping the entire laravel application DO NOT MODIFY THIS PART.
+- config - contains all necessary configuration such as environment variable handler, storage allocation, session, cors, websockets, and all.
+- database - contains database-related operations
+- database/factories - contains code that automatically populates table.
+- database/migrations - contains code that updates database table.
+- database/seeder - contains the logic for generating records that is used by factory.
+- public - contains the bootstrap or entry point of laravel. DO NOT TOUCH THIS PART.
+- resources - contains resources such as css, js, and blade template. We do not need this as we will only focus on REST API.
+- routes - contains codes that is responsible for defining endpoints. WE WILL ONLY MODIFY THE API PART.
+- storage - contains resources that is uploaded by the end-user or the logs done by the server. 
+- tests - contains test scripts necessary for the application.
+- tests/Feature - contains test for Feature testing.
+- tests/Unit - contains tests for Unit testing.
+- vendor - contains all the libraries defined in the composer.json file. DO NOT TOUCH THIS PART.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+***
+.env will contain the environment variables, .env by default will not be present on your code, copy and rename the .env.example to .env, do not touch the .env.example, it serves as a backup.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Feature Testing -  testing of components in the perspective of user as if they are accessing the API, usually a chaining of method, and directly affects database records.
+Unit Testing - testing of individual components to ensure that the module is working properly. This is just a mock test, which does not affect the database records.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+***
+## Nothing follows~
+Any custom implementation of command line interface, directive, middleware, etc. will be added here as to how to use.
