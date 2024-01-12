@@ -25,3 +25,46 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+## Directory Structure
+```bash
+  src
+  |_ app
+  |_ assets
+```
+
+app - holds most of the component codes, routing, and services.
+assets - holds the assets such as image, video, etc.
+
+***
+## Please be guided:
+When you want to apply CSS globally, add the class via **styles.css**
+DO NOT TOUCH main.ts, main.server.ts
+
+app.config.ts - handles most of the dependency injections, you do not need to touch this when you generate component, services, directives, etc. via the CLI.
+
+app.routes.ts - handles the routing configurations. Only include components that requires routing, otherwise if the component merely serves as an abstraction of an element such as registration form, button, do not include.
+
+***
+## When adding a new route:
+open app.routes.ts
+```ts
+import { Routes } from '@angular/router';
+import { YourComponent } from './yourcomponent/yourcomponent.component';
+
+export const routes: Routes = [
+  {
+    path: "your_path", //do not include the /, use the absolute path
+    component: YourComponent, //import the component and pass the Class, do not instantiate.
+  }
+
+];
+```
+for more information, please read [Routing Documentations.]("https://angular.io/guide/routing-overview")
+
+***
+## NOTHING FOLLOWS:
+
+More will be added when necessary.
+
