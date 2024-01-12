@@ -1,5 +1,5 @@
 # Frontend Side for CurriCompass
-
+<STRONG>IGNORE THIS README, DEPRECATED.</STRONG>
 ## Directory Structure
 
 ```shell

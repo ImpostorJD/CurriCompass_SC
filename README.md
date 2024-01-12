@@ -14,7 +14,7 @@ This project entitled CurriCompass is a Capstone project in compliance with the 
 - Powerful tool for defining curriculum
 
 ## Technologies Used
-- ReactJS
+- Angular 17.0.2
 - MaterialUI
 - Laravel v 10.3.0
 - php v 8.1.0
@@ -33,19 +33,19 @@ NOTE: Install both package manager if you want to run both frontend and backend.
 - Just install the node runtime.
 
 #### Run Frontend Client
-- cd into CurriCompassFE via:
+- cd into CurriCompassUI via:
 ```bash
- cd ./CurriCompassFE
+ cd ./CurriCompassUI
 ```
-- Ensure that node_modules are included in /CurriCompassFE, however if it is missing, just run
+- Ensure that node_modules are included in /CurriCompassUI, however if it is missing, just run
 ```shell
 npm install
 ```
 - Run the frontend client using:
 ```shell
-npm run dev
+ng serve -o
 ```
-- It should by default be running on port 5173
+- It should by default be running on port 4200
 
 #### Installing Dependencies
 - If you require dependencies from third party libraries, you may install it with the following command, and it will automatically be added to package.json and package-lock.json. DO NOT MODIFY THIS DIRECTLY as it will break the functionality of the framework.
