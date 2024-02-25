@@ -65,7 +65,7 @@ npm uninstall [dependency]
 - Run the prompt.
 - Select the installation for all users.
 - Do not tick the developer mode, just proceed.
-- If you have XAMPP installed, select C:\XAMPP\php\php.exe, ensure that the php version is 8.1.0 or higher.
+- locate the php.exe e.g.(C:\XAMPP\php\php.exe), and select.
 - skip the proxy url configuration.
 - install.
 
@@ -74,7 +74,7 @@ npm uninstall [dependency]
 ```shell
 cd ./CurriCompassAPI
 ```
-- serve the server
+- given that you already setup the backend, you can freely serve via:
 ```bash
 php artisan serve
 ```
@@ -95,16 +95,13 @@ php artisan serve
 
 ### Backend Development
 - John Daniel Tejero
-- Kevin Ray Guevara
-- Naif Taratingan
 
 ### Frontend Development
 - Jason Wayne Hendricks
-- Carlos Miguel San Andres
-- Gerard Bea
+- Kevin Ray Guevara
+- Naif Taratingan
 
 ### UI/UX
-- Jason Wayne Hendricks
 - Carlos Miguel San Andres
 
 ### Database Designer
