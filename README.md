@@ -107,19 +107,3 @@ cd ./CurriCompassAPI
 php artisan serve
 ```
 - it should be running on port 8000 by default.
-
-## Roles
-
-### Backend Development
-- John Daniel Tejero
-
-### Frontend Development
-- Jason Wayne Hendricks
-- Kevin Ray Guevara
-- Naif Taratingan
-
-### UI/UX
-- Carlos Miguel San Andres
-
-### Database Designer
-- John Daniel Tejero
