@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StudentRecord extends Model
+class Subjects extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'srid';
-
-    protected $fillable = [
-        'year_level',
-        'status'
+    protected $primaryKey = 'subjectid';
+    protected $fillable =[
+        'subjectname',
+        'subjectcode',
     ];
 
     public function subjectsTaken()
@@ -21,8 +20,4 @@ class StudentRecord extends Model
         return $this->hasMany(subjectsTaken::class);
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'userid', 'userid');
-    }
 }
