@@ -12,8 +12,10 @@ class StudentRecord extends Model
     protected $primaryKey = 'srid';
 
     protected $fillable = [
+        'userid',
         'year_level',
-        'status'
+        'status',
+        'studentno'
     ];
 
     public function subjectsTaken()

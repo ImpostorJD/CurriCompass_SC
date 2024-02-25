@@ -13,11 +13,17 @@ class Subjects extends Model
     protected $fillable =[
         'subjectname',
         'subjectcode',
+        'subjectcredits'
     ];
 
     public function subjectsTaken()
     {
         return $this->hasMany(subjectsTaken::class);
+    }
+
+    public function curriculumsubjects()
+    {
+        return $this->hasMany(CurriculumSubjects::class);
     }
 
 }

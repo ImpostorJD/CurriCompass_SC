@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Curriculum extends Model
+{
+    use HasFactory;
+
+    protected $primaryKey = 'cid';
+    protected $fillables = [
+        'programid',
+    ];
+
+    public function program(){
+        return $this->belongsTo(Programs::class, 'programid', 'programid');
+    }
+
+    public function curriculumSubject()
+    {
+        return $this->hasMany(CurriculumSubjects::class);
+    }
+}
