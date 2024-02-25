@@ -108,17 +108,6 @@ php artisan serve
 ```
 - it should be running on port 8000 by default.
 
-## Developers
-**Leader**
-- Jason Wayne Hendricks
-
-**Members**
-1.	Gerard Bea
-2.	Kevin Ray Guevara	
-3.	Carlos Miguel San Andres
-4.	Naif Taratingan
-5.	John Daniel Tejero
-
 ## Roles
 
 ### Backend Development
@@ -134,8 +123,3 @@ php artisan serve
 
 ### Database Designer
 - John Daniel Tejero
-- Kevin Ray Guevara
-
-### Documentation
-- Naif Taratingan
-- Gerard Bea

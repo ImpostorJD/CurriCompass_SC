@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+//TODO: Implement Routers
+//TODO: Add Documentation
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +20,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::controller(RoleController::class)
+    ->prefix('/roles')
+    ->group(function (){
+        Route::get('/', 'index');
+        Route::get('/{id}', 'show');
+        Route::post('/', 'store');
+        Route::delete('/{id}', 'destroy');
+        Route::patch('/{id}', 'update');
+    });
+
+
