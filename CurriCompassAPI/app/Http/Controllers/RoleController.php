@@ -47,9 +47,9 @@ class RoleController extends Controller
      */
     public function show(String $id)
     {
-        $res = Role::where('roleid', '=', $id)->get();
+        $res = Role::where('roleid', '=', $id)->first();
 
-        if(count($res) != 0) {
+        if($res != null) {
             return response()->json([
                 ['status' => 'success'],
                 $res], 200);
@@ -93,13 +93,13 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        $res = Role::where('roleid', '=', $id)->get();
+        $res = Role::where('roleid', '=', $id)->first();
 
-        if(count($res) != 0) {
+        if($res != null) {
             return response()->json([
                 ['status' => 'success'],
-                Role::where('roleid', '=', $id)->delete(),
-                $res], 200);
+                $res->delete()
+            ], 200);
         }
 
         return response()->json([

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subjects;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-//TODO: Complete API Calls
 //TODO: Add Documentation
 //TODO: Add Role-based access
 class SubjectsController extends Controller
@@ -14,7 +15,10 @@ class SubjectsController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            ['status' => 'success'],
+            Subjects::all()
+            ], 200);
     }
 
     /**
@@ -22,7 +26,23 @@ class SubjectsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'subjectname' => ['required', 'string'],
+            'subjectcode' => ['required', 'string'],
+            'subjectcredits' => ['required', 'int'],
+        ]);
+
+        if($validate->fails()){
+            return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
+        }
+        return response()->json([
+            ['status' => 'resource created successfully'],
+            Subjects::create([
+                'subjectname' => $request['subjectname'],
+                'subjectcode' => $request['subjectcode'],
+                'subjectcredits' => $request['subjectcredits'],
+            ])
+        ], 201);
     }
 
     /**
@@ -30,7 +50,17 @@ class SubjectsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $res = Subjects::where('subjectid', '=', $id)->first();
+
+        if($res != null) {
+            return response()->json([
+                ['status' => 'success'],
+                $res], 200);
+        }
+        return response()->json([
+            ['status' => 'not found'],
+            ], 404);
+
     }
 
     /**
@@ -38,7 +68,31 @@ class SubjectsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'subjectname' => ['required', 'string'],
+            'subjectcode' => ['required', 'string'],
+            'subjectcredits' => ['required', 'int'],
+        ]);
+
+        if($validate->fails()){
+            return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
+        }
+
+        $res = Subjects::where('subjectid', '=', $id)->first();
+
+        if($res != null) {
+            return response()->json([
+                ['status' => 'updated'],
+                $res->update([
+                    'subjectname' => $request['subjectname'],
+                    'subjectcode' => $request['subjectcode'],
+                    'subjectcredits' => $request['subjectcredits'],
+                ])
+            ], 200);
+        }
+        return response()->json([
+            ['status' => 'not found'],
+            ], 404);
     }
 
     /**
@@ -46,6 +100,16 @@ class SubjectsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $res = Subjects::where('subjectid', '=', $id)->first();
+
+        if($res != null) {
+            return response()->json([
+                ['status' => 'updated'],
+                $res->delete(),
+            ], 200);
+        }
+        return response()->json([
+            ['status' => 'not found'],
+            ], 404);
     }
 }

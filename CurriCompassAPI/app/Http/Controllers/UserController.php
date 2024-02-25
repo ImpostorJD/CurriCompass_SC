@@ -5,9 +5,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 //TODO: Add Documentation
-//TODO: Implement all necessary methods
 //TODO: Add Role-based access
 class UserController extends Controller
 {
@@ -40,33 +40,38 @@ class UserController extends Controller
                     'token' => $token,
                     'type' => 'bearer',
                 ]
-            ]);
-
+        ]);
     }
 
     public function register(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+        $validate = Validator::make( $request->all(), [
+            ['userfname' => ['required','string','max:255']],
+            ['userlname' => ['required','string','max:255']],
+            ['usermiddle' => ['required','string','max:255']],
+            ['email' => ['required','string','email','max:255','unique:users']],
+            ['password' => ['required','string','min:6']],
+            ['roleid' => ['required','integer']],
         ]);
+
+        if($validate->fails()){
+            return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
+        }
 
         $user = User::create([
-            'name' => $request->name,
+            'userfname' => $request->userfname,
+            'userlname' => $request->userlname,
+            'usermiddle' => $request->usermiddle,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]);
+            'roleid' => $request->roleid,
 
-        $token = Auth::login($user);
+        ]);
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+            $user
+        ], 201);
+
     }
 
     public function logout()
@@ -90,4 +95,45 @@ class UserController extends Controller
         ]);
     }
 
+    public function show(Request $request, String $id)
+    {
+        $res = User::where('userid', '=', $id)->first();
+
+        if($res != null) {
+            return response()->json([
+                ['status' => 'success'],
+                $res], 200);
+        }
+        return response()->json([
+            ['status' => 'not found'],
+            ], 404);
+    }
+
+    public function destroy(Request $request, String $id)
+    {
+        $res = User::where('userid', '=', $id)->first();
+
+        if($res != null) {
+            return response()->json([
+                ['status' => 'success'],
+                $res->delete()
+            ], 200);
+        }
+
+        return response()->json([
+            ['status' => 'not found'],
+            ], 404);
+    }
+
+    public function update(Request $request, String $id)
+    {
+        $request->validate([
+            'userfname' => 'required|string|max:255',
+            'userlname' => 'required|string|max:255',
+            'usermiddle' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+            'roleid' => 'required|integer',
+        ]);
+    }
 }
