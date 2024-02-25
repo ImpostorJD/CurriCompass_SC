@@ -59,7 +59,15 @@ npm uninstall [dependency]
 ```
 
 ### For Backend Developers
+#### Setup PHP CLI:
+1. Extract php 8.1.0 zip to C:\Program Files
+2. Open windows task bar, and search for environment variables.
+3. Click on **Environment Variables** button at the very bottom.
+4. Locate the variable **PATH**, then double click.
+5. Click on **New**, then **Browse**.
+6. Locate the directory containing **php-cgi.exe**, then click ok.
 
+#### Setting Up Composer
 [![Composer - Installation](https://img.shields.io/badge/Composer-Installation-d7e2f3)](https://getcomposer.org/Composer-Setup.exe)
 - Click the badge above to download the executable file of Composer.
 - Run the prompt.
@@ -69,10 +77,30 @@ npm uninstall [dependency]
 - skip the proxy url configuration.
 - install.
 
+#### PostgreSQL Installation:
+
+[![PostgreSQL - Installation](https://img.shields.io/badge/PostgreSQL-Installation-4d91ff)](https://sbp.enterprisedb.com/getfile.jsp?fileid=1258893)
+
+- Click the badge above to download the setup executable file of PostgreSQL.
+- Run the application.
+- Leave port, username, and host as default.
+- Setup your password.
+- install.
+
+#### Configure .env file
+- copy and paste .env.example in the same directory where it is located.
+- rename the copied file as **.env**.
+- configure the key-value pairs to match your postgreSQL configuration (in most cases only the password is required).
+
 #### Run the Backend Client
 - cd into CurriCompassAPI
 ```shell
 cd ./CurriCompassAPI
+```
+- run the initializer CLI command via
+
+```shell
+  php artisan app:init-db
 ```
 - given that you already setup the backend, you can freely serve via:
 ```bash

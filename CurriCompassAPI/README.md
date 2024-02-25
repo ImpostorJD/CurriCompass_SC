@@ -77,13 +77,6 @@ Feature Testing -  testing of components in the perspective of user as if they a
 Unit Testing - testing of individual components to ensure that the module is working properly. This is just a mock test, which does not affect the database records.
 
 ***
-## Setup PHP CLI:
-1. Extract php 8.1.0 zip to C:\Program Files
-2. Open windows task bar, and search for environment variables.
-3. Click on **Environment Variables** button at the very bottom.
-4. Locate the variable **PATH**, then double click.
-5. Click on **New**, then **Browse**.
-6. Locate the directory containing **php-cgi.exe**, then click ok.
 
 
 ## Nothing follows~
