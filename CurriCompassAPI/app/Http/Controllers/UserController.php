@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
+//TODO: implement necessary methods
 //TODO: Add Documentation
 //TODO: Add Role-based access
 class UserController extends Controller
@@ -50,7 +51,11 @@ class UserController extends Controller
             ['usermiddle' => ['required','string','max:255']],
             ['email' => ['required','string','email','max:255','unique:users']],
             ['password' => ['required','string','min:6']],
-            ['roleid' => ['required','integer']],
+            ['roles' => ['required','array', function($attribute, $value, $validator){
+                foreach ($value as $key => $subject) {
+                    $validator->addRule("{$attribute}.{$key}.roleid", 'required|integer');
+                }
+            }]],
         ]);
 
         if($validate->fails()){
@@ -63,9 +68,13 @@ class UserController extends Controller
             'usermiddle' => $request->usermiddle,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'roleid' => $request->roleid,
-
         ]);
+
+        foreach($request->roles as $role) {
+            $user->user_roles()->attach($role);
+        }
+        $user->user_roles()->attach();
+
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
@@ -125,6 +134,7 @@ class UserController extends Controller
             ], 404);
     }
 
+    //TODO: Implement update
     public function update(Request $request, String $id)
     {
         $request->validate([
@@ -133,7 +143,6 @@ class UserController extends Controller
             'usermiddle' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'roleid' => 'required|integer',
         ]);
     }
 }

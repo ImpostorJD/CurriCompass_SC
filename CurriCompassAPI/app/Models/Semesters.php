@@ -12,4 +12,8 @@ class Semesters extends Model
     {
         return $this->hasOne(SubjectsTaken::class, 'taken_at', 'semid');
     }
+
+    public function curriculum_subjects(){
+        return $this->hasMany(CurriculumSubjects::class, 'semid', 'semid');
+    }
 }

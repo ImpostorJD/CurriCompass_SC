@@ -23,4 +23,8 @@ class CurriculumSubjects extends Model
         return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
     }
 
+    public function semesters(){
+        return $this->belongsTo(Semesters::class, 'semid', 'semid');
+    }
+
 }
