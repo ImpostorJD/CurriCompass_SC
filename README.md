@@ -28,9 +28,14 @@ NOTE: Install both package manager if you want to run both frontend and backend.
 ### For Frontend Developers
 
 [![NodeJS - Installation](https://img.shields.io/badge/NodeJS-Installation-2ea44f)](https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi)
-- Click the badge above to download the executable file of NodeJS
-- Run the prompt.
-- Just install the node runtime.
+1. Click the badge above to download the executable file of NodeJS
+2. Run the prompt.
+3. Just install the node runtime.
+4. Open windows task bar and search for environment variables.
+5. Locate PATH, double click.
+6. Locate nodeJS in the PATH, if not found, proceed to the next step.
+7. Click on Add, then Browse, then look for the file directory of nodeJS.
+8. Close the environment variable.
 
 #### Run Frontend Client
 - cd into CurriCompassUI via:
