@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+//TODO: include curriculum
 class StudentRecord extends Model
 {
     use HasFactory;

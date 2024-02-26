@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Semesters extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'semid';
+
+    protected $fillables = [
+        'semdesc'
+    ];
+
     public function subjects_taken()
     {
         return $this->hasOne(SubjectsTaken::class, 'taken_at', 'semid');

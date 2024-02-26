@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 //TODO: implement necessary methods
+//FIXME: Fix adding/editing/deleting roles of users
 //TODO: Add Documentation
 //TODO: Add Role-based access
 class UserController extends Controller
@@ -17,6 +18,7 @@ class UserController extends Controller
         $this->middleware('auth:api', ['except' => ['login']]);
     }
 
+    //Public Methods
     public function login(Request $request)
     {
         $request->validate([
@@ -134,7 +136,7 @@ class UserController extends Controller
             ], 404);
     }
 
-    //TODO: Implement update
+    //FIXME: Implement update
     public function update(Request $request, String $id)
     {
         $request->validate([

@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-//TODO: Test the API
 //TODO: Implement ROLE BASED ACCESS
+//TODO: Test API
+//TODO: Register to api.php
 //TODO: Add documentation
 class CurriculumController extends Controller
 {
@@ -18,7 +19,7 @@ class CurriculumController extends Controller
             ['status' => "success"],
             Curriculum::all()
                 ->with(['curriculum_subjects', function(Builder $query){
-                    return $query
+                    $query
                         ->with('subjects')
                         ->with('semesters')
                         ->get();
@@ -30,17 +31,17 @@ class CurriculumController extends Controller
     public function show(Request $request, String $id){
         $curriculum = Curriculum::where('cid', $id)
             ->with(['curriculum_subjects', function(Builder $query) {
-                return $query
-                ->with('subjects')
-                ->with('semesters')
-                ->get();
+                $query
+                    ->with('subjects')
+                    ->with('semesters')
+                    ->get();
             }])
             ->first();
 
         if ($curriculum != null) {
            return response()->json([
-            ['status' => 'success'],
-            $curriculum
+                ['status' => 'success'],
+                $curriculum
            ], 200);
         }
 
@@ -129,11 +130,9 @@ class CurriculumController extends Controller
                 switch ($action) {
                     case 'update':
                         $curriculum->curriculum_subjects()->updateExistingPivot($subjectId, ['semid' => $semesterId]);
-                        $subjectIdsToUpdate[] = $subjectId;
                         break;
                     case 'delete':
                         $curriculum->curriculum_subjects()->detach($subjectId);
-                        $subjectIdsToDelete[] = $subjectId;
                         break;
                     default:
                         return response()->json(['status' => 'invalid_action'], 400);
