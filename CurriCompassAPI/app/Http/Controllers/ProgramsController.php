@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 //TODO: Implement ROLE BASED ACCESS
 //TODO: Test API
-//TODO: Register to api.php
 //TODO: Add documentation
 class ProgramsController extends Controller
 {

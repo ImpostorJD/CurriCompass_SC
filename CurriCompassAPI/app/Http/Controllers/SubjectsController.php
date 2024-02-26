@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 //TODO: Add Documentation
 //TODO: Test API
-//TODO: Register to api.php
 //TODO: Add Role-based access
 class SubjectsController extends Controller
 {
