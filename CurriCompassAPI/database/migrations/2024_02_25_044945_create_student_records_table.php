@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-//TODO: include curriculum
 return new class extends Migration
 {
     /**
@@ -18,11 +17,16 @@ return new class extends Migration
             $table->string('year_level');
             $table->string('status');
             $table->unsignedBigInteger('userid');
+            $table->unsignedBigInteger('cid');
             $table->timestamps();
             $table->foreign('userid')
                 ->references('userid')
                 ->on('users')
                 ->unique()
+                ->onDelete('cascade');
+            $table->foreign('cid')
+                ->references('cid')
+                ->on('curricula')
                 ->onDelete('cascade');
         });
     }

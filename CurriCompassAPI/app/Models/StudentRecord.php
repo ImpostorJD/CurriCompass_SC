@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-//TODO: include curriculum
 class StudentRecord extends Model
 {
     use HasFactory;
@@ -16,7 +15,8 @@ class StudentRecord extends Model
         'userid',
         'year_level',
         'status',
-        'studentno'
+        'studentno',
+        'cid'
     ];
 
     public function subjectsTaken()
@@ -27,5 +27,9 @@ class StudentRecord extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'userid', 'userid');
+    }
+
+    public function curriculum(){
+        return $this->belongsTo(Curriculum::class, 'cid', 'cid');
     }
 }

@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-//FIXME: Include curriculum
 //TODO: Implement ROLE BASED ACCESS
 //TODO: Test API
 //TODO: Register to api.php
@@ -23,6 +22,9 @@ class StudentRecordsController extends Controller
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
                         ->with('semesters')
+                        ->with(['curriculum'], function(Builder $query){
+                          $query->with('program')->get();
+                        })
                         ->get();
                 }])->get();
             }])->get()
@@ -37,6 +39,9 @@ class StudentRecordsController extends Controller
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
                         ->with('semesters')
+                        ->with(['curriculum'], function(Builder $query){
+                            $query->with('program')->get();
+                          })
                         ->get();
                 }])->get();
             }])->first();
@@ -70,6 +75,9 @@ class StudentRecordsController extends Controller
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
                         ->with('semesters')
+                        ->with(['curriculum'], function(Builder $query){
+                            $query->with('program')->get();
+                          })
                         ->get();
                 }])->get();
             }])->first();
@@ -121,6 +129,9 @@ class StudentRecordsController extends Controller
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
                         ->with('semesters')
+                        ->with(['curriculum'], function(Builder $query){
+                            $query->with('program')->get();
+                          })
                         ->get();
                 }])->get();
             }])->first();
@@ -208,6 +219,9 @@ class StudentRecordsController extends Controller
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
                         ->with('semesters')
+                        ->with(['curriculum'], function(Builder $query){
+                            $query->with('program')->get();
+                          })
                         ->get();
                 }])->get();
             }])->first();
