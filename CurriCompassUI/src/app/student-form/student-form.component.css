@@ -1,0 +1,127 @@
+header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 25px;
+    height: 128px;
+}
+
+ul{
+    color:#ffffff;
+}
+
+header h1	 {
+    color:#ffffff;
+    font-family:Verdana;
+    text-align: center;
+    font-size: 16px;
+    padding-right: 50px;
+}
+
+nav	 {
+    text-align: left;
+    font-size: 1.5em;
+
+}
+
+nav a {
+    display: block;
+    padding: 16px;
+    text-decoration: none;
+    float: left;
+    width: max-content;
+}
+
+nav a:link	{
+        color: #333f02;
+}
+
+nav a:hover	{
+        color: #092a0f;
+        background-color: #092a0f;
+        color: white;
+}
+
+nav ul{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+}
+
+nav li {
+    padding-top: .5em;
+    padding-bottom: .5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 100%;
+}
+
+.wrapper {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #0cb557;
+    position: fixed;
+    height: 100%;
+    overflow: hidden;
+}
+
+.twrapper{
+    display: block;
+    border-bottom: #000000;
+}
+
+.twrapper nav{
+    text-align: right;
+    padding-right: 50px;
+    padding-top: 10px;
+    /*para lang makita ko kung saan sakop*/
+}
+
+.addstudent{
+    text-align: left;
+    margin-left: 25%;
+    margin-right: 35%;
+    padding-bottom: 50px;
+    background-color: #e8eae8;
+}
+
+.addstudent form{
+    text-align: left;
+    margin-left: 20px;
+    display: inline-block;
+    list-style: none;
+}
+
+.float-child {
+    width: 50%;
+    float: left;
+    padding: 20px;
+}
+.float-child1 {
+    width: 50%;
+    float: left;
+    padding: 20px;
+}
+
+#float-container {
+    border: 3px solid #fff;
+    padding: 20px;
+    display: fixed;
+}
+
+.addstudent h1{
+    padding-left: 40px;
+}
+
+button{
+    padding-left: 20px;
+}
+
+* {
+    border: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
