@@ -12,7 +12,6 @@ import { catchError } from 'rxjs/operators';
  * @param next
  * @returns
  */
-
 export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
   return next(req).pipe(
     catchError((error: HttpEvent<any>) => {
