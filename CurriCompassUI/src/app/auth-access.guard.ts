@@ -5,6 +5,7 @@ import { inject } from '@angular/core';
  * 3/1/2024
  * Middleware to intercept requests to validate login context.
  *
+ * Usage: { path: '</url path>', component: </Component>, canActivate: AuthGuard(["roles_array"])},
  * TODO: Configure error handling
  * @author John Daniel Tejero
  */
