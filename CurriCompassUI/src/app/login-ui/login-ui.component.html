@@ -1,23 +1,23 @@
-<div class="container">
-  <div class="overlay">
-    <div class="overlay-screen"></div>
-    <img class="overlay-bg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGMAUzLMxISroI1w4J_VN6K4bkkX5l8wu6-KTZgRKWWA&s"/>
+<div class="relative w-full h-full flex items-center flex-col">
+  <img class="w-full h-full absolute -z-10" src="https://www.finduniversity.ph/_resources/business/9623/bu-377.JPG"/>
+  <div class="bg-emerald-600 h-full w-full bg-opacity-[50%] absolute -z-10"></div>
+  <div class="w-full flex items-center">
+    <img class="h-40" src="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png">
+    <span class="text-green-900 text-[2rem] font-bold font-poppins">CurriCompass</span>
   </div>
-  <div class="header">
-    <img class="logo" src="https://www.adaptivewfs.com/wp-content/uploads/2020/07/logo-placeholder-image.png">
-    <span class="header-title">CurriCompass</span>
-  </div>
-  <form class="form-container">
-    <div class="input-container">
-        <label for="studentNo">Student No.</label>
-      <input type="text" class="form-control float" id="studentNo">
+  <form class="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border-0 lg:h-[50vh] lg:w-[30vw] h-[80vh] w-[90vw] xl:p-[3rem] sm:p-20 p-6 flex flex-col justify-around">
+    <div class="relative h-[3rem] cursor-pointer after:absolute after:w-full after:h-full after:z-20" (click)="toggleFormActive($event, 'email')">
+      <input type="text" class="idle text-slate-500 cursor-pointer focus:outline-0"
+      (input)="makeFormActive($event, 'email')">
+      <label for="email">Email</label>
+    </div>
+    <div class="relative h-[3rem] after:absolute after:w-full after:h-full after:z-20" (click)="toggleFormActive($event, 'password')">
+
+      <input type="password" class="idle text-slate-500 cursor-pointer focus:outline-0"
+      (input)="makeFormActive($event, 'password')">
+      <label for="password">Password</label>
 
     </div>
-    <div class="input-container">
-        <label for="password">Password</label>
-      <input type="password" class="form-control float" id="password">
-
-    </div>
-    <button class="login-btn-submit" (click)="onLoginSuccess()">SIGN IN</button>
+    <button class="bg-emerald-600 py-3 w-full rounded-md text-white hover:bg-emerald-700 transition-all" (click)="onLoginSuccess()">SIGN IN</button>
   </form>
 </div>

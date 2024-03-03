@@ -15,7 +15,7 @@ This project entitled CurriCompass is a Capstone project in compliance with the 
 
 ## Technologies Used
 - Angular 17.0.2
-- MaterialUI
+- TailwindCSS
 - Laravel v 10.3.0
 - php v 8.1.0
 - Visual Studio Code

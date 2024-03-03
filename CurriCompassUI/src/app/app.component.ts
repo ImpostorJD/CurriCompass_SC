@@ -4,11 +4,15 @@ import { RouterOutlet } from '@angular/router';
 import { LoginUiComponent } from "./login-ui/login-ui.component";
 import { StudentFormComponent } from "./student-form/student-form.component";
 
-
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet,LoginUiComponent,StudentFormComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    LoginUiComponent,
+    StudentFormComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
