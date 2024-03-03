@@ -3,6 +3,8 @@ import { Component } from "@angular/core";
 import { RouterOutlet } from '@angular/router';
 import { LoginUiComponent } from "./login-ui/login-ui.component";
 import { StudentFormComponent } from "./student-form/student-form.component";
+import { NavigationComponent } from "./components/navigation/navigation.component";
+import { BaselayoutComponent } from "./components/baselayout/baselayout.component";
 
 @Component({
   selector: 'app-root',
@@ -12,6 +14,8 @@ import { StudentFormComponent } from "./student-form/student-form.component";
     RouterOutlet,
     LoginUiComponent,
     StudentFormComponent,
+    NavigationComponent,
+    BaselayoutComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

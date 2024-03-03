@@ -64,6 +64,14 @@ export const routes: Routes = [
 for more information, please read [Routing Documentations.]("https://angular.io/guide/routing-overview")
 
 ***
+
+## Adding icons to your layouts:
+If you want to add icons, you can utilize the material-design-icons and material-symbols installed:
+
+```html
+<i class = "material-symbols">settings</i>
+```
+for material symbols, please refer to [material-font]("https://fonts.google.com/icons?selected=Material+Symbols+Outlined:settings:FILL@0;wght@400;GRAD@0;opsz@24")
 ## NOTHING FOLLOWS:
 
 More will be added when necessary.

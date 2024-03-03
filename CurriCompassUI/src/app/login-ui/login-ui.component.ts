@@ -11,8 +11,9 @@ import { Router } from '@angular/router';
 export class LoginUiComponent {
     constructor(private router: Router){}
     onLoginSuccess(){
-      this.router.navigate(['/Student'])
+      this.router.navigate(['/student'])
     }
+
     makeFormActive(event: any, fieldName: string): void {
       // if (fieldName === 'username') {
       //   this.usernameErrorMessage = '';
