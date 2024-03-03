@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('curricula', function (Blueprint $table) {
             $table->id('cid');
             $table->unsignedBigInteger('programid');
+            $table->text('specialization')->unique();
             $table->timestamps();
             $table->foreign('programid')
                 ->references('programid')

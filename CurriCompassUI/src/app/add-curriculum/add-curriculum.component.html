@@ -1,0 +1,79 @@
+<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
+  <h1 class="font-bold font-sans text-[2rem] uppercase">Add Curriculum</h1>
+  <div class="flex lg:flex-row gap-2 flex-col bg-white mx-1 xl:mx-48 lg:mx-28">
+    <div class="border-slate-400 border-1 w-full p-5 border-[1px] rounded-sm shadow-lg">
+      <div class="flex xl:flex-row flex-col justify-center gap-2">
+        <div class="w-full flex flex-col">
+          <span>Program</span>
+          <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4"></select>
+        </div>
+        <div class="w-full flex flex-col">
+          <span>Specialization</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4"/>
+        </div>
+        <div class="w-full flex flex-col">
+          <span>Specialization Code</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class=" border-slate-400 border-[1px] rounded-md mx-1 xl:mx-48 lg:mx-28 md:overflow-y-auto md:h-[25rem] min-h-[25rem] h-auto bg-white">
+    <table class="table-auto w-full border-collapse border border-slate-300">
+      <thead  class="bg-slate-200">
+        <tr class="flex flex-row">
+          <th class="w-[30%] py-2">
+            Course Code
+          </th>
+          <th class="w-[30%] py-2">
+            Semester
+          </th>
+          <th class="flex-auto py-2">
+            Pre-requisites
+          </th>
+          <th class="flex-auto flex justify-center items-center">
+            <i class="material-symbols-outlined">add</i>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="flex flex-col">
+        <tr class="flex flex-row bg-white">
+          <td class="w-[30%] px-1">
+            <select class="w-full py-2 px-4">
+            </select>
+          </td>
+          <td class="w-[30%] px-1">
+            <select class="w-full py-2 px-4">
+            </select>
+          </td>
+          <td class="flex-auto px-1">
+            <button class="w-full flex flex-row gap-1 justify-center py-2 px-4 border-slate-300 border-[1px]">
+              <i class="material-symbols-outlined">add</i>
+              <span>Add Pre-requisites</span>
+            </button>
+          </td>
+          <td class="flex-auto flex justify-center items-center px-1">
+            <i class="material-symbols-outlined">delete</i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="flex flex-row justify-center gap-2 py-2 mx-1 xl:mx-48 lg:mx-28">
+    <button class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+      <i class="material-symbols-outlined">
+        cancel
+      </i>
+      <span class="hidden lg:block">
+        Cancel
+      </span>
+    </button>
+    <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
+      <i class="material-symbols-outlined">add</i>
+      <span class="hidden lg:block">
+        Add Curriculum
+      </span>
+    </button>
+  </div>
+</div>
+
