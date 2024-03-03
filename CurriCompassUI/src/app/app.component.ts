@@ -12,9 +12,6 @@ import { BaselayoutComponent } from "./components/baselayout/baselayout.componen
   imports: [
     CommonModule,
     RouterOutlet,
-    LoginUiComponent,
-    StudentFormComponent,
-    NavigationComponent,
     BaselayoutComponent
   ],
   templateUrl: './app.component.html',
