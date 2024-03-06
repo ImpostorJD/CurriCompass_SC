@@ -29,8 +29,8 @@
 
         <a
           [routerLink]="button.path"
-           class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl relative before:absolute before:h-full before:-z-10 before:w-full hover:before:bg-green-600"
-           [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl': panelToggled, 'justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
+           class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl relative before:absolute before:h-full before:-z-10 hover:before:bg-green-600"
+           [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl before:w-full': panelToggled, 'justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
            routerLinkActive="before:bg-green-600 text-white"
            [routerLinkActiveOptions]="{exact: true}"
         >
