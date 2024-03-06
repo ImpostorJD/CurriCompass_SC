@@ -68,6 +68,13 @@ export class NavigationComponent {
       path: "/courses"
     },
     {
+      name : "School Calendar",
+      allowedRoles: [],
+      icon_type: "material-symbols-outlined",
+      icon: "event_note",
+      path: "/school-calendar"
+    },
+    {
       name : "Consulatation",
       allowedRoles: [],
       icon_type: "material-symbols-outlined",
