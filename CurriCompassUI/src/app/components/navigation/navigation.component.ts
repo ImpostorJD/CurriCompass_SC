@@ -40,6 +40,13 @@ export class NavigationComponent {
       path: "/users"
     },
     {
+      name : "Student Records",
+      allowedRoles: [],
+      icon_type: "material-symbols-outlined",
+      icon: "person_book",
+      path: "/students"
+    },
+    {
       name : "Curriculum",
       allowedRoles: [],
       icon_type: "material-symbols-outlined",
@@ -67,13 +74,6 @@ export class NavigationComponent {
       icon: "explore",
       path: "/consulatation"
     },
-    {
-      name : "Student Records",
-      allowedRoles: [],
-      icon_type: "material-symbols-outlined",
-      icon: "person_book",
-      path: "/students"
-    },
 
   ];
 
@@ -84,7 +84,7 @@ export class NavigationComponent {
   ngDoCheck(){
     if (!this.initialCheckDone && this.document.defaultView && this.document.defaultView.innerWidth < 768) {
       this.panelToggled = false;
-      this.initialCheckDone = true; // Set the flag to true after the initial check
+      this.initialCheckDone = true;
     }else{
       this.initialCheckDone = false;
     }
