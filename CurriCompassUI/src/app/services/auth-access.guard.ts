@@ -7,7 +7,6 @@ import { inject } from '@angular/core';
  *
  * Usage: { path: '</url path>', component: </Component>, canActivate: AuthGuard(["roles_array"])},
  * TODO: Configure error handling
- * @author John Daniel Tejero
  */
 
 export function AuthGuard(allowedRoles: string[]): CanActivateFn {

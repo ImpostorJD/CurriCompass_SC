@@ -1,20 +1,53 @@
-<nav class="w-[15rem] h-full flex flex-col relative">
+<nav class="h-full flex flex-col relative transition-all md:z-0"
+  [ngClass]="{'md:w-[18rem] z-20': panelToggled, 'md:w-[9rem] z-0': !panelToggled}">
   <div class="absolute w-full h-full -z-10">
     <div class="relative w-full h-full">
-      <img src="../../../assets/bu-entraince.jpeg" class="w-[200vw] h-full absolute inset-0 object-cover"/>
+      <img src="../../../assets/bu-entraince.jpeg" class="w-[200vw] h-full absolute inset-0 object-cover md:block hidden"/>
     </div>
   </div>
-  <div class="bg-green-600 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-60 flex flex-row justify-evenly items-center w-full h-[5rem] border-b-slate-300 border-b-[0.17rem] rounded-b-md">
-    <i class="material-symbols-outlined text-white">menu</i>
+  <div class="px-4 bg-green-700 md:bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 flex flex-row justify-evenly items-center w-full h-[10%] border-b-slate-300 border-b-[0.17rem] rounded-b-md">
+    <i class="material-symbols-outlined text-white cursor-pointer hover:bg-green-600 p-3 rounded-md"(click)="collapse()">
+      @if(panelToggled) {
+        arrow_back
+      }@else{
+        menu
+      }
+    </i>
     <img src = "../../../assets/CompassPreAdvisingNoBgAlt.png" class="h-[80%]"/>
-    <span class="font-poppins text-white font-bold">CurriCompass</span>
+    <span class="font-poppins text-white font-bold"
+      [ngClass]="{'md:hidden': !panelToggled, 'md:inline': panelToggled}">
+    CurriCompass
+    </span>
   </div>
-  <aside class="bg-green-600 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-60 flex-auto rounded-t-md flex flex-col p-1">
-    <div class="flex-auto">
+  <aside
+    class="md:static md:before:hidden before:block bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 md:flex-auto rounded-t-md flex flex-col transition-all absolute h-[90%] bottom-0 w-full z-30"
+    [ngClass]="{'right-0 before:absolute before:bg-black before:bg-opacity-35 before:h-full before:w-[100vw] before:-z-20': panelToggled, 'right-[100%] before:hidden': !panelToggled}"
+  >
+    <div class="flex-auto text-white flex flex-col overflow-auto z-30">
+      <!--TODO: add filter on buttons based on roles-->
+      @for (button of buttons; track $index) {
+
+        <a
+          [routerLink]="button.path"
+           class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl relative before:absolute before:h-full before:-z-10 before:w-full hover:before:bg-green-600"
+           [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl': panelToggled, 'justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
+           routerLinkActive="before:bg-green-600 text-white"
+           [routerLinkActiveOptions]="{exact: true}"
+        >
+          <i class="{{button.icon_type}}">{{button.icon}}</i>
+          <span
+            [ngClass]="{'inline': panelToggled, 'hidden': !panelToggled}"
+          >{{button.name}}</span>
+        </a>
+      }
     </div>
-    <button class="bg-green-600 text-white flex h-10 justify-center items-center hover:bg-green-800 py-6 rounded-md border-emerald-800 hover:border-green-800 transition-all shadow-md shadow-green-950">
-      <i class="material-symbols-outlined mr-[1rem]">logout</i>
-      <span>Sign out</span>
+    <button
+      class="m-1 bg-green-600 text-white flex h-10 justify-center items-center hover:bg-green-800 rounded-md border-emerald-800 hover:border-green-800 transition-all shadow-md shadow-green-950"
+      (click)="logout()">
+      <i class="material-symbols-outlined">logout</i>
+      <span class="ml-1"
+        [ngClass]="{'inline': panelToggled, 'hidden': !panelToggled}"
+      >Sign out</span>
     </button>
   </aside>
 </nav>

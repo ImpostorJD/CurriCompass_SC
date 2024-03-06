@@ -7,7 +7,6 @@ import { catchError } from 'rxjs/operators';
  * To be provided as an interceptor to redirect the user to appropriate error page.
  * TODO: Implement interceptors
  *
- * @author John Daniel Tejero
  * @param req
  * @param next
  * @returns

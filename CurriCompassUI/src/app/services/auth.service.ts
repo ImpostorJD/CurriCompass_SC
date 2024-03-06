@@ -7,7 +7,6 @@ import { HttpReqHandlerService } from './http-req-handler.service';
  * 3/1/2024
  *
  * Service for handling authentication context for stateless REST API services
- * @author John Daniel Tejero
  */
 @Injectable({
   providedIn: 'root'
