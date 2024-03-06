@@ -1,4 +1,63 @@
-<!--TODO: ADD Student Listing UI-->
-<div class="bg-slate-200 h-full w-full">
-
+<!--Guide if may want ibahin -kvn-->
+<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
+  <h1 class="font-bold font-sans text-2xl uppercase">Students Listing</h1>
+  <div class="flex lg:flex-row gap-2 flex-col bg-white mx-1 xl:mx-48 lg:mx-28">
+    <!-- Add relevant content for students listing -->
+  </div>
+  <div class=" border-slate-400 border-[1px] rounded-md mx-1 xl:mx-48 lg:mx-28 md:overflow-y-auto md:h-[25rem] min-h-[25rem] h-auto bg-white">
+    <!-- Add a table to display students -->
+    <table class="table-auto w-full border-collapse border border-slate-300">
+      <thead class="bg-slate-200">
+        <tr class="flex flex-row">
+          <th class="w-[20%] py-2">
+            Student ID
+          </th>
+          <th class="w-[20%] py-2">
+            Name
+          </th>
+          <th class="w-[20%] py-2">
+            Course
+          </th>
+          <th class="w-[20%] py-2">
+            Year Level
+          </th>
+          <th class="flex-auto py-2">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="flex flex-col">
+        <!--students information -->
+        <tr class="flex flex-row bg-white">
+          <td class="w-[20%] px-1">
+            <!-- Display student ID -->
+          </td>
+          <td class="w-[20%] px-1">
+            <!-- Display student name -->
+          </td>
+          <td class="w-[20%] px-1">
+            <!-- Display student course -->
+          </td>
+          <td class="w-[20%] px-1">
+            <!-- Display student year level -->
+          </td>
+          <td class="flex-auto flex justify-center items-center px-1">
+            <!-- Add icon for actions, e.g., view student details -->
+            <button class="bg-blue-500 text-white px-3 py-1 rounded-md">View Details</button>
+          </td>
+        </tr>
+        <!-- Ulitin niyo lang code para mag add ng row structure -->
+      </tbody>
+    </table>
+  </div>
+  <div class="flex flex-row justify-center gap-2 py-2 mx-1 xl:mx-48 lg:mx-28">
+    <!-- Add relevant buttons -->
+    <button class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+      <i class="material-symbols-outlined">cancel</i>
+      <span class="hidden lg:block">
+        Cancel
+      </span>
+    </button>
+    <!-- Add lang kayo button if need kvnry -->
+  </div>
 </div>

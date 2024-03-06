@@ -20,10 +20,14 @@ export const routes: Routes = [
         { path : 'add-program', component: ProgramsFormComponent },
         { path : 'add-course', component: CourseFormComponent },
         { path : 'add-curriculum', component: AddCurriculumComponent },
+        {path : 'students-list', component: StudentsListingComponent },
         { path : 'students', children: [
-          {path : '', component: StudentsListingComponent },
+          
           { path : ':id', component: StudentRecordManagementComponent },
           { path : 'add-student', component: StudentFormComponent },
+         
+          
+          
         ]},
       ]
     },
