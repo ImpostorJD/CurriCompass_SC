@@ -13,14 +13,18 @@ import { StudentsListingComponent } from './pages/students-listing/students-list
 export const routes: Routes = [
     { path: 'login', component: LoginUiComponent },
     { path: '', component: BaselayoutComponent, children: [
-        { path : 'add-student', component: StudentFormComponent },
-        { path : 'add-user', component: UserFormComponent },
+        {path: 'user', children: [
+          { path : 'add-user', component: UserFormComponent },
+          { path : 'edit-user/:id', component: EditUserFormComponent },
+        ]},
         { path : 'add-program', component: ProgramsFormComponent },
         { path : 'add-course', component: CourseFormComponent },
         { path : 'add-curriculum', component: AddCurriculumComponent },
-        { path : 'edit-user/:id', component: EditUserFormComponent },
-        { path : 'students', component: StudentsListingComponent },
-        { path : 'students/:id', component: StudentRecordManagementComponent },
+        { path : 'students', children: [
+          {path : '', component: StudentsListingComponent },
+          { path : ':id', component: StudentRecordManagementComponent },
+          { path : 'add-student', component: StudentFormComponent },
+        ]},
       ]
     },
 
