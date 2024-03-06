@@ -31,10 +31,16 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ```bash
   src
   |_ app
+  |  |_ components
+  |  |_ pages
+  |  |_ services
   |_ assets
 ```
 
-app - holds most of the component codes, routing, and services.
+app - main directory
+components - holds reusable components.
+pages - holds components that retains states and acts as page
+services - holds services that can be injected in components
 assets - holds the assets such as image, video, etc.
 
 ***
@@ -72,6 +78,19 @@ If you want to add icons, you can utilize the material-design-icons and material
 <i class = "material-symbols">settings</i>
 ```
 for material symbols, please refer to [material-font]("https://fonts.google.com/icons?selected=Material+Symbols+Outlined:settings:FILL@0;wght@400;GRAD@0;opsz@24")
+
+## When creating a new page component and page
+Please type in your CLI something like this:
+
+### For Page:
+```bash
+  ng generate component pages/{page-name}
+```
+### For a Component:
+```bash
+  ng generate component components/{page-name}
+```
+
 ## NOTHING FOLLOWS:
 
 More will be added when necessary.

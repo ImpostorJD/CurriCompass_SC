@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { RouterOutlet } from '@angular/router';
-import { LoginUiComponent } from "./login-ui/login-ui.component";
-import { StudentFormComponent } from "./student-form/student-form.component";
+import { LoginUiComponent } from "./pages/login-ui/login-ui.component";
+import { StudentFormComponent } from "./pages/student-form/student-form.component";
 import { NavigationComponent } from "./components/navigation/navigation.component";
 import { BaselayoutComponent } from "./components/baselayout/baselayout.component";
 

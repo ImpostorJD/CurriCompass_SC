@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
  *  USAGE: No usage as of the moment
  *
  * IMPORTANT NOTE: use proper method for each http method signature to avoid complications
- * @author John Daniel Tejero
  */
 @Injectable({
   providedIn: 'root'
