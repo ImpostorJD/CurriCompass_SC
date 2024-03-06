@@ -5,7 +5,7 @@
       <img src="../../../assets/bu-entraince.jpeg" class="w-[200vw] h-full absolute inset-0 object-cover md:block hidden"/>
     </div>
   </div>
-  <div class="px-4 bg-green-700 md:bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 flex flex-row justify-evenly items-center w-full h-[10%] border-b-slate-300 border-b-[0.17rem] rounded-b-md">
+  <div class="px-4 bg-green-700 md:bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 flex flex-row justify-evenly items-center w-full h-[10%] border-b-slate-300 border-b-[0.17rem] rounded-br-md">
     <i class="material-symbols-outlined text-white cursor-pointer hover:bg-green-600 p-3 rounded-md"(click)="collapse()">
       @if(panelToggled) {
         arrow_back
@@ -20,7 +20,7 @@
     </span>
   </div>
   <aside
-    class="md:static md:before:hidden before:block bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 md:flex-auto rounded-t-md flex flex-col transition-all duration-[350ms] absolute h-[90%] bottom-0 w-full z-30"
+    class="md:static md:before:hidden before:block bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 md:flex-auto rounded-tr-md flex flex-col transition-all duration-[350ms] absolute h-[90%] bottom-0 w-full z-30"
     [ngClass]="{'right-0 before:absolute before:bg-black before:bg-opacity-35 before:h-full before:w-[100vw] before:-z-20': panelToggled, 'right-[100%] before:hidden': !panelToggled}"
   >
     <div class="flex-auto text-white flex flex-col overflow-auto z-30">
