@@ -20,7 +20,7 @@
     </span>
   </div>
   <aside
-    class="md:static md:before:hidden before:block bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 md:flex-auto rounded-t-md flex flex-col transition-all absolute h-[90%] bottom-0 w-full z-30"
+    class="md:static md:before:hidden before:block bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 md:flex-auto rounded-t-md flex flex-col transition-all duration-[350ms] absolute h-[90%] bottom-0 w-full z-30"
     [ngClass]="{'right-0 before:absolute before:bg-black before:bg-opacity-35 before:h-full before:w-[100vw] before:-z-20': panelToggled, 'right-[100%] before:hidden': !panelToggled}"
   >
     <div class="flex-auto text-white flex flex-col overflow-auto z-30">
@@ -29,14 +29,14 @@
 
         <a
           [routerLink]="button.path"
-           class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl relative before:absolute before:h-full before:-z-10 hover:before:bg-green-600"
+           class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl relative before:absolute before:h-full before:-z-10 hover:before:bg-green-600 transition-all"
            [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl before:w-full': panelToggled, 'justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
            routerLinkActive="before:bg-green-600 text-white"
            [routerLinkActiveOptions]="{exact: true}"
         >
           <i class="{{button.icon_type}}">{{button.icon}}</i>
           <span
-            [ngClass]="{'inline': panelToggled, 'hidden': !panelToggled}"
+            [ngClass]="{'md:inline': panelToggled, 'md:hidden': !panelToggled}"
           >{{button.name}}</span>
         </a>
       }
@@ -46,7 +46,7 @@
       (click)="logout()">
       <i class="material-symbols-outlined">logout</i>
       <span class="ml-1"
-        [ngClass]="{'inline': panelToggled, 'hidden': !panelToggled}"
+        [ngClass]="{'md:inline': panelToggled, 'md:hidden': !panelToggled}"
       >Sign out</span>
     </button>
   </aside>
