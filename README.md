@@ -8,6 +8,10 @@
 ## Overview
 This project entitled CurriCompass is a Capstone project in compliance with the requirements for Capstone Project (CAP1). The goal of this project is to streamline the pre-advisement process of students for the upcoming semestral enrollment. 
 
+## PLEASE READ THE INSTRUCTIONS BEFORE PROCEEDING!
+[![UI Instructions](https://img.shields.io/badge/UI-Instructions-ffffff)](https://github.com/JohnDanielTejero/CurriCompass_SC/blob/main/CurriCompassUI/README.md)
+[![API Instructions](https://img.shields.io/badge/API-Instructions-ff3421)](https://github.com/JohnDanielTejero/CurriCompass_SC/tree/main/CurriCompassAPI)
+
 ## Features
 - Algorithm-based decision-making for pre-advisement
 - Adjustable lists of courses 
@@ -21,7 +25,7 @@ This project entitled CurriCompass is a Capstone project in compliance with the 
 - Visual Studio Code
 - GitHub
 - PenPot Desktop
-
+- 
 ## Installation
 NOTE: Install both package manager if you want to run both frontend and backend.
 
