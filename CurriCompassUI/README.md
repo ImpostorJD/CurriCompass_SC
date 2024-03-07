@@ -48,6 +48,10 @@ assets - holds the assets such as image, video, etc.
 When you want to apply CSS globally, add the class via **styles.css**
 DO NOT TOUCH main.ts, main.server.ts
 
+### Setup Config.ts
+- Copy the Config Copy.ts file to the same directory.
+- Rename the copied file as Config.ts.
+
 app.config.ts - handles most of the dependency injections, you do not need to touch this when you generate component, services, directives, etc. via the CLI.
 
 app.routes.ts - handles the routing configurations. Only include components that requires routing, otherwise if the component merely serves as an abstraction of an element such as registration form, button, do not include.
