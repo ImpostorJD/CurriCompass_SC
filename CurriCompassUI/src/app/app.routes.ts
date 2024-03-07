@@ -18,18 +18,21 @@ export const routes: Routes = [
           { path : 'add-user', component: UserFormComponent },
           { path : 'edit-user/:id', component: EditUserFormComponent },
         ]},
-        { path : 'add-program', component: ProgramsFormComponent },
-        { path : 'program-list', component: ProgramListComponent },
+
+        {
+          path: 'programs', children: [
+            { path : '', component: ProgramListComponent },
+            { path : 'add-program', component: ProgramsFormComponent },
+          ]
+        },
+
         { path : 'add-course', component: CourseFormComponent },
         { path : 'add-curriculum', component: AddCurriculumComponent },
-        {path : 'students-list', component: StudentsListingComponent },
+
         { path : 'students', children: [
-          
+          {path : '', component: StudentsListingComponent },
           { path : ':id', component: StudentRecordManagementComponent },
           { path : 'add-student', component: StudentFormComponent },
-         
-          
-          
         ]},
       ]
     },
