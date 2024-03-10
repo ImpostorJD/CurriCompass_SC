@@ -12,6 +12,7 @@ import { StudentsListingComponent } from './pages/students-listing/students-list
 import { ProgramListComponent } from './pages/program-list/program-list.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { CurriculaListComponent } from './pages/curricula-list/curricula-list.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginUiComponent },
@@ -31,8 +32,12 @@ export const routes: Routes = [
         },
 
         { path : 'add-course', component: CourseFormComponent },
-        { path : 'add-curriculum', component: AddCurriculumComponent },
 
+        {path: 'curricula', children: [
+          { path : '', component: CurriculaListComponent },
+          { path : 'add-curriculum', component: AddCurriculumComponent },
+
+        ]},
         { path : 'students', children: [
           {path : '', component: StudentsListingComponent },
           { path : 'add-student', component: StudentFormComponent },

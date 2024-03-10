@@ -55,7 +55,7 @@ export class NavigationComponent {
       allowedRoles: [],
       icon_type: "material-symbols-outlined",
       icon: "contract",
-      path: "/curriculum"
+      path: "/curricula"
     },
     {
       name : "Program",

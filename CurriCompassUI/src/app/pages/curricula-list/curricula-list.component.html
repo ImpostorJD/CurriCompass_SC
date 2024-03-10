@@ -1,22 +1,25 @@
 <div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
-  <h1 class="font-bold font-sans text-2xl uppercase">Programs</h1>
+  <h1 class="font-bold font-sans text-2xl uppercase">Curricula</h1>
   <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
     <table class="table-auto w-full border-collapse border border-slate-300">
       <thead class="bg-slate-300">
         <tr class="flex flex-row py-2">
-          <th class="w-[33.3%] py-2 hidden lg:block">
-            Program Code
+          <th class="w-[10%] py-2 hidden lg:block">
+            Curriculum Id
           </th>
-          <th class="lg:w-[33.3%] py-2 flex-auto">
-            Program Description
+          <th class="lg:w-[35%] py-2 flex-auto">
+            Program
           </th>
-          <th class="w-[33.3%] lg:flex-auto py-2 flex items-center justify-center">
+          <th class="lg:w-[25%] py-2 flex-auto">
+            Specialization
+          </th>
+          <th class="w-[25%] lg:flex-auto py-2 flex items-center justify-center">
             <a
                class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
-              [routerLink]="'/programs/add-program'"
+              [routerLink]="'/curricula/add-curriculum'"
             >
               <i class="material-symbols-outlined">add</i>
-              <span class="lg:inline hidden">Add Program</span>
+              <span class="lg:inline hidden">Add Curriculum</span>
             </a>
           </th>
         </tr>
@@ -24,16 +27,20 @@
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
         <!--students information -->
         <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100" *ngFor="let num of iterates">
-          <td class="w-[33.3%] px-1 hidden lg:flex items-center">
-            <!-- Display Program Code-->
-            <span>BSIT</span>
+          <td class="w-[10%] px-1 hidden lg:flex items-center">
+            <!-- Curriculum ID-->
+            <span>1</span>
           </td>
-          <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
+          <td class="lg:w-[35%] flex-auto px-1 flex items-center">
             <!-- Display Program full -->
             <span>Bachelor of Science in Information Technology</span>
           </td>
+          <td class="lg:w-[25%] flex-auto px-1 flex items-center">
+            <!-- Display Program full -->
+            <span>Web and Mobile</span>
+          </td>
 
-          <td class="w-[33.3%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+          <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
             <!-- Sample Route -->
             <a
               class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
