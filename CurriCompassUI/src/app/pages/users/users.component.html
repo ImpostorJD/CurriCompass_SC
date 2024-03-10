@@ -1,1 +1,66 @@
-<p>users works!</p>
+<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
+  <h1 class="font-bold font-sans text-2xl uppercase">Users</h1>
+  <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
+    <!-- Add a table to display students -->
+    <table class="table-auto w-full border-collapse border border-slate-300">
+      <thead class="bg-slate-300">
+        <tr class="flex flex-row py-2">
+          <th class="w-[25%] py-2 hidden lg:block">
+            Email
+          </th>
+          <th class="lg:w-[20%] py-2 flex-auto">
+            Name
+          </th>
+          <th class="w-[20%] py-2 hidden lg:block">
+            Contact No.
+          </th>
+          <th class="w-[10%] py-2 hidden lg:block">
+            Role
+          </th>
+          <th class="w-[25%] lg:flex-auto py-2 flex items-center justify-center">
+            <a
+               class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
+              [routerLink]="'/users/add-user'"
+            >
+              <i class="material-symbols-outlined">add</i>
+              <span class="lg:inline hidden">Add User</span>
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
+        <!--students information -->
+        <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100" *ngFor="let num of iterates">
+          <td class="w-[25%] px-1 hidden lg:flex items-center">
+            <span>{{'johndanieltejero23@gmail.com'}}</span>
+          </td>
+          <td class="lg:w-[20%] flex-auto px-1 flex items-center">
+            <span>John Daniel Tejero</span>
+          </td>
+          <td class="w-[20%] px-1 hidden lg:flex items-center">
+            <span>09398416091</span>
+          </td>
+          <td class="w-[10%] px-1 hidden lg:flex items-center">
+            <span>Student</span>
+          </td>
+          <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+            <!-- Sample Route -->
+            <a
+              class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
+              [routerLink]="'/users/1'"
+            >
+            <i class="material-symbols-outlined">
+              visibility
+            </i>
+          </a>
+          <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md">
+              <i class="material-symbols-outlined">
+                delete
+              </i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

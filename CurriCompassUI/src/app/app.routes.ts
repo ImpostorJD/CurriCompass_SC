@@ -13,15 +13,18 @@ import { ProgramListComponent } from './pages/program-list/program-list.componen
 import { UsersComponent } from './pages/users/users.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { CurriculaListComponent } from './pages/curricula-list/curricula-list.component';
+import { CoursesListComponent } from './pages/courses-list/courses-list.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginUiComponent },
     { path: '', component: BaselayoutComponent, children: [
+
+        { path : 'profile', component: ProfilePageComponent },
+
         {path: 'users', children: [
           { path : '', component: UsersComponent },
           { path : 'add-user', component: UserFormComponent },
           { path : 'edit-user/:id', component: EditUserFormComponent },
-          { path : ':id', component: ProfilePageComponent },
         ]},
 
         {
@@ -31,13 +34,16 @@ export const routes: Routes = [
           ]
         },
 
-        { path : 'add-course', component: CourseFormComponent },
+        { path: 'courses', children: [
+          { path: '', component: CoursesListComponent },
+          { path : 'add-course', component: CourseFormComponent },
+        ]},
 
         {path: 'curricula', children: [
           { path : '', component: CurriculaListComponent },
           { path : 'add-curriculum', component: AddCurriculumComponent },
-
         ]},
+
         { path : 'students', children: [
           {path : '', component: StudentsListingComponent },
           { path : 'add-student', component: StudentFormComponent },

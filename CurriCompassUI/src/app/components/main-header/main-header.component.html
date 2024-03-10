@@ -3,16 +3,19 @@
   <button class="w-fit h-full border-green-600 px-5 flex items-center content-center rounded-md text-green-800 hover:text-white hover:bg-green-700 hover:border-green-700 transition-all">
     <i class="material-symbols-outlined">settings</i>
   </button>
-  <span class="w-[12rem] border-green-600 h-full border-[0.22rem] md:flex flex-row rounded-md items-center justify-evenly text-green-800 hidden">
+  <a
+    class="w-[12rem] border-green-600 h-full border-[0.22rem] md:flex flex-row rounded-md items-center justify-evenly text-green-800 hidden cursor-pointer hover:bg-green-600 hover:text-white transition-all"
+    [routerLink]="'/profile'"
+  >
     <i class="material-symbols-outlined w-[30%] text-center">account_circle</i>
     <div class="flex-auto flex flex-col justify-center">
       <span class="text-[0.88rem] font-semibold">
         Username
       </span>
-      <span class="text-slate-800 text-[0.79rem]">
+      <span class="text-[0.79rem]">
         Role
       </span>
     </div>
-  </span>
+  </a>
 
 </header>

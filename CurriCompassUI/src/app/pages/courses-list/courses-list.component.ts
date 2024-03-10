@@ -3,12 +3,12 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-users',
+  selector: 'app-courses-list',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './users.component.html',
-  styleUrl: './users.component.css'
+  templateUrl: './courses-list.component.html',
+  styleUrl: './courses-list.component.css'
 })
-export class UsersComponent {
+export class CoursesListComponent {
   iterates: Array<number> = Array.from({ length: 20 }, (_, i) => i + 1);
 }

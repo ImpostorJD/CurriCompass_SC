@@ -1,42 +1,42 @@
 <div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
-  <h1 class="font-bold font-sans text-2xl uppercase">Curricula</h1>
+  <h1 class="font-bold font-sans text-2xl uppercase">Courses</h1>
   <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
     <table class="table-auto w-full border-collapse border border-slate-300">
       <thead class="bg-slate-300">
         <tr class="flex flex-row py-2">
-          <th class="w-[10%] py-2 hidden lg:block">
-            Curriculum Id
+          <th class="w-[15%] py-2 hidden lg:block">
+            Course Code
           </th>
           <th class="lg:w-[35%] py-2 flex-auto">
-            Program
+            Course Description
           </th>
-          <th class="lg:w-[25%] py-2 flex-auto">
-            Specialization
+          <th class="lg:w-[10%] py-2 flex-auto">
+            Credits
           </th>
           <th class="w-[25%] lg:flex-auto py-2 flex items-center justify-center">
             <a
                class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
-              [routerLink]="'/curricula/add-curriculum'"
+              [routerLink]="'/courses/add-course'"
             >
               <i class="material-symbols-outlined">add</i>
-              <span class="lg:inline hidden">Add Curriculum</span>
+              <span class="lg:inline hidden">Add Course</span>
             </a>
           </th>
         </tr>
       </thead>
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
         <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100" *ngFor="let num of iterates">
-          <td class="w-[10%] px-1 hidden lg:flex items-center">
-            <!-- Curriculum ID-->
-            <span>1</span>
+          <td class="w-[15%] px-1 hidden lg:flex items-center">
+            <!-- Display Course Code-->
+            <span>WAM4</span>
           </td>
           <td class="lg:w-[35%] flex-auto px-1 flex items-center">
-            <!-- Display Program full -->
-            <span>Bachelor of Science in Information Technology</span>
+            <!-- Display Course Description -->
+            <span>Mobile Development With Android Studio 2</span>
           </td>
-          <td class="lg:w-[25%] flex-auto px-1 flex items-center">
-            <!-- Display Program full -->
-            <span>Web and Mobile</span>
+          <td class="lg:w-[10%] flex-auto px-1 flex items-center">
+            <!-- Display Course Description -->
+            <span>3</span>
           </td>
 
           <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
