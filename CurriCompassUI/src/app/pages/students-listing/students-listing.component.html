@@ -1,6 +1,6 @@
 <div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
   <h1 class="font-bold font-sans text-2xl uppercase">Students</h1>
-  <div class=" border-slate-400 border-[1px] rounded-md mx-1 xl:mx-48 lg:mx-8 lg:overflow-y-auto lg:h-[25rem] min-h-[25rem] h-auto bg-white">
+  <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
     <!-- Add a table to display students -->
     <table class="table-auto w-full border-collapse border border-slate-300">
       <thead class="bg-slate-300">
@@ -14,17 +14,23 @@
           <th class="w-[20%] py-2 hidden lg:block">
             Program
           </th>
-          <th class="w-[20%] py-2 hidden lg:block">
+          <th class="w-[15%] py-2 hidden lg:block">
             Year Level
           </th>
-          <th class="w-[20%] lg:flex-auto py-2">
-            Actions
+          <th class="w-[25%] lg:flex-auto py-2 flex items-center justify-center">
+            <a
+               class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
+              [routerLink]="'/students/add-student'"
+            >
+              <i class="material-symbols-outlined">add</i>
+              <span class="lg:inline hidden">Add Student</span>
+            </a>
           </th>
         </tr>
       </thead>
-      <tbody class="flex flex-col">
+      <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
         <!--students information -->
-        <tr class="flex flex-row bg-white h-[3rem] hover:bg-green-100">
+        <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100" *ngFor="let num of iterates">
           <td class="w-[20%] px-1 hidden lg:flex items-center">
             <!-- Display student ID -->
             <span>211-1049</span>
@@ -37,43 +43,28 @@
             <span>BSIT</span>
             <!-- Display student course -->
           </td>
-          <td class="w-[20%] px-1 hidden lg:flex items-center">
+          <td class="w-[15%] px-1 hidden lg:flex items-center">
             <span>3rd Year</span>
             <!-- Display student year level -->
           </td>
-          <td class="w-[20%] flex justify-center items-center px-1">
+          <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
             <!-- Sample Route -->
             <a
-              class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white w-full h-full transition-all flex items-center justify-center"
+              class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
               [routerLink]="'/students/1'"
             >
-              <i class="material-symbols-outlined mr-1">
-                visibility
+            <i class="material-symbols-outlined">
+              visibility
+            </i>
+          </a>
+          <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md">
+              <i class="material-symbols-outlined">
+                delete
               </i>
-              <span class="lg:inline hidden">
-                View Details
-              </span>
-            </a>
+            </button>
           </td>
         </tr>
-        <!-- Ulitin niyo lang code para mag add ng row structure -->
       </tbody>
     </table>
-  </div>
-  <div class="flex flex-row justify-center gap-2 py-2 mx-1 xl:mx-48 lg:mx-8">
-    <!-- TODO: Disable the delete button if students are not selected -->
-
-    <button class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
-      <i class="material-symbols-outlined">Delete</i>
-      <span class="hidden lg:block">
-        Delete
-      </span>
-    </button>
-    <button class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-green-600 py-2 rounded-md text-white hover:bg-green-700 transition-all uppercase">
-        <i class="material-symbols-outlined">Add</i>
-        <span class="hidden lg:block">
-          Add
-        </span>
-      </button>
   </div>
 </div>

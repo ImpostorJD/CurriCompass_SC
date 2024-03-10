@@ -31,8 +31,8 @@ export const routes: Routes = [
 
         { path : 'students', children: [
           {path : '', component: StudentsListingComponent },
-          { path : ':id', component: StudentRecordManagementComponent },
           { path : 'add-student', component: StudentFormComponent },
+          { path : ':id', component: StudentRecordManagementComponent },
         ]},
       ]
     },

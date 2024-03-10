@@ -10,5 +10,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './students-listing.component.css'
 })
 export class StudentsListingComponent {
-
+  iterates: Array<number> = Array.from({ length: 20 }, (_, i) => i + 1);
 }

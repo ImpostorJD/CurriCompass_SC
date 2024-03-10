@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 //TODO: Implement ROLE BASED ACCESS
 //TODO: Test API
 //TODO: Add documentation
+//TODO: Edit Taken At to enum
 class StudentRecordsController extends Controller
 {
     public function index(){
@@ -20,7 +21,6 @@ class StudentRecordsController extends Controller
             })->with(['student_records', function(Builder $query){
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
-                        ->with('semesters')
                         ->with(['curriculum'], function(Builder $query){
                           $query->with('program')->get();
                         })
@@ -37,7 +37,6 @@ class StudentRecordsController extends Controller
             })->with(['student_records', function(Builder $query){
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
-                        ->with('semesters')
                         ->with(['curriculum'], function(Builder $query){
                             $query->with('program')->get();
                           })
@@ -73,7 +72,6 @@ class StudentRecordsController extends Controller
             })->with(['student_records', function(Builder $query){
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
-                        ->with('semesters')
                         ->with(['curriculum'], function(Builder $query){
                             $query->with('program')->get();
                           })
@@ -110,7 +108,6 @@ class StudentRecordsController extends Controller
 
                 foreach ($value as $key => $subject) {
                     $validator->addRule("{$attribute}.{$key}.subjectid", 'required|integer');
-                    $validator->addRule("{$attribute}.{$key}.taken_at", 'required|integer');
                     $validator->addRule("{$attribute}.{$key}.remark", 'required|string');
                     $validator->addRule("{$attribute}.{$key}.action", 'required|string|in:create,update,delete');
                 }
@@ -127,7 +124,6 @@ class StudentRecordsController extends Controller
             })->with(['student_records', function(Builder $query){
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
-                        ->with('semesters')
                         ->with(['curriculum'], function(Builder $query){
                             $query->with('program')->get();
                           })
@@ -149,7 +145,6 @@ class StudentRecordsController extends Controller
             foreach ($request->subjects_taken as $subject) {
                 $action = $subject['action'];
                 $subjectid = $subject['subjectid'];
-                $taken_at = $subject['taken_at'];
                 $remark = $subject['remark'];
 
                 switch ($action) {
@@ -157,7 +152,6 @@ class StudentRecordsController extends Controller
                         $studentRecord->subjects_taken()->create([
                             'srid' => $studentRecord->srid,
                             'subjectid' => $subjectid,
-                            'taken_at' => $taken_at,
                             'remark' => $remark,
                         ]);
                         break;
@@ -217,7 +211,6 @@ class StudentRecordsController extends Controller
             })->with(['student_records', function(Builder $query){
                 $query->with(['subjects_taken', function(Builder $query){
                     $query->with('subjects')
-                        ->with('semesters')
                         ->with(['curriculum'], function(Builder $query){
                             $query->with('program')->get();
                           })
