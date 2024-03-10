@@ -10,13 +10,17 @@ import { AddCurriculumComponent } from './pages/add-curriculum/add-curriculum.co
 import { StudentRecordManagementComponent } from './pages/student-record-management/student-record-management.component';
 import { StudentsListingComponent } from './pages/students-listing/students-listing.component';
 import { ProgramListComponent } from './pages/program-list/program-list.component';
+import { UsersComponent } from './pages/users/users.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginUiComponent },
     { path: '', component: BaselayoutComponent, children: [
-        {path: 'user', children: [
+        {path: 'users', children: [
+          { path : '', component: UsersComponent },
           { path : 'add-user', component: UserFormComponent },
           { path : 'edit-user/:id', component: EditUserFormComponent },
+          { path : ':id', component: ProfilePageComponent },
         ]},
 
         {
