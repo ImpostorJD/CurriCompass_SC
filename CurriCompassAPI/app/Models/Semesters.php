@@ -15,10 +15,10 @@ class Semesters extends Model
         'semdesc'
     ];
 
-    public function subjects_taken()
-    {
-        return $this->hasOne(SubjectsTaken::class, 'taken_at', 'semid');
-    }
+    // public function subjects_taken()
+    // {
+    //     return $this->hasOne(SubjectsTaken::class, 'taken_at', 'semid');
+    // }
 
     public function curriculum_subjects(){
         return $this->hasMany(CurriculumSubjects::class, 'semid', 'semid');

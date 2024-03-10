@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('subjects_taken', function (Blueprint $table) {
             $table->unsignedBigInteger('srid');
             $table->unsignedBigInteger('subjectid');
-            $table->unsignedBigInteger('taken_at');
+            $table->enum('taken_at', ['Sem 1', 'Sem 2', 'Sem 3', 'Credited']);
+            $table->string('school_year');
             $table->string('remark'); //subjected to change
             $table->foreign('srid')
             ->references('srid')
@@ -24,10 +25,10 @@ return new class extends Migration
             ->references('subjectid')
             ->on('subjects')
             ->onDelete('cascade');
-        $table->foreign('taken_at')
-            ->references('semid')
-            ->on('semesters')
-            ->onDelete('cascade');
+        // $table->foreign('taken_at')
+        //     ->references('semid')
+        //    ->on('semesters')
+        //    ->onDelete('cascade');
         $table->primary(['srid', 'subjectid']);
         });
     }

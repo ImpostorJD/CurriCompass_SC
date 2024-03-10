@@ -1,41 +1,133 @@
 <div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
     <h1 class="font-bold font-sans text-2xl uppercase">Student Records</h1>
-    <div class="flex lg:flex-row gap-4 flex-col">
-      <div class="border-slate-400 border-1 lg:w-1/2 w-full p-5 border-[1px] rounded-sm shadow-lg bg-white">
-        <h2 class="font-bold text-lg">Basic</h2>
-        <div class="flex flex-col">
-          <label for="firstName">First Name</label>
-          <input id="firstName" class="border-slate-500 border-[1px] rounded-sm p-2 my-2" />
-          <label for="middleName">Middle Name</label>
-          <input id="middleName" class="border-slate-500 border-[1px] rounded-sm p-2 my-2" />
-          <label for="surname">Surname</label>
-          <input id="surname" class="border-slate-500 border-[1px] rounded-sm p-2 my-2" />
-        </div>
+    <div class="flex-auto rounded-md w-full flex gap-2 p-2 flex-col">
+      <!-- TODO: Basic Information: Static and will be populated with dynamic information -->
+      <div class="h-[15rem] w-full flex bg-white shadow-lg">
+        <table class="h-full border border-collapse flex w-full table-condensed">
+          <thead class="flex flex-col h-full justify-around w-[25%]">
+            <tr class="w-full h-full">
+              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center flex-wrap">
+                Student No
+              </th>
+              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+                Student Name
+              </th>
+              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+                Program
+              </th>
+              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+                Specialization
+              </th>
+              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+                Year Level
+              </th>
+              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody class="flex-auto flex flex-col h-full">
+            <tr class="w-full h-full flex flex-col">
+              <td class="border-slate-600 border h-[16.7%] p-2">
+                211-1049
+              </td>
+              <td class="border-slate-600 border h-[16.7%] p-2">
+                John Daniel Tejero
+              </td>
+              <td class="border-slate-600 border h-[16.7%] p-2">
+                Bachelor of Science in Information Technology
+              </td>
+              <td class="border-slate-600 border h-[16.7%] p-2">
+                Web and Mobile
+              </td>
+              <td class="border-slate-600 border h-[16.7%] p-2">
+                3rd Year
+              </td>
+              <td class="border-slate-600 border h-[16.7%] p-2">
+                Irregular
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="border-slate-400 border-[1px] lg:w-1/2 w-full p-5 rounded-sm shadow-lg bg-white">
-        <h2 class="font-bold text-lg">Credentials</h2>
-        <div class="flex flex-col">
-          <label for="email">Email</label>
-          <input id="email" type="email" class="border-slate-500 border-[1px] rounded-sm p-2 my-2" />
-          <label for="password">Password</label>
-          <input id="password" type="password" class="border-slate-500 border-[1px] rounded-sm p-2 my-2" />
-          <label for="contactNumber">Contact Number</label>
-          <input id="contactNumber" type="tel" class="border-slate-500 border-[1px] rounded-sm p-2 my-2" />
-        </div>
+      <!-- TODO: populate with the data from database - student records <list of subject taken> -->
+      <div class="h-auto w-full">
+        <table class="flex-auto flex flex-col w-full">
+          <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
+            <tr class="h-full w-full flex flex-row">
+              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Subject Code
+              </th>
+              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Subject Name
+              </th>
+              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Credits
+              </th>
+              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Taken At
+              </th>
+              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                S.Y.
+              </th>
+              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Remark
+              </th>
+              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                <button class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center p-1 hover:bg-green-600 hover:text-white transition-all">
+                    <i class="material-symbols-outlined">add</i>
+                </button>
+              </th>
+              <th class="w-[1px]">
+
+              </th>
+            </tr>
+          </thead>
+          <tbody class="max-h-[20rem] overflow-y-auto">
+            <!--TODO: this will be via array form laters-->
+            <tr class="flex flex-row w-full" *ngFor="let num of iterates">
+              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Subject Code
+              </td>
+              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Subject Name
+              </td>
+              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Credits
+              </td>
+              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Taken At
+              </td>
+              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                S.Y.
+              </td>
+              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                Remark
+              </td>
+              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+                <button class="border-[1px] rounded-md shadow-md border-red-600 text-red-600 flex items-center justify-center p-1 hover:bg-red-600 hover:text-white transition-all">
+                    <i class="material-symbols-outlined">delete</i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-    <div class="flex justify-center gap-4 py-2">
-      <button class="w-full flex gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
-        <i class="material-symbols-outlined">person_cancel</i>
-        <span class="hidden lg:block">Cancel</span>
-      </button>
-      <button class="w-full flex gap-2 px-4 py-2 items-center justify-center border-green-600 border-[1px] rounded-md text-green-600 transition-all hover:bg-green-600 hover:text-white uppercase">
-        <i class="material-symbols-outlined">person_add</i>
-        <span class="hidden lg:block">Save Without Student Information</span>
-      </button>
-      <button class="w-full flex gap-2 px-4 py-2 bg-green-600 items-center justify-center rounded-md text-white hover:bg-green-800 transition-all uppercase">
-        <i class="material-symbols-outlined">user_attributes</i>
-        <span class="hidden lg:block">Add Student Information</span>
-      </button>
+      <div class="flex h-[3rem] justify-end gap-2">
+        <button class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+          <i class="material-symbols-outlined">
+            close
+          </i>
+          <span class="hidden lg:block">
+            Discard Changes
+          </span>
+        </button>
+        <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
+          <i class="material-symbols-outlined">edit</i>
+          <span class="hidden lg:block">
+            Save Changes
+          </span>
+        </button>
+      </div>
     </div>
 </div>

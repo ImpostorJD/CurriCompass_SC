@@ -13,6 +13,7 @@ class SubjectsTaken extends Model
         'srid',
         'subjectid',
         'taken_at',
+        'school_year',
         'remark'
     ];
 
@@ -24,8 +25,8 @@ class SubjectsTaken extends Model
         return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
     }
 
-    public function semesters()
-    {
-        return $this->belongsTo(Semesters::class, 'taken_at', 'semid');
-    }
+    // public function semesters()
+    // {
+    //     return $this->belongsTo(Semesters::class, 'taken_at', 'semid');
+    // }
 }

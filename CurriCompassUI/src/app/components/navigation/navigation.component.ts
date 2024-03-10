@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { RolesDirective } from '../../services/roles.directive';
 import NavigationItems from '../../models/navigation-items';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 @Component({
   selector: 'app-navigation',
@@ -12,7 +12,11 @@ import { DOCUMENT } from '@angular/common';
   styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private router: Router
+  ) {}
+
   panelToggled?: boolean;
   initialCheckDone: boolean = false;
 
@@ -100,7 +104,10 @@ export class NavigationComponent {
   collapse(){
     this.panelToggled = !this.panelToggled;
   }
+
   logout(){
+    //TODO: Add logout mechanism
     console.log("logged out");
+    this.router.navigate(['/login'])
   }
 }
