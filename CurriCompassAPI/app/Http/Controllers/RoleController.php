@@ -18,7 +18,7 @@ class RoleController extends Controller
     {
         return response()->json([
             ['status' => 'success'],
-            Role::all()
+            Role::where('rolename','!=', 'Admin')->get()
             ], 200);
     }
 

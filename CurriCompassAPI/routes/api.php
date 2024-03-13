@@ -7,8 +7,6 @@ use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StudentRecordsController;
 use App\Http\Controllers\SubjectsController;
 use App\Http\Controllers\UserController;
-use App\Models\Programs;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 //TODO: Implement Routers [Completed for now, other processes to be followed: DO NOT DELETE]
@@ -66,7 +64,7 @@ Route::controller(ProgramsController::class)
     });
 
 Route::controller(SemesterController::class)
-    ->prefix('/subjects')
+    ->prefix('/semesters')
     ->group(function (){
         Route::get('/', 'index');
         Route::get('/{id}', 'show');
@@ -76,7 +74,7 @@ Route::controller(SemesterController::class)
     });
 
 Route::controller(CurriculumController::class)
-    ->prefix('/subjects')
+    ->prefix('/curriculum')
     ->group(function (){
         Route::get('/', 'index');
         Route::get('/{id}', 'show');
@@ -86,7 +84,7 @@ Route::controller(CurriculumController::class)
     });
 
 Route::controller(StudentRecordsController::class)
-    ->prefix('/subjects')
+    ->prefix('/student-records')
     ->group(function (){
         Route::get('/', 'index');
         Route::get('/{id}', 'show');

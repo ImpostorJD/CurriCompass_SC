@@ -1,27 +1,139 @@
-<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="userField">
   <h1 class="font-bold font-sans text-[2rem] uppercase">Add User</h1>
-  <div class="flex lg:flex-row gap-2 flex-col bg-white">
-    <div class="border-slate-400 border-1 lg:w-[50%] w-full p-5 border-[1px] rounded-sm shadow-lg">
-      <h2 class="font-bold text-[1.33rem]">Basic Information</h2>
-      <div class="flex flex-col">
-        <span>first name</span>
-        <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4"/>
-        <span>middle name</span>
-        <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4"/>
-        <span>surname</span>
-        <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4"/>
+  <div class="flex flex-col gap-1">
+    <div class="flex lg:flex-row gap-2 flex-col bg-white">
+      <div class="border-slate-400 border-1 lg:w-[50%] w-full p-5 border-[1px] rounded-sm shadow-lg">
+        <h2 class="font-bold text-[1.33rem]">Basic Information</h2>
+        <div class="flex flex-col">
+          <div class="flex flex-col">
+            <span>first name</span>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userfname"/>
+            @if(
+                userField.get('userfname')?.invalid &&
+                (userField.get('userfname')?.touched ||
+                userField.get('userfname')?.dirty)
+              ){
+                <div class="text-red-600">
+                  First name is required!
+                </div>
+              }
+          </div>
+          <div class="flex flex-col">
+            <span>middle name</span>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="usermiddle"/>
+            @if(
+              userField.get('usermiddle')?.invalid &&
+              (userField.get('usermiddle')?.touched ||
+              userField.get('usermiddle')?.dirty)
+            ){
+              <div class="text-red-600">
+                Middle name is required!
+              </div>
+            }
+          </div>
+          <div class="flex flex-col">
+            <span>surname</span>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userlname"/>
+            @if(
+              userField.get('userlname')?.invalid &&
+              (userField.get('userlname')?.touched ||
+              userField.get('userlname')?.dirty)
+            ){
+              <div class="text-red-600">
+                Last name is required!
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="border-slate-400 border-[1px] lg:w-[50%] w-full p-5 rounded-sm shadow-lg">
+        <h2 class="font-bold text-[1.33rem]">Credentials</h2>
+        <div class="flex flex-col">
+          <div class="flex flex-col">
+            <span>email</span>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email"/>
+            @if(
+              userField.get('email')?.invalid &&
+              (userField.get('email')?.touched ||
+              userField.get('email')?.dirty)
+            ){
+              <div class="text-red-600">
+                @if(userField.get('email')?.hasError('required')){
+                  Email is required!
+                }
+                @if(userField.get('email')?.hasError('email')){
+                  Email is in invalid format!
+                }
+              </div>
+            }
+          </div>
+          <div class="flex flex-col">
+            <span>password</span>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" type="password" formControlName="password"/>
+            @if(
+              userField.get('password')?.invalid &&
+              (userField.get('password')?.touched ||
+              userField.get('password')?.dirty)
+            ){
+              <div class="text-red-600">
+                Password is required!
+              </div>
+            }
+          </div>
+          <div class="flex flex-col">
+            <span>contact number</span>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="contactno"/>
+            @if(
+              userField.get('contactno')?.invalid &&
+              (userField.get('contactno')?.touched ||
+              userField.get('contactno')?.dirty)
+            ){
+              <div class="text-red-600">
+                {{userField.get('contactno')?.getError | json }}
+                @if(userField.get('contactno')?.hasError('required')){
+                  Contact number is required!
+                }
+                @if(userField.get('contactno')?.hasError('pattern')){
+                  Contct number is in invalid format!
+                }
+              </div>
+            }
+          </div>
+        </div>
       </div>
     </div>
-    <div class="border-slate-400 border-[1px] lg:w-[50%] w-full p-5 rounded-sm shadow-lg">
-      <h2 class="font-bold text-[1.33rem]">Credentials</h2>
-      <div class="flex flex-col">
-        <span>email</span>
-        <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4"/>
-        <span>password</span>
-        <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4"/>
-        <span>contact number</span>
-        <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4"/>
-      </div>
+    <div class="flex flex-col gap-2 p-4 border-[1px] rounded-md border-slate-400 bg-white md:h-[15rem] md:overflow-y-auto h-full">
+      <h2 class="font-bold text-[1.33rem]">Roles</h2>
+      <button class="flex items-center justify-center bg-green-600 text-white w-fit px-4 py-2 rounded-sm" (click)="addRolesArray()">
+        <i class="material-symbols-outlined">add</i>
+        <span class="uppercase ml-1">Add role</span>
+      </button>
+      @for(item of rolesFormArray.controls; track $index){
+        <div class="flex flex-row gap-2 items-center">
+          <span class="font-bold">
+            Role
+          </span>
+          <select placeholder ="roles" class="w-full border-[1px] border-slate-400 rounded-md py-2" [selectedIndex]="0">
+            <option [value]="null" disabled>
+              Please Select
+            </option>
+            @for(role of roles; track $index){
+              <option [value]="role.roleid">
+                {{ role.rolename }}
+              </option>
+            }
+
+          </select>
+          <button class="bg-red-500 flex items-center justify-center p-2 h-full text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="popRolesArray($index)">
+            <i class="material-symbols-outlined">
+              delete
+            </i>
+            <span class="md:inline hidden ml-1">
+              Delete
+            </span>
+          </button>
+        </div>
+      }
     </div>
   </div>
   <div class="flex flex-row justify-center gap-2 py-2">
@@ -40,4 +152,4 @@
       </span>
     </button>
   </div>
-</div>
+</form>

@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        //$this->middleware('auth:api', ['except' => ['login']]);
     }
 
     //Public Methods
@@ -46,18 +46,18 @@ class UserController extends Controller
         ]);
     }
 
+    //FIXED
     public function register(Request $request){
+        //dd($request->all());
         $validate = Validator::make( $request->all(), [
-            ['userfname' => ['required','string','max:255']],
-            ['userlname' => ['required','string','max:255']],
-            ['usermiddle' => ['required','string','max:255']],
-            ['email' => ['required','string','email','max:255','unique:users']],
-            ['password' => ['required','string','min:6']],
-            ['roles' => ['required','array', function($attribute, $value, $validator){
-                foreach ($value as $key => $subject) {
-                    $validator->addRule("{$attribute}.{$key}.roleid", 'required|integer');
-                }
-            }]],
+            'userfname' => ['required','string','max:255'],
+            'userlname' => ['required','string','max:255'],
+            'usermiddle' => ['required','string','max:255'],
+            'email' => ['required','string','email','max:255','unique:users'],
+            'contactno' => ['required','string'],
+            'password' => ['required','string'],
+            'roles' => ['required','array'],
+            'roles.*.roleid' => ['required', 'integer'],
         ]);
 
         if($validate->fails()){
@@ -68,6 +68,7 @@ class UserController extends Controller
             'userfname' => $request->userfname,
             'userlname' => $request->userlname,
             'usermiddle' => $request->usermiddle,
+            'contact_no' => $request->contactno,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -75,7 +76,7 @@ class UserController extends Controller
         foreach($request->roles as $role) {
             $user->user_roles()->attach($role);
         }
-        $user->user_roles()->attach();
+        //$user->user_roles()->attach($request->roles);
 
         return response()->json([
             'status' => 'success',

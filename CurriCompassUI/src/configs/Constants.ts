@@ -11,7 +11,7 @@ import { HttpHeaders } from "@angular/common/http";
  */
 export const httpOptions = (authToken: string) => {
   headers: new HttpHeaders({
-  'Authorization': `Bearer ${authToken}`,
+  //'Authorization': `Bearer ${authToken}`,
   'Content-Type': 'application/json',
 })}
 
