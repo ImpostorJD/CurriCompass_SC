@@ -36,6 +36,13 @@ class SubjectsController extends Controller
         if($validate->fails()){
             return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
         }
+
+        $res = Subjects::where('subjectcode', '=', $request->subjectcode)->first();
+
+        if($res != null){
+            return response()->json([['status' => 'conflict'], "subject already existing"] ,409);
+        }
+
         return response()->json([
             ['status' => 'resource created successfully'],
             Subjects::create([
@@ -82,6 +89,10 @@ class SubjectsController extends Controller
         $res = Subjects::where('subjectid', '=', $id)->first();
 
         if($res != null) {
+            if($res->subjectcode != $request->subjectcode && Subjects::where('subjectcode', $request->subjectcode)->first() != null) {
+                return response()->json([['status' => 'conflict'], "Subject code is already in use."], 409);
+            }
+
             return response()->json([
                 ['status' => 'updated'],
                 $res->update([

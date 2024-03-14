@@ -14,6 +14,7 @@ import { UsersComponent } from './pages/users/users.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { CurriculaListComponent } from './pages/curricula-list/curricula-list.component';
 import { CoursesListComponent } from './pages/courses-list/courses-list.component';
+import { EditCourseComponent } from './pages/edit-course/edit-course.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginUiComponent },
@@ -24,7 +25,7 @@ export const routes: Routes = [
         {path: 'users', children: [
           { path : '', component: UsersComponent },
           { path : 'add-user', component: UserFormComponent },
-          { path : 'edit-user/:id', component: EditUserFormComponent },
+          { path : ':id', component: EditUserFormComponent },
         ]},
 
         {
@@ -37,6 +38,7 @@ export const routes: Routes = [
         { path: 'courses', children: [
           { path: '', component: CoursesListComponent },
           { path : 'add-course', component: CourseFormComponent },
+          { path : ':id', component: EditCourseComponent },
         ]},
 
         {path: 'curricula', children: [

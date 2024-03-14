@@ -73,22 +73,21 @@ export class UserFormComponent {
     }
 
     handleSubmit(){
-      if(this.rolesFormArray.length <= 0) {
-        return;
-      }
-
       if(this.userField.status == "INVALID"){
         markFormGroupAsDirtyAndInvalid(this.userField);
         return;
       }
 
+      if(this.rolesFormArray.length <= 0) {
+        return;
+      }
        console.log(this.userField.value);
 
        let response = null;
        this.req.postResource('users/register', this.userField.value, httpOptions).subscribe({
         next: data => {
           response = data;
-          console.log(response);
+          //console.log(response);
           this.router.navigateByUrl('/users')
         },
         error: err => {

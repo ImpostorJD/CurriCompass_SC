@@ -34,6 +34,7 @@ Route::controller(UserController::class)
         Route::delete('/{id}', 'destroy');
         Route::patch('/{id}', 'update');
     });
+
 Route::controller(RoleController::class)
     ->prefix('/roles')
     ->group(function (){
