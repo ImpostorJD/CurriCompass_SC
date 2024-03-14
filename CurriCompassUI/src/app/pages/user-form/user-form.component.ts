@@ -52,7 +52,6 @@ export class UserFormComponent {
 
     addRolesArray() {
         this.selectedRoles.push(null);
-
         const role: any = this.fb.group({
           roleid: new FormControl(null, [Validators.required])
         });

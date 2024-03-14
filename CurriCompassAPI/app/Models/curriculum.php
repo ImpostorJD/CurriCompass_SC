@@ -12,6 +12,7 @@ class Curriculum extends Model
     protected $primaryKey = 'cid';
     protected $fillables = [
         'programid',
+        'specialization',
     ];
 
     public function program(){
@@ -24,6 +25,6 @@ class Curriculum extends Model
 
     public function curriculum_subjects()
     {
-        return $this->hasMany(CurriculumSubjects::class);
+        return $this->hasMany(CurriculumSubjects::class, 'cid', 'cid');
     }
 }

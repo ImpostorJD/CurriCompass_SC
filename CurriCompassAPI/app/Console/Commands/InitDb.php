@@ -32,5 +32,9 @@ class InitDb extends Command
         echo("Commencing database seeding:");
         $this->call('db:seed', ['--class' => 'RoleSeeder']);
         echo("Role Table successfully seeded.");
+        $this->call('db:seed', ['--class' => 'SemesterSeeder']);
+        echo("Semester Table successfully seeded.");
+        $this->call('db:seed', ['--class' => 'ProgramSeeder']);
+        echo("Program Table successfully seeded.");
     }
 }
