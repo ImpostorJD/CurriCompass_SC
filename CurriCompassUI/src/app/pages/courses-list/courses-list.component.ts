@@ -22,6 +22,7 @@ export class CoursesListComponent {
   constructor(
     private req: HttpReqHandlerService,
   ){}
+
   courses: any = null;
 
   getCourses(){

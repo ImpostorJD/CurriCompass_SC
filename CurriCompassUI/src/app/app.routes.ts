@@ -15,6 +15,7 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
 import { CurriculaListComponent } from './pages/curricula-list/curricula-list.component';
 import { CoursesListComponent } from './pages/courses-list/courses-list.component';
 import { EditCourseComponent } from './pages/edit-course/edit-course.component';
+import { EditProgramsComponent } from './pages/edit-programs/edit-programs.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginUiComponent },
@@ -32,6 +33,7 @@ export const routes: Routes = [
           path: 'programs', children: [
             { path : '', component: ProgramListComponent },
             { path : 'add-program', component: ProgramsFormComponent },
+            { path : ':id', component: EditProgramsComponent },
           ]
         },
 

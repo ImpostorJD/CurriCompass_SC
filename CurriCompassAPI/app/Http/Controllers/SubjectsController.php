@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 //TODO: Add Documentation
-//TODO: Test API
 //TODO: Add Role-based access
 class SubjectsController extends Controller
 {

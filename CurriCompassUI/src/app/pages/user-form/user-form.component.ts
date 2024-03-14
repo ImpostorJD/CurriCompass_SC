@@ -5,6 +5,7 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 
 //TODO: Add role based access and render
 
@@ -17,7 +18,10 @@ import { Router, RouterLink } from '@angular/router';
     CommonModule,
     RouterLink
   ],
-  providers: [HttpReqHandlerService],
+  providers: [
+    HttpReqHandlerService,
+    RemoveInputErrorService,
+  ],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.css'
 })
@@ -25,7 +29,8 @@ export class UserFormComponent {
   constructor(
     private fb : FormBuilder,
     private req : HttpReqHandlerService,
-    private router: Router
+    private router: Router,
+    public rs: RemoveInputErrorService
     ){}
 
     roles: Array<any> = null!;
@@ -87,7 +92,6 @@ export class UserFormComponent {
        this.req.postResource('users/register', this.userField.value, httpOptions).subscribe({
         next: data => {
           response = data;
-          //console.log(response);
           this.router.navigateByUrl('/users')
         },
         error: err => {

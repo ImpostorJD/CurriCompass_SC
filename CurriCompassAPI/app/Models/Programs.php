@@ -10,7 +10,7 @@ class Programs extends Model
     use HasFactory;
 
     protected $primaryKey = 'programid';
-    protected $fillables = [
+    protected $fillable = [
         'programcode',
         'programdesc'
     ];

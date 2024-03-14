@@ -51,7 +51,7 @@
         <div class="flex flex-col">
           <div class="flex flex-col">
             <span>email</span>
-            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email" (focus)="removeError(
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email" (focus)="rs.removeError(
               userField.get('email'),
               {'duplicate' : false, 'email': false, 'required' : false}
               )"/>

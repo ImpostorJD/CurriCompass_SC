@@ -29,6 +29,10 @@ class ProgramsController extends Controller
             return response()->json([['status' => 'bad request'], $validate->errors()], 400);
         }
 
+        if(Programs::where('programcode',$request->programcode)->first() != null){
+            return response()->json([['status' => 'conflict'], "program code already in use!"], 409);
+        }
+
         return response()->json([
             ['status' => 'success'],
         Programs::create([
@@ -64,9 +68,14 @@ class ProgramsController extends Controller
 
         $program = Programs::find($id);
 
-        if($program){
+        if($program) {
+            if($program->programcode != $request->programcode && Programs::where('programcode', $request->programcode)->first() != null) {
+                return response()->json([['status' => 'conflict'], "Program code is already in use."], 409);
+            }
+
             return response()->json([
                 ['status' => 'success'],
+
             $program->update([
                 'programcode' => $request->programcode,
                 'programdesc' => $request->programdesc,
@@ -76,7 +85,7 @@ class ProgramsController extends Controller
         return response()->json(['status' => 'not found'], 404);
     }
 
-    public function delete(Request $request, String $id){
+    public function destroy(Request $request, String $id){
         $program = Programs::find($id);
 
         if($program){

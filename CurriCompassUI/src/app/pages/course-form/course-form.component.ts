@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
+import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 
 @Component({
   selector: 'app-course-form',
@@ -15,7 +16,10 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
     CommonModule,
     RouterLink,
   ],
-  providers: [HttpReqHandlerService],
+  providers: [
+    HttpReqHandlerService,
+    RemoveInputErrorService,
+  ],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.css'
 })
@@ -23,7 +27,8 @@ export class CourseFormComponent {
   constructor(
     private router: Router,
     private req: HttpReqHandlerService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public rs: RemoveInputErrorService
   ){}
 
   courseField = this.fb.group({
@@ -32,9 +37,6 @@ export class CourseFormComponent {
     subjectcredits: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),
   });
 
-  removeError(control: any, error: any): void {
-    control.setErrors(error);
-  }
 
   handleSubmit(){
     if(this.courseField.status == "INVALID"){

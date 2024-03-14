@@ -5,7 +5,7 @@
       <div class="flex flex-col">
         <div class="flex flex-col">
           <span>Course Code</span>
-          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="subjectcode" (focus)="removeError(
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="subjectcode" (focus)="rs.removeError(
             courseField.get('subjectcode'),
             {'duplicate' : false, 'required' : false}
             )"/>

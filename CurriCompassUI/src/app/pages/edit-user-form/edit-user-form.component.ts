@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
+import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 
 @Component({
   selector: 'app-edit-user-form',
@@ -15,7 +16,10 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
     RouterLink,
     ReactiveFormsModule
   ],
-  providers:[HttpReqHandlerService],
+  providers:[
+    HttpReqHandlerService,
+    RemoveInputErrorService,
+  ],
   templateUrl: './edit-user-form.component.html',
   styleUrl: './edit-user-form.component.css'
 })
@@ -26,7 +30,8 @@ export class EditUserFormComponent {
     private req : HttpReqHandlerService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    ){}
+    public rs: RemoveInputErrorService,
+  ){}
 
     roles: Array<any> = null!;
     selectedRoles: Array<any> = [];
@@ -99,10 +104,6 @@ export class EditUserFormComponent {
         }
        })
 
-    }
-
-    removeError(control: any, error: any): void {
-      control.setErrors(error);
     }
 
     ngOnInit(){

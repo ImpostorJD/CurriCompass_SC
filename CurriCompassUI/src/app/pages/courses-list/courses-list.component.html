@@ -4,10 +4,10 @@
     <table class="table-auto w-full border-collapse border border-slate-300">
       <thead class="bg-slate-300">
         <tr class="flex flex-row py-2">
-          <th class="w-[15%] py-2 hidden lg:block">
+          <th class="w-[30%] py-2">
             Course Code
           </th>
-          <th class="lg:w-[35%] py-2 flex-auto">
+          <th class="lg:w-[35%] py-2 flex-auto hidden lg:block">
             Course Description
           </th>
           <th class="lg:w-[10%] py-2 flex-auto">
@@ -27,13 +27,13 @@
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
         @for(course of courses; track $index){
           <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
-            <td class="w-[15%] px-1 hidden lg:flex items-center">
+            <td class="w-[30%] flex px-1 items-center">
               <span>{{ course.subjectcode }}</span>
             </td>
-            <td class="lg:w-[35%] flex-auto px-1 flex items-center">
+            <td class="lg:w-[35%] hidden lg:flex px-1 items-center">
               <span>{{ course.subjectname }}</span>
             </td>
-            <td class="lg:w-[10%] flex-auto px-1 flex items-center">
+            <td class="lg:w-[10%] flex-auto px-1 flex items-center justify-center">
               <span>{{ course.subjectcredits }}</span>
             </td>
 
