@@ -29,6 +29,7 @@ Route::controller(UserController::class)
         Route::post('/register', 'register');
         Route::get('/logout', 'logout');
         Route::get('/refresh', 'refresh');
+        Route::get('/', 'index');
         Route::get('/{id}', 'show');
         Route::delete('/{id}', 'destroy');
         Route::patch('/{id}', 'update');

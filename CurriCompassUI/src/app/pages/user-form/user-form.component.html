@@ -1,4 +1,4 @@
-<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="userField">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="userField" (submit)="handleSubmit()">
   <h1 class="font-bold font-sans text-[2rem] uppercase">Add User</h1>
   <div class="flex flex-col gap-1">
     <div class="flex lg:flex-row gap-2 flex-col bg-white">
@@ -51,7 +51,10 @@
         <div class="flex flex-col">
           <div class="flex flex-col">
             <span>email</span>
-            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email"/>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email" (focus)="removeError(
+              userField.get('email'),
+              {'duplicate' : false, 'email': false, 'required' : false}
+              )"/>
             @if(
               userField.get('email')?.invalid &&
               (userField.get('email')?.touched ||
@@ -63,6 +66,9 @@
                 }
                 @if(userField.get('email')?.hasError('email')){
                   Email is in invalid format!
+                }
+                @if(userField.get('email')?.hasError('duplicate')){
+                  Email is already in use!
                 }
               </div>
             }
@@ -102,28 +108,39 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-2 p-4 border-[1px] rounded-md border-slate-400 bg-white md:h-[15rem] md:overflow-y-auto h-full">
+    <div class="flex flex-col gap-2 p-4 border-[1px] rounded-md border-slate-400 bg-white lg:h-[15rem] lg:overflow-y-auto h-full">
       <h2 class="font-bold text-[1.33rem]">Roles</h2>
       <button class="flex items-center justify-center bg-green-600 text-white w-fit px-4 py-2 rounded-sm" (click)="addRolesArray()">
         <i class="material-symbols-outlined">add</i>
         <span class="uppercase ml-1">Add role</span>
       </button>
+      @if(rolesFormArray.length <= 0){
+        <div class="text-red-600">
+          Roles are required!
+        </div>
+      }
       @for(item of rolesFormArray.controls; track $index){
         <div class="flex flex-row gap-2 items-center">
           <span class="font-bold">
             Role
           </span>
-          <select placeholder ="roles" class="w-full border-[1px] border-slate-400 rounded-md py-2" [selectedIndex]="0">
-            <option [value]="null" disabled>
-              Please Select
-            </option>
-            @for(role of roles; track $index){
-              <option [value]="role.roleid">
-                {{ role.rolename }}
+          <div class="w-full flex flex-col gap-1">
+            <select placeholder ="roles" class="w-full border-[1px] border-slate-400 rounded-md py-2" [selectedIndex]="null" (change)="roleSelected($index, $event)" [formControl]="getRoleControl($index)">
+              <option [value]="null" disabled>
+                Please Select
               </option>
+              @for(role of roles; track $index){
+                <option [value]="role.roleid" [disabled]="isRoleSelected(role.roleid)">
+                  {{ role.rolename }}
+                </option>
+              }
+            </select>
+            @if(item.get('roleid')?.hasError('required')){
+              <div class="text-red-600">
+                Role is required!
+              </div>
             }
-
-          </select>
+          </div>
           <button class="bg-red-500 flex items-center justify-center p-2 h-full text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="popRolesArray($index)">
             <i class="material-symbols-outlined">
               delete
@@ -137,15 +154,15 @@
     </div>
   </div>
   <div class="flex flex-row justify-center gap-2 py-2">
-    <button class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+    <a class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase" [routerLink]="'/users'">
       <i class="material-symbols-outlined">
         person_cancel
       </i>
       <span class="hidden lg:block">
         Cancel
       </span>
-    </button>
-    <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
+    </a>
+    <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase" (click)="handleSubmit()">
       <i class="material-symbols-outlined">person_add</i>
       <span class="hidden lg:block">
         Save Changes

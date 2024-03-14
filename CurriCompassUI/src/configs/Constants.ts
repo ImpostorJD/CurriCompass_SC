@@ -1,4 +1,5 @@
 import { HttpHeaders } from "@angular/common/http";
+import { FormGroup } from "@angular/forms";
 
 /**
  * 3/1/2024
@@ -13,5 +14,16 @@ export const httpOptions = (authToken: string) => {
   headers: new HttpHeaders({
   //'Authorization': `Bearer ${authToken}`,
   'Content-Type': 'application/json',
+  'accept': 'application/json',
 })}
 
+export function markFormGroupAsDirtyAndInvalid(formGroup: FormGroup) {
+  Object.values(formGroup.controls).forEach(control => {
+    if (control instanceof FormGroup) {
+      markFormGroupAsDirtyAndInvalid(control);
+    } else {
+      control.markAsDirty();
+      control.markAsTouched();
+    }
+  });
+}
