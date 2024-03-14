@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('programid');
             $table->string('programcode');
             $table->text('programdesc');
-            $table->timestamps();
         });
     }
 

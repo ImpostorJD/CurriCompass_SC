@@ -62,7 +62,7 @@
                 </option>
                 @for(course of courses; track $index){
                   <option [value]="course.subjectid" [disabled]="isCourseSelected(course.subjectid)">
-                    {{ course.subjectname }}
+                    {{ course.subjectcode }}
                   </option>
                 }
               </select>
