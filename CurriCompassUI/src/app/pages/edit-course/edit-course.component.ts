@@ -75,15 +75,14 @@ export class EditCourseComponent {
 
   handleSubmit(){
 
-    console.log(this.courseField.value);
-    return;
     if(this.courseField.status == "INVALID"){
       markFormGroupAsDirtyAndInvalid(this.courseField);
       return;
     }
 
     this.req.patchResource('subjects/' + this.routerId, this.courseField.value, httpOptions).subscribe({
-      next: () => {
+      next: (res: any) => {
+        console.log(res);
         this.router.navigateByUrl('/courses');
       },
       error: err => {
@@ -109,9 +108,10 @@ export class EditCourseComponent {
 
       this.req.getResource('subjects/' + this.routerId, httpOptions).subscribe({
         next: (res: any) => {
+          console.log(res);
           this.courseField.patchValue(res[1]);
-          this.courseField.controls['year_level'].patchValue(res[1].pre_requisites.year_level);
-          this.courseField.controls['completion'].patchValue(res[1].pre_requisites.completion);
+          this.courseField.controls['year_level'].setValue(res[1].pre_requisites.year_level);
+          this.courseField.controls['completion'].setValue(res[1].pre_requisites.completion);
           if (res[1].pre_requisites_subjects.length > 0) {
             res[1].pre_requisites_subjects.forEach((subject:any, i: number) => {
               const csubject: any = this.fb.group({

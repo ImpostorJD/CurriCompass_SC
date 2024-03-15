@@ -41,7 +41,7 @@ class SubjectsController extends Controller
             return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
         }
 
-        $res = Subjects::where('subjectcode', '=', $request->subjectcode)->first();
+        $res = Subjects::where('subjectcode', $request->subjectcode)->first();
 
         if($res != null){
             return response()->json([['status' => 'conflict'], "subject already existing"] ,409);
@@ -134,6 +134,7 @@ class SubjectsController extends Controller
             ]);
 
             Pre_Requisites_Subjects::where('prid', $pre_requisite->prid)->delete();
+
             if(sizeof($request->subjects) > 0) {
                 foreach($request->subjects as $subject){
                     Pre_Requisites_Subjects::create([
@@ -142,7 +143,6 @@ class SubjectsController extends Controller
                     ]);
                 }
             }
-
 
             return response()->json([
                 ['status' => 'updated'],

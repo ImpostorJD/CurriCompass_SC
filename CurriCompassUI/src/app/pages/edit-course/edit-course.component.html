@@ -1,4 +1,4 @@
-<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="courseField" (ngSubmit)="handleSubmit()">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="courseField" (submit)="handleSubmit()">
   <h1 class="font-bold font-sans text-[2rem] uppercase">Edit Course</h1>
   <div class="flex gap-2 flex-col mx-2 min-h-[30rem]">
     <div class="border-slate-400 border-1 flex-auto p-5 border-[1px] rounded-sm shadow-lg">
@@ -90,7 +90,7 @@
       <div class="flex flex-col">
         <span>Year Level</span>
         <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="year_level">
-          <option [value]="null" selected>
+          <option [value]="''" selected>
             None
           </option>
           <option value="1st Year">
