@@ -1,8 +1,9 @@
 <form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="courseField" (ngSubmit)="handleSubmit()">
   <h1 class="font-bold font-sans text-[2rem] uppercase">Add Course</h1>
-  <div class="flex lg:flex-row gap-2 flex-col bg-white mx-1 xl:mx-48 lg:mx-28 min-h-[30rem]">
-    <div class="border-slate-400 border-1 w-full p-5 border-[1px] rounded-sm shadow-lg">
+  <div class="flex gap-2 flex-col mx-2 min-h-[30rem]">
+    <div class="border-slate-400 border-1 flex-auto p-5 border-[1px] rounded-sm shadow-lg">
       <div class="flex flex-col">
+        <span class="font-bold text-[1.5rem]">Course Information</span>
         <div class="flex flex-col">
           <span>Course Code</span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="subjectcode" (focus)="rs.removeError(
@@ -53,30 +54,116 @@
               }
           }
         </div>
+        <div class="flex flex-col">
+          <span>Course Type</span>
+          <select formControlName="subjecttype" class="border-slate-500 border-[1px] rounded-sm p-2 my-4">
+              <option [value]="null" selected disabled>
+                Please Select
+              </option>
+              <option value="Lab">
+                Laboratory
+              </option>
+              <option value="Lec">
+                Lecture
+              </option>
+          </select>
+          @if( courseField.get('subjecttype')?.invalid &&
+            (courseField.get('subjecttype')?.touched ||
+            courseField.get('subjecttype')?.dirty)) {
+            <div class="text-red-600">
+              Field is required!
+            </div>
+          }
+        </div>
       </div>
     </div>
-  </div>
-  <div class="flex flex-row justify-center gap-2 py-2 mx-1 xl:mx-48 lg:mx-28">
-    <a
-      class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase"
-      [routerLink]="'/courses'"
-    >
-      <i class="material-symbols-outlined">
-        cancel
-      </i>
-      <span class="hidden lg:block">
-        Cancel
-      </span>
-    </a>
-    <button
-      class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase"
-      (click)="handleSubmit()"
-    >
-      <i class="material-symbols-outlined">add</i>
-      <span class="hidden lg:block">
-        Add Course
-      </span>
-    </button>
+    <div class="gap-2 bg-white border-slate-400 border-1 flex-auto flex flex-col p-5 border-[1px] rounded-sm shadow-lg">
+      <span class="font-bold text-[1.5rem]">Pre Requisites</span>
+      <button class="flex items-center justify-center bg-green-600 text-white w-fit px-4 py-2 rounded-sm" (click)="addReqCourseArray()">
+        <i class="material-symbols-outlined">add</i>
+        <span class="uppercase ml-1">Add Pre-Requisite Subject</span>
+      </button>
+      <div class="flex flex-col">
+        <span>Curriculum Completion (Decimal Form)</span>
+        <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" type="number" placeholder="leave if none" formControlName="completion"/>
+      </div>
+      <div class="flex flex-col">
+        <span>Year Level</span>
+        <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="year_level">
+          <option [value]="null" selected>
+            None
+          </option>
+          <option value="1st Year">
+            1st Year
+          </option>
+          <option value="2nd Year">
+            2nd Year
+          </option>
+          <option value="3rd Year">
+            3rd Year
+          </option>
+          <option value="4th Year">
+            4th Year
+          </option>
+        </select>
+      </div>
+      <div class="flex flex-col min-h-[20rem] pb-[3rem] gap-2">
+        <span>Course Pre-Requisites</span>
+        @for(pre of reqCourseArray.controls; track $index){
+          <div class="flex flex-row gap-2">
+            <div class="flex flex-col gap-1 w-full">
+              <select class="w-full border-[1px] border-slate-400 rounded-md py-2" [selectedIndex]="0" (change)="courseSelected($index, $event)" [formControl]="getReqCourseControl($index)">
+                <option [value]="null" disabled>
+                  Please Select
+                </option>
+                @for(course of courseList; track $index){
+                  <option [value]="course.subjectid" [disabled]="isCourseSelected(course.subjectid)">
+                    {{ course.subjectcode }}
+                  </option>
+                }
+              </select>
+              @if(pre.get('subjectid')?.invalid &&
+              (pre.get('subjectid')?.touched ||
+              pre.get('subjectid')?.dirty)){
+                <div class="text-red-600">
+                  Course is required!
+                </div>
+              }
+            </div>
+            <button class="bg-red-500 flex items-center justify-center p-2 h-full text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="popReqCourseArray($index)">
+              <i class="material-symbols-outlined">
+                delete
+              </i>
+              <span class="md:inline hidden ml-1">
+                Delete
+              </span>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="flex flex-row justify-center gap-2">
+      <a
+        class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase"
+        [routerLink]="'/courses'"
+      >
+        <i class="material-symbols-outlined">
+          cancel
+        </i>
+        <span class="hidden lg:block">
+          Cancel
+        </span>
+      </a>
+      <button
+        class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase"
+        (click)="handleSubmit()"
+      >
+        <i class="material-symbols-outlined">add</i>
+        <span class="hidden lg:block">
+          Add Course
+        </span>
+      </button>
+    </div>
   </div>
 </form>
 

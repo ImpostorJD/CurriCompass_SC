@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pre_Requisites;
+use App\Models\Pre_Requisites_Subjects;
 use App\Models\Subjects;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,10 +29,12 @@ class SubjectsController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->subjects);
         $validate = Validator::make($request->all(), [
             'subjectname' => ['required', 'string'],
             'subjectcode' => ['required', 'string'],
             'subjectcredits' => ['required', 'int'],
+            'subjecttype' => ['required', 'string'],
         ]);
 
         if($validate->fails()){
@@ -42,13 +47,31 @@ class SubjectsController extends Controller
             return response()->json([['status' => 'conflict'], "subject already existing"] ,409);
         }
 
+        $subject = Subjects::create([
+            'subjectname' => $request['subjectname'],
+            'subjectcode' => $request['subjectcode'],
+            'subjectcredits' => $request['subjectcredits'],
+            'subjecttype' => $request['subjecttype'],
+        ]);
+
+        $pre_requisite = Pre_Requisites::create([
+            'subjectid' => $subject->subjectid,
+            'year_level' => $request->year_level,
+            'completion' => $request->completion,
+        ]);
+
+        if(sizeof($request->subjects) > 0) {
+            foreach($request->subjects as $subject){
+                Pre_Requisites_Subjects::create([
+                    "prid" => $pre_requisite->prid,
+                    "subjectid" => $subject['subjectid'],
+                ]);
+            }
+        }
+
         return response()->json([
             ['status' => 'resource created successfully'],
-            Subjects::create([
-                'subjectname' => $request['subjectname'],
-                'subjectcode' => $request['subjectcode'],
-                'subjectcredits' => $request['subjectcredits'],
-            ])
+            $subject,
         ], 201);
     }
 
@@ -57,9 +80,12 @@ class SubjectsController extends Controller
      */
     public function show(string $id)
     {
-        $res = Subjects::where('subjectid', '=', $id)->first();
+        $res = Subjects::with('pre_requisites')
+            ->where('subjectid', '=', $id)->first();
 
         if($res != null) {
+            $pre_requisites_subjects = Pre_Requisites_Subjects::where('prid', $res->pre_requisites->prid)->get();
+            $res['pre_requisites_subjects'] = $pre_requisites_subjects;
             return response()->json([
                 ['status' => 'success'],
                 $res], 200);
@@ -75,10 +101,12 @@ class SubjectsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $validate = Validator::make($request->all(), [
             'subjectname' => ['required', 'string'],
             'subjectcode' => ['required', 'string'],
             'subjectcredits' => ['required', 'int'],
+            'subjecttype' => ['required', 'string'],
         ]);
 
         if($validate->fails()){
@@ -92,13 +120,33 @@ class SubjectsController extends Controller
                 return response()->json([['status' => 'conflict'], "Subject code is already in use."], 409);
             }
 
+            $res->update([
+                'subjectname' => $request['subjectname'],
+                'subjectcode' => $request['subjectcode'],
+                'subjectcredits' => $request['subjectcredits'],
+                'subjecttype' => $request['subjecttype'],
+            ]);
+
+            $pre_requisite = Pre_Requisites::where('subjectid', $id)->first();
+            $pre_requisite->update([
+                'year_level' => $request->year_level,
+                'completion' => $request->completion,
+            ]);
+
+            Pre_Requisites_Subjects::where('prid', $pre_requisite->prid)->delete();
+            if(sizeof($request->subjects) > 0) {
+                foreach($request->subjects as $subject){
+                    Pre_Requisites_Subjects::create([
+                        "prid" => $pre_requisite->prid,
+                        "subjectid" => $subject['subjectid'],
+                    ]);
+                }
+            }
+
+
             return response()->json([
                 ['status' => 'updated'],
-                $res->update([
-                    'subjectname' => $request['subjectname'],
-                    'subjectcode' => $request['subjectcode'],
-                    'subjectcredits' => $request['subjectcredits'],
-                ])
+                $res
             ], 200);
         }
         return response()->json([

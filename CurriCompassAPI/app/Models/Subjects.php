@@ -13,7 +13,8 @@ class Subjects extends Model
     protected $fillable =[
         'subjectname',
         'subjectcode',
-        'subjectcredits'
+        'subjectcredits',
+        'subjecttype'
     ];
 
     public function subjectsTaken()
@@ -26,4 +27,11 @@ class Subjects extends Model
         return $this->hasMany(CurriculumSubjects::class);
     }
 
+    public function pre_requisites(){
+        return $this->hasOne(Pre_Requisites::class, 'subjectid', 'subjectid');
+    }
+
+    public function pre_requisites_subjects(){
+        return $this->hasMany(Pre_Requisites_Subjects::class, 'subjectid', 'subjectid');
+    }
 }

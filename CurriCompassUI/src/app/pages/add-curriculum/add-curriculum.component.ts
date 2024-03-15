@@ -59,15 +59,18 @@ export class AddCurriculumComponent {
 
   addCsubjectsArray() {
     const csubject: any = this.fb.group({
-      'subjecid' : new FormControl(null, [Validators.required]),
+      'subjectid' : new FormControl(null, [Validators.required]),
       'semid' : new FormControl(null, [Validators.required]),
-      'pre_requisite': this.fb.array([]),
     });
     this.csubjectsFormArray.push(csubject);
   }
 
   getCsubjectsControl(index: number): FormControl{
     return (this.csubjectsFormArray.at(index) as FormGroup).get('subjectid')! as FormControl;
+  }
+
+  handleSubmit(){
+
   }
 
   ngOnInit(){

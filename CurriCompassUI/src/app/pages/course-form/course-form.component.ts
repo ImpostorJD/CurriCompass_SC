@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { HttpClientModule } from '@angular/common/http';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
@@ -31,10 +31,17 @@ export class CourseFormComponent {
     public rs: RemoveInputErrorService
   ){}
 
+  courseList: any = null;
+  selectedCourses: Array<any> = [];
+
   courseField = this.fb.group({
     subjectcode: new FormControl('', [Validators.required]),
     subjectname: new FormControl('', [Validators.required]),
     subjectcredits: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),
+    subjecttype: new FormControl(null, [Validators.required]),
+    completion: new FormControl(null),
+    year_level: new FormControl(null),
+    subjects: this.fb.array([]),
   });
 
 
@@ -48,6 +55,7 @@ export class CourseFormComponent {
       next: () => {
         this.router.navigateByUrl('/courses');
       },
+
       error: err => {
         if(err.status == 409) {
           console.log(err.status);
@@ -55,6 +63,44 @@ export class CourseFormComponent {
         }
       }
     })
+  }
+
+  get reqCourseArray() {
+    return this.courseField.get('subjects') as FormArray;
+  }
+  popReqCourseArray(index : number){
+    this.reqCourseArray.removeAt(index);
+  }
+
+  courseSelected(index: number, event: any) {
+    const courseid = event.target.value;
+    this.selectedCourses[index] = parseInt(courseid);
+  }
+
+  isCourseSelected(courseid: number): boolean {
+    return this.selectedCourses.includes(courseid);
+  }
+
+  addReqCourseArray() {
+    const csubject: any = this.fb.group({
+      'subjectid' : new FormControl(null, [Validators.required]),
+    });
+    this.reqCourseArray.push(csubject);
+  }
+
+  getReqCourseControl(index: number): FormControl{
+    return (this.reqCourseArray.at(index) as FormGroup).get('subjectid')! as FormControl;
+  }
+
+
+  ngOnInit(){
+    this.req.getResource('subjects', httpOptions).subscribe({
+      next: (res:any) => {
+        this.courseList = res[1];
+      },
+
+      error: err => console.error(err),
+    });
   }
 
 }
