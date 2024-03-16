@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cid');
             $table->unsignedBigInteger('subjectid');
             $table->unsignedBigInteger('semid');
+            $table->enum('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year']);
             $table->foreign('cid')
                 ->references('cid')
                 ->on('curricula')

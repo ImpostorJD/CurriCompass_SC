@@ -4,13 +4,13 @@
     <table class="table-auto w-full border-collapse border border-slate-300">
       <thead class="bg-slate-300">
         <tr class="flex flex-row py-2">
-          <th class="w-[10%] py-2 hidden lg:block">
+          <th class="w-[15%] py-2 hidden lg:flex items-center justify-center">
             Curriculum Id
           </th>
-          <th class="lg:w-[35%] py-2 flex-auto">
+          <th class="lg:w-[35%] py-2 flex-auto flex items-center justify-center">
             Program
           </th>
-          <th class="lg:w-[25%] py-2 flex-auto">
+          <th class="lg:w-[25%] py-2 flex-auto flex items-center justify-center">
             Specialization
           </th>
           <th class="w-[25%] lg:flex-auto py-2 flex items-center justify-center">
@@ -25,37 +25,38 @@
         </tr>
       </thead>
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
-        <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100" *ngFor="let num of iterates">
-          <td class="w-[10%] px-1 hidden lg:flex items-center">
-            <!-- Curriculum ID-->
-            <span>1</span>
-          </td>
-          <td class="lg:w-[35%] flex-auto px-1 flex items-center">
-            <!-- Display Program full -->
-            <span>Bachelor of Science in Information Technology</span>
-          </td>
-          <td class="lg:w-[25%] flex-auto px-1 flex items-center">
-            <!-- Display Program full -->
-            <span>Web and Mobile</span>
-          </td>
+        @for(curriculum of curricula; track $index){
+          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
+            <td class="w-[15%] px-1 hidden lg:flex items-center">
+              <span>{{ curriculum.cid }}</span>
+            </td>
+            <td class="lg:w-[35%] flex-auto px-1 flex items-center">
+              <!-- Display Program full -->
+              <span>{{  curriculum.program.programdesc }}</span>
+            </td>
+            <td class="lg:w-[25%] flex-auto px-1 flex items-center justify-center">
+              <!-- Display Program full -->
+              <span>{{ (curriculum.specialization == null) ? "None" : curriculum.specialization }}</span>
+            </td>
 
-          <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
-            <!-- Sample Route -->
-            <a
-              class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
-              [routerLink]="'/programs/1'"
-            >
-            <i class="material-symbols-outlined">
-              visibility
-            </i>
-          </a>
-          <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md">
+            <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+              <!-- Sample Route -->
+              <a
+                class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
+                [routerLink]="'/curricula/' + curriculum.cid"
+              >
               <i class="material-symbols-outlined">
-                delete
+                visibility
               </i>
-            </button>
-          </td>
-        </tr>
+            </a>
+            <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="deleteCurricula(curriculum.cid)">
+                <i class="material-symbols-outlined">
+                  delete
+                </i>
+              </button>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>

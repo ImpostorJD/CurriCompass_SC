@@ -1,13 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 
 @Component({
-  selector: 'app-add-curriculum',
+  selector: 'app-edit-curriculum',
   standalone: true,
   imports: [
     RouterLink,
@@ -18,17 +18,19 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
     HttpReqHandlerService,
     RemoveInputErrorService,
   ],
-  templateUrl: './add-curriculum.component.html',
-  styleUrl: './add-curriculum.component.css'
+  templateUrl: './edit-curriculum.component.html',
+  styleUrl: './edit-curriculum.component.css'
 })
-export class AddCurriculumComponent {
+export class EditCurriculumComponent {
   constructor(
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private req: HttpReqHandlerService,
     public rs: RemoveInputErrorService,
   ){}
 
+  routeId:number = null!;
   programs: any = null;
   courses: any = null;
   semesters: any = null;
@@ -95,9 +97,8 @@ export class AddCurriculumComponent {
       return;
     }
 
-
-    this.req.postResource('curriculum', this.curriculum.value, httpOptions).subscribe({
-      next: (res:any) => {
+    this.req.patchResource('curriculum/' + this.routeId, this.curriculum.value, httpOptions).subscribe({
+      next: () => {
         this.router.navigateByUrl('/curricula');
       },
 
@@ -128,6 +129,31 @@ export class AddCurriculumComponent {
         this.semesters = res[1];
       },
       error: err => console.error(err),
-    })
+    });
+
+    this.activatedRoute.params.subscribe(params => {
+      this.routeId = params['id'];
+      this.req.getResource('curriculum/' + this.routeId, httpOptions).subscribe({
+        next: (res:any) => {
+          this.curriculum.patchValue(res[1]);
+
+          if(res[1].curriculum_subjects.length > 0) {
+            res[1].curriculum_subjects.forEach((cs:any, index: number) => {
+              const csubject: any = this.fb.group({
+                'subjectid' : new FormControl(cs.subjectid, [Validators.required]),
+                'semid' : new FormControl(cs.semid, [Validators.required]),
+                'year_level' : new FormControl(cs.year_level, [Validators.required]),
+              });
+              this.csubjectsFormArray.push(csubject);
+              this.selectedCourses[index] = parseInt(cs.subjectid);
+            });
+          }
+
+        },
+        error: err=> console.error(err),
+
+      });
+    });
   }
+
 }

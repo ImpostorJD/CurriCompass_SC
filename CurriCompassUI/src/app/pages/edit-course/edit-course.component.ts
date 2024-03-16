@@ -7,6 +7,7 @@ import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 
+//TODO: Add role based access
 @Component({
   selector: 'app-edit-course',
   standalone: true,
@@ -82,7 +83,6 @@ export class EditCourseComponent {
 
     this.req.patchResource('subjects/' + this.routerId, this.courseField.value, httpOptions).subscribe({
       next: (res: any) => {
-        console.log(res);
         this.router.navigateByUrl('/courses');
       },
       error: err => {
@@ -108,7 +108,6 @@ export class EditCourseComponent {
 
       this.req.getResource('subjects/' + this.routerId, httpOptions).subscribe({
         next: (res: any) => {
-          console.log(res);
           this.courseField.patchValue(res[1]);
           this.courseField.controls['year_level'].setValue(res[1].pre_requisites.year_level);
           this.courseField.controls['completion'].setValue(res[1].pre_requisites.completion);

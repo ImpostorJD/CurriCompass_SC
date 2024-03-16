@@ -122,9 +122,7 @@
                   </option>
                 }
               </select>
-              @if(pre.get('subjectid')?.invalid &&
-              (pre.get('subjectid')?.touched ||
-              pre.get('subjectid')?.dirty)){
+              @if(pre.get('subjectid')?.invalid){
                 <div class="text-red-600">
                   Course is required!
                 </div>

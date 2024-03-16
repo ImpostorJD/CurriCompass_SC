@@ -12,7 +12,8 @@ class CurriculumSubjects extends Model
     protected $fillables = [
         'cid',
         'subjectid',
-        'semid'
+        'semid',
+        'year_level',
     ];
 
     public function curricula(){

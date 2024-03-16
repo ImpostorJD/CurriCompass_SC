@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class InitDb extends Command
+class InitSample extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:init-db';
+    protected $signature = 'app:init-sample';
 
     /**
      * The console command description.
@@ -25,16 +25,19 @@ class InitDb extends Command
      */
     public function handle()
     {
-        //
         echo("migrating databases... \n Please wait...\n");
         $this->call('migrate:fresh');
         echo("successfully migrated.\n");
-        echo("Commencing database seeding:");
+        echo("Commencing database seeding:\n");
         $this->call('db:seed', ['--class' => 'RoleSeeder']);
-        echo("Role Table successfully seeded. \n");
+        echo("Role Table successfully seeded.\n");
         $this->call('db:seed', ['--class' => 'UserSeeder']);
         echo("User Table successfully seeded. \n");
         $this->call('db:seed', ['--class' => 'SemesterSeeder']);
-        echo("Semester Table successfully seeded. \n");
+        echo("Semester Table successfully seeded.\n");
+        $this->call('db:seed', ['--class' => 'ProgramSeeder']);
+        echo("Program Table successfully seeded.\n");
+        $this->call('db:seed', ['--class' => 'CourseSeeder']);
+        echo("Course/Subjects Table successfully seeded.\n");
     }
 }

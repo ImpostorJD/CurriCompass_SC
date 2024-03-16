@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curriculum;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 //TODO: Implement ROLE BASED ACCESS
-//TODO: Test API
 //TODO: Add documentation
 class CurriculumController extends Controller
 {
@@ -16,23 +14,15 @@ class CurriculumController extends Controller
 
         return response()->json([
             ['status' => "success"],
-            Curriculum::all()
-                ->with(['curriculum_subjects', function(Builder $query){
-                    $query
-                        ->with('subjects')
-                        ->with('semesters')
-                        ->get();
-                }])
-            ->with('curriculum_subjects')
+            Curriculum::with('program')->get()
         ]);
     }
 
     public function show(Request $request, String $id){
         $curriculum = Curriculum::where('cid', $id)
-            ->with(['curriculum_subjects', function(Builder $query) {
+            ->with(['curriculum_subjects'=> function($query) {
                 $query
                     ->with('subjects')
-                    ->with('semesters')
                     ->get();
             }])
             ->first();
@@ -50,24 +40,35 @@ class CurriculumController extends Controller
     public function store(Request $request){
         $validate = Validator::make($request->all(), [
             'programid' => ['required', 'integer'],
-            'subjects' => ['required', 'array', function($attribute, $value, $validator) {
-                foreach ($value as $key => $subject) {
-                    $validator->addRule("{$attribute}.{$key}.subjectid", 'required|integer');
-                    $validator->addRule("{$attribute}.{$key}.semid", 'required|integer');
-                }
-            }],
+            'specialization' => ['nullable', 'string'],
+            'curriculum_subjects' => ['required', 'array'],
+            'curriculum_subjects*.semid' => ['required', 'integer'],
+            'curriculum_subjects*.subjectid' => ['required', 'integer'],
+            'curriculum_subjects*.year_level' => ['required', 'string'],
         ]);
 
         if($validate->fails()){
             return response()->json([['status' => 'bad request'], $validate->errors()], 400);
         }
 
+        $existing = Curriculum::where('programid', $request->programid)
+            ->where('specialization', $request->specialization)->first();
+        if($existing != null){
+            return response()->json([['status' => 'conflict'], "Combination already exists."], 409);
+        }
+
         $curriculum = Curriculum::create([
-            'programid' => $request->programid
+            'programid' => $request->programid,
+            'specialization' => $request->specialization,
         ]);
 
-        foreach($request->subjects as $subject) {
-            $curriculum->curriculum_subjects()->attach($subject);
+        foreach($request->curriculum_subjects as $subject) {
+            $curriculum->curriculum_subjects()->insert([
+                'cid' => $curriculum->cid,
+                'subjectid' => $subject['subjectid'],
+                'semid' => $subject['semid'],
+                'year_level'=>$subject['year_level'],
+            ]);
         }
 
         return response()->json([
@@ -76,7 +77,7 @@ class CurriculumController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request, String $id){
+    public function destroy(Request $request, String $id){
         $curriculum = Curriculum::where('cid', $id)->first();
 
         if ($curriculum != null){
@@ -90,58 +91,44 @@ class CurriculumController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'programid' => ['required', 'integer'],
-            'subjects' => ['nullable', 'array', function($attribute, $value, $validator) {
-                if (!$value) {
-                    return;
-                }
-
-                foreach ($value as $key => $subject) {
-                    $validator->addRule("{$attribute}.{$key}.subjectid", 'required|integer');
-                    $validator->addRule("{$attribute}.{$key}.semid", 'required|integer');
-                    $validator->addRule("{$attribute}.{$key}.action", 'required|string|in:update,delete');
-                }
-            }],
+            'specialization' => ['nullable', 'string'],
+            'curriculum_subjects' => ['required', 'array'],
+            'curriculum_subjects*.semid' => ['required', 'integer'],
+            'curriculum_subjects*.subjectid' => ['required', 'integer'],
+            'curriculum_subjects*.year_level' => ['required', 'string'],
         ]);
 
-        if ($validate->fails()) {
+        if($validate->fails()){
             return response()->json([['status' => 'bad request'], $validate->errors()], 400);
         }
+        $existing = Curriculum::where('programid', $request->programid)
+            ->where('specialization', $request->specialization)->first();
+        $curriculum = Curriculum::find($id);
 
-        $curriculum = Curriculum::where('cid', $id)->first();
-
-        if ($curriculum === null) {
-            return response()->json(['status' => 'not found'], 404);
+        if($existing != null && ($request->programid != $existing->programid && $request->specialization != $existing->specialization)){
+            return response()->json([['status' => 'conflict'], "Combination already exists."], 409);
         }
 
-        // Update program ID
-        $curriculum->programid = $request->programid;
-        $curriculum->save();
+        $curriculum->update([
+            'programid' => $request->programid,
+            'specialization' => $request->specialization,
 
-        if (!empty($request->subjects)) {
-            $subjectIdsToUpdate = [];
-            $subjectIdsToDelete = [];
+        ]);
 
-            foreach ($request->subjects as $subject) {
-                $action = $subject['action'];
-                $subjectId = $subject['subjectid'];
-                $semesterId = $subject['semid'];
+        $curriculum->curriculum_subjects()->delete();
 
-                switch ($action) {
-                    case 'update':
-                        $curriculum->curriculum_subjects()->updateExistingPivot($subjectId, ['semid' => $semesterId]);
-                        break;
-                    case 'delete':
-                        $curriculum->curriculum_subjects()->detach($subjectId);
-                        break;
-                    default:
-                        return response()->json(['status' => 'invalid_action'], 400);
-                }
-            }
+        foreach($request->curriculum_subjects as $subject) {
+            $curriculum->curriculum_subjects()->insert([
+                'cid' => $curriculum->cid,
+                'subjectid' => $subject['subjectid'],
+                'semid' => $subject['semid'],
+                'year_level'=>$subject['year_level'],
+            ]);
         }
 
         return response()->json([
             ['status' => 'success'],
-            $curriculum,
+            $curriculum
         ], 200);
     }
 }

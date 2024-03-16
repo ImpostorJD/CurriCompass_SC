@@ -1,5 +1,5 @@
 import { HttpHeaders } from "@angular/common/http";
-import { FormGroup } from "@angular/forms";
+import { FormArray, FormGroup } from "@angular/forms";
 
 /**
  * 3/1/2024
@@ -18,10 +18,11 @@ export const httpOptions = (authToken: string) => {
 })}
 
 export function markFormGroupAsDirtyAndInvalid(formGroup: FormGroup) {
+  formGroup.markAllAsTouched();
   Object.values(formGroup.controls).forEach(control => {
     if (control instanceof FormGroup) {
       markFormGroupAsDirtyAndInvalid(control);
-    } else {
+    }else {
       control.markAsDirty();
       control.markAsTouched();
     }

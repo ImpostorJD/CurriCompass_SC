@@ -16,6 +16,7 @@ import { CurriculaListComponent } from './pages/curricula-list/curricula-list.co
 import { CoursesListComponent } from './pages/courses-list/courses-list.component';
 import { EditCourseComponent } from './pages/edit-course/edit-course.component';
 import { EditProgramsComponent } from './pages/edit-programs/edit-programs.component';
+import { EditCurriculumComponent } from './pages/edit-curriculum/edit-curriculum.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginUiComponent },
@@ -46,6 +47,7 @@ export const routes: Routes = [
         {path: 'curricula', children: [
           { path : '', component: CurriculaListComponent },
           { path : 'add-curriculum', component: AddCurriculumComponent },
+          { path : ':id', component: EditCurriculumComponent },
         ]},
 
         { path : 'students', children: [

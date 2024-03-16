@@ -10,7 +10,7 @@ class Curriculum extends Model
     use HasFactory;
 
     protected $primaryKey = 'cid';
-    protected $fillables = [
+    protected $fillable = [
         'programid',
         'specialization',
     ];
