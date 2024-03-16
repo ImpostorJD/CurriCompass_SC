@@ -13,10 +13,23 @@ This project entitled CurriCompass is a Capstone project in compliance with the 
 [![API Instructions](https://img.shields.io/badge/API-Instructions-ff3421)](https://github.com/JohnDanielTejero/CurriCompass_SC/tree/main/CurriCompassAPI)
 
 ## Features
-- Algorithm-based decision-making for pre-advisement
+- Algorithm-based decision-making for academic advising
 - Adjustable lists of courses 
 - Powerful tool for defining curriculum
 
+## Progress:
+### Finish Module:
+- User Module
+- Curriculum Module
+- Courses Module
+- Program Module
+  
+### Ongoing Module:
+- Student Record Management Module
+- Consultation Module
+- Profile Module
+- Authentication Module
+  
 ## Technologies Used
 - Angular 17.0.2
 - TailwindCSS
