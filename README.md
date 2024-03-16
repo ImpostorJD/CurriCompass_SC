@@ -25,9 +25,9 @@ This project entitled CurriCompass is a Capstone project in compliance with the 
 - Visual Studio Code
 - GitHub
 - PenPot Desktop
-- 
+
 ## Installation
-NOTE: Install both package manager if you want to run both frontend and backend.
+NOTE: Setup both Frontend and Backend to run the Application in Development Environment
 
 ### For Frontend Developers
 
@@ -68,13 +68,19 @@ npm uninstall [dependency]
 ```
 
 ### For Backend Developers
-#### Setup PHP CLI:
-1. Extract php 8.1.0 zip to C:\Program Files
+#### Setting up WAMP
+[![WAMP - Installation](https://img.shields.io/badge/WAMP-Installation-9966cc)](https://sourceforge.net/projects/wampserver/files/WampServer%203/WampServer%203.0.0/wampserver3.3.2_x64.exe/download)
+1. Run the installer.
 2. Open windows task bar, and search for environment variables.
 3. Click on **Environment Variables** button at the very bottom.
 4. Locate the variable **PATH**, then double click.
 5. Click on **New**, then **Browse**.
-6. Locate the directory containing **php-cgi.exe**, then click ok.
+6. Locate the directory containing **php-cgi.exe** inside wamp/bin/php/php8.1.0/, then click ok.
+7. open php.ini located in the same directory.
+8. search (ctrl + f) for extension.
+9. create new line and add this: extension=php_pdo_pgsql.dll
+10. Save changes.
+11. Restart WAMP server
 
 #### Setting Up Composer
 [![Composer - Installation](https://img.shields.io/badge/Composer-Installation-d7e2f3)](https://getcomposer.org/Composer-Setup.exe)
