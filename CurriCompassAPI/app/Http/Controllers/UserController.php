@@ -52,7 +52,7 @@ class UserController extends Controller
             'userlname' => ['required','string','max:255'],
             'usermiddle' => ['required','string','max:255'],
             'email' => ['required','string','email','max:255'],
-            'contactno' => ['required','string'],
+            'contactno' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
             'password' => ['required','string'],
             'roles' => ['required','array'],
             'roles.*.roleid' => ['required', 'integer'],

@@ -15,13 +15,13 @@ class StudentRecord extends Model
         'userid',
         'year_level',
         'status',
-        'studentno',
+        'student_no',
         'cid'
     ];
 
-    public function subjectsTaken()
+    public function subjects_taken()
     {
-        return $this->hasMany(subjectsTaken::class);
+        return $this->hasMany(subjectsTaken::class, 'srid', 'srid');
     }
 
     public function user()

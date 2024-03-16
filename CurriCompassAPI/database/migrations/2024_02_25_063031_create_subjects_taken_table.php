@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subjectid');
             $table->enum('taken_at', ['Sem 1', 'Sem 2', 'Sem 3', 'Credited']);
             $table->string('school_year');
-            $table->string('remark'); //subjected to change
+            $table->enum('remark', ["Excelent", "Very Good", "Good", "Fair", "Passing", "Failed", "Widthdrawn", "Incomplete"]);
             $table->foreign('srid')
             ->references('srid')
             ->on('student_records')
@@ -25,10 +25,6 @@ return new class extends Migration
             ->references('subjectid')
             ->on('subjects')
             ->onDelete('cascade');
-        // $table->foreign('taken_at')
-        //     ->references('semid')
-        //    ->on('semesters')
-        //    ->onDelete('cascade');
         $table->primary(['srid', 'subjectid']);
         });
     }

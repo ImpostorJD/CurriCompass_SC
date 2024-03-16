@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class SubjectsTaken extends Model
 {
     use HasFactory;
-    public $timestamps = false;
+
+    public $table = "subjects_taken";
+    public $incrementing = false;
+    protected $primaryKey = ['srid', 'subjectid'];
     protected $fillable = [
         'srid',
         'subjectid',
@@ -25,8 +28,4 @@ class SubjectsTaken extends Model
         return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
     }
 
-    // public function semesters()
-    // {
-    //     return $this->belongsTo(Semesters::class, 'taken_at', 'semid');
-    // }
 }

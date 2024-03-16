@@ -1,15 +1,78 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { HttpReqHandlerService } from '../../services/http-req-handler.service';
+import { RemoveInputErrorService } from '../../services/remove-input-error.service';
+import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 
 
 @Component({
   selector: 'app-student-form',
   standalone: true,
-  imports: [CommonModule,RouterLink],
+  imports: [
+    CommonModule,
+    RouterLink,
+    HttpClientModule,
+    ReactiveFormsModule,
+  ],
+  providers: [
+    HttpReqHandlerService,
+    RemoveInputErrorService,
+  ],
   templateUrl: './student-form.component.html',
   styleUrl: './student-form.component.css'
 })
 export class StudentFormComponent {
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private req: HttpReqHandlerService,
+    public rs: RemoveInputErrorService
+  ){}
 
+  userField =  this.fb.group({
+    "studentid" : new FormControl('', [Validators.required]),
+    "userfname" : new FormControl('', [Validators.required]),
+    "userlname" : new FormControl('', [Validators.required]),
+    "usermiddle" : new FormControl('', [Validators.required]),
+    "contactno" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
+    "email" : new FormControl('', [Validators.required, Validators.email]),
+    "password" : new FormControl('', [Validators.required]),
+    "status" : new FormControl(null, [Validators.required]),
+    "roles" : this.fb.array([
+      this.fb.group({
+        roleid: new FormControl(3)
+      })
+    ]),
+  })
+
+  handleSubmit(event:string) {
+    if(this.userField.status == "INVALID"){
+      markFormGroupAsDirtyAndInvalid(this.userField);
+      return;
+    }
+
+    this.req.postResource('student-records', this.userField.value, httpOptions).subscribe({
+      next: (res: any) => {
+        if(event === "with_record"){
+          this.router.navigateByUrl(`/students/${res[1].student_no}`)
+          return;
+        }
+        this.router.navigateByUrl(`/students`)
+      },
+
+      error: (err) => {
+          if(err.status == 409) {
+            if(err.error[1].email != null){
+              this.userField.get('email')?.setErrors({duplicate: true});
+            }
+            if(err.error[1].studentid != null){
+              this.userField.get('studentid')?.setErrors({duplicate: true});
+            }
+          }
+      }
+    });
+  }
 }

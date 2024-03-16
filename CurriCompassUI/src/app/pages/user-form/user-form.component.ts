@@ -85,7 +85,6 @@ export class UserFormComponent {
       if(this.rolesFormArray.length <= 0) {
         return;
       }
-       console.log(this.userField.value);
 
        let response = null;
        this.req.postResource('users/register', this.userField.value, httpOptions).subscribe({
@@ -111,7 +110,7 @@ export class UserFormComponent {
       this.req.getResource('roles', httpOptions)
         .subscribe({
           next: (res:any) => {
-            this.roles = res[1];
+            this.roles = res[1].filter((r:any) => r.rolename !== "Student");
           },
           error: err => console.log(err)
         });

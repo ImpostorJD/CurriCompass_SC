@@ -29,41 +29,37 @@
         </tr>
       </thead>
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
-        <!--students information -->
-        <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100" *ngFor="let num of iterates">
-          <td class="w-[20%] px-1 hidden lg:flex items-center">
-            <!-- Display student ID -->
-            <span>211-1049</span>
-          </td>
-          <td class="lg:w-[20%] flex-auto px-1 flex items-center">
-            <span>John Daniel Tejero</span>
-            <!-- Display student name -->
-          </td>
-          <td class="w-[20%] px-1 hidden lg:flex items-center">
-            <span>BSIT</span>
-            <!-- Display student course -->
-          </td>
-          <td class="w-[15%] px-1 hidden lg:flex items-center">
-            <span>3rd Year</span>
-            <!-- Display student year level -->
-          </td>
-          <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
-            <!-- Sample Route -->
-            <a
-              class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
-              [routerLink]="'/students/1'"
-            >
-            <i class="material-symbols-outlined">
-              visibility
-            </i>
-          </a>
-          <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md">
+        @for(student of students; track $index){
+          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
+            <td class="w-[20%] px-1 hidden lg:flex items-center">
+              <span>{{ student.student_record.student_no }}</span>
+            </td>
+            <td class="lg:w-[20%] flex-auto px-1 flex items-center">
+              <span>{{ student.userfname + " " + student.userlname + " " + student.userlname }}</span>
+            </td>
+            <td class="w-[20%] px-1 hidden lg:flex items-center">
+              <span>{{ student.student_record.cid != null ? student.student_record.curriculum.program.programcode : "Not Yet Set" }}</span>
+            </td>
+            <td class="w-[15%] px-1 hidden lg:flex items-center">
+              <span>{{ student.student_record.year_level != null ? student.student_record.year_level : "Not Yet Set" }}</span>
+            </td>
+            <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+              <a
+                class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
+                [routerLink]="'/students/' + student.student_record.student_no"
+              >
               <i class="material-symbols-outlined">
-                delete
+                visibility
               </i>
-            </button>
-          </td>
-        </tr>
+            </a>
+            <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"  (click)="deleteStudent(student.userid)">
+                <i class="material-symbols-outlined">
+                  delete
+                </i>
+              </button>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>

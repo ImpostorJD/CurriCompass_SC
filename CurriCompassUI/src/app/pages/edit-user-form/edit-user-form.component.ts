@@ -110,7 +110,7 @@ export class EditUserFormComponent {
       this.req.getResource('roles', httpOptions)
         .subscribe({
           next: (res:any) => {
-            this.roles = res[1];
+            this.roles = res[1].filter((r:any) => r.rolename !== "Student");
           },
           error: err => console.log(err)
         });

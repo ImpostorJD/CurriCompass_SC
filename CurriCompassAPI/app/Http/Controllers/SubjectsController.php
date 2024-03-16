@@ -79,12 +79,11 @@ class SubjectsController extends Controller
      */
     public function show(string $id)
     {
-        $res = Subjects::with('pre_requisites')
-            ->where('subjectid', '=', $id)->first();
+        $res = Subjects::with(['pre_requisites' => function($query){
+            $query->with('pre_requisites_subjects')->get();
+        }])->where('subjectid', '=', $id)->first();
 
         if($res != null) {
-            $pre_requisites_subjects = Pre_Requisites_Subjects::where('prid', $res->pre_requisites->prid)->get();
-            $res['pre_requisites_subjects'] = $pre_requisites_subjects;
             return response()->json([
                 ['status' => 'success'],
                 $res], 200);

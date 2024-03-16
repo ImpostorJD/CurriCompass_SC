@@ -25,7 +25,8 @@
           <span>Specialization</span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="specialization"
             [value]="null"
-            (input)="onInputChange($event)"/>
+            (input)="onInputChange($event)"
+            (focus)="rs.removeError(curriculum.get('specialization'), {'duplicate' : false})"/>
           @if(curriculum.get('specialization')?.hasError('duplicate')){
             <div class="text-red-600">
               Combination of specialization and program is already in use!

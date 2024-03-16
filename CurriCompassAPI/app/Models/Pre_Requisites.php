@@ -23,6 +23,6 @@ class Pre_Requisites extends Model
     }
 
     public function pre_requisites_subjects(){
-        return $this->hasMany(Pre_Requisites::class, 'prid', 'prid');
+        return $this->hasMany(Pre_Requisites_Subjects::class, 'prid', 'prid');
     }
 }

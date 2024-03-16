@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
  * Middleware to intercept requests to validate client with no login context.
  *
  * Usage: { path: '</url path>', component: </Component>, canActivate: AnonGuard()},
- * @author John Daniel Tejero
  */
 export const AnonGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,

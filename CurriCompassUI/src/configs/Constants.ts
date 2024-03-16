@@ -18,11 +18,11 @@ export const httpOptions = (authToken: string) => {
 })}
 
 export function markFormGroupAsDirtyAndInvalid(formGroup: FormGroup) {
-  formGroup.markAllAsTouched();
   Object.values(formGroup.controls).forEach(control => {
     if (control instanceof FormGroup) {
       markFormGroupAsDirtyAndInvalid(control);
     }else {
+      control.markAsTouched();
       control.markAsDirty();
       control.markAsTouched();
     }

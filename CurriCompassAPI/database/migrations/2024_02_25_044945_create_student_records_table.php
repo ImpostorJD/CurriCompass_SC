@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('student_records', function (Blueprint $table) {
             $table->id('srid');
-            $table->string('student_no');
-            $table->string('year_level');
-            $table->string('status');
+            $table->string('student_no')->unique();
+            $table->enum('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year'])->nullable();
+            $table->enum('status', ['Regular', 'Irregular', 'Graduated', 'Inactive'])->default('regular');
             $table->unsignedBigInteger('userid');
-            $table->unsignedBigInteger('cid');
+            $table->unsignedBigInteger('cid')->nullable();
             $table->timestamps();
             $table->foreign('userid')
                 ->references('userid')
