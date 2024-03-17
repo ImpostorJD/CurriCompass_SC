@@ -51,10 +51,7 @@
         <div class="flex flex-col">
           <div class="flex flex-col">
             <span>email</span>
-            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email" (focus)="rs.removeError(
-              userField.get('email'),
-              {'duplicate' : false, 'email': false, 'required' : false}
-              )"/>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email"/>
             @if(
               userField.get('email')?.invalid &&
               (userField.get('email')?.touched ||
@@ -64,10 +61,10 @@
                 @if(userField.get('email')?.hasError('required')){
                   Email is required!
                 }
-                @if(userField.get('email')?.hasError('email')){
+                @else if(userField.get('email')?.hasError('email')){
                   Email is in invalid format!
                 }
-                @if(userField.get('email')?.hasError('duplicate')){
+                @else if(userField.get('email')?.hasError('duplicate')){
                   Email is already in use!
                 }
               </div>
@@ -82,11 +79,10 @@
               userField.get('contact_no')?.dirty)
             ){
               <div class="text-red-600">
-                {{userField.get('contact_no')?.getError | json }}
                 @if(userField.get('contact_no')?.hasError('required')){
                   Contact number is required!
                 }
-                @if(userField.get('contact_no')?.hasError('pattern')){
+                @else if(userField.get('contact_no')?.hasError('pattern')){
                   Contct number is in invalid format!
                 }
               </div>

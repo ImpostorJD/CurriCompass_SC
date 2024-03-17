@@ -40,7 +40,7 @@ export class CourseFormComponent {
     subjectname: new FormControl('', [Validators.required]),
     subjectcredits: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),
     subjecttype: new FormControl(null, [Validators.required]),
-    completion: new FormControl(null),
+    completion: new FormControl(null, [Validators.min(0), Validators.max(1)]),
     year_level: new FormControl(null),
     subjects: this.fb.array([]),
   });

@@ -50,7 +50,7 @@ export class StudentRecordManagementComponent {
     "contact_no" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
     "email" : new FormControl('', [Validators.required, Validators.email]),
     "program" : new FormControl('', [Validators.required]),
-    "specialization" : new FormControl(null, [Validators.required]),
+    "specialization" : new FormControl(null),
     "year_level" : new FormControl(null, [Validators.required]),
     "status" : new FormControl(null, [Validators.required]),
     "subjects_taken" : this.fb.array([]),

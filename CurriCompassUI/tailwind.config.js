@@ -10,7 +10,7 @@ module.exports = {
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
         'poppins': ['Poppins'],
-      }
+      },
     },
   },
   plugins: [],

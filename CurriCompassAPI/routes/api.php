@@ -3,18 +3,19 @@
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ProgramsController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\StudentRecordsController;
 use App\Http\Controllers\SubjectsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-//TODO: Implement Routers [Completed for now, other processes to be followed: DO NOT DELETE]
 //TODO: Add Documentation
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
+| in all controller, include in fetching the school year table
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
@@ -87,6 +88,16 @@ Route::controller(CurriculumController::class)
 
 Route::controller(StudentRecordsController::class)
     ->prefix('/student-records')
+    ->group(function (){
+        Route::get('/', 'index');
+        Route::get('/{id}', 'show');
+        Route::post('/', 'store');
+        Route::delete('/{id}', 'destroy');
+        Route::patch('/{id}', 'update');
+    });
+
+Route::controller(SchoolYearController::class)
+    ->prefix('/school-year')
     ->group(function (){
         Route::get('/', 'index');
         Route::get('/{id}', 'show');

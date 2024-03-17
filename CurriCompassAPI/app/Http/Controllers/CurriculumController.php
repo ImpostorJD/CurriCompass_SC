@@ -104,8 +104,10 @@ class CurriculumController extends Controller
             ->where('specialization', $request->specialization)->first();
         $curriculum = Curriculum::find($id);
 
-        if($existing != null && ($request->programid != $existing->programid && $request->specialization != $existing->specialization)){
-            return response()->json([['status' => 'conflict'], "Combination already exists."], 409);
+        if($existing != null){
+            if(($request->programid != $existing->programid && $request->specialization != $existing->specialization)) return response()->json([['status' => 'conflict'], "Combination already exists."], 409);
+        }else{
+            return response()->json(['status' => 'not found'], 404);
         }
 
         $curriculum->update([

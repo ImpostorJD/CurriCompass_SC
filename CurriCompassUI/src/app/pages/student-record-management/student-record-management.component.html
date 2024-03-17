@@ -1,7 +1,6 @@
 <form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="studentProfileField">
     <h1 class="font-bold font-sans text-2xl uppercase">Student Records</h1>
     <div class="flex-auto rounded-md w-full flex gap-2 p-2 flex-col">
-      <!-- TODO: Basic Information: Static and will be populated with dynamic information -->
       <div class="h-[28rem] w-full flex bg-white shadow-lg">
         <table class="h-full border border-collapse flex w-full table-condensed">
           <thead class="flex flex-col h-full justify-around w-[25%]">
@@ -40,27 +39,107 @@
           </thead>
           <tbody class="flex-auto flex flex-col h-full">
             <tr class="w-full h-full flex flex-col">
-              <td class="border-slate-600 border h-[10%]">
-                <input class="w-full p-2 h-full" formControlName="studentid"/>
+              <td class="border-slate-600 border h-[10%] relative group/studentid">
+                <input
+                  class="w-full p-2 h-full group/studentid"
+                  [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('studentid')?.invalid }"
+                  formControlName="studentid"/>
+                  @if(studentProfileField.get('studentid')?.invalid) {
+                    <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                    <div class="w-0 h-0 opacity-0 studentid group-hover/studentid:opacity-100 group-focus/studentid:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                    </div>
+                    <div class="z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0 group-hover/studentid:opacity-100 group-focus/studentid:opacity-100">
+                      @if(studentProfileField.get('studentid')?.hasError('required')){
+                        Student ID is required!
+                      }@else if (studentProfileField.get('studentid')?.hasError('duplicate')){
+                        Student ID is already in use!
+                      }
+                    </div>
+
+                  }
               </td>
-              <td class="border-slate-600 border h-[10%]">
-                <input class="w-full p-2 h-full" formControlName="userfname"/>
+              <td class="border-slate-600 border h-[10%] relative group/userfname">
+                <input
+                  class="w-full p-2 h-full group/userfname"
+                  formControlName="userfname"
+                  [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('userfname')?.invalid }"/>
+                @if(studentProfileField.get('userfname')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="group-focus/userfname:opacity-100 w-0 h-0 opacity-0 group-hover/userfname:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="group-hover/userfname:opacity-100 group-focus/userfname:opacity-100 z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0">
+                    First Name is required!
+                  </div>
+                }
               </td>
-              <td class="border-slate-600 border h-[10%]">
-                <input class="w-full p-2 h-full" formControlName="usermiddle"/>
+              <td class="border-slate-600 border h-[10%] relative group/usermiddle">
+                <input class="w-full p-2 h-full group/usermiddle"
+                  [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('usermiddle')?.invalid }"
+                  formControlName="usermiddle"/>
+                @if(studentProfileField.get('usermiddle')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 group-focus/usermiddle:opacity-100 group-hover/usermiddle:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/usermiddle:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/usermiddle:opacity-100">
+                    Middle Name is required!
+                  </div>
+                }
               </td>
-              <td class="border-slate-600 border h-[10%]">
-                <input class="w-full p-2 h-full" formControlName="userlname"/>
+              <td class="border-slate-600 border h-[10%] relative group/userlname">
+                <input class="w-full p-2 h-full group/userlname"
+                [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('userlname')?.invalid }"
+                formControlName="userlname"/>
+                @if(studentProfileField.get('userlname')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 group-focus/userlname:opacity-100 group-hover/userlname:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/userlname:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/userlname:opacity-100">
+                    Last Name is required!
+                  </div>
+                }
               </td>
-              <td class="border-slate-600 border h-[10%]">
-                <input class="w-full p-2 h-full" formControlName="contact_no"/>
+              <td class="border-slate-600 border h-[10%] relative group/contact_no">
+                <input class="w-full p-2 h-full group/contact_no"
+                  [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('contact_no')?.invalid }"
+                  formControlName="contact_no"/>
+                @if(studentProfileField.get('contact_no')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 group-focus/contact_no:opacity-100 group-hover/contact_no:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/contact_no:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/contact_no:opacity-100">
+                    @if(studentProfileField.get('contactno')?.hasError('required')){
+                      Contact number is required!
+                    }
+                    @else if(studentProfileField.get('contactno')?.hasError('pattern')){
+                      Contct number is in invalid format!
+                    }
+                  </div>
+                }
               </td>
-              <td class="border-slate-600 border h-[10%]">
-                <input class="w-full p-2 h-full" formControlName="email"/>
+              <td class="border-slate-600 border h-[10%] relative group/email">
+                <input class="w-full p-2 h-full group/email"
+                  [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('email')?.invalid }"
+                  formControlName="email"/>
+                  @if(studentProfileField.get('email')?.invalid) {
+                    <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                    <div class="w-0 h-0 opacity-0 group-focus/email:opacity-100 group-hover/email:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                    </div>
+                    <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/email:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/email:opacity-100">
+                      @if(studentProfileField.get('email')?.hasError('required')){
+                        Email is required!
+                      }@else if(studentProfileField.get('email')?.hasError('email')){
+                        Email is in invalid format!
+                      }@else if(studentProfileField.get('email')?.hasError('duplicate')){
+                        Email is already in use!
+                      }
+                    </div>
+                  }
               </td>
-              <td class="border-slate-600 border h-[10%]">
-                <select class="w-full p-2 h-full border-[0px]" (change)="setSpecializationsEvent($event)"
-                formControlName="program">
+              <td class="border-slate-600 border h-[10%] relative group/program">
+                <select class="w-full p-2 h-full border-[0px] group/program"
+                  [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('program')?.invalid }"
+                  (change)="setSpecializationsEvent($event)"
+                  formControlName="program">
                   <option [value]="''" disabled selected>
                     N/A
                   </option>
@@ -70,6 +149,14 @@
                     </option>
                   }
                 </select>
+                @if(studentProfileField.get('program')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 group-focus/program:opacity-100 group-hover/program:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/program:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/program:opacity-100">
+                    Program is required!
+                  </div>
+                }
               </td>
               <td class="border-slate-600 border h-[10%]">
                 <select class="w-full p-2 h-full border-[0px]" formControlName="specialization"
@@ -81,8 +168,10 @@
                   }
                 </select>
               </td>
-              <td class="border-slate-600 border h-[10%]">
-                <select class="w-full p-2 h-full" formControlName="year_level">
+              <td class="border-slate-600 border h-[10%] relative group/year_level">
+                <select class="w-full p-2 h-full group/year_level"
+                [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('year_level')?.invalid }"
+                formControlName="year_level">
                   <option [value]="null" selected disabled>
                     None
                   </option>
@@ -99,9 +188,19 @@
                     4th Year
                   </option>
                 </select>
+                @if(studentProfileField.get('year_level')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 group-focus/year_level:opacity-100 group-hover/year_level:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/year_level:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/year_level:opacity-100">
+                    Year Level is required!
+                  </div>
+                }
               </td>
-              <td class="border-slate-600 border h-[10%]">
-                <select class="w-full p-2 h-full" formControlName="status">
+              <td class="border-slate-600 border h-[10%] relative group/status">
+                <select class="w-full p-2 h-full group/status"
+                [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('status')?.invalid }"
+                formControlName="status">
                   <option [value]="''" disabled selected>
                     Please Select
                   </option>
@@ -118,12 +217,19 @@
                     Inactive
                   </option>
                 </select>
+                @if(studentProfileField.get('status')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 group-focus/status:opacity-100 group-hover/status:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/status:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/status:opacity-100">
+                    Status is required!
+                  </div>
+                }
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <!-- TODO: add error handling and message per field -->
       <div class="h-auto w-full">
         <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
           <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
@@ -189,8 +295,11 @@
                   <td class="border border-slate-600 w-[20%] flex items-center justify-center">
                     To be Added Later
                   </td>
-                  <td class="border border-slate-600 w-[20%] flex items-center justify-center">
-                    <select class="w-full p-2 h-full" [formControl]="getRemarkControl($index)">
+                  <td class="border border-slate-600 w-[20%] flex items-center justify-center relative group/remark">
+                    <select
+                      class="w-full p-2 h-full group/remark"
+                      [ngClass]="{'border-red-600 border-[1px]': getRemarkControl($index).invalid }"
+                      [formControl]="getRemarkControl($index)">
                       <option value="None">
                         None
                       </option>
@@ -219,6 +328,14 @@
                         Widthdrawn
                       </option>
                     </select>
+                    @if(getRemarkControl($index).invalid) {
+                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                      <div class="w-0 h-0 opacity-0 group-focus/remark:opacity-100 group-hover/remark:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                      </div>
+                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/remark:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/remark:opacity-100">
+                        Status is required!
+                      </div>
+                    }
                   </td>
                 </tr>
               }
