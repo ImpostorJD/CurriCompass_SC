@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { HttpClientModule } from '@angular/common/http';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
+import { CoursePipePipe } from '../../services/search-filters/course-pipe.pipe';
 
 //TODO: Add role-based access
 @Component({
@@ -16,6 +17,8 @@ import { RemoveInputErrorService } from '../../services/remove-input-error.servi
     ReactiveFormsModule,
     CommonModule,
     RouterLink,
+    CoursePipePipe,
+    FormsModule
   ],
   providers: [
     HttpReqHandlerService,
@@ -32,6 +35,7 @@ export class CourseFormComponent {
     public rs: RemoveInputErrorService
   ){}
 
+  searchCourse: string = '';
   courseList: any = null;
   selectedCourses: Array<any> = [];
 
@@ -45,6 +49,13 @@ export class CourseFormComponent {
     subjects: this.fb.array([]),
   });
 
+  getSelectedCourseIndex(index: number): number | null {
+    const selectedCourseId = this.selectedCourses[index];
+    if (selectedCourseId === null) {
+      return null;
+    }
+    return this.courseList.find((c: any) => c.subjectid === selectedCourseId)?.subjectid || null;
+  }
 
   handleSubmit(){
     if(this.courseField.status == "INVALID"){
@@ -75,7 +86,8 @@ export class CourseFormComponent {
 
   courseSelected(index: number, event: any) {
     const courseid = event.target.value;
-    this.selectedCourses[index] = parseInt(courseid);
+    //this.selectedCourses[index] = parseInt(courseid);
+    this.selectedCourses[index] = courseid ? parseInt(courseid) : null;
   }
 
   isCourseSelected(courseid: number): boolean {

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
+import { CoursePipePipe } from '../../services/search-filters/course-pipe.pipe';
 
 //TODO: Add role based access
 @Component({
@@ -16,6 +17,8 @@ import { RemoveInputErrorService } from '../../services/remove-input-error.servi
     ReactiveFormsModule,
     CommonModule,
     RouterLink,
+    CoursePipePipe,
+    FormsModule
   ],
   providers: [
     HttpReqHandlerService,
@@ -33,6 +36,7 @@ export class EditCourseComponent {
     public rs: RemoveInputErrorService,
   ){}
 
+  searchCourse: string = '';
   courseList: any = null;
   selectedCourses: Array<any> = [];
   routerId: number = null!;
