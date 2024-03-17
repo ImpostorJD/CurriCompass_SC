@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Curriculum;
 use App\Models\StudentRecord;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 //TODO: Implement ROLE BASED ACCESS
-//TODO: FIX UPDATE
 //TODO: Add documentation
 class StudentRecordsController extends Controller
 {
@@ -129,7 +127,6 @@ class StudentRecordsController extends Controller
         ], 200);
     }
 
-    //TODO: Fix the update
     public function update(Request $request, String $id){
 
         $validate = Validator::make($request->all(), [

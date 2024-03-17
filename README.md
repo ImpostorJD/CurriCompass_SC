@@ -55,6 +55,20 @@ NOTE: Setup both Frontend and Backend to run the Application in Development Envi
 8. Close the environment variable.
 
 #### Run Frontend Client
+##### Configure config file
+- Copy and paste Config copy.ts in the same directory where it is located.
+- Rename the copied file as **Config.ts**.
+- In the file, you will see an exported constant **environment**.
+
+```ts
+export const environment = {
+  environment: EnvironmentType.DEV,
+  apiUrl: apiUrls[EnvironmentType.DEV],
+};
+```
+- set both the environment and apiUrl to .DEV and save.
+---
+
 - cd into CurriCompassUI via:
 ```bash
  cd ./CurriCompassUI
@@ -89,9 +103,9 @@ npm uninstall [dependency]
 4. Locate the variable **PATH**, then double click.
 5. Click on **New**, then **Browse**.
 6. Locate the directory containing **php-cgi.exe** inside wamp/bin/php/php8.1.0/, then click ok.
-7. open php.ini located in the same directory.
-8. search (ctrl + f) for extension.
-9. create new line and add this: extension=php_pdo_pgsql.dll
+7. Open php.ini located in the same directory.
+8. Search (ctrl + f) for extension.
+9. Create new line and add this: extension=php_pdo_pgsql.dll
 10. Save changes.
 11. Restart WAMP server
 
@@ -101,9 +115,9 @@ npm uninstall [dependency]
 - Run the prompt.
 - Select the installation for all users.
 - Do not tick the developer mode, just proceed.
-- locate the php.exe e.g.(C:\XAMPP\php\php.exe), and select.
-- skip the proxy url configuration.
-- install.
+- Locate the php.exe e.g.(C:\XAMPP\php\php.exe), and select.
+- Skip the proxy url configuration.
+- Install.
 
 #### PostgreSQL Installation:
 
@@ -113,19 +127,19 @@ npm uninstall [dependency]
 - Run the application.
 - Leave port, username, and host as default.
 - Setup your password.
-- install.
+- Install.
 
 #### Configure .env file
-- copy and paste .env.example in the same directory where it is located.
-- rename the copied file as **.env**.
-- configure the key-value pairs to match your postgreSQL configuration (in most cases only the password is required).
+- Copy and paste .env.example in the same directory where it is located.
+- Rename the copied file as **.env**.
+- Configure the key-value pairs to match your postgreSQL configuration (in most cases only the password is required).
 
 #### Run the Backend Client
 - cd into CurriCompassAPI
 ```shell
 cd ./CurriCompassAPI
 ```
-- run the initializer CLI command via
+- Run the initializer CLI command via
 
 ```shell
   php artisan app:init-db
@@ -134,4 +148,4 @@ cd ./CurriCompassAPI
 ```bash
 php artisan serve
 ```
-- it should be running on port 8000 by default.
+- It should be running on port 8000 by default.
