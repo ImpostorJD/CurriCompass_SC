@@ -23,9 +23,9 @@ This project entitled CurriCompass is a Capstone project in compliance with the 
 - Curriculum Module
 - Courses Module
 - Program Module
-  
-### Ongoing Module:
 - Student Record Management Module
+
+### Ongoing Module:
 - Consultation Module
 - Profile Module
 - Authentication Module

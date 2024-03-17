@@ -1,128 +1,241 @@
-<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="studentProfileField">
     <h1 class="font-bold font-sans text-2xl uppercase">Student Records</h1>
     <div class="flex-auto rounded-md w-full flex gap-2 p-2 flex-col">
       <!-- TODO: Basic Information: Static and will be populated with dynamic information -->
-      <div class="h-[15rem] w-full flex bg-white shadow-lg">
+      <div class="h-[28rem] w-full flex bg-white shadow-lg">
         <table class="h-full border border-collapse flex w-full table-condensed">
           <thead class="flex flex-col h-full justify-around w-[25%]">
             <tr class="w-full h-full">
-              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center flex-wrap">
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center flex-wrap">
                 Student No
               </th>
-              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
-                Student Name
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+                First Name
               </th>
-              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+                Middle Name
+              </th>
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+                Last Name
+              </th>
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+                Contact No.
+              </th>
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+                Email
+              </th>
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
                 Program
               </th>
-              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
                 Specialization
               </th>
-              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
                 Year Level
               </th>
-              <th class="p-2 h-[16.7%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
                 Status
               </th>
             </tr>
           </thead>
           <tbody class="flex-auto flex flex-col h-full">
             <tr class="w-full h-full flex flex-col">
-              <td class="border-slate-600 border h-[16.7%] p-2">
-                211-1049
+              <td class="border-slate-600 border h-[10%]">
+                <input class="w-full p-2 h-full" formControlName="studentid"/>
               </td>
-              <td class="border-slate-600 border h-[16.7%] p-2">
-                John Daniel Tejero
+              <td class="border-slate-600 border h-[10%]">
+                <input class="w-full p-2 h-full" formControlName="userfname"/>
               </td>
-              <td class="border-slate-600 border h-[16.7%] p-2">
-                Bachelor of Science in Information Technology
+              <td class="border-slate-600 border h-[10%]">
+                <input class="w-full p-2 h-full" formControlName="usermiddle"/>
               </td>
-              <td class="border-slate-600 border h-[16.7%] p-2">
-                Web and Mobile
+              <td class="border-slate-600 border h-[10%]">
+                <input class="w-full p-2 h-full" formControlName="userlname"/>
               </td>
-              <td class="border-slate-600 border h-[16.7%] p-2">
-                3rd Year
+              <td class="border-slate-600 border h-[10%]">
+                <input class="w-full p-2 h-full" formControlName="contact_no"/>
               </td>
-              <td class="border-slate-600 border h-[16.7%] p-2">
-                Irregular
+              <td class="border-slate-600 border h-[10%]">
+                <input class="w-full p-2 h-full" formControlName="email"/>
+              </td>
+              <td class="border-slate-600 border h-[10%]">
+                <select class="w-full p-2 h-full border-[0px]" (change)="setSpecializationsEvent($event)"
+                formControlName="program">
+                  <option [value]="''" disabled selected>
+                    N/A
+                  </option>
+                  @for(program of programs; track $index){
+                    <option [value]="program.programid">
+                      {{program.programdesc}}
+                    </option>
+                  }
+                </select>
+              </td>
+              <td class="border-slate-600 border h-[10%]">
+                <select class="w-full p-2 h-full border-[0px]" formControlName="specialization"
+                (change)="changeSpecialization()">
+                  @for(c of specializations; track $index){
+                    <option [value]="c.specialization">
+                      {{ c.specialization != null ? c.specialization : "None" }}
+                    </option>
+                  }
+                </select>
+              </td>
+              <td class="border-slate-600 border h-[10%]">
+                <select class="w-full p-2 h-full" formControlName="year_level">
+                  <option [value]="null" selected disabled>
+                    None
+                  </option>
+                  <option value="1st Year">
+                    1st Year
+                  </option>
+                  <option value="2nd Year">
+                    2nd Year
+                  </option>
+                  <option value="3rd Year">
+                    3rd Year
+                  </option>
+                  <option value="4th Year">
+                    4th Year
+                  </option>
+                </select>
+              </td>
+              <td class="border-slate-600 border h-[10%]">
+                <select class="w-full p-2 h-full" formControlName="status">
+                  <option [value]="''" disabled selected>
+                    Please Select
+                  </option>
+                  <option value="Regular">
+                    Regular
+                  </option>
+                  <option value="Irregular">
+                    Irregular
+                  </option>
+                  <option value="Graduated">
+                    Graduated
+                  </option>
+                  <option value="Inactive">
+                    Inactive
+                  </option>
+                </select>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <!-- TODO: populate with the data from database - student records <list of subject taken> -->
+      <!-- TODO: add error handling and message per field -->
       <div class="h-auto w-full">
-        <table class="flex-auto flex flex-col w-full">
+        <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
           <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
             <tr class="h-full w-full flex flex-row">
-              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+              <th class="border border-slate-600 w-[10%] flex items-center justify-center">
                 Course Code
               </th>
-              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                Course Title
-              </th>
-              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+              <th class="border border-slate-600 w-[10%] flex items-center justify-center">
                 Credits
               </th>
-              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+              <th class="border border-slate-600 w-[10%] flex items-center justify-center">
+                Year Level
+              </th>
+              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
+                Semester
+              </th>
+              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
+                Sem Taken
+              </th>
+              <th class="border border-slate-600 w-[20%] flex items-center justify-center">
                 Taken At
               </th>
-              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                S.Y.
-              </th>
-              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
+              <th class="border border-slate-600 flex-auto flex items-center justify-center">
                 Remark
-              </th>
-              <th class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                <button class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center p-1 hover:bg-green-600 hover:text-white transition-all">
-                    <i class="material-symbols-outlined">add</i>
-                </button>
-              </th>
-              <th class="w-[1px]">
-
               </th>
             </tr>
           </thead>
-          <tbody class="max-h-[20rem] overflow-y-auto">
-            <!--TODO: this will be via array form laters-->
-            <tr class="flex flex-row w-full hover:bg-green-300" *ngFor="let num of iterates">
-              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                Subject Code
-              </td>
-              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                Subject Name
-              </td>
-              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                Credits
-              </td>
-              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                Taken At
-              </td>
-              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                S.Y.
-              </td>
-              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                Remark
-              </td>
-              <td class="border border-slate-600 w-[14.28%] flex items-center justify-center">
-                <button class="border-[1px] rounded-md shadow-md border-red-600 text-red-600 flex items-center justify-center p-1 hover:bg-red-600 hover:text-white transition-all">
-                    <i class="material-symbols-outlined">delete</i>
-                </button>
-              </td>
-            </tr>
+          <tbody class="h-[25rem] overflow-y-auto">
+            @if(curriculumSubjects != null && subjectsTakenArray.length > 0){
+              @for(cs of curriculumSubjects; track $index){
+                <tr class="flex flex-row w-full hover:bg-green-300">
+                  <td class="border border-slate-600 w-[10%] flex items-center justify-center">
+                    {{ cs.subjects.subjectcode }}
+                  </td>
+                  <td class="border border-slate-600 w-[10%] flex items-center justify-center">
+                    {{ cs.subjects.subjectcredits }}
+                  </td>
+                  <td class="border border-slate-600 w-[10%] flex items-center justify-center">
+                    {{ cs.year_level }}
+                  </td>
+                  <td class="border border-slate-600 w-[15%] flex items-center justify-center">
+                    {{ cs.semesters.semdesc }}
+                  </td>
+                  <td class="border border-slate-600 w-[15%] flex items-center justify-center">
+                    <select class="h-full w-full p-2" [formControl]="getTakenAtControl($index)">
+                      <option [value]="null" disabled selected>
+                        Please Select
+                      </option>
+                      <option value="Credited">
+                        Credited
+                      </option>
+                      <option value="Sem 1">
+                        1st Semester
+                      </option>
+                      <option value="Sem 2">
+                        2nd Semester
+                      </option>
+                      <option value="Sem 3">
+                        3rd Semester
+                      </option>
+                    </select>
+                  </td>
+                  <td class="border border-slate-600 w-[20%] flex items-center justify-center">
+                    To be Added Later
+                  </td>
+                  <td class="border border-slate-600 w-[20%] flex items-center justify-center">
+                    <select class="w-full p-2 h-full" [formControl]="getRemarkControl($index)">
+                      <option value="None">
+                        None
+                      </option>
+                      <option value="Excelent">
+                        Excelent
+                      </option>
+                      <option value="Very Good">
+                        Very Good
+                      </option>
+                      <option value="Good">
+                        Good
+                      </option>
+                      <option value="Fair">
+                        Fair
+                      </option>
+                      <option value="Passing">
+                        Passing
+                      </option>
+                      <option value="Failed">
+                        Failed
+                      </option>
+                      <option value="Incomplete">
+                        Incomplete
+                      </option>
+                      <option value="Widthdrawn">
+                        Widthdrawn
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+              }
+            }
           </tbody>
         </table>
       </div>
       <div class="flex h-[3rem] justify-end gap-2">
-        <button class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+        <a [routerLink]="'/students'" class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
           <i class="material-symbols-outlined">
             close
           </i>
           <span class="hidden lg:block">
             Discard Changes
           </span>
-        </button>
-        <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
+        </a>
+        <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase" (click)="handleSubmit()">
           <i class="material-symbols-outlined">edit</i>
           <span class="hidden lg:block">
             Save Changes
@@ -130,4 +243,4 @@
         </button>
       </div>
     </div>
-</div>
+  </form>

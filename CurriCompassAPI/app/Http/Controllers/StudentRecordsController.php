@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Curriculum;
 use App\Models\StudentRecord;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,6 +42,7 @@ class StudentRecordsController extends Controller
                     $query->with('program');
                     $query->with(['curriculum_subjects' => function($query){
                         $query->with('subjects');
+                        $query->with('semesters');
                     }]);
                   }]);
             }])->first();
@@ -51,6 +53,7 @@ class StudentRecordsController extends Controller
                 $user
             ], 200);
         }
+
         return response()->json([
             'status' => 'not found',
         ], 404);
@@ -128,111 +131,102 @@ class StudentRecordsController extends Controller
 
     //TODO: Fix the update
     public function update(Request $request, String $id){
-        $validate = Validator::make($request->all(), [
-            'student_no' => ['required', 'string'],
-            'year_level' => ['required', 'integer'],
-            'status' => ['required', 'string'],
-            'subjects_taken' => ['nullable', 'array', function($attribute, $value, $validator) {
-                if (!$value) {
-                    return;
-                }
 
-                foreach ($value as $key => $subject) {
-                    $validator->addRule("{$attribute}.{$key}.subjectid", 'required|integer');
-                    $validator->addRule("{$attribute}.{$key}.remark", 'required|string');
-                    $validator->addRule("{$attribute}.{$key}.action", 'required|string|in:create,update,delete');
-                }
-            }]
+        $validate = Validator::make($request->all(), [
+            'userfname' => ['required','string','max:255'],
+            'userlname' => ['required','string','max:255'],
+            'usermiddle' => ['required','string','max:255'],
+            'email' => ['required','string','email','max:255'],
+            'contact_no' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
+            'password' => ['required','string'],
+            'roles' => ['required','array'],
+            'roles.*.roleid' => ['required', 'integer'],
+            "studentid" => ['required', 'string'],
+            "status" => ['required','string'],
+            "program" => ['required','integer'],
+            "specialization" => ['required','string'],
+            "subjects_taken" => ['nullable','array'],
+            "subjects_taken*.subjectid" => ['required','integer'],
+            "subjects_taken*.taken_at" => ['required','string'],
+            "subjects_taken*.remark" => ['required','string'],
         ]);
 
         if($validate->fails()){
-            return response()->json([['status' => 'bad request'], $validate->errors()], 400);
+            return response()
+            ->json([
+                ['status' => 'bad request'],
+                $validate->errors()
+            ], 400);
         }
 
-        $user = User::where('userid', $id)
-            ->whereHas('user_roles', function (Builder $query){
-                $query->where('rolename', '=', 'Student');
-            })->with(['student_records', function(Builder $query){
-                $query->with(['subjects_taken', function(Builder $query){
-                    $query->with('subjects')
-                        ->with(['curriculum'], function(Builder $query){
-                            $query->with('program')->get();
-                          })
-                        ->get();
-                }])->get();
-            }])->first();
+        $user = User::with('student_record')
+            ->where('userid', $id)
+            ->first();
 
-        if($user) {
-
-            $user->student_record()
-                ->update([
-                    'student_no' => $request->student_no,
-                    'year_level' => $request->year_level,
-                    'status' => $request->status,
-                ]);
-            $studentRecord = $user->student_record;
-        if (!empty($request->subjects_taken)) {
-
-            foreach ($request->subjects_taken as $subject) {
-                $action = $subject['action'];
-                $subjectid = $subject['subjectid'];
-                $remark = $subject['remark'];
-
-                switch ($action) {
-                    case 'create':
-                        $studentRecord->subjects_taken()->create([
-                            'srid' => $studentRecord->srid,
-                            'subjectid' => $subjectid,
-                            'remark' => $remark,
-                        ]);
-                        break;
-                    case 'update':
-                        // Check for both student_record_id and subjectid for update
-                        $existingSubjectTaken = $studentRecord->subjects_taken()
-                            ->where('srid', $studentRecord->srid)
-                            ->where('subjectid', $subjectid)
-                            ->first();
-                        if ($existingSubjectTaken) {
-                            $existingSubjectTaken->update([
-                                'taken_at' => $taken_at ?? $existingSubjectTaken->taken_at,
-                                'remark' => $remark ?? $existingSubjectTaken->remark,
-                            ]);
-                        } else {
-                            return response()->json([
-                                ['status' => 'error'],
-                                'message' => "Subject_taken record with student_record_id: {$studentRecord->srid} and subject_id: {$subjectid} not found for updating",
-                            ], 400);
-                        }
-                        break;
-                    case 'delete':
-                        $subjectTakenToDelete = $studentRecord->subjects_taken()
-                            ->where('srid', $studentRecord->srid)
-                            ->where('subjectid', $subjectid)
-                            ->first();
-
-                        if ($subjectTakenToDelete) {
-                            $subjectTakenToDelete->delete();
-                        } else {
-                            return response()->json([
-                                'status' => 'subject to delete not found',
-                            ], 404);
-                        }
-                        break;
-                    default:
-                        return response()->json(['status' => 'invalid_action'], 400);
-                }
-            }
-        }
-
+        if(!$user){
             return response()->json([
-                ['status' => 'success'],
-                $user
-            ], 200);
+                'status' => 'not found',
+            ], 404);
+        }
+
+        $conflict_errors = [];
+        if($user->email != $request->email && User::where('email', $request->email)
+        ->first() != null) {
+            $conflict_errors['email'] = "email is already in use.";
+        }
+
+
+        if($user->student_record->student_no != $request->studentid &&
+        User::whereHas(
+            'student_record', function($query) use ($request) {
+            $query->where('student_no', $request->studentid);
+        })->first() != null) {
+            $conflict_errors["studentid"] = "Student ID is already in use.";
+        }
+
+        if(sizeof($conflict_errors) > 0){
+            return response()
+                ->json([
+                    ['status' => 'conflict'],
+                    $conflict_errors
+                ], 409);
+        }
+
+        $user->update([
+            'userfname' => $request->userfname,
+            'userlname' => $request->userlname,
+            'usermiddle' => $request->usermiddle,
+            'contact_no' => $request->contact_no,
+            'email' => $request->email,
+        ]);
+
+        $curriculum = Curriculum::whereHas('program', function($query) use ($request){
+            $query->where('programid', $request->program)
+            ->where('specialization', $request->specialization);
+        })->first();
+
+        $user->student_record()->update([
+            'year_level' => $request['year_level'],
+            'status' => $request['status'],
+            'student_no' => $request['studentid'],
+            'cid' => $curriculum['cid'],
+        ]);
+
+        $user->student_record->subjects_taken()->delete();
+
+        foreach($request->subjects_taken as $subject){
+            $user->student_record->subjects_taken()->insert([
+                'subjectid' => $subject['subjectid'],
+                'taken_at' => $subject['taken_at'],
+                'remark' => $subject['remark'],
+                'srid' => $user->student_record->srid,
+            ]);
         }
 
         return response()->json([
-            'status' => 'not found',
-        ], 404);
+            ['status' => 'student record created successfully.'],
+            $user
+        ], 200);
     }
 
     public function destroy(Request $request, String $id){

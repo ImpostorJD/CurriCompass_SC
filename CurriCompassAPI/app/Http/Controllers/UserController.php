@@ -155,7 +155,7 @@ class UserController extends Controller
 
     public function update(Request $request, String $id)
     {
-        $user = User::where('userid', '=', $id)->with('user_roles')->first();
+        $user = User::where('userid', '=', $id)->first();
 
         if($user != null) {
             $validate = Validator::make( $request->all(), [

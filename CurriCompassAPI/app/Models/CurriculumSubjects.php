@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class CurriculumSubjects extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
+    public $incrementing = false;
+    protected $primaryKey = ['cid', 'subjectid'];
     protected $fillables = [
         'cid',
         'subjectid',

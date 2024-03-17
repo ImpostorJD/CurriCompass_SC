@@ -21,9 +21,8 @@ class CurriculumController extends Controller
     public function show(Request $request, String $id){
         $curriculum = Curriculum::where('cid', $id)
             ->with(['curriculum_subjects'=> function($query) {
-                $query
-                    ->with('subjects')
-                    ->get();
+                $query->with('subjects');
+                $query->with('semesters');
             }])
             ->first();
 
