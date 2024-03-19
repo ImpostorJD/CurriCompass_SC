@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { HttpClientModule } from '@angular/common/http';
 import { httpOptions } from '../../../configs/Constants';
+import { FormsModule } from '@angular/forms';
+import { UserFilterPipe } from '../../services/user-filter.pipe';
 
 @Component({
   selector: 'app-users',
@@ -11,9 +13,13 @@ import { httpOptions } from '../../../configs/Constants';
   imports: [
     HttpClientModule,
     CommonModule,
-    RouterLink
+    RouterLink,
+    FormsModule,
+    UserFilterPipe,
   ],
-  providers: [HttpReqHandlerService],
+  providers: [
+    HttpReqHandlerService,
+  ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
@@ -22,6 +28,7 @@ export class UsersComponent {
     private req: HttpReqHandlerService
   ){}
 
+  searchUser:string ='';
   users: any = null!;
 
   getUser(){

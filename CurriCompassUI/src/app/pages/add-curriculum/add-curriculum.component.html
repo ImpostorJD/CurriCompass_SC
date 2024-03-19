@@ -6,11 +6,11 @@
         <div class="w-full flex flex-col">
           <span>Program</span>
           <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="programid">
-            <option [value]="null" disabled selected>
+            <option [ngValue]="null" disabled selected>
               Please Select
             </option>
             @for(program of programs; track $index){
-              <option [value]="program.programid">
+              <option [ngValue]="program.programid">
                 {{program.programdesc }}
               </option>
             }
@@ -36,7 +36,11 @@
       </div>
     </div>
   </div>
-  <div class=" border-slate-400 border-[1px] rounded-md mx-2 min-h-[25vh] lg:min-h-[25rem] bg-white overflow-hidden">
+  <div class="flex flex-col h-[8rem] border-slate-400 p-4 rounded-md border-[1px] mx-2 bg-white">
+    <span>Search For Courses</span>
+    <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchCourse" [ngModelOptions]="{standalone:true}">
+  </div>
+  <div class=" border-slate-400 border-[1px] rounded-md mx-2 min-h-[25vh] lg:min-h-[15rem] bg-white overflow-hidden">
     <table class="table-auto w-full h-full border-collapse border border-slate-300">
       <thead  class="bg-slate-200 h-[3rem]">
         <tr class="flex flex-row py-2">
@@ -60,7 +64,7 @@
           </th>
         </tr>
       </thead>
-      <tbody class="flex flex-col h-full lg:h-[30rem] overflow-y-auto">
+      <tbody class="flex flex-col h-full lg:h-[20rem] overflow-y-auto">
         @if(csubjectsFormArray.controls.length <= 0){
           <tr>
             <td>
@@ -70,15 +74,36 @@
             </td>
           </tr>
         }
-        @for(csubject of csubjectsFormArray.controls; track $index){
+        @for(csubject of csubjectsFormArray.controls; let outerIndex = $index; track outerIndex){
           <tr class="flex flex-row bg-white py-2 hover:bg-slate-100">
             <td class="w-[20%] px-1 flex flex-col">
-              <select class="w-full py-2 px-4" (change)="courseSelected($index, $event)" [formControl]="getCsubjectsControl($index)">
-                <option [value]="null" disabled selected>
+              <select class="w-full py-2 px-4" (change)="courseSelected(outerIndex, $event)" [formControl]="getCsubjectsControl(outerIndex)">
+                <option [ngValue]="null" disabled selected>
                   Please Select
                 </option>
-                @for(course of courses; track $index){
-                  <option [value]="course.subjectid" [disabled]="isCourseSelected(course.subjectid)">
+                @if(searchCourse.trim().length > 0 &&
+                      isSelectedCourseFiltered(outerIndex) == false &&
+                      getCsubjectsControl(outerIndex).value != null &&
+                      getCsubjectsControl(outerIndex).value != "null"
+                    ){
+                      <option
+                        [disabled]="isCourseSelected(getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectid)"
+                        [ngValue]="getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectid">
+                        <!--[selected]="getReqCourseControl(outerIndex).value !== undefined && getSelectedCourse(getReqCourseControl(outerIndex).value).subjectid"-->
+                        {{ getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectcode }}
+                      </option>
+                    }
+                @if(searchCourse.trim().length > 0 &&
+                  getCsubjectsControl(outerIndex).value !== null &&
+                  !isSelectedCourseFiltered(outerIndex)
+                ){
+                  <option [disabled]="isCourseSelected(getCsubjectsControl(outerIndex).value)"
+                  [ngValue]="getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectid">
+                    {{ getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectcode }}
+                  </option>
+                }
+                @for(course of courses | coursePipe:searchCourse; track $index){
+                  <option [ngValue]="course.subjectid" [disabled]="isCourseSelected(course.subjectid)">
                     {{ course.subjectcode }}
                   </option>
                 }
@@ -90,12 +115,12 @@
               }
             </td>
             <td class="w-[20%] px-1">
-              <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getCsemControl($index)">
-                <option [value]="null" disabled selected>
+              <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getCsemControl(outerIndex )">
+                <option [ngValue]="null" disabled selected>
                   Please Select
                 </option>
                 @for(sem of semesters; track $index){
-                  <option [value]="sem.semid">
+                  <option [ngValue]="sem.semid">
                     {{ sem.semdesc }}
                   </option>
                 }
@@ -107,8 +132,8 @@
               }
             </td>
             <td class="w-[20%] px-1">
-              <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getYearLevelControl($index)">
-                <option [value]="null" disabled selected>
+              <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getYearLevelControl(outerIndex)">
+                <option [ngValue]="null" disabled selected>
                   Please Select
                 </option>
                 <option value="1st Year">
@@ -131,7 +156,7 @@
               }
             </td>
             <td class="flex-auto flex justify-center items-center px-1">
-              <button class="bg-red-500 flex items-center justify-center p-2 h-full text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="popCsubjectsArray($index)">
+              <button class="bg-red-500 flex items-center justify-center p-2 h-full text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="popCsubjectsArray(outerIndex)">
                 <i class="material-symbols-outlined">
                   delete
                 </i>

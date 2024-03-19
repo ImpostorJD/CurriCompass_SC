@@ -1,5 +1,9 @@
 <div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
   <h1 class="font-bold font-sans text-2xl uppercase">Students</h1>
+  <div class="mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
+    <span>Search For Students</span>
+    <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchStudent" [ngModelOptions]="{standalone:true}">
+  </div>
   <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
     <!-- Add a table to display students -->
     <table class="table-auto w-full border-collapse border border-slate-300">
@@ -29,7 +33,7 @@
         </tr>
       </thead>
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
-        @for(student of students; track $index){
+        @for(student of students| userFilter:searchStudent; track $index){
           <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
             <td class="w-[20%] px-1 hidden lg:flex items-center">
               <span>{{ student.student_record.student_no }}</span>

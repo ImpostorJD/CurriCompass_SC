@@ -1,10 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
+import { CoursePipePipe } from '../../services/search-filters/course-pipe.pipe';
+import { CoursesServiceService } from '../../services/courses-service.service';
+import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 
 @Component({
   selector: 'app-edit-curriculum',
@@ -13,10 +16,14 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
     RouterLink,
     ReactiveFormsModule,
     HttpClientModule,
+    CoursePipePipe,
+    FormsModule,
   ],
   providers: [
     HttpReqHandlerService,
     RemoveInputErrorService,
+    CoursesServiceService,
+    CoursePipePipe,
   ],
   templateUrl: './edit-curriculum.component.html',
   styleUrl: './edit-curriculum.component.css'
@@ -24,11 +31,16 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
 export class EditCurriculumComponent {
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
+    private fac: FormArrayControlUtilsService,
+    private coursesService: CoursesServiceService,
+    private coursePipe: CoursePipePipe,
     private req: HttpReqHandlerService,
     public rs: RemoveInputErrorService,
+    private activatedRoute: ActivatedRoute,
   ){}
+
+  searchCourse: string ='';
 
   routeId:number = null!;
   programs: any = null;
@@ -53,7 +65,8 @@ export class EditCurriculumComponent {
   }
 
   popCsubjectsArray(index : number){
-      this.csubjectsFormArray.removeAt(index);
+    this.selectedCourses.splice(index, 1);
+    this.fac.popControl(this.csubjectsFormArray, index);
   }
 
   courseSelected(index: number, event: any) {
@@ -71,19 +84,32 @@ export class EditCurriculumComponent {
       'semid' : new FormControl(null, [Validators.required]),
       'year_level' : new FormControl(null, [Validators.required]),
     });
-    this.csubjectsFormArray.push(csubject);
+    this.fac.addControl(this.csubjectsFormArray, csubject);
   }
 
   getYearLevelControl(index: number): FormControl{
-    return (this.csubjectsFormArray.at(index) as FormGroup).get('year_level')! as FormControl;
+    return this.fac.getFormControl(index, this.csubjectsFormArray, "year_level");
   }
 
   getCsubjectsControl(index: number): FormControl{
-    return (this.csubjectsFormArray.at(index) as FormGroup).get('subjectid')! as FormControl;
+    return this.fac.getFormControl(index, this.csubjectsFormArray, "subjectid");
   }
 
   getCsemControl(index: number): FormControl{
-    return (this.csubjectsFormArray.at(index) as FormGroup).get('semid')! as FormControl;
+    return this.fac.getFormControl(index, this.csubjectsFormArray, "semid");
+  }
+
+  isSelectedCourseFiltered(index: number): boolean {
+    const selectedCourseId = parseInt(this.getCsubjectsControl(index).value);
+    if (typeof selectedCourseId != "number") {
+      return false;
+    }
+    const filteredCourses = this.coursePipe.transform(this.courses, this.searchCourse);
+    return typeof filteredCourses.find(course => course.subjectid === selectedCourseId) == "undefined" ? false: true;
+  }
+
+  getSelectedCourse(i: number){
+    return this.courses.find((c:any) => c.subjecid = i);
   }
 
   handleSubmit(){
@@ -117,12 +143,12 @@ export class EditCurriculumComponent {
       error: err => console.error(err),
     });
 
-    this.req.getResource('subjects', httpOptions).subscribe({
-      next: (res: any) => {
-        this.courses = res[1];
-      },
-      error: err => console.error(err),
-    });
+    this.coursesService.getCourses().subscribe({
+        next: (c:any) => {
+          this.courses = c;
+        },
+        error: (err:any) => console.log(err),
+    })
 
     this.req.getResource('semesters', httpOptions).subscribe({
       next: (res: any) => {

@@ -6,10 +6,7 @@
       <div class="flex flex-col gap-1">
         <div class="flex flex-col">
           <span>Student ID</span>
-          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="studentid" (focus)="rs.removeError(
-            userField.get('studentid'),
-            {'duplicate' : false, 'required' : false}
-          )"/>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="studentid"/>
           @if(
             userField.get('studentid')?.invalid &&
             (userField.get('studentid')?.touched ||

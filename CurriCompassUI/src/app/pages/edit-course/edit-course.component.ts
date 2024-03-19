@@ -7,6 +7,8 @@ import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { CoursePipePipe } from '../../services/search-filters/course-pipe.pipe';
+import { CoursesServiceService } from '../../services/courses-service.service';
+import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 
 //TODO: Add role based access
 @Component({
@@ -21,8 +23,9 @@ import { CoursePipePipe } from '../../services/search-filters/course-pipe.pipe';
     FormsModule
   ],
   providers: [
+    CoursePipePipe,
     HttpReqHandlerService,
-    RemoveInputErrorService,
+    CoursesServiceService,
   ],
   templateUrl: './edit-course.component.html',
   styleUrl: './edit-course.component.css'
@@ -33,6 +36,9 @@ export class EditCourseComponent {
     private activeRouter: ActivatedRoute,
     private req: HttpReqHandlerService,
     private fb: FormBuilder,
+    private coursePipe: CoursePipePipe,
+    private coursesService: CoursesServiceService,
+    private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,
   ){}
 
@@ -52,10 +58,12 @@ export class EditCourseComponent {
   });
 
   get reqCourseArray() {
-    return this.courseField.get('subjects') as FormArray  ;
+    return this.courseField.get('subjects') as FormArray;
   }
+
   popReqCourseArray(index : number){
-    this.reqCourseArray.removeAt(index);
+    this.selectedCourses.splice(index, 1);
+    this.fac.popControl(this.reqCourseArray, index);
   }
 
   courseSelected(index: number, event: any) {
@@ -64,14 +72,32 @@ export class EditCourseComponent {
   }
 
   isCourseSelected(courseid: number): boolean {
-    return this.selectedCourses.includes(courseid);
+    const course:any = this.selectedCourses.find((c:number) =>  c === courseid);
+    return (course != null && typeof course != "undefined");
   }
 
   addReqCourseArray() {
-    const csubject: any = this.fb.group({
+    const csubject = this.fb.group({
       'subjectid' : new FormControl(null, [Validators.required]),
     });
-    this.reqCourseArray.push(csubject);
+    this.fac.addControl(this.reqCourseArray, csubject);
+  }
+
+  isSelectedCourseFiltered(index: number): boolean {
+    const selectedCourseId = parseInt(this.getReqCourseControl(index).value);
+    if (typeof selectedCourseId != "number") {
+      return false;
+    }
+    const filteredCourses = this.coursePipe.transform(this.courseList, this.searchCourse);
+    return typeof filteredCourses.find(course => course.subjectid === selectedCourseId) == "undefined" ? false: true;
+
+  }
+
+  getSelectedCourse(i: number | string) {
+    if (typeof i == "string"){
+      i = parseInt(i);
+    }
+    return this.courseList.find((c:any) => c.subjectid === i);
   }
 
   getReqCourseControl(index: number): FormControl{
@@ -99,36 +125,34 @@ export class EditCourseComponent {
   }
 
   ngOnInit(){
+    this.coursesService.getCourses().subscribe({
+      next: (c:any) => {
+        this.courseList = c;
+      },
+      error: (err:any) => console.log(err),
+    });
 
     this.activeRouter.params.subscribe(params => {
       this.routerId = parseInt(params['id']);
-      this.req.getResource('subjects', httpOptions).subscribe({
-        next: (res:any) => {
-          this.courseList = res[1].filter((obj:any) => obj.subjectid !== this.routerId);
-        },
 
-        error: err => console.error(err),
-      });
-
-      this.req.getResource('subjects/' + this.routerId, httpOptions).subscribe({
-        next: (res: any) => {
-          this.courseField.patchValue(res[1]);
-          this.courseField.controls['year_level'].setValue(res[1].pre_requisites.year_level);
-          this.courseField.controls['completion'].setValue(res[1].pre_requisites.completion);
-          if (res[1].pre_requisites.pre_requisites_subjects.length > 0) {
-            res[1].pre_requisites.pre_requisites_subjects.forEach((subject:any, i: number) => {
+      this.coursesService.getCourse(this.routerId).subscribe({
+        next: (c:any) => {
+          this.courseField.patchValue(c);
+          this.courseField.controls['year_level'].setValue(c.pre_requisites.year_level);
+          this.courseField.controls['completion'].setValue(c.pre_requisites.completion);
+          if (c.pre_requisites.pre_requisites_subjects.length > 0) {
+            c.pre_requisites.pre_requisites_subjects.forEach((subject:any, i: number) => {
               const csubject: any = this.fb.group({
                 'subjectid' : new FormControl(parseInt(subject.subjectid), [Validators.required]),
               });
               this.selectedCourses[i] = parseInt(subject.subjectid);
-              this.reqCourseArray.push(csubject);
+              this.fac.addControl(this.reqCourseArray, csubject);
 
             });
           }
         },
-        error: error => console.log(error),
-      })
-
+        error: (err:any) => console.log(err),
+     })
     })
   }
 

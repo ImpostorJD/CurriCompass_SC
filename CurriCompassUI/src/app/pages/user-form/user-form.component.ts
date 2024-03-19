@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { RemoveInputErrorService } from '../../services/remove-input-error.service';
+import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 
 //TODO: Add role based access and render
-
 @Component({
   selector: 'app-user-form',
   standalone: true,
@@ -20,7 +19,6 @@ import { RemoveInputErrorService } from '../../services/remove-input-error.servi
   ],
   providers: [
     HttpReqHandlerService,
-    RemoveInputErrorService,
   ],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.css'
@@ -30,7 +28,7 @@ export class UserFormComponent {
     private fb : FormBuilder,
     private req : HttpReqHandlerService,
     private router: Router,
-    public rs: RemoveInputErrorService
+    private fac: FormArrayControlUtilsService,
     ){}
 
     roles: Array<any> = null!;
@@ -55,16 +53,16 @@ export class UserFormComponent {
         const role: any = this.fb.group({
           roleid: new FormControl(null, [Validators.required])
         });
-        this.rolesFormArray.push(role);
+        this.fac.addControl(this.rolesFormArray, role);
     }
 
     getRoleControl(index: number): FormControl{
-      return (this.rolesFormArray.at(index) as FormGroup).get('roleid')! as FormControl;
+      return this.fac.getFormControl(index, this.rolesFormArray, 'roleid');
     }
 
     popRolesArray(index : number){
       this.selectedRoles.splice(index, 1);
-        this.rolesFormArray.removeAt(index);
+      this.fac.popControl(this.rolesFormArray, index);
     }
 
     roleSelected(index: number, event: any) {
@@ -86,10 +84,9 @@ export class UserFormComponent {
         return;
       }
 
-       let response = null;
        this.req.postResource('users/register', this.userField.value, httpOptions).subscribe({
-        next: data => {
-          response = data;
+        next: () => {
+
           this.router.navigateByUrl('/users')
         },
         error: err => {

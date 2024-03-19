@@ -77,7 +77,7 @@
     <div class="gap-2 bg-white border-slate-400 border-1 flex-auto flex flex-col p-5 border-[1px] rounded-sm shadow-lg">
       <span class="font-bold text-[1.5rem]">Pre Requisites</span>
       <div class="flex lg:flex-row flex-col gap-4">
-        <div class="flex lg:flex-col lg:w-[50%] flex-row w-full gap-2">
+        <div class="flex flex-col lg:w-[50%] w-full gap-2">
           <div class="flex flex-col">
             <span>Curriculum Completion (Decimal Form)</span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" type="number" placeholder="leave if none" formControlName="completion"/>
@@ -123,15 +123,32 @@
 
           <div class="flex flex-col min-h-[20rem] pb-[3rem] gap-2">
             <span>Course Pre-Requisites</span>
-            @for(pre of reqCourseArray.controls; track $index){
+            @for(pre of reqCourseArray.controls; let outerIndex = $index; track outerIndex){
               <div class="flex flex-row gap-2">
                 <div class="flex flex-col gap-1 w-full">
-                  <select class="w-full border-[1px] border-slate-400 rounded-md py-2" [selectedIndex]="getSelectedCourseIndex($index)" (change)="courseSelected($index, $event)" [formControl]="getReqCourseControl($index)">
-                    <option [value]="null" disabled>
+                  <select class="w-full border-[1px] border-slate-400 rounded-md py-2"
+                    (change)="courseSelected(outerIndex, $event)"
+                    [formControl]="getReqCourseControl(outerIndex)">
+                    <option [ngValue]="null" disabled>
                       Please Select
                     </option>
-                    @for(course of courseList | coursePipe:searchCourse; track course.subjectid) {
-                      <option [value]="course.subjectid" [disabled]="isCourseSelected(course.subjectid)">
+                    @if(searchCourse.trim().length > 0 &&
+                      isSelectedCourseFiltered(outerIndex) == false &&
+                      getReqCourseControl(outerIndex).value != null
+                    ){
+                      <option
+                        [disabled]="isCourseSelected(getSelectedCourse(getReqCourseControl(outerIndex).value).subjectid)"
+                        [ngValue]="getSelectedCourse(getReqCourseControl(outerIndex).value).subjectid">
+                        <!--[selected]="getReqCourseControl(outerIndex).value !== undefined && getSelectedCourse(getReqCourseControl(outerIndex).value).subjectid"-->
+                        {{ getSelectedCourse(getReqCourseControl(outerIndex).value).subjectcode }}
+                      </option>
+                    }
+
+                    @for(course of courseList | coursePipe:searchCourse; track $index) {
+                      <option
+                        [disabled]="isCourseSelected(course.subjectid)"
+                        [ngValue]="course.subjectid">
+                        <!--[selected]="getReqCourseControl(outerIndex).value !== undefined && course.subjectid == getReqCourseControl(outerIndex).value"-->
                         {{ course.subjectcode }}
                       </option>
                     }
@@ -142,7 +159,7 @@
                     </div>
                   }
                 </div>
-                <button class="bg-red-500 flex items-center justify-center p-2 h-full text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="popReqCourseArray($index)">
+                <button class="bg-red-500 flex items-center justify-center p-2 h-full text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="popReqCourseArray(outerIndex)">
                   <i class="material-symbols-outlined">
                     delete
                   </i>

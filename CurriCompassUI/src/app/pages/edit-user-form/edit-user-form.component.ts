@@ -3,9 +3,9 @@ import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
-import { RemoveInputErrorService } from '../../services/remove-input-error.service';
+import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 
 @Component({
   selector: 'app-edit-user-form',
@@ -18,7 +18,6 @@ import { RemoveInputErrorService } from '../../services/remove-input-error.servi
   ],
   providers:[
     HttpReqHandlerService,
-    RemoveInputErrorService,
   ],
   templateUrl: './edit-user-form.component.html',
   styleUrl: './edit-user-form.component.css'
@@ -30,7 +29,7 @@ export class EditUserFormComponent {
     private req : HttpReqHandlerService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public rs: RemoveInputErrorService,
+    private fac: FormArrayControlUtilsService,
   ){}
 
     roles: Array<any> = null!;
@@ -52,20 +51,19 @@ export class EditUserFormComponent {
 
     addRolesArray() {
         this.selectedRoles.push(null);
-
         const role: any = this.fb.group({
           roleid: new FormControl(null, [Validators.required])
         });
-        this.rolesFormArray.push(role);
+        this.fac.addControl(this.rolesFormArray, role);
     }
 
     getRoleControl(index: number): FormControl{
-      return (this.rolesFormArray.at(index) as FormGroup).get('roleid')! as FormControl;
+      return this.fac.getFormControl(index, this.rolesFormArray, 'roleid');
     }
 
     popRolesArray(index : number){
       this.selectedRoles.splice(index, 1);
-        this.rolesFormArray.removeAt(index);
+      this.fac.popControl(this.rolesFormArray, index);
     }
 
     roleSelected(index: number, event: any) {
@@ -87,13 +85,8 @@ export class EditUserFormComponent {
         return;
       }
 
-       console.log(this.userField.value);
-
-       let response = null;
        this.req.patchResource('users/' + this.routeId, this.userField.value, httpOptions).subscribe({
-        next: data => {
-          response = data;
-          console.log(response);
+        next: () => {
           this.router.navigateByUrl('/users')
         },
         error: err => {
@@ -127,7 +120,7 @@ export class EditUserFormComponent {
                   roleid: new FormControl(role.roleid, [Validators.required])
                 });
                 this.selectedRoles[index] = parseInt(role.roleid);
-                this.rolesFormArray.push(roleField);
+                this.fac.addControl(this.rolesFormArray, roleField);
               });
 
             },

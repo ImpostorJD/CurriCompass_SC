@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
-import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 
 
@@ -19,7 +18,6 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
   ],
   providers: [
     HttpReqHandlerService,
-    RemoveInputErrorService,
   ],
   templateUrl: './student-form.component.html',
   styleUrl: './student-form.component.css'
@@ -29,7 +27,6 @@ export class StudentFormComponent {
     private router: Router,
     private fb: FormBuilder,
     private req: HttpReqHandlerService,
-    public rs: RemoveInputErrorService
   ){}
 
   userField =  this.fb.group({

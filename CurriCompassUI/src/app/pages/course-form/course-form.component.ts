@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { HttpClientModule } from '@angular/common/http';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { CoursePipePipe } from '../../services/search-filters/course-pipe.pipe';
+import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
+import { CoursesServiceService } from '../../services/courses-service.service';
 
-//TODO: Add role-based access
 @Component({
   selector: 'app-course-form',
   standalone: true,
@@ -22,7 +23,8 @@ import { CoursePipePipe } from '../../services/search-filters/course-pipe.pipe';
   ],
   providers: [
     HttpReqHandlerService,
-    RemoveInputErrorService,
+    CoursesServiceService,
+    CoursePipePipe,
   ],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.css'
@@ -32,6 +34,9 @@ export class CourseFormComponent {
     private router: Router,
     private req: HttpReqHandlerService,
     private fb: FormBuilder,
+    private coursesService: CoursesServiceService,
+    private fac: FormArrayControlUtilsService,
+    private coursePipe: CoursePipePipe,
     public rs: RemoveInputErrorService
   ){}
 
@@ -49,14 +54,6 @@ export class CourseFormComponent {
     subjects: this.fb.array([]),
   });
 
-  getSelectedCourseIndex(index: number): number | null {
-    const selectedCourseId = this.selectedCourses[index];
-    if (selectedCourseId === null) {
-      return null;
-    }
-    return this.courseList.find((c: any) => c.subjectid === selectedCourseId)?.subjectid || null;
-  }
-
   handleSubmit(){
     if(this.courseField.status == "INVALID"){
       markFormGroupAsDirtyAndInvalid(this.courseField);
@@ -73,6 +70,7 @@ export class CourseFormComponent {
           console.log(err.status);
           this.courseField.get('subjectcode')?.setErrors({duplicate: true});
         }
+
       }
     })
   }
@@ -80,40 +78,58 @@ export class CourseFormComponent {
   get reqCourseArray() {
     return this.courseField.get('subjects') as FormArray;
   }
+
   popReqCourseArray(index : number){
-    this.reqCourseArray.removeAt(index);
+    this.selectedCourses.splice(index, 1);
+    this.fac.popControl(this.reqCourseArray, index);
   }
 
   courseSelected(index: number, event: any) {
     const courseid = event.target.value;
-    //this.selectedCourses[index] = parseInt(courseid);
-    this.selectedCourses[index] = courseid ? parseInt(courseid) : null;
+    this.selectedCourses[index] = parseInt(courseid);
   }
 
   isCourseSelected(courseid: number): boolean {
-    return this.selectedCourses.includes(courseid);
+    const course:any = this.selectedCourses.find((c:number) =>  c === courseid);
+    return (course != null && typeof course != "undefined");
   }
 
   addReqCourseArray() {
-    const csubject: any = this.fb.group({
+    const csubject = this.fb.group({
       'subjectid' : new FormControl(null, [Validators.required]),
     });
-    this.reqCourseArray.push(csubject);
+    this.fac.addControl(this.reqCourseArray, csubject);
   }
 
   getReqCourseControl(index: number): FormControl{
-    return (this.reqCourseArray.at(index) as FormGroup).get('subjectid')! as FormControl;
+    return this.fac.getFormControl(index, this.reqCourseArray, "subjectid");
+  }
+
+  isSelectedCourseFiltered(index: number): boolean {
+    const selectedCourseId = parseInt(this.getReqCourseControl(index).value);
+    if (typeof selectedCourseId != "number") {
+      return false;
+    }
+    const filteredCourses = this.coursePipe.transform(this.courseList, this.searchCourse);
+    return typeof filteredCourses.find(course => course.subjectid === selectedCourseId) == "undefined" ? false: true;
+
+  }
+
+  getSelectedCourse(i: number | string) {
+    if (typeof i == "string"){
+      i = parseInt(i);
+    }
+    return this.courseList.find((c:any) => c.subjectid === i);
   }
 
 
   ngOnInit(){
-    this.req.getResource('subjects', httpOptions).subscribe({
-      next: (res:any) => {
-        this.courseList = res[1];
+    this.coursesService.getCourses().subscribe({
+      next: (c:any) => {
+        this.courseList = c;
       },
-
-      error: err => console.error(err),
-    });
+      error: (err:any) => console.log(err),
+   })
   }
 
 }

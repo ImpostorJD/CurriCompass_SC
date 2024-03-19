@@ -4,6 +4,8 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
+import { UserFilterPipe } from '../../services/user-filter.pipe';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-students-listing',
@@ -12,6 +14,8 @@ import { httpOptions } from '../../../configs/Constants';
     CommonModule,
     RouterLink,
     HttpClientModule,
+    FormsModule,
+    UserFilterPipe,
   ],
   providers: [
     HttpReqHandlerService,
@@ -24,6 +28,7 @@ export class StudentsListingComponent {
     private req: HttpReqHandlerService,
   ){}
 
+  searchStudent:string = '';
   students:any = null;
 
   deleteStudent(id : number) {
