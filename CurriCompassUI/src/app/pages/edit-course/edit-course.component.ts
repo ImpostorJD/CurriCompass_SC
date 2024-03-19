@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
-import { CoursePipePipe } from '../../services/search-filters/course-pipe.pipe';
+import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe';
 import { CoursesServiceService } from '../../services/courses-service.service';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 
@@ -19,11 +19,11 @@ import { FormArrayControlUtilsService } from '../../services/form-array-control-
     ReactiveFormsModule,
     CommonModule,
     RouterLink,
-    CoursePipePipe,
+    CourseFilterPipe,
     FormsModule
   ],
   providers: [
-    CoursePipePipe,
+    CourseFilterPipe,
     HttpReqHandlerService,
     CoursesServiceService,
   ],
@@ -36,7 +36,7 @@ export class EditCourseComponent {
     private activeRouter: ActivatedRoute,
     private req: HttpReqHandlerService,
     private fb: FormBuilder,
-    private coursePipe: CoursePipePipe,
+    private coursePipe: CourseFilterPipe,
     private coursesService: CoursesServiceService,
     private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,

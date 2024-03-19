@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
-import { UserFilterPipe } from '../../services/user-filter.pipe';
+import { UserFilterPipe } from '../../services/search-filters/user-filter.pipe';
 import { FormsModule } from '@angular/forms';
 
 @Component({

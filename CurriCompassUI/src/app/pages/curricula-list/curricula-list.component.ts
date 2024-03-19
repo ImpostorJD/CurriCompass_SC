@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { HttpClientModule } from '@angular/common/http';
 import { httpOptions } from '../../../configs/Constants';
+import { CurriculumFilterPipe } from '../../services/search-filters/curriculum-filter.pipe';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-curricula-list',
@@ -11,7 +13,9 @@ import { httpOptions } from '../../../configs/Constants';
   imports: [
     CommonModule,
     RouterLink,
-    HttpClientModule
+    HttpClientModule,
+    CurriculumFilterPipe,
+    FormsModule,
   ],
   providers: [
     HttpReqHandlerService,
@@ -24,6 +28,7 @@ export class CurriculaListComponent {
     private req: HttpReqHandlerService,
   ){}
 
+  searchCurricula: string = '';
   curricula: any  = null;
   iterates: Array<number> = Array.from({ length: 20 }, (_, i) => i + 1);
 

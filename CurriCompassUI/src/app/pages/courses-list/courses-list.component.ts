@@ -4,6 +4,8 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
+import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-courses-list',
@@ -11,7 +13,9 @@ import { httpOptions } from '../../../configs/Constants';
   imports: [
     CommonModule,
     RouterLink,
-    HttpClientModule
+    HttpClientModule,
+    CourseFilterPipe,
+    FormsModule,
   ],
 
   providers: [HttpReqHandlerService],
@@ -23,6 +27,7 @@ export class CoursesListComponent {
     private req: HttpReqHandlerService,
   ){}
 
+  searchCourse:string = '';
   courses: any = null;
 
   getCourses(){

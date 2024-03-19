@@ -1,10 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'coursePipe',
+  name: 'programFilter',
   standalone: true
 })
-export class CourseFilterPipe implements PipeTransform {
+export class ProgramFilterPipe implements PipeTransform {
 
   transform(value: any[], search: string = ''): any[] {
     if (!search) {
@@ -13,10 +13,10 @@ export class CourseFilterPipe implements PipeTransform {
 
     search = search.toLowerCase();
     return value.filter(item => {
-      const courseCodeLower = (item as any).subjectcode?.toLowerCase() || '';
-      const subjectDescLower = (item as any).subjectname?.toLowerCase() || '';
-      const combinedString = courseCodeLower + ' ' + subjectDescLower;
+      const programCode = (item as any).programcode?.toLowerCase() || '';
+      const  programDesc = (item as any).programdesc?.toLowerCase() || '';
 
+      const combinedString = programCode + ' ' + programDesc;
       return combinedString.includes(search);
     });
   }

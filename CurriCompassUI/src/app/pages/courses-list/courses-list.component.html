@@ -1,5 +1,9 @@
 <div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
   <h1 class="font-bold font-sans text-2xl uppercase">Courses</h1>
+  <div class="mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
+    <span>Search For Courses</span>
+    <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchCourse" [ngModelOptions]="{standalone:true}">
+  </div>
   <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
     <table class="table-auto w-full border-collapse border border-slate-300">
       <thead class="bg-slate-300">
@@ -25,7 +29,7 @@
         </tr>
       </thead>
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
-        @for(course of courses; track $index){
+        @for(course of courses| coursePipe:searchCourse; track $index){
           <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
             <td class="w-[30%] flex px-1 items-center">
               <span>{{ course.subjectcode }}</span>

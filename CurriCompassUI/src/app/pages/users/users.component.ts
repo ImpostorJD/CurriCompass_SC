@@ -5,7 +5,7 @@ import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { HttpClientModule } from '@angular/common/http';
 import { httpOptions } from '../../../configs/Constants';
 import { FormsModule } from '@angular/forms';
-import { UserFilterPipe } from '../../services/user-filter.pipe';
+import { UserFilterPipe } from '../../services/search-filters/user-filter.pipe';
 
 @Component({
   selector: 'app-users',
