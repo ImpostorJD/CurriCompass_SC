@@ -16,15 +16,21 @@ return new class extends Migration
             $table->unsignedBigInteger('programid');
             $table->string('specialization')
                 ->nullable();
+            $table->unsignedBigInteger('sy');
             $table->timestamps();
             $table->unique([
                 'specialization',
                 'programid',
+                'sy',
             ]);
             $table->foreign('programid')
                 ->references('programid')
                 ->on('programs')
                 ->onDelete('cascade');
+            $table->foreign('sy')
+                ->references('sy')
+                ->on('school_years')
+                ->onDelete('restrict');
         });
     }
 

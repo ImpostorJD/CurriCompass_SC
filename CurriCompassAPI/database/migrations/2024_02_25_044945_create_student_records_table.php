@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-//TODO: add connection to school year table
 return new class extends Migration
 {
     /**
@@ -18,6 +17,7 @@ return new class extends Migration
             $table->enum('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year'])->nullable();
             $table->enum('status', ['Regular', 'Irregular', 'Graduated', 'Inactive'])->default('regular');
             $table->unsignedBigInteger('userid');
+            $table->unsignedBigInteger('sy')->nullable();
             $table->unsignedBigInteger('cid')->nullable();
             $table->timestamps();
             $table->foreign('userid')
@@ -25,6 +25,10 @@ return new class extends Migration
                 ->on('users')
                 ->unique()
                 ->onDelete('cascade');
+            $table->foreign('sy')
+                ->references('sy')
+                ->on('school_years')
+                ->onDelete('restrict');
             $table->foreign('cid')
                 ->references('cid')
                 ->on('curricula')

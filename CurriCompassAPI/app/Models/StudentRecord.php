@@ -16,20 +16,23 @@ class StudentRecord extends Model
         'year_level',
         'status',
         'student_no',
-        'cid'
+        'cid',
+        'sy'
     ];
 
-    public function subjects_taken()
-    {
+    public function subjects_taken() {
         return $this->hasMany(subjectsTaken::class, 'srid', 'srid');
     }
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class, 'userid', 'userid');
     }
 
-    public function curriculum(){
+    public function curriculum() {
         return $this->belongsTo(Curriculum::class, 'cid', 'cid');
+    }
+
+    public function school_year() {
+        return $this->belongsTo(SchoolYear::class, 'sy', 'sy');
     }
 }

@@ -16,12 +16,16 @@ return new class extends Migration
             $table->unsignedBigInteger('srid');
             $table->unsignedBigInteger('subjectid');
             $table->enum('taken_at', ['Sem 1', 'Sem 2', 'Sem 3', 'Credited']);
-           // $table->string('school_year');
+            $table->unsignedBigInteger('sy');
             $table->enum('remark', ["Excelent", "Very Good", "Good", "Fair", "Passing", "Failed", "Widthdrawn", "Incomplete", "None"]);
             $table->foreign('srid')
                 ->references('srid')
                 ->on('student_records')
                 ->onDelete('cascade');
+            $table->foreign('sy')
+                ->references('sy')
+                ->on('school_years')
+                ->onDelete('restrict');
             $table->foreign('subjectid')
                 ->references('subjectid')
                 ->on('subjects')

@@ -19,6 +19,7 @@ class StudentRecordsController extends Controller
             User::whereHas('user_roles', function($query){
                $query->where('rolename', '=', 'Student');
             })->with(['student_record' => function($query){
+                $query->with('school_year');
                 $query->with(['curriculum' => function($query){
                     $query->with('program');
                     $query->with('curriculum_subjects');
@@ -41,8 +42,10 @@ class StudentRecordsController extends Controller
                     $query->with(['curriculum_subjects' => function($query){
                         $query->with('subjects');
                         $query->with('semesters');
+                        $query->with('school_year');
                     }]);
                   }]);
+                $query->with('school_year');
             }])->first();
 
         if($user) {
@@ -139,12 +142,14 @@ class StudentRecordsController extends Controller
             'roles' => ['required','array'],
             'roles.*.roleid' => ['required', 'integer'],
             "studentid" => ['required', 'string'],
+            'sy'=> ['required','integer'],
             "status" => ['required','string'],
             "program" => ['required','integer'],
             "specialization" => ['required','string'],
             "subjects_taken" => ['nullable','array'],
             "subjects_taken*.subjectid" => ['required','integer'],
             "subjects_taken*.taken_at" => ['required','string'],
+            "subjects_taken*.sy" => ['required','integer'],
             "subjects_taken*.remark" => ['required','string'],
         ]);
 
@@ -167,8 +172,8 @@ class StudentRecordsController extends Controller
         }
 
         $conflict_errors = [];
-        if($user->email != $request->email && User::where('email', $request->email)
-        ->first() != null) {
+        if($user->email != $request->email &&
+        User::where('email', $request->email)->first() != null) {
             $conflict_errors['email'] = "email is already in use.";
         }
 
@@ -207,6 +212,7 @@ class StudentRecordsController extends Controller
             'status' => $request['status'],
             'student_no' => $request['studentid'],
             'cid' => $curriculum['cid'],
+            'sy' => $request['sy']
         ]);
 
         $user->student_record->subjects_taken()->delete();
@@ -217,6 +223,7 @@ class StudentRecordsController extends Controller
                 'taken_at' => $subject['taken_at'],
                 'remark' => $subject['remark'],
                 'srid' => $user->student_record->srid,
+                'sy' => $subject['sy'],
             ]);
         }
 

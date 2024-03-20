@@ -13,6 +13,7 @@ class Curriculum extends Model
     protected $fillable = [
         'programid',
         'specialization',
+        'sy',
     ];
 
     public function program(){
@@ -23,8 +24,11 @@ class Curriculum extends Model
         return $this->hasMany(StudentRecord::class, 'cid','cid');
     }
 
-    public function curriculum_subjects()
-    {
+    public function curriculum_subjects(){
         return $this->hasMany(CurriculumSubjects::class, 'cid', 'cid');
+    }
+
+    public function school_year(){
+        return $this->belongsTo(SchoolYear::class, 'sy', 'sy');
     }
 }
