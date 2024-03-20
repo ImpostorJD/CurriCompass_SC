@@ -18,7 +18,7 @@ class SchoolYearController extends Controller
     public function show(Request $request, String $id)
     {
 
-        $sy = SchoolYear::find('sy', $id);
+        $sy = SchoolYear::where('sy', $id)->first();
         if ($sy){
             return response()->json([
                 ['status' => 'success'],
@@ -78,7 +78,8 @@ class SchoolYearController extends Controller
             ], 400);
         }
 
-        $currentRecord = SchoolYear::find('sy', $id);
+        $currentRecord = SchoolYear::where('sy', $id)->first();
+
         if($currentRecord){
             $existing = SchoolYear::where('sy_end', $request->sy_end)
                 ->where('sy_start', $request->sy_start)
@@ -98,8 +99,8 @@ class SchoolYearController extends Controller
                 $currentRecord->update([
                     'sy_start' => $request->sy_start,
                     'sy_end' => $request->sy_end,
-                ], 200),
-            ]);
+                ]),
+            ], 200);
         }
 
         return response()->json([

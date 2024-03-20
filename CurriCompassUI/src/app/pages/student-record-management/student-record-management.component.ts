@@ -6,6 +6,8 @@ import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { httpOptions, markFormGroupAsDirtyAndInvalid, sortSemester, yearLevel } from '../../../configs/Constants';
+import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
+import { FormatDateService } from '../../services/format/format-date.service';
 
 @Component({
   selector: 'app-student-record-management',
@@ -29,7 +31,9 @@ export class StudentRecordManagementComponent {
     private router: Router,
     private req: HttpReqHandlerService,
     private fb: FormBuilder,
-    public rs: RemoveInputErrorService
+    private fac: FormArrayControlUtilsService,
+    public rs: RemoveInputErrorService,
+    public dateformat: FormatDateService
   ){}
 
   routeId: string = null!;
@@ -38,6 +42,7 @@ export class StudentRecordManagementComponent {
   programs:any = null;
   specializations: any = null;
 
+  school_years: any = null;
   curricula:any = null;
   curriculumSubjects:any = null;
   subjectTaken: any = null;
@@ -47,6 +52,7 @@ export class StudentRecordManagementComponent {
     "userfname" : new FormControl('', [Validators.required]),
     "userlname" : new FormControl('', [Validators.required]),
     "usermiddle" : new FormControl('', [Validators.required]),
+    "sy": new FormControl(null, [Validators.required]),
     "contact_no" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
     "email" : new FormControl('', [Validators.required, Validators.email]),
     "program" : new FormControl('', [Validators.required]),
@@ -66,37 +72,43 @@ export class StudentRecordManagementComponent {
       subject_taken.find((s:any) => s.subjectid === element.subjectid) : null;
     let taken_at = null;
     let remark = null;
+    let sy = null;
 
     if(subject != null && typeof subject != "undefined"){
       taken_at = subject.taken_at;
       remark = subject.remark;
+      sy = subject.sy;
     }
 
     const subjectField = this.fb.group({
       "subjectid": new FormControl(element.subjectid),
       "taken_at": new FormControl(taken_at),
       "remark": new FormControl(remark),
+      "sy": new FormControl(sy),
     });
 
-    this.subjectsTakenArray.push(subjectField);
+    this.fac.addControl(this.subjectsTakenArray, subjectField);
   }
 
   popSubjectsTaken(index: number){
-    this.subjectsTakenArray.removeAt(index);
+    this.fac.popControl(this.subjectsTakenArray, index);
   }
 
   clearAllSubjectsTaken(){
-    this.subjectsTakenArray.clear();
+    this.fac.clearControls(this.subjectsTakenArray);
   }
 
   getRemarkControl(index: number): FormControl{
-    return (this.subjectsTakenArray.at(index) as FormGroup).get('remark')! as FormControl;
+    return this.fac.getFormControl(index, this.subjectsTakenArray, 'remark');
   }
 
   getTakenAtControl(index: number): FormControl{
-    return (this.subjectsTakenArray.at(index) as FormGroup).get('taken_at')! as FormControl;
+    return this.fac.getFormControl(index, this.subjectsTakenArray, 'taken_at');
   }
 
+  getSchoolYearControl(index: number): FormControl {
+    return this.fac.getFormControl(index, this.subjectsTakenArray, 'sy');
+  }
   getRemarkOfSubject(subjectid: number) {
     return this.curriculumSubjects.find((s:any) => s.subjectid === subjectid).remark;
   }
@@ -165,7 +177,6 @@ export class StudentRecordManagementComponent {
       }
     });
 
-    console.log(this.studentProfileField);
     if (!remarkFilled) return;
 
     data.subjects_taken = data.subjects_taken!.filter((e:any) => e.taken_at !== null)!;
@@ -201,6 +212,13 @@ export class StudentRecordManagementComponent {
         this.programs = res[1];
       },
       error: (err: any) => console.error(err),
+    });
+
+    this.req.getResource('school-year', httpOptions).subscribe({
+      next: (res: any) => {
+        this.school_years = res[1];
+      },
+      error: err => console.error(err),
     });
 
     this.activatedRoute.params.subscribe(params => {

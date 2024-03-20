@@ -8,6 +8,7 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
 import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe';
 import { CoursesServiceService } from '../../services/courses-service.service';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
+import { FormatDateService } from '../../services/format/format-date.service';
 
 @Component({
   selector: 'app-edit-curriculum',
@@ -38,10 +39,12 @@ export class EditCurriculumComponent {
     private req: HttpReqHandlerService,
     public rs: RemoveInputErrorService,
     private activatedRoute: ActivatedRoute,
+    public dateformat: FormatDateService,
   ){}
 
   searchCourse: string ='';
 
+  school_years: any = null;
   routeId:number = null!;
   programs: any = null;
   courses: any = null;
@@ -51,6 +54,7 @@ export class EditCurriculumComponent {
   curriculum = this.fb.group({
     programid : new FormControl(null, [Validators.required]),
     specialization : new FormControl(null),
+    sy : new FormControl(null, [Validators.required]),
     curriculum_subjects: this.fb.array([]),
   });
 
@@ -143,6 +147,13 @@ export class EditCurriculumComponent {
       error: err => console.error(err),
     });
 
+    this.req.getResource('school-year', httpOptions).subscribe({
+      next: (res: any) => {
+        this.school_years = res[1];
+      },
+      error: err => console.error(err),
+    });
+
     this.coursesService.getCourses().subscribe({
         next: (c:any) => {
           this.courses = c;
@@ -162,7 +173,6 @@ export class EditCurriculumComponent {
       this.req.getResource('curriculum/' + this.routeId, httpOptions).subscribe({
         next: (res:any) => {
           this.curriculum.patchValue(res[1]);
-
           if(res[1].curriculum_subjects.length > 0) {
             res[1].curriculum_subjects.forEach((cs:any, index: number) => {
               const csubject: any = this.fb.group({
@@ -176,7 +186,7 @@ export class EditCurriculumComponent {
           }
 
         },
-        error: err=> console.error(err),
+        error: err => console.error(err),
 
       });
     });

@@ -1,1 +1,48 @@
-<p>edit-school-year works!</p>
+
+<form  class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto"[formGroup]="schoolYearField">
+  <h1 class="font-bold font-sans text-[2rem] uppercase">Edit School Year</h1>
+  <div class="flex gap-4 flex-col bg-white mx-2 min-h-[30rem] p-4">
+    <div>
+      <span class="font-bold">School Year Start</span>
+      @if(schoolYear){
+        <app-date-picker (yearInput)="setYearStart($event)" [yearData]="schoolYear.sy_start"></app-date-picker>
+      }
+      @if(this.schoolYearField.get('sy_start')?.invalid){
+        <div class="text-red-600">
+          @if(this.schoolYearField.get('sy_start')?.getError('less_than') == true){
+            School year start should not be greater than the year end.
+          }@else if (this.schoolYearField.get('sy_start')?.getError('equal') == true){
+            School year start should not be the same as the year end.
+          }@else if (this.schoolYearField.get('sy_start')?.getError('duplicate') == true){
+            School year combination already exists.
+          }
+        </div>
+      }
+    </div>
+    <div>
+      <span class="font-bold">School Year End</span>
+      @if(schoolYear){
+        <app-date-picker (yearInput)="setYearEnd($event)" [yearData]="schoolYear.sy_end"></app-date-picker>
+
+      }
+    </div>
+  </div>
+  <div class="flex flex-row justify-center gap-2 py-2 mx-2">
+    <a
+      [routerLink]="'/school-calendar'"
+      class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+      <i class="material-symbols-outlined">
+        cancel
+      </i>
+      <span class="hidden lg:block">
+        Cancel
+      </span>
+    </a>
+    <button (click)="handleSubmit()" class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
+      <i class="material-symbols-outlined">edit</i>
+      <span class="hidden lg:block">
+        Edit School Year
+      </span>
+    </button>
+  </div>
+</form>

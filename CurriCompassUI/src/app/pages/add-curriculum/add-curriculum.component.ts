@@ -8,6 +8,7 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Co
 import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 import { CoursesServiceService } from '../../services/courses-service.service';
+import { FormatDateService } from '../../services/format/format-date.service';
 
 @Component({
   selector: 'app-add-curriculum',
@@ -36,11 +37,13 @@ export class AddCurriculumComponent {
     private coursePipe: CourseFilterPipe,
     private req: HttpReqHandlerService,
     public rs: RemoveInputErrorService,
+    public dateformat: FormatDateService
   ){}
 
   searchCourse: string ='';
 
   programs: any = null;
+  school_years: any = null;
   courses: any = null;
   semesters: any = null;
   selectedCourses: Array<any> = [];
@@ -48,6 +51,7 @@ export class AddCurriculumComponent {
   curriculum = this.fb.group({
     programid : new FormControl(null, [Validators.required]),
     specialization : new FormControl(null),
+    sy : new FormControl(null, [Validators.required]),
     curriculum_subjects: this.fb.array([]),
   });
 
@@ -137,6 +141,13 @@ export class AddCurriculumComponent {
     this.req.getResource('programs', httpOptions).subscribe({
       next: (res: any) => {
         this.programs = res[1];
+      },
+      error: err => console.error(err),
+    });
+
+    this.req.getResource('school-year', httpOptions).subscribe({
+      next: (res: any) => {
+        this.school_years = res[1];
       },
       error: err => console.error(err),
     });

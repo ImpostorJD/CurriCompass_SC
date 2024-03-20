@@ -1,4 +1,4 @@
-<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
+<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative">
   <h1 class="font-bold font-sans text-2xl uppercase">School Year</h1>
   <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
     <table class="table-auto w-full border-collapse border border-slate-300">
@@ -22,32 +22,49 @@
         </tr>
       </thead>
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
-        <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
-          <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
-            <span></span>
-          </td>
-          <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
-            <span></span>
-          </td>
-          <td class="w-[33.3%] flex justify-center items-center px-1 lg:gap-2 gap-1">
-            <a
-              class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
-            [routerLink]="'/school-calendar/1'"
-            >
-            <i class="material-symbols-outlined">
-              visibility
-            </i>
-          </a>
-          <button
-            class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"
-          >
+        @for(sy of schoolYears; track $index){
+          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
+            <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
+              <span>
+                 {{ dateformat.formatToYear(sy.sy_start) }}
+                </span>
+              </td>
+              <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
+                <span>
+                  {{ dateformat.formatToYear(sy.sy_end) }}
+              </span>
+            </td>
+            <td class="w-[33.3%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+              <a
+                class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
+              [routerLink]="'/school-calendar/'+ sy.sy"
+              >
               <i class="material-symbols-outlined">
-                delete
+                visibility
               </i>
-            </button>
-          </td>
-        </tr>
+            </a>
+            <button
+              class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"
+            >
+                <i class="material-symbols-outlined">
+                  delete
+                </i>
+              </button>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
+  </div>
+  <div class="bg-red-100 border border-red-400 text-red-700 rounded absolute bottom-0 right-0" role="alert">
+    @if(showError){
+      <div class="relative w-full h-full flex flex-col p-4">
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline">School Year .</span>
+        <span class="absolute top-0 right-0" (click)="showError = false">
+          <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+      </div>
+    }
   </div>
 </div>

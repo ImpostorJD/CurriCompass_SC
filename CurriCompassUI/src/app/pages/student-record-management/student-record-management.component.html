@@ -1,45 +1,48 @@
 <form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="studentProfileField">
     <h1 class="font-bold font-sans text-2xl uppercase">Student Records</h1>
     <div class="flex-auto rounded-md w-full flex gap-2 p-2 flex-col">
-      <div class="h-[28rem] w-full flex bg-white shadow-lg">
+      <div class="h-[30rem] w-full flex bg-white shadow-lg">
         <table class="h-full border border-collapse flex w-full table-condensed">
           <thead class="flex flex-col h-full justify-around w-[25%]">
             <tr class="w-full h-full">
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center flex-wrap">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center flex-wrap">
                 Student No
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 First Name
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Middle Name
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Last Name
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Contact No.
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Email
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
+                Enrolled at:
+              </th>
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Program
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Specialization
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Year Level
               </th>
-              <th class="p-2 h-[10%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Status
               </th>
             </tr>
           </thead>
           <tbody class="flex-auto flex flex-col h-full">
             <tr class="w-full h-full flex flex-col">
-              <td class="border-slate-600 border h-[10%] relative group/studentid">
+              <td class="border-slate-600 border h-[9.09%] relative group/studentid">
                 <input
                   class="w-full p-2 h-full group/studentid"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('studentid')?.invalid }"
@@ -58,7 +61,7 @@
 
                   }
               </td>
-              <td class="border-slate-600 border h-[10%] relative group/userfname">
+              <td class="border-slate-600 border h-[9.09%] relative group/userfname">
                 <input
                   class="w-full p-2 h-full group/userfname"
                   formControlName="userfname"
@@ -72,7 +75,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[10%] relative group/usermiddle">
+              <td class="border-slate-600 border h-[9.09%] relative group/usermiddle">
                 <input class="w-full p-2 h-full group/usermiddle"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('usermiddle')?.invalid }"
                   formControlName="usermiddle"/>
@@ -85,7 +88,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[10%] relative group/userlname">
+              <td class="border-slate-600 border h-[9.09%] relative group/userlname">
                 <input class="w-full p-2 h-full group/userlname"
                 [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('userlname')?.invalid }"
                 formControlName="userlname"/>
@@ -98,7 +101,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[10%] relative group/contact_no">
+              <td class="border-slate-600 border h-[9.09%] relative group/contact_no">
                 <input class="w-full p-2 h-full group/contact_no"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('contact_no')?.invalid }"
                   formControlName="contact_no"/>
@@ -116,7 +119,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[10%] relative group/email">
+              <td class="border-slate-600 border h-[9.09%] relative group/email">
                 <input class="w-full p-2 h-full group/email"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('email')?.invalid }"
                   formControlName="email"/>
@@ -135,7 +138,29 @@
                     </div>
                   }
               </td>
-              <td class="border-slate-600 border h-[10%] relative group/program">
+              <td class="border-slate-600 border h-[9.09%] relative group/sy">
+                <select class="w-full p-2 h-full group/sy"
+                [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('sy')?.invalid }"
+                formControlName="sy">
+                  <option [ngValue]="null" disabled selected>
+                    Please Select
+                  </option>
+                  @for(sy of school_years; track $index){
+                    <option [ngValue]="sy.sy">
+                      {{ dateformat.formatToYear(sy.sy_start)  + " - " + dateformat.formatToYear(sy.sy_end) }}
+                    </option>
+                  }
+                </select>
+                @if(studentProfileField.get('sy')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 group-focus/sy:opacity-100 group-hover/sy:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/sy:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/sy:opacity-100">
+                    Enrolled at is required!
+                  </div>
+                }
+              </td>
+              <td class="border-slate-600 border h-[9.09%] relative group/program">
                 <select class="w-full p-2 h-full border-[0px] group/program"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('program')?.invalid }"
                   (change)="setSpecializationsEvent($event)"
@@ -144,7 +169,7 @@
                     N/A
                   </option>
                   @for(program of programs; track $index){
-                    <option [value]="program.programid">
+                    <option [ngValue]="program.programid">
                       {{program.programdesc}}
                     </option>
                   }
@@ -158,17 +183,17 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[10%]">
+              <td class="border-slate-600 border h-[9.09%]">
                 <select class="w-full p-2 h-full border-[0px]" formControlName="specialization"
                 (change)="changeSpecialization()">
                   @for(c of specializations; track $index){
-                    <option [value]="c.specialization">
+                    <option [ngValue]="c.specialization">
                       {{ c.specialization != null ? c.specialization : "None" }}
                     </option>
                   }
                 </select>
               </td>
-              <td class="border-slate-600 border h-[10%] relative group/year_level">
+              <td class="border-slate-600 border h-[9.09%] relative group/year_level">
                 <select class="w-full p-2 h-full group/year_level"
                 [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('year_level')?.invalid }"
                 formControlName="year_level">
@@ -197,7 +222,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[10%] relative group/status">
+              <td class="border-slate-600 border h-[9.09%] relative group/status">
                 <select class="w-full p-2 h-full group/status"
                 [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('status')?.invalid }"
                 formControlName="status">
@@ -246,11 +271,11 @@
               <th class="border border-slate-600 w-[15%] flex items-center justify-center">
                 Semester
               </th>
+              <th class="border border-slate-600 w-[20%] flex items-center justify-center">
+                SY Taken
+              </th>
               <th class="border border-slate-600 w-[15%] flex items-center justify-center">
                 Sem Taken
-              </th>
-              <th class="border border-slate-600 w-[20%] flex items-center justify-center">
-                Taken At
               </th>
               <th class="border border-slate-600 flex-auto flex items-center justify-center">
                 Remark
@@ -273,9 +298,21 @@
                   <td class="border border-slate-600 w-[15%] flex items-center justify-center">
                     {{ cs.semesters.semdesc }}
                   </td>
+                  <td class="border border-slate-600 w-[20%] flex items-center justify-center">
+                    <select class="h-full w-full p-2" [formControl]="getSchoolYearControl($index)">
+                      <option [ngValue]="null" disabled selected>
+                        Please Select
+                      </option>
+                      @for(sy of school_years; track $index){
+                        <option [ngValue]="sy.sy">
+                          {{ dateformat.formatToYear(sy.sy_start)  + " - " + dateformat.formatToYear(sy.sy_end) }}
+                        </option>
+                      }
+                    </select>
+                  </td>
                   <td class="border border-slate-600 w-[15%] flex items-center justify-center">
                     <select class="h-full w-full p-2" [formControl]="getTakenAtControl($index)">
-                      <option [value]="null" disabled selected>
+                      <option [ngValue]="null" disabled selected>
                         Please Select
                       </option>
                       <option value="Credited">
@@ -291,9 +328,6 @@
                         3rd Semester
                       </option>
                     </select>
-                  </td>
-                  <td class="border border-slate-600 w-[20%] flex items-center justify-center">
-                    To be Added Later
                   </td>
                   <td class="border border-slate-600 w-[20%] flex items-center justify-center relative group/remark">
                     <select

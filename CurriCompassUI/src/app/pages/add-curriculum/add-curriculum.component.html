@@ -22,6 +22,24 @@
           }
         </div>
         <div class="w-full flex flex-col">
+          <span>School Year</span>
+          <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="sy">
+            <option [ngValue]="null" disabled selected>
+              Please Select
+            </option>
+            @for(sy of school_years; track $index){
+              <option [ngValue]="sy.sy">
+                {{ dateformat.formatToYear(sy.sy_start)  + " - " + dateformat.formatToYear(sy.sy_end) }}
+              </option>
+            }
+          </select>
+          @if(curriculum.get('sy')?.hasError('required')){
+            <div class="text-red-600">
+              School Year is required!
+            </div>
+          }
+        </div>
+        <div class="w-full flex flex-col">
           <span>Specialization</span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="specialization"
             [value]="null"
@@ -29,7 +47,7 @@
             (focus)="rs.removeError(curriculum.get('specialization'), {'duplicate' : false})"/>
           @if(curriculum.get('specialization')?.hasError('duplicate')){
             <div class="text-red-600">
-              Combination of specialization and program is already in use!
+              Combination of specialization and program is already in use in the school year provided!
             </div>
           }
         </div>

@@ -16,20 +16,6 @@ This project entitled CurriCompass is a Capstone project in compliance with the 
 - Algorithm-based decision-making for academic advising
 - Adjustable lists of courses 
 - Powerful tool for defining curriculum
-
-## Progress:
-### Finish Module:
-- User Module
-- Curriculum Module
-- Courses Module
-- Program Module
-- Student Record Management Module
-
-### Ongoing Module:
-- School Calendar Module
-- Consultation Module
-- Profile Module
-- Authentication Module
   
 ## Technologies Used
 - Angular 17.0.2
