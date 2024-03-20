@@ -9,6 +9,7 @@ import { RemoveInputErrorService } from '../../services/remove-input-error.servi
 import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 import { CoursesServiceService } from '../../services/courses-service.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-course-form',
@@ -25,6 +26,7 @@ import { CoursesServiceService } from '../../services/courses-service.service';
     HttpReqHandlerService,
     CoursesServiceService,
     CourseFilterPipe,
+    AuthService,
   ],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.css'
@@ -36,8 +38,9 @@ export class CourseFormComponent {
     private fb: FormBuilder,
     private coursesService: CoursesServiceService,
     private fac: FormArrayControlUtilsService,
+    private auth: AuthService,
     private coursePipe: CourseFilterPipe,
-    public rs: RemoveInputErrorService
+    public rs: RemoveInputErrorService,
   ){}
 
   searchCourse: string = '';
@@ -60,7 +63,7 @@ export class CourseFormComponent {
       return;
     }
 
-    this.req.postResource('subjects', this.courseField.value, httpOptions).subscribe({
+    this.req.postResource('subjects', this.courseField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.router.navigateByUrl('/courses');
       },

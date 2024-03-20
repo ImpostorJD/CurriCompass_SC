@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class StudentFormComponent {
     private router: Router,
     private fb: FormBuilder,
     private req: HttpReqHandlerService,
+    private auth: AuthService,
   ){}
 
   userField =  this.fb.group({
@@ -51,7 +53,7 @@ export class StudentFormComponent {
       return;
     }
 
-    this.req.postResource('student-records', this.userField.value, httpOptions).subscribe({
+    this.req.postResource('student-records', this.userField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         if(event === "with_record"){
           this.router.navigateByUrl(`/students/${res[1].student_no}`)

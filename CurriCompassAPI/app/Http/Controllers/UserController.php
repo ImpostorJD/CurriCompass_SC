@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
 
 //TODO: Add Documentation
-//TODO: Add Role-based access
 class UserController extends Controller
 {
     public function __construct()

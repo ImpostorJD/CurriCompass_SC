@@ -9,8 +9,8 @@ import { RemoveInputErrorService } from '../../services/remove-input-error.servi
 import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe';
 import { CoursesServiceService } from '../../services/courses-service.service';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
+import { AuthService } from '../../services/auth.service';
 
-//TODO: Add role based access
 @Component({
   selector: 'app-edit-course',
   standalone: true,
@@ -26,6 +26,7 @@ import { FormArrayControlUtilsService } from '../../services/form-array-control-
     CourseFilterPipe,
     HttpReqHandlerService,
     CoursesServiceService,
+    AuthService,
   ],
   templateUrl: './edit-course.component.html',
   styleUrl: './edit-course.component.css'
@@ -40,6 +41,7 @@ export class EditCourseComponent {
     private coursesService: CoursesServiceService,
     private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,
+    private auth: AuthService
   ){}
 
   searchCourse: string = '';
@@ -111,8 +113,8 @@ export class EditCourseComponent {
       return;
     }
 
-    this.req.patchResource('subjects/' + this.routerId, this.courseField.value, httpOptions).subscribe({
-      next: (res: any) => {
+    this.req.patchResource('subjects/' + this.routerId, this.courseField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: () => {
         this.router.navigateByUrl('/courses');
       },
       error: err => {

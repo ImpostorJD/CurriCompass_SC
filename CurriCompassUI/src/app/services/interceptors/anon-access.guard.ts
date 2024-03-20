@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth.service';
 import { Observable } from 'rxjs';
 
 /**
@@ -16,7 +16,7 @@ export const AnonGuard: CanActivateFn = (
   Observable<boolean | UrlTree>
   | Promise<boolean | UrlTree>
   | boolean
-  | UrlTree=> {
+  | UrlTree => {
 
   return inject(AuthService).getCookie('user') != null
     ? true

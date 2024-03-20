@@ -6,6 +6,7 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { HttpClientModule } from '@angular/common/http';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { httpOptions } from '../../../configs/Constants';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-programs-form',
@@ -30,6 +31,7 @@ export class ProgramsFormComponent {
     private fb: FormBuilder,
     private router: Router,
     public rs: RemoveInputErrorService,
+    private auth: AuthService,
   ){}
 
   programsField = this.fb.group({
@@ -38,7 +40,7 @@ export class ProgramsFormComponent {
   });
 
   handleSubmit() {
-    this.req.postResource('programs', this.programsField.value, httpOptions).subscribe({
+    this.req.postResource('programs', this.programsField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.router.navigateByUrl('/programs')
       },

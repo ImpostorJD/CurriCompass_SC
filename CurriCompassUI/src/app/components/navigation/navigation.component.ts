@@ -4,17 +4,24 @@ import { RolesDirective } from '../../services/roles.directive';
 import NavigationItems from '../../models/navigation-items';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, RolesDirective, RouterLink, RouterLinkActive],
+  imports: [
+    CommonModule,
+    RolesDirective,
+    RouterLink,
+    RouterLinkActive
+  ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private router: Router
+    private router: Router,
+    private auth: AuthService,
   ) {}
 
   panelToggled?: boolean;
@@ -106,8 +113,7 @@ export class NavigationComponent {
   }
 
   logout(){
-    //TODO: Add logout mechanism
-    console.log("logged out");
+    this.auth.deleteCookie('user')
     this.router.navigate(['/login'])
   }
 }

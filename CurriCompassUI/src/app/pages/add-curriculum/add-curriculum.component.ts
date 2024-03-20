@@ -9,6 +9,7 @@ import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 import { CoursesServiceService } from '../../services/courses-service.service';
 import { FormatDateService } from '../../services/format/format-date.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-curriculum',
@@ -24,6 +25,7 @@ import { FormatDateService } from '../../services/format/format-date.service';
     CoursesServiceService,
     CourseFilterPipe,
     HttpReqHandlerService,
+    AuthService,
   ],
   templateUrl: './add-curriculum.component.html',
   styleUrl: './add-curriculum.component.css'
@@ -37,7 +39,8 @@ export class AddCurriculumComponent {
     private coursePipe: CourseFilterPipe,
     private req: HttpReqHandlerService,
     public rs: RemoveInputErrorService,
-    public dateformat: FormatDateService
+    public dateformat: FormatDateService,
+    private auth: AuthService,
   ){}
 
   searchCourse: string ='';
@@ -125,8 +128,8 @@ export class AddCurriculumComponent {
       return;
     }
 
-    this.req.postResource('curriculum', this.curriculum.value, httpOptions).subscribe({
-      next: (res:any) => {
+    this.req.postResource('curriculum', this.curriculum.value, httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: () => {
         this.router.navigateByUrl('/curricula');
       },
 
@@ -138,14 +141,14 @@ export class AddCurriculumComponent {
   }
 
   ngOnInit(){
-    this.req.getResource('programs', httpOptions).subscribe({
+    this.req.getResource('programs', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.programs = res[1];
       },
       error: err => console.error(err),
     });
 
-    this.req.getResource('school-year', httpOptions).subscribe({
+    this.req.getResource('school-year', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.school_years = res[1];
       },
@@ -159,7 +162,7 @@ export class AddCurriculumComponent {
       error: (err:any) => console.log(err),
    })
 
-    this.req.getResource('semesters', httpOptions).subscribe({
+    this.req.getResource('semesters', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.semesters = res[1];
       },

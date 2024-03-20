@@ -10,12 +10,19 @@ import { FormGroup } from "@angular/forms";
  * @author John Daniel Tejero
  * @param authToken
  */
-export const httpOptions = (authToken: string) => {
-  return new HttpHeaders({
-  'Authorization': `Bearer ${authToken}`,
-  'Content-Type': 'application/json',
-  'accept': 'application/json',
-})}
+export const httpOptions = (authToken: string | null) => {
+  const header:any =  {
+    headers: {
+      'Content-Type': 'application/json',
+      'accept': 'application/json',
+    }
+  };
+
+  if (authToken){
+    header.headers['Authorization'] = `Bearer ${authToken}`;
+  }
+  return header;
+}
 
 export function markFormGroupAsDirtyAndInvalid(formGroup: FormGroup) {
   Object.values(formGroup.controls).forEach(control => {

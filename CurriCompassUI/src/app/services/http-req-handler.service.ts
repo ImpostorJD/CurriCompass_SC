@@ -13,7 +13,9 @@ import { Observable } from 'rxjs';
  *
  * IMPORTANT NOTE: use proper method for each http method signature to avoid complications
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
 export class HttpReqHandlerService {
 
   constructor(private http: HttpClient) {}

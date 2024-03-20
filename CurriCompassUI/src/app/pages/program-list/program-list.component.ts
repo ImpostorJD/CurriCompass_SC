@@ -6,6 +6,7 @@ import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
 import { FormsModule } from '@angular/forms';
 import { ProgramFilterPipe } from '../../services/search-filters/program-filter.pipe';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-program-list',
@@ -24,13 +25,14 @@ import { ProgramFilterPipe } from '../../services/search-filters/program-filter.
 export class ProgramListComponent {
   constructor(
     private req: HttpReqHandlerService,
+    private auth: AuthService,
   ){}
 
   searchProgram:string = "";
   programs :any = null;
 
   getPrograms(){
-    this.req.getResource('programs', httpOptions).subscribe({
+    this.req.getResource('programs', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.programs = res[1];
       },
@@ -40,7 +42,7 @@ export class ProgramListComponent {
   }
 
   deleteProgram(id: number){
-    this.req.deleteResource('programs/' + id, httpOptions).subscribe({
+    this.req.deleteResource('programs/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getPrograms();
       },

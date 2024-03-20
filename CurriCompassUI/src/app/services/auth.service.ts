@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpReqHandlerService } from './http-req-handler.service';
 import { httpOptions } from '../../configs/Constants';
+import { DOCUMENT } from '@angular/common';
 
 
 /**
@@ -14,17 +15,20 @@ import { httpOptions } from '../../configs/Constants';
 })
 export class AuthService {
 
-  constructor(private req: HttpReqHandlerService) { }
+  constructor(
+    private req: HttpReqHandlerService,
+    @Inject(DOCUMENT) private document: Document,
+  ) { }
 
   /**
    * function for authenticating user
    *
-   * @param username
+   * @param email
    * @param password
    * @returns
    */
-  login(username: string, password: string) : Observable<any> {
-    return this.req.postResource('/auth/users/login', {username: username, password: password}, {});
+  login(email: string, password: string) : Observable<any> {
+    return this.req.postResource('users/login', {email: email, password: password}, {});
   }
 
   /**
@@ -33,7 +37,7 @@ export class AuthService {
    */
   logout() :Observable<any> {
     // Send a logout request to your backend to clear the HttpOnly cookie
-    return this.req.postResource('/auth/users/logout', {}, httpOptions(this.getCookie('user')));
+    return this.req.postResource('users/logout', {}, httpOptions(this.getCookie('user')));
   }
   /**
    * function for setting cookie for the JWT

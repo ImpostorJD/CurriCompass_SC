@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth.service';
 import { inject } from '@angular/core';
 /**
  * 3/1/2024

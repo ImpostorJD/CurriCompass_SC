@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import moment from 'moment';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
+import { AuthService } from '../../services/auth.service';
 import { httpOptions } from '../../../configs/Constants';
 
 @Component({
@@ -17,7 +18,8 @@ import { httpOptions } from '../../../configs/Constants';
     HttpClientModule
   ],
   providers:[
-    HttpReqHandlerService
+    HttpReqHandlerService,
+    AuthService,
   ],
   templateUrl: './add-school-year.component.html',
   styleUrl: './add-school-year.component.css'
@@ -27,7 +29,8 @@ export class AddSchoolYearComponent {
   constructor(
     private fb: FormBuilder,
     private req: HttpReqHandlerService,
-    private route: Router
+    private route: Router,
+    private auth: AuthService
   ){}
 
   schoolYearField = this.fb.group({
@@ -63,7 +66,7 @@ export class AddSchoolYearComponent {
       return;
     }
 
-    this.req.postResource('school-year', this.schoolYearField.value, httpOptions).subscribe({
+    this.req.postResource('school-year', this.schoolYearField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.route.navigateByUrl('/school-calendar')
       },

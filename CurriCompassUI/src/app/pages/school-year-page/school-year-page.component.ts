@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
 import { FormatDateService } from '../../services/format/format-date.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-school-year-page',
@@ -22,13 +23,14 @@ export class SchoolYearPageComponent {
   constructor(
     private req: HttpReqHandlerService,
     public dateformat: FormatDateService,
+    private auth: AuthService
   ){}
 
   schoolYears:any = null;
   showError = false;
 
   getSchoolYear(){
-    this.req.getResource('school-year', httpOptions).subscribe({
+    this.req.getResource('school-year', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
         this.schoolYears = res[1];
       },
@@ -37,7 +39,7 @@ export class SchoolYearPageComponent {
   }
 
   deleteSchoolYear(id: number){
-    this.req.deleteResource('school-year/' + id, httpOptions).subscribe({
+    this.req.deleteResource('school-year/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getSchoolYear();
       },

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { httpOptions } from '../../../configs/Constants';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-edit-programs',
@@ -30,6 +31,7 @@ export class EditProgramsComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public rs: RemoveInputErrorService,
+    private auth: AuthService,
   ){}
 
   routerId: number = null!;
@@ -39,7 +41,7 @@ export class EditProgramsComponent {
   });
 
   handleSubmit() {
-    this.req.patchResource('programs/' + this.routerId, this.programsField.value, httpOptions).subscribe({
+    this.req.patchResource('programs/' + this.routerId, this.programsField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.router.navigateByUrl('/programs')
       },
@@ -57,7 +59,7 @@ export class EditProgramsComponent {
     this.activatedRoute.params.subscribe(params => {
       this.routerId = parseInt(params['id']);
 
-      this.req.getResource('programs/' + this.routerId, httpOptions).subscribe({
+      this.req.getResource('programs/' + this.routerId, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: (res: any) => {
           this.programsField.patchValue(res[1]);
         },

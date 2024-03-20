@@ -5,15 +5,16 @@
     <img class="md:h-40 h-[5rem]" src="../../assets/CompassPreAdvisingNoBgAlt.png">
     <span class="text-white sm:text-[2rem] font-bold font-poppins text-[1.33rem] uppercase">CurriCompass</span>
   </div>
-  <form class="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border-0 lg:h-[50vh] lg:w-[30vw] h-[80vh] w-[90vw] xl:p-[3rem] sm:p-20 p-6 flex flex-col justify-around">
+  <form class="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 border-0 lg:h-[50vh] lg:w-[30vw] h-[80vh] w-[90vw] xl:p-[3rem] sm:p-20 p-6 flex flex-col justify-around" [formGroup]="loginPayload">
     <div class="relative h-[3rem] cursor-pointer after:absolute after:w-full after:h-full after:z-20" (click)="toggleFormActive($event, 'email')">
       <input type="text" class="idle text-slate-500 cursor-pointer focus:outline-0"
-      (input)="makeFormActive($event, 'email')">
+      (input)="makeFormActive($event, 'email')" formControlName="email">
       <label for="email">Email</label>
     </div>
     <div class="relative h-[3rem] after:absolute after:w-full after:h-full after:z-20 cursor-pointer" (click)="toggleFormActive($event, 'password')">
       <input type="password" class="idle text-slate-500 cursor-pointer focus:outline-0"
-      (input)="makeFormActive($event, 'password')">
+      (input)="makeFormActive($event, 'password')"
+      formControlName="password">
       <label for="password">Password</label>
     </div>
     <button class="bg-emerald-600 py-3 w-full rounded-md text-white hover:bg-emerald-700 transition-all" (click)="onLoginSuccess()">SIGN IN</button>

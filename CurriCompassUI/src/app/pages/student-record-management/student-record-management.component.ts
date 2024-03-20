@@ -8,6 +8,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { httpOptions, markFormGroupAsDirtyAndInvalid, sortSemester, yearLevel } from '../../../configs/Constants';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 import { FormatDateService } from '../../services/format/format-date.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-student-record-management',
@@ -33,7 +34,8 @@ export class StudentRecordManagementComponent {
     private fb: FormBuilder,
     private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,
-    public dateformat: FormatDateService
+    public dateformat: FormatDateService,
+    private auth: AuthService,
   ){}
 
   routeId: string = null!;
@@ -115,7 +117,7 @@ export class StudentRecordManagementComponent {
 
   getCurriculumSubjects(id: number){
     this.clearAllSubjectsTaken();
-    this.req.getResource('curriculum/' + id, httpOptions).subscribe({
+    this.req.getResource('curriculum/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.curriculumSubjects = res[1].curriculum_subjects
           .sort((a: any, b: any) => yearLevel(a.year_level, b.year_level))
@@ -180,7 +182,7 @@ export class StudentRecordManagementComponent {
     if (!remarkFilled) return;
 
     data.subjects_taken = data.subjects_taken!.filter((e:any) => e.taken_at !== null)!;
-    this.req.patchResource('student-records/' + this.studentProfile.userid, data, httpOptions)
+    this.req.patchResource('student-records/' + this.studentProfile.userid, data, httpOptions(this.auth.getCookie('user')))
       .subscribe({
         next: () => {
           this.router.navigateByUrl('/students');
@@ -200,21 +202,21 @@ export class StudentRecordManagementComponent {
   }
 
   ngOnInit() {
-    this.req.getResource('curriculum', httpOptions).subscribe({
+    this.req.getResource('curriculum', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.curricula = res[1];
       },
       error: (err: any) => console.error(err),
     });
 
-    this.req.getResource('programs', httpOptions).subscribe({
+    this.req.getResource('programs', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.programs = res[1];
       },
       error: (err: any) => console.error(err),
     });
 
-    this.req.getResource('school-year', httpOptions).subscribe({
+    this.req.getResource('school-year', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.school_years = res[1];
       },
@@ -223,7 +225,7 @@ export class StudentRecordManagementComponent {
 
     this.activatedRoute.params.subscribe(params => {
       this.routeId = params["id"];
-      this.req.getResource('student-records/' + this.routeId, httpOptions).subscribe({
+      this.req.getResource('student-records/' + this.routeId, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: (res: any) => {
           this.studentProfile = res[1];
           this.studentProfileField.patchValue(this.studentProfile);

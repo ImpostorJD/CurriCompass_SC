@@ -9,6 +9,7 @@ import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe
 import { CoursesServiceService } from '../../services/courses-service.service';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
 import { FormatDateService } from '../../services/format/format-date.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-edit-curriculum',
@@ -40,6 +41,7 @@ export class EditCurriculumComponent {
     public rs: RemoveInputErrorService,
     private activatedRoute: ActivatedRoute,
     public dateformat: FormatDateService,
+    private auth: AuthService,
   ){}
 
   searchCourse: string ='';
@@ -140,14 +142,14 @@ export class EditCurriculumComponent {
   }
 
   ngOnInit(){
-    this.req.getResource('programs', httpOptions).subscribe({
+    this.req.getResource('programs', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.programs = res[1];
       },
       error: err => console.error(err),
     });
 
-    this.req.getResource('school-year', httpOptions).subscribe({
+    this.req.getResource('school-year', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.school_years = res[1];
       },
@@ -161,7 +163,7 @@ export class EditCurriculumComponent {
         error: (err:any) => console.log(err),
     })
 
-    this.req.getResource('semesters', httpOptions).subscribe({
+    this.req.getResource('semesters', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.semesters = res[1];
       },
@@ -170,7 +172,7 @@ export class EditCurriculumComponent {
 
     this.activatedRoute.params.subscribe(params => {
       this.routeId = params['id'];
-      this.req.getResource('curriculum/' + this.routeId, httpOptions).subscribe({
+      this.req.getResource('curriculum/' + this.routeId, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: (res:any) => {
           this.curriculum.patchValue(res[1]);
           if(res[1].curriculum_subjects.length > 0) {

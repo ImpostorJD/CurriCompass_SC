@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import moment from 'moment';
 import { httpOptions } from '../../../configs/Constants';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-edit-school-year',
@@ -27,7 +28,8 @@ export class EditSchoolYearComponent {
     private fb: FormBuilder,
     private req: HttpReqHandlerService,
     private route: Router,
-    private activeRouter: ActivatedRoute
+    private activeRouter: ActivatedRoute,
+    private auth: AuthService,
   ){}
   @ViewChild(DatePickerComponent, { static: false }) datePickerComponent!: DatePickerComponent;
   routerId:number = null!;
@@ -53,7 +55,7 @@ export class EditSchoolYearComponent {
       return;
     }
 
-    this.req.patchResource('school-year/' + this.routerId, this.schoolYearField.value, httpOptions).subscribe({
+    this.req.patchResource('school-year/' + this.routerId, this.schoolYearField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.route.navigateByUrl('/school-calendar')
       },
@@ -82,7 +84,7 @@ export class EditSchoolYearComponent {
   ngOnInit() {
     this.activeRouter.params.subscribe(params => {
       this.routerId = parseInt(params['id']);
-      this.req.getResource('school-year/' + this.routerId, httpOptions).subscribe({
+      this.req.getResource('school-year/' + this.routerId, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: (res:any) => {
           this.schoolYear = res[1];
           this.schoolYearField.get('sy_start')!.patchValue(moment(res[1].sy_start).format("YYYY/MM/DD"));

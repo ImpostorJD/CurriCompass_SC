@@ -20,9 +20,15 @@ import { EditCurriculumComponent } from './pages/edit-curriculum/edit-curriculum
 import { SchoolYearPageComponent } from './pages/school-year-page/school-year-page.component';
 import { EditSchoolYearComponent } from './pages/edit-school-year/edit-school-year.component';
 import { AddSchoolYearComponent } from './pages/add-school-year/add-school-year.component';
+import { AnonGuard } from './services/interceptors/anon-access.guard';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginUiComponent },
+    {
+      path: 'login',
+      component: LoginUiComponent,
+      canActivate: [AnonGuard]
+    },
+
     { path: '', component: BaselayoutComponent, children: [
 
         { path : 'profile', component: ProfilePageComponent },

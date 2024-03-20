@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-edit-user-form',
@@ -30,6 +31,7 @@ export class EditUserFormComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private fac: FormArrayControlUtilsService,
+    private auth: AuthService,
   ){}
 
     roles: Array<any> = null!;
@@ -85,7 +87,7 @@ export class EditUserFormComponent {
         return;
       }
 
-       this.req.patchResource('users/' + this.routeId, this.userField.value, httpOptions).subscribe({
+       this.req.patchResource('users/' + this.routeId, this.userField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: () => {
           this.router.navigateByUrl('/users')
         },
@@ -100,7 +102,7 @@ export class EditUserFormComponent {
     }
 
     ngOnInit(){
-      this.req.getResource('roles', httpOptions)
+      this.req.getResource('roles', httpOptions(this.auth.getCookie('user')))
         .subscribe({
           next: (res:any) => {
             this.roles = res[1].filter((r:any) => r.rolename !== "Student");
@@ -111,7 +113,7 @@ export class EditUserFormComponent {
         this.activatedRoute.params.subscribe(params => {
           this.routeId = parseInt(params['id']);
 
-          this.req.getResource('users/' + params['id'], httpOptions).subscribe({
+          this.req.getResource('users/' + params['id'], httpOptions(this.auth.getCookie('user'))).subscribe({
             next: (res: any) => {
               const selectedUser = res[1];
               this.userField.patchValue(selectedUser);

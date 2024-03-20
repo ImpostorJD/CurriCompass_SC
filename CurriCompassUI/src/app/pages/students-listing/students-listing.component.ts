@@ -6,6 +6,7 @@ import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
 import { UserFilterPipe } from '../../services/search-filters/user-filter.pipe';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-students-listing',
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
   ],
   providers: [
     HttpReqHandlerService,
+    AuthService,
   ],
   templateUrl: './students-listing.component.html',
   styleUrl: './students-listing.component.css'
@@ -26,13 +28,15 @@ import { FormsModule } from '@angular/forms';
 export class StudentsListingComponent {
   constructor(
     private req: HttpReqHandlerService,
+    private auth: AuthService,
   ){}
 
   searchStudent:string = '';
   students:any = null;
 
   deleteStudent(id : number) {
-    this.req.deleteResource('student-records/' + id, httpOptions).subscribe({
+    this.req.deleteResource('student-records/' + id,
+    httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getStudents();
       },
@@ -41,7 +45,8 @@ export class StudentsListingComponent {
   }
 
   getStudents(){
-    this.req.getResource('student-records', httpOptions).subscribe({
+    this.req.getResource('student-records',
+    httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
         this.students = res[1];
       },

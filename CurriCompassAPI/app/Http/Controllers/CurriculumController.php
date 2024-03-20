@@ -6,7 +6,6 @@ use App\Models\Curriculum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-//TODO: Implement ROLE BASED ACCESS
 //TODO: Add documentation
 class CurriculumController extends Controller
 {

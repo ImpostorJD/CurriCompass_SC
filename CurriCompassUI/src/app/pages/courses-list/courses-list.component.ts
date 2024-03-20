@@ -6,6 +6,8 @@ import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
 import { CourseFilterPipe } from '../../services/search-filters/course-pipe.pipe';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { CoursesServiceService } from '../../services/courses-service.service';
 
 @Component({
   selector: 'app-courses-list',
@@ -18,29 +20,31 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
   ],
 
-  providers: [HttpReqHandlerService],
+  providers: [
+    HttpReqHandlerService,
+    AuthService,
+  ],
   templateUrl: './courses-list.component.html',
   styleUrl: './courses-list.component.css'
 })
 export class CoursesListComponent {
   constructor(
     private req: HttpReqHandlerService,
+    private auth: AuthService,
+    private courseService: CoursesServiceService
   ){}
 
   searchCourse:string = '';
   courses: any = null;
 
   getCourses(){
-    this.req.getResource('subjects', httpOptions).subscribe({
-      next: (res: any) => {
-        this.courses = res[1];
-      },
-      error: err => console.error(err)
+    this.courseService.getCourses().subscribe((c:any) => {
+      this.courses = c;
     });
   }
 
   deleteCourse(id: number){
-    this.req.deleteResource('subjects/' + id, httpOptions).subscribe({
+    this.req.deleteResource('subjects/' + id, this.auth.getCookie('user')).subscribe({
       next: () => {
         this.getCourses()
       },
