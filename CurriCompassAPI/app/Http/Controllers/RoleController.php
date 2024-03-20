@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Validator;
 //TODO: Add Role-based access
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    public function __construct(){
+        $this->middleware(['auth:api']);
+    }
+
     public function index()
     {
         return response()->json([
@@ -22,9 +24,6 @@ class RoleController extends Controller
             ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
@@ -42,9 +41,6 @@ class RoleController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(String $id)
     {
         $res = Role::where('roleid', '=', $id)->first();
@@ -60,9 +56,6 @@ class RoleController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $validate = Validator::make($request->all(), [
@@ -88,9 +81,6 @@ class RoleController extends Controller
             ], 404);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $res = Role::where('roleid', '=', $id)->first();

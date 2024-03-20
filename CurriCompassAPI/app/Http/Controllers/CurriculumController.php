@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Validator;
 //TODO: Add documentation
 class CurriculumController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware(['auth:api']);
+    }
+
     public function index(){
 
         return response()->json([

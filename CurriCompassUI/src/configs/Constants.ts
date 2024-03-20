@@ -1,5 +1,5 @@
 import { HttpHeaders } from "@angular/common/http";
-import { FormArray, FormGroup } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 
 /**
  * 3/1/2024
@@ -11,8 +11,8 @@ import { FormArray, FormGroup } from "@angular/forms";
  * @param authToken
  */
 export const httpOptions = (authToken: string) => {
-  headers: new HttpHeaders({
-  //'Authorization': `Bearer ${authToken}`,
+  return new HttpHeaders({
+  'Authorization': `Bearer ${authToken}`,
   'Content-Type': 'application/json',
   'accept': 'application/json',
 })}

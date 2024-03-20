@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpReqHandlerService } from './http-req-handler.service';
+import { httpOptions } from '../../configs/Constants';
 
 
 /**
@@ -23,22 +24,16 @@ export class AuthService {
    * @returns
    */
   login(username: string, password: string) : Observable<any> {
-    return this.req.postResource('/auth/login', {username: username, password: password}, {});
+    return this.req.postResource('/auth/users/login', {username: username, password: password}, {});
   }
 
   /**
    * function for invalidating login context
    * @returns
    */
-  logout(): Promise<any> {
+  logout() :Observable<any> {
     // Send a logout request to your backend to clear the HttpOnly cookie
-    return this.req.postResource('/auth/logout', {},
-      {
-        headers : {
-          'Authorization' : 'Bearer '.concat(this.getCookie('user'))
-        }
-      }
-    ).toPromise();
+    return this.req.postResource('/auth/users/logout', {}, httpOptions(this.getCookie('user')));
   }
   /**
    * function for setting cookie for the JWT
@@ -86,25 +81,13 @@ export class AuthService {
     return;
   }
 
-  checkUserAsync(): Promise<any>{
 
-    return this.req.getResource('/auth/profile',
-      {
-        headers: {
-          'Authorization' : 'Bearer '.concat(this.getCookie('user'))
-        }
-      }
-    ).toPromise();
+  /**@deprecated, use checkUser() */
+  checkUserAsync(): Promise<any>{
+    return this.req.getResource('/auth/users/profile', httpOptions(this.getCookie('user'))).toPromise();
   }
 
   checkUser(): Observable<any>{
-
-    return this.req.getResource('/auth/profile',
-      {
-        headers: {
-          'Authorization' : 'Bearer '.concat(this.getCookie('user'))
-        }
-      }
-    );
+    return this.req.getResource('/auth/users/profile', httpOptions(this.getCookie('user')));
   }
 }

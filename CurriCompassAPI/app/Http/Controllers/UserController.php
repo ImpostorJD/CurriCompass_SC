@@ -14,7 +14,13 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api')
+            ->except([
+                'login',
+                'isLoggedIn',
+                'logout',
+                'refresh'
+            ]);
     }
 
     //Public Methods
@@ -46,7 +52,9 @@ class UserController extends Controller
     }
 
     public function register(Request $request){
-        //dd($request->all());
+
+        $this->middleware('auth.anyrole:Admin');
+
         $validate = Validator::make( $request->all(), [
             'userfname' => ['required','string','max:255'],
             'userlname' => ['required','string','max:255'],
@@ -125,6 +133,7 @@ class UserController extends Controller
 
     public function show(Request $request, String $id)
     {
+        $this->middleware('auth.anyrole:Admin');
         $res = User::where('userid', '=', $id)->with('user_roles')->first();
 
         if($res != null) {
@@ -139,6 +148,8 @@ class UserController extends Controller
 
     public function destroy(Request $request, String $id)
     {
+        $this->middleware('auth.anyrole:Admin');
+
         $res = User::where('userid', '=', $id)->first();
 
         if($res != null) {
@@ -155,6 +166,8 @@ class UserController extends Controller
 
     public function update(Request $request, String $id)
     {
+        $this->middleware('auth.anyrole:Admin');
+
         $user = User::where('userid', '=', $id)->first();
 
         if($user != null) {
@@ -203,4 +216,48 @@ class UserController extends Controller
             ], 404);
 
     }
+
+    public function isLoggedIn(){
+        return response()->json(Auth::check());
+    }
+
+    /**
+     * Check if user has role
+     *
+     * @param Request $request string of role
+     * @return bool|string
+     */
+    public function hasRole(Request $request){
+        if (!Auth::check()) return response()->json('unauthenticated user cannot use this endpoint', 401);
+        else{
+            return response()->json($request->user()->hasPermission($request['permission']), 200);
+        }
+    }
+
+    /**
+     * check if user has any role
+     *
+     * @param Request $request array of roles
+     * @return bool|string
+     */
+    public function hasAnyRole(Request $request){
+        if (!Auth::check()) return response()->json(['unauthenticated user cannot use this endpoint', 401]);
+        else{
+            return response()->json($request->user()->hasAnyRole($request['permission']), 200);
+        }
+    }
+
+    /**
+     * check if user has all roles
+     *
+     * @param Request $request array of roles
+     * @return bool|string
+     */
+    public function hasAllRoles(Request $request){
+        if (!Auth::check()) return response()->json(['unauthenticated user cannot use this endpoint', 401]);
+        else{
+            return response()->json($request->user()->hasRoles($request['permission']), 200);
+        }
+    }
+
 }

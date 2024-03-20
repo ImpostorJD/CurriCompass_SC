@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Validator;
 class SemesterController extends Controller
 {
 
+
+    public function __construct(){
+        $this->middleware(['auth:api']);
+    }
+
     public function index()
     {
         return response()->json([
