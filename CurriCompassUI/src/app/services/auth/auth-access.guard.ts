@@ -6,7 +6,6 @@ import { inject } from '@angular/core';
  * Middleware to intercept requests to validate login context.
  *
  * Usage: { path: '</url path>', component: </Component>, canActivate: AuthGuard(["roles_array"])},
- * TODO: Configure error handling
  */
 export function AuthGuard(allowedRoles: string[]): CanActivateFn {
   return async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree>  => {

@@ -230,12 +230,35 @@ class UserController extends Controller
     }
 
     public function profile(Request $request){
-        $user = $request->user();
+
+        $user = User::where('userid', $request->user()->userid)
+            ->with('user_roles')
+            ->first();
+
+        if($user->hasRoles('Student')){
+            $user = User::where('userid', $user->userid)
+            ->with('user_roles', function ($query){
+                $query->where('rolename', '=', 'Student');
+            })->with(['student_record' => function($query) {
+                $query->with(['subjects_taken' => function($query){
+                    $query->with('subjects');
+                    $query->with('school_year');
+                }]);
+                $query->with(['curriculum' => function($query){
+                    $query->with('school_year');
+                    $query->with('program');
+                    $query->with(['curriculum_subjects' => function($query){
+                        $query->with('subjects');
+                        $query->with('semesters');
+                    }]);
+                  }]);
+                $query->with('school_year');
+            }])->first();
+        }
+
         return response()->json([
             ['status' => 'success'],
-            User::where('userid', $user->userid)
-                ->with('user_roles')
-                ->first()
+            $user
         ], 200);
     }
 

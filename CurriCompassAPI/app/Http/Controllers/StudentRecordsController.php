@@ -40,13 +40,14 @@ class StudentRecordsController extends Controller
                 $query->where('student_no', $id);
                 $query->with(['subjects_taken' => function($query){
                     $query->with('subjects');
+                    $query->with('school_year');
                 }]);
                 $query->with(['curriculum' => function($query){
                     $query->with('program');
+                    $query->with('school_year');
                     $query->with(['curriculum_subjects' => function($query){
                         $query->with('subjects');
                         $query->with('semesters');
-                        $query->with('school_year');
                     }]);
                   }]);
                 $query->with('school_year');
