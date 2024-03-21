@@ -29,8 +29,8 @@ export class RolesToRenderDirective {
         for(let userRole of roleInstance) {
           if (role.includes(userRole.rolename)){
             this.viewContainer.createEmbeddedView(this.templateRef);
+            return;
           }
-          return;
         }
       }
 

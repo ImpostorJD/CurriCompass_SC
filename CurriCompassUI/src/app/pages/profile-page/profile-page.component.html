@@ -66,7 +66,7 @@
       </tbody>
     </table>
   </div>
-  <div class="h-auto w-full" *appRolesToRender="['Student']">
+  <div class="h-auto w-full" *appRolesToRender="['Student']" [ngIf]="user?.student_record.cid != null">
     <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
       <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
         <tr class="h-full w-full flex flex-row">

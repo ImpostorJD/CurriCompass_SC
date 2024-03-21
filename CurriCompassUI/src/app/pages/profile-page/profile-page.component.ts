@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { RolesToRenderDirective } from '../../services/auth/roles-to-render.directive';
 import { FormatDateService } from '../../services/format/format-date.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile-page',
   standalone: true,
-  imports: [RolesToRenderDirective],
+  imports: [RolesToRenderDirective, CommonModule],
   providers: [FormatDateService],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.css'
@@ -29,7 +30,6 @@ export class ProfilePageComponent {
     this.auth.checkUser().subscribe({
       next: (res:any) => {
         this.user = res[1];
-        console.log(this.user);
       },
 
       error: error => console.log(error),

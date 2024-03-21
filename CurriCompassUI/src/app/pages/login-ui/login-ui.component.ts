@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -22,11 +22,15 @@ export class LoginUiComponent {
     auth: AuthService = inject(AuthService);
 
     loginPayload = this.fb.group({
-      email: new FormControl(''),
-      password: new FormControl(''),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
     });
 
-    onLoginSuccess() {
+    onLoginAttempt() {
+      if(this.loginPayload.status === "INVALID"){
+        return;
+      }
+
       this.auth.login(
         this.loginPayload.get('email')?.value!,
         this.loginPayload.get('password')?.value!).subscribe({
@@ -35,17 +39,18 @@ export class LoginUiComponent {
             this.router.navigate(['/'])
           },
           error: err => {
-            //TODO: Handle error
+            if (err.status == 401){
+              //Handle error incorrect password
+              this.loginPayload.get('password')?.setErrors({'incorrect': true});
+            }else if (err.status == 404){
+              this.loginPayload.get('email')?.setErrors({'not found': true});
+              //handle user not found
+            }
           }
         })
     }
 
-    makeFormActive(event: any, fieldName: string): void {
-      // if (fieldName === 'username') {
-      //   this.usernameErrorMessage = '';
-      // } else if (fieldName === 'password') {
-      //   this.passwordErrorMessage = '';
-      // }
+    makeFormActive(event: any): void {
       if(event.target.value.trim().length !== 0){
         event.target.classList.add('active');
         return;
@@ -53,8 +58,8 @@ export class LoginUiComponent {
       event.target.classList.remove('active');
     }
 
-    toggleFormActive(event: any, fieldName: string): void {
+    toggleFormActive(event: any): void {
       event.target.children[0].focus();
-      this.makeFormActive( event.target.children[0], fieldName);
+      this.makeFormActive( event.target.children[0]);
     }
 }

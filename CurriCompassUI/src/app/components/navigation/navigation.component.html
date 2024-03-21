@@ -24,10 +24,9 @@
     [ngClass]="{'right-0 before:absolute before:bg-black before:bg-opacity-35 before:h-full before:w-[100vw] before:-z-20': panelToggled, 'right-[100%] before:hidden': !panelToggled}"
   >
     <div class="flex-auto text-white flex flex-col overflow-auto z-30">
-      <!--TODO: add filter on buttons based on roles-->
       @for (button of buttons; track $index) {
-
         <a
+          *appRolesToRender="button.allowedRoles"
           [routerLink]="button.path"
            class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl relative before:absolute before:h-full before:-z-10 hover:before:bg-green-600 transition-all"
            [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl before:w-full': panelToggled, 'md:justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"

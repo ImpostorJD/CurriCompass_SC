@@ -1,18 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, inject } from '@angular/core';
-import { RolesDirective } from '../../services/roles.directive';
 import NavigationItems from '../../models/navigation-items';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { RolesToRenderDirective } from '../../services/auth/roles-to-render.directive';
 @Component({
   selector: 'app-navigation',
   standalone: true,
   imports: [
     CommonModule,
-    RolesDirective,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    RolesToRenderDirective
+  ],
+  providers:[
+    RolesToRenderDirective
   ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css'
@@ -28,67 +31,66 @@ export class NavigationComponent {
   panelToggled?: boolean;
   initialCheckDone: boolean = false;
 
-  //TODO: add appropriate nav items
   readonly buttons: Array<NavigationItems> = [
     {
       name : "Dashboard",
-      allowedRoles: [],
+      allowedRoles: ['Admin', 'Faculty', 'Student'],
       icon_type: "material-symbols-outlined",
       icon: "dashboard",
       path: "/"
     },
     {
       name : "Profile",
-      allowedRoles: [],
+      allowedRoles: ['Admin', 'Faculty', 'Student'],
       icon_type: "material-symbols-outlined",
       icon: "account_circle",
       path: "/profile"
     },
     {
       name : "Users",
-      allowedRoles: [],
+      allowedRoles: ['Admin'],
       icon_type: "material-symbols-outlined",
       icon: "groups",
       path: "/users"
     },
     {
       name : "Student Records",
-      allowedRoles: [],
+      allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "person_book",
       path: "/students"
     },
     {
       name : "Curriculum",
-      allowedRoles: [],
+      allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "contract",
       path: "/curricula"
     },
     {
       name : "Program",
-      allowedRoles: [],
+      allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "book",
       path: "/programs"
     },
     {
       name : "Courses",
-      allowedRoles: [],
+      allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "menu_book",
       path: "/courses"
     },
     {
       name : "School Calendar",
-      allowedRoles: [],
+      allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "event_note",
       path: "/school-calendar"
     },
     {
       name : "Consulatation",
-      allowedRoles: [],
+      allowedRoles: ['Student'],
       icon_type: "material-symbols-outlined",
       icon: "explore",
       path: "/consulatation"
