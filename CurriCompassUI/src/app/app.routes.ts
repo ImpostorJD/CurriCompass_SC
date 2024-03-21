@@ -20,7 +20,8 @@ import { EditCurriculumComponent } from './pages/edit-curriculum/edit-curriculum
 import { SchoolYearPageComponent } from './pages/school-year-page/school-year-page.component';
 import { EditSchoolYearComponent } from './pages/edit-school-year/edit-school-year.component';
 import { AddSchoolYearComponent } from './pages/add-school-year/add-school-year.component';
-import { AnonGuard } from './services/interceptors/anon-access.guard';
+import { AnonGuard } from './services/auth/anon-access.guard';
+import { AuthGuard } from './services/auth/auth-access.guard';
 
 export const routes: Routes = [
     {
@@ -29,11 +30,18 @@ export const routes: Routes = [
       canActivate: [AnonGuard]
     },
 
-    { path: '', component: BaselayoutComponent, children: [
+    { path: '',
+      component: BaselayoutComponent,
+      canActivate:[AuthGuard([])],
+      children: [
+        {
+          path : 'profile',
+          component: ProfilePageComponent
+        },
 
-        { path : 'profile', component: ProfilePageComponent },
-
-        { path: 'users', children: [
+        { path: 'users',
+          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          children: [
             { path : '', component: UsersComponent },
             { path : 'add-user', component: UserFormComponent },
             { path : ':id', component: EditUserFormComponent },
@@ -68,6 +76,7 @@ export const routes: Routes = [
             { path : ':id', component: StudentRecordManagementComponent },
           ]
         },
+
         { path: 'school-calendar', children: [
             { path: '', component: SchoolYearPageComponent },
             { path: 'add-school-year', component: AddSchoolYearComponent },

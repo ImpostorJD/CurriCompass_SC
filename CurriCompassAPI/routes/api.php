@@ -32,6 +32,7 @@ Route::controller(UserController::class)
             ->middleware('auth.anyrole:Admin');
 
         Route::get('/logout', 'logout');
+        Route::get('/profile', 'profile');
 
         Route::get('/refresh', 'refresh');
         Route::get('/', 'index')
@@ -137,7 +138,8 @@ Route::controller(CurriculumController::class)
 Route::controller(StudentRecordsController::class)
     ->prefix('/student-records')
     ->group(function (){
-        Route::get('/', 'index');
+        Route::get('/', 'index')
+            ->middleware('auth.anyrole:Admin, Faculty');
 
         Route::get('/{id}', 'show');
 

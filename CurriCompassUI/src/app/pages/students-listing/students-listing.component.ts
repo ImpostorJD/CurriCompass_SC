@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
@@ -14,22 +13,18 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     CommonModule,
     RouterLink,
-    HttpClientModule,
     FormsModule,
     UserFilterPipe,
-  ],
-  providers: [
-    HttpReqHandlerService,
-    AuthService,
   ],
   templateUrl: './students-listing.component.html',
   styleUrl: './students-listing.component.css'
 })
 export class StudentsListingComponent {
   constructor(
-    private req: HttpReqHandlerService,
-    private auth: AuthService,
   ){}
+
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
   searchStudent:string = '';
   students:any = null;

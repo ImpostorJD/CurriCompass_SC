@@ -15,9 +15,6 @@ class HasAllRole
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if($request->user() === null){
-            return abort(401);
-        }
 
         if($request->user()->hasRoles($roles)){
             return $next($request);

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpReqHandlerService } from './http-req-handler.service';
 import { httpOptions } from '../../configs/Constants';
 import { catchError, map, of } from 'rxjs';
@@ -8,10 +8,10 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class CoursesServiceService {
-  constructor(
-    private req: HttpReqHandlerService,
-    private auth: AuthService,
-  ) {}
+  constructor() {}
+
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
   getCourses() {
     return this.req.getResource('subjects', httpOptions(this.auth.getCookie('user')))

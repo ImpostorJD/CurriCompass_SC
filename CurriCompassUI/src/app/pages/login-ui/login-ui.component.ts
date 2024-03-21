@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpReqHandlerService } from '../../services/http-req-handler.service';
-import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -10,24 +8,18 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    HttpClientModule,
   ],
-  providers:[
-    HttpReqHandlerService,
-    AuthService
-  ],
+  providers:[],
   templateUrl: './login-ui.component.html',
   styleUrl: './login-ui.component.css'
 })
 export class LoginUiComponent {
     constructor(
-
       private router: Router,
       private fb: FormBuilder,
-      private req: HttpReqHandlerService,
-      private auth: AuthService,
     ){}
 
+    auth: AuthService = inject(AuthService);
 
     loginPayload = this.fb.group({
       email: new FormControl(''),

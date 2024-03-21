@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
-import { HttpClientModule } from '@angular/common/http';
 import { FormArray, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -15,7 +14,6 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-course-form',
   standalone: true,
   imports: [
-    HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
     RouterLink,
@@ -23,10 +21,8 @@ import { AuthService } from '../../services/auth.service';
     FormsModule
   ],
   providers: [
-    HttpReqHandlerService,
     CoursesServiceService,
     CourseFilterPipe,
-    AuthService,
   ],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.css'
@@ -34,14 +30,15 @@ import { AuthService } from '../../services/auth.service';
 export class CourseFormComponent {
   constructor(
     private router: Router,
-    private req: HttpReqHandlerService,
     private fb: FormBuilder,
     private coursesService: CoursesServiceService,
     private fac: FormArrayControlUtilsService,
-    private auth: AuthService,
     private coursePipe: CourseFilterPipe,
     public rs: RemoveInputErrorService,
-  ){}
+    ){}
+
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
   searchCourse: string = '';
   courseList: any = null;

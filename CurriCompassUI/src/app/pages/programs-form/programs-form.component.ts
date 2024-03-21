@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { httpOptions } from '../../../configs/Constants';
 import { AuthService } from '../../services/auth.service';
@@ -12,13 +11,11 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-programs-form',
   standalone: true,
   imports: [
-    HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
     RouterLink,
   ],
   providers: [
-    HttpReqHandlerService,
     RemoveInputErrorService
   ],
   templateUrl: './programs-form.component.html',
@@ -27,12 +24,12 @@ import { AuthService } from '../../services/auth.service';
 export class ProgramsFormComponent {
 
   constructor(
-    private req: HttpReqHandlerService,
     private fb: FormBuilder,
     private router: Router,
-    public rs: RemoveInputErrorService,
-    private auth: AuthService,
   ){}
+
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
   programsField = this.fb.group({
     'programcode': new FormControl('', [Validators.required]),

@@ -1,6 +1,9 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { throwError } from 'rxjs';
+import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AuthService } from '../auth.service';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 /**
  * 3/1/2024
  *
@@ -12,28 +15,53 @@ import { catchError } from 'rxjs/operators';
  * @returns
  */
 export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
+  const auth: AuthService =  inject(AuthService);
+  const router: Router =  inject(Router);
+
   return next(req).pipe(
     catchError((error: HttpEvent<any>) => {
+
+      console.log(error);
+
       // Handle errors here
       if (error instanceof HttpErrorResponse) {
-        console.error('HTTP error:', error);
+        if (error.status == 401) {
+          if(router.url == "login") {
+            return next(req);
+          }
 
-        // Customize error handling based on status code, request type, etc.
-        if (error.status === 401) {
-          // Handle unauthorized errors, e.g., redirect to login
+          auth.deleteCookie('user');
+          router.navigateByUrl('/login');
+
         } else if (error.status === 404) {
-          // Handle not found errors, e.g., display a user-friendly message
+
+          //TODO: If login failed (no user found)
+          if(router.url == "login") {
+            return next(req);
+          }
+          router.navigateByUrl('/not-found');
+
+        } else if (error.status === 403) {
+          //TODO: If login failed (incorrect password)
+          if(router.url == "login") {
+            return next(req);
+          }
+
+          router.navigateByUrl('/forbidden-access');
+
         } else {
-          // Handle generic errors, e.g., display an error banner
+          router.navigateByUrl('/something-went-wrong');
         }
+        // Customize error handling based on status code, request type, etc.
 
         // You can also return a custom observable for further handling
-        return throwError(error);
-      } else {
-        // Handle other errors
-        console.error('Unexpected error:', error);
-        return throwError(error);
+        return throwError(() => error);
       }
+
+      return throwError(() => error);
+
     })
+
   );
+
 };

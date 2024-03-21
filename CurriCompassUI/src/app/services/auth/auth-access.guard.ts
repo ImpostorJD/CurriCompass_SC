@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { inject } from '@angular/core';
 /**
@@ -8,27 +8,25 @@ import { inject } from '@angular/core';
  * Usage: { path: '</url path>', component: </Component>, canActivate: AuthGuard(["roles_array"])},
  * TODO: Configure error handling
  */
-
 export function AuthGuard(allowedRoles: string[]): CanActivateFn {
-  return (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree => {
+  return async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree>  => {
 
     const getUserCookie = inject(AuthService).getCookie('user');
     try{
 
       if (allowedRoles.length > 0) {
-        const user:any = inject(AuthService).checkUserAsync();
-
+        const resp:any = await inject(AuthService).checkUserAsync();
+        const user = await resp[1];
         for(let role of allowedRoles) {
 
-          for(let userRole of user.roles) {
-            if (role.includes(userRole)){
+          for(let userRole of user.user_roles) {
+            if (role.includes(userRole.rolename)){
               return true;
             }
-
           }
-
         }
-        return false;
+
+        inject(Router).navigateByUrl('/');
       }
 
     }catch(e){

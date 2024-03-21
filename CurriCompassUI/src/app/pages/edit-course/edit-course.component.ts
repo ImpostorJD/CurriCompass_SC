@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
@@ -15,7 +14,6 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-edit-course',
   standalone: true,
   imports: [
-    HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
     RouterLink,
@@ -24,9 +22,7 @@ import { AuthService } from '../../services/auth.service';
   ],
   providers: [
     CourseFilterPipe,
-    HttpReqHandlerService,
     CoursesServiceService,
-    AuthService,
   ],
   templateUrl: './edit-course.component.html',
   styleUrl: './edit-course.component.css'
@@ -35,14 +31,15 @@ export class EditCourseComponent {
   constructor(
     private router: Router,
     private activeRouter: ActivatedRoute,
-    private req: HttpReqHandlerService,
     private fb: FormBuilder,
     private coursePipe: CourseFilterPipe,
     private coursesService: CoursesServiceService,
     private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,
-    private auth: AuthService
   ){}
+
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
   searchCourse: string = '';
   courseList: any = null;

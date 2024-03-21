@@ -1,8 +1,7 @@
-import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, lastValueFrom } from 'rxjs';
 import { HttpReqHandlerService } from './http-req-handler.service';
 import { httpOptions } from '../../configs/Constants';
-import { DOCUMENT } from '@angular/common';
 
 
 /**
@@ -15,11 +14,9 @@ import { DOCUMENT } from '@angular/common';
 })
 export class AuthService {
 
-  constructor(
-    private req: HttpReqHandlerService,
-    @Inject(DOCUMENT) private document: Document,
-  ) { }
+  constructor() { }
 
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService)
   /**
    * function for authenticating user
    *
@@ -85,13 +82,11 @@ export class AuthService {
     return;
   }
 
-
-  /**@deprecated, use checkUser() */
-  checkUserAsync(): Promise<any>{
-    return this.req.getResource('/auth/users/profile', httpOptions(this.getCookie('user'))).toPromise();
+  async checkUserAsync(): Promise<any> {
+    return await lastValueFrom(this.req.getResource('users/profile', httpOptions(this.getCookie('user'))));
   }
 
   checkUser(): Observable<any>{
-    return this.req.getResource('/auth/users/profile', httpOptions(this.getCookie('user')));
+    return this.req.getResource('users/profile', httpOptions(this.getCookie('user')));
   }
 }

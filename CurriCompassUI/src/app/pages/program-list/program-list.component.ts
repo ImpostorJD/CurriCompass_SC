@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
@@ -12,21 +12,20 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-program-list',
   standalone: true,
   imports: [
-    HttpClientModule,
     CommonModule,
     RouterLink,
     FormsModule,
     ProgramFilterPipe,
   ],
-  providers: [HttpReqHandlerService],
   templateUrl: './program-list.component.html',
   styleUrl: './program-list.component.css'
 })
 export class ProgramListComponent {
-  constructor(
-    private req: HttpReqHandlerService,
-    private auth: AuthService,
-  ){}
+
+  constructor(){}
+
+  private auth: AuthService = inject(AuthService);
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
 
   searchProgram:string = "";
   programs :any = null;

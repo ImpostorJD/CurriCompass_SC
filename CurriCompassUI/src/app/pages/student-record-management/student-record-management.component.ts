@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -16,11 +15,9 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    HttpClientModule,
     RouterLink,
   ],
   providers: [
-    HttpReqHandlerService,
     RemoveInputErrorService,
   ],
   templateUrl: './student-record-management.component.html',
@@ -30,13 +27,14 @@ export class StudentRecordManagementComponent {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private req: HttpReqHandlerService,
     private fb: FormBuilder,
     private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,
     public dateformat: FormatDateService,
-    private auth: AuthService,
   ){}
+
+  private auth: AuthService = inject(AuthService);
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
 
   routeId: string = null!;
   studentProfile: any = null;

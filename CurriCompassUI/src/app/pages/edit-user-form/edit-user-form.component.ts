@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
@@ -13,12 +12,8 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,
     RouterLink,
     ReactiveFormsModule
-  ],
-  providers:[
-    HttpReqHandlerService,
   ],
   templateUrl: './edit-user-form.component.html',
   styleUrl: './edit-user-form.component.css'
@@ -27,12 +22,12 @@ import { AuthService } from '../../services/auth.service';
 export class EditUserFormComponent {
   constructor(
     private fb : FormBuilder,
-    private req : HttpReqHandlerService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private fac: FormArrayControlUtilsService,
-    private auth: AuthService,
   ){}
+  private req : HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
     roles: Array<any> = null!;
     selectedRoles: Array<any> = [];

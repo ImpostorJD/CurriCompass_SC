@@ -52,8 +52,6 @@ class UserController extends Controller
 
     public function register(Request $request){
 
-        $this->middleware('auth.anyrole:Admin');
-
         $validate = Validator::make( $request->all(), [
             'userfname' => ['required','string','max:255'],
             'userlname' => ['required','string','max:255'],
@@ -132,7 +130,7 @@ class UserController extends Controller
 
     public function show(Request $request, String $id)
     {
-        $this->middleware('auth.anyrole:Admin');
+
         $res = User::where('userid', '=', $id)->with('user_roles')->first();
 
         if($res != null) {
@@ -147,7 +145,6 @@ class UserController extends Controller
 
     public function destroy(Request $request, String $id)
     {
-        $this->middleware('auth.anyrole:Admin');
 
         $res = User::where('userid', '=', $id)->first();
 
@@ -165,7 +162,6 @@ class UserController extends Controller
 
     public function update(Request $request, String $id)
     {
-        $this->middleware('auth.anyrole:Admin');
 
         $user = User::where('userid', '=', $id)->first();
 
@@ -231,6 +227,16 @@ class UserController extends Controller
         else{
             return response()->json($request->user()->hasPermission($request['permission']), 200);
         }
+    }
+
+    public function profile(Request $request){
+        $user = $request->user();
+        return response()->json([
+            ['status' => 'success'],
+            User::where('userid', $user->userid)
+                ->with('user_roles')
+                ->first()
+        ], 200);
     }
 
     /**

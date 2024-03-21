@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { Observable } from 'rxjs';
 
@@ -18,8 +18,8 @@ export const AnonGuard: CanActivateFn = (
   | boolean
   | UrlTree => {
 
-  return inject(AuthService).getCookie('user') != null
+  return inject(AuthService).getCookie('user').length == 0
     ? true
-    : inject(Router).createUrlTree(['/']);
+    : inject(Router).navigateByUrl('/');
 
 };

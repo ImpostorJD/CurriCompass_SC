@@ -1,8 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePickerComponent } from '../../components/date-picker/date-picker.component';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import moment from 'moment';
 import { httpOptions } from '../../../configs/Constants';
@@ -15,10 +14,6 @@ import { AuthService } from '../../services/auth.service';
     DatePickerComponent,
     RouterLink,
     ReactiveFormsModule,
-    HttpClientModule
-  ],
-  providers:[
-    HttpReqHandlerService
   ],
   templateUrl: './edit-school-year.component.html',
   styleUrl: './edit-school-year.component.css'
@@ -26,12 +21,12 @@ import { AuthService } from '../../services/auth.service';
 export class EditSchoolYearComponent {
   constructor(
     private fb: FormBuilder,
-    private req: HttpReqHandlerService,
     private route: Router,
     private activeRouter: ActivatedRoute,
-    private auth: AuthService,
   ){}
-  @ViewChild(DatePickerComponent, { static: false }) datePickerComponent!: DatePickerComponent;
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
+
   routerId:number = null!;
   schoolYear:any = null;
 

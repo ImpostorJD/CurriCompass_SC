@@ -1,6 +1,5 @@
-import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../services/remove-input-error.service';
@@ -17,15 +16,12 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    HttpClientModule,
     FormsModule,
     CourseFilterPipe,
   ],
   providers: [
     CoursesServiceService,
     CourseFilterPipe,
-    HttpReqHandlerService,
-    AuthService,
   ],
   templateUrl: './add-curriculum.component.html',
   styleUrl: './add-curriculum.component.css'
@@ -37,11 +33,12 @@ export class AddCurriculumComponent {
     private fac: FormArrayControlUtilsService,
     private coursesService: CoursesServiceService,
     private coursePipe: CourseFilterPipe,
-    private req: HttpReqHandlerService,
     public rs: RemoveInputErrorService,
     public dateformat: FormatDateService,
-    private auth: AuthService,
   ){}
+
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
   searchCourse: string ='';
 

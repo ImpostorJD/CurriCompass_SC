@@ -1,5 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions } from '../../../configs/Constants';
@@ -11,20 +10,17 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [
     RouterLink,
-    HttpClientModule,
-  ],
-  providers: [
-    HttpReqHandlerService,
   ],
   templateUrl: './school-year-page.component.html',
   styleUrl: './school-year-page.component.css'
 })
 export class SchoolYearPageComponent {
   constructor(
-    private req: HttpReqHandlerService,
     public dateformat: FormatDateService,
-    private auth: AuthService
   ){}
+
+  private auth: AuthService = inject(AuthService);
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
 
   schoolYears:any = null;
   showError = false;

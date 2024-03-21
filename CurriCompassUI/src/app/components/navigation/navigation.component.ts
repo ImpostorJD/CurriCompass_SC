@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { RolesDirective } from '../../services/roles.directive';
 import NavigationItems from '../../models/navigation-items';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -21,8 +21,9 @@ export class NavigationComponent {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private router: Router,
-    private auth: AuthService,
-  ) {}
+    ) {}
+
+  private auth: AuthService = inject(AuthService);
 
   panelToggled?: boolean;
   initialCheckDone: boolean = false;

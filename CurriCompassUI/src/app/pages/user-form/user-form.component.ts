@@ -1,24 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../configs/Constants';
-import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormArrayControlUtilsService } from '../../services/form-array-control-utils.service';
+import { AuthService } from '../../services/auth.service';
 
-//TODO: Add role based access and render
 @Component({
   selector: 'app-user-form',
   standalone: true,
   imports: [
-    HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
     RouterLink
-  ],
-  providers: [
-    HttpReqHandlerService,
   ],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.css'
@@ -26,10 +21,11 @@ import { FormArrayControlUtilsService } from '../../services/form-array-control-
 export class UserFormComponent {
   constructor(
     private fb : FormBuilder,
-    private req : HttpReqHandlerService,
-    private router: Router,
     private fac: FormArrayControlUtilsService,
+    private router: Router,
     ){}
+    private req : HttpReqHandlerService = inject(HttpReqHandlerService);
+    private auth: AuthService = inject(AuthService);
 
     roles: Array<any> = null!;
     selectedRoles: Array<any> = [];
@@ -84,7 +80,7 @@ export class UserFormComponent {
         return;
       }
 
-       this.req.postResource('users/register', this.userField.value, httpOptions).subscribe({
+       this.req.postResource('users/register', this.userField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: () => {
 
           this.router.navigateByUrl('/users')
@@ -104,7 +100,7 @@ export class UserFormComponent {
     }
 
     ngOnInit(){
-      this.req.getResource('roles', httpOptions)
+      this.req.getResource('roles', httpOptions(this.auth.getCookie('user')))
         .subscribe({
           next: (res:any) => {
             this.roles = res[1].filter((r:any) => r.rolename !== "Student");

@@ -11,26 +11,24 @@
           <span>Program Code</span>
           <input
             class="border-slate-500 border-[1px] rounded-sm p-2 my-4"
-            formControlName="programcode"
-            (focus)="rs.removeError(
-              programsField.get('programcode'),
-              {'duplicate': false, 'required': false}
-              )"/>
+            formControlName="programcode"/>
           @if(
             programsField.get('programcode')?.invalid &&
             (programsField.get('programcode')?.touched ||
             programsField.get('programcode')?.dirty)
           ){
-            @if(programsField.get('programcode')?.hasError('duplicate')){
-              <div class="text-red-600">
-                Program code is in use!
-              </div>
-            }
             @if(programsField.get('programcode')?.hasError('required')){
               <div class="text-red-600">
                 Program code is required!
               </div>
             }
+
+            @else if(programsField.get('programcode')?.hasError('duplicate')){
+              <div class="text-red-600">
+                Program code is in use!
+              </div>
+            }
+
           }
         </div>
         <div class="flex flex-col">

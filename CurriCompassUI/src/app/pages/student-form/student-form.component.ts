@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
@@ -14,12 +14,9 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     CommonModule,
     RouterLink,
-    HttpClientModule,
     ReactiveFormsModule,
   ],
-  providers: [
-    HttpReqHandlerService,
-  ],
+
   templateUrl: './student-form.component.html',
   styleUrl: './student-form.component.css'
 })
@@ -27,9 +24,10 @@ export class StudentFormComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private req: HttpReqHandlerService,
-    private auth: AuthService,
   ){}
+
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
   userField =  this.fb.group({
     "studentid" : new FormControl('', [Validators.required]),

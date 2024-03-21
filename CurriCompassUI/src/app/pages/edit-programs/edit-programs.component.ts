@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../services/http-req-handler.service';
-import { RemoveInputErrorService } from '../../services/remove-input-error.service';
 import { httpOptions } from '../../../configs/Constants';
 import { AuthService } from '../../services/auth.service';
 
@@ -12,27 +10,22 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-edit-programs',
   standalone: true,
   imports: [
-    HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
     RouterLink,
-  ],
-  providers: [
-    HttpReqHandlerService,
-    RemoveInputErrorService
   ],
   templateUrl: './edit-programs.component.html',
   styleUrl: './edit-programs.component.css'
 })
 export class EditProgramsComponent {
   constructor(
-    private req: HttpReqHandlerService,
     private fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public rs: RemoveInputErrorService,
-    private auth: AuthService,
   ){}
+
+  private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  private auth: AuthService = inject(AuthService);
 
   routerId: number = null!;
   programsField = this.fb.group({
