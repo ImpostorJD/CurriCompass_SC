@@ -1,0 +1,20 @@
+<div class="relative w-full h-full flex items-center flex-col overflow-hidden">
+  <img class="md:w-full md:h-full absolute -z-10 h-[50rem] w-[50rem]" src="../../assets/bu-itb.jpeg"/>
+  <div class="bg-green-600 h-full w-full bg-opacity-[40%] absolute -z-10"></div>
+  <div class="w-full flex items-center">
+    <img class="md:h-40 h-[5rem]" src="../../assets/CompassPreAdvisingNoBgAlt.png">
+    <span class="text-white sm:text-[2rem] font-bold font-poppins text-[1.33rem] uppercase">CurriCompass</span>
+  </div>
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col sm:flex-row mt-[10rem]">
+      <span class="text-white font-bold font-poppins w-auto text-[4rem] relative h-[8rem] before:absolute before:border-2 before:border-white sm:before:bottom-0 before:bottom-[30%] sm:before:h-full before:h-0 before:w-full  sm:before:w-[2px] sm:before:right-[-10%] before:right-0">
+        {{ errorCode }}
+      </span>
+      <p class="sm:ml-[2rem] ml-0 text-[1.66rem] text-white flex flex-wrap w-[10rem] text-center">{{ message }}</p>
+    </div>
+    <div class="text-white flex flex-row items-center relative w-fit">
+      <i class="material-symbols-outlined">arrow_back</i>
+      <a class="ml-1 after:absolute after:w-full after:h-full after:left-0 cursor-pointer" [routerLink]="auth.getCookie('user').length > 0 ? '/' : '/login'">Go Back</a>
+    </div>
+  </div>
+</div>

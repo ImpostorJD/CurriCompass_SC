@@ -2,14 +2,15 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login-ui',
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    CommonModule
   ],
-  providers:[],
   templateUrl: './login-ui.component.html',
   styleUrl: './login-ui.component.css'
 })
@@ -40,11 +41,9 @@ export class LoginUiComponent {
           },
           error: err => {
             if (err.status == 401){
-              //Handle error incorrect password
               this.loginPayload.get('password')?.setErrors({'incorrect': true});
             }else if (err.status == 404){
               this.loginPayload.get('email')?.setErrors({'not found': true});
-              //handle user not found
             }
           }
         })

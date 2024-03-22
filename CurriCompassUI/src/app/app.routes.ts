@@ -22,6 +22,7 @@ import { EditSchoolYearComponent } from './pages/edit-school-year/edit-school-ye
 import { AddSchoolYearComponent } from './pages/add-school-year/add-school-year.component';
 import { AnonGuard } from './services/auth/anon-access.guard';
 import { AuthGuard } from './services/auth/auth-access.guard';
+import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 export const routes: Routes = [
     {
@@ -85,6 +86,8 @@ export const routes: Routes = [
         },
       ]
     },
-
+    {
+      path: "**", component: ErrorPageComponent
+    }
 
 ];

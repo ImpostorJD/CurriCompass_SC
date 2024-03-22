@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 import { inject } from '@angular/core';
@@ -21,8 +21,6 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
   return next(req).pipe(
     catchError((error: HttpEvent<any>) => {
 
-      console.log(error);
-
       // Handle errors here
       if (error instanceof HttpErrorResponse) {
         if (error.status == 401) {
@@ -35,26 +33,20 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
 
         } else if (error.status === 404) {
 
-          //TODO: If login failed (no user found)
           if(router.url == "login") {
             return next(req);
           }
-          router.navigateByUrl('/not-found');
+          router.navigateByUrl('/error/404');
 
         } else if (error.status === 403) {
-          //TODO: If login failed (incorrect password)
           if(router.url == "login") {
             return next(req);
           }
-
-          router.navigateByUrl('/forbidden-access');
-
+          router.navigateByUrl('/error/403');
         } else {
-          router.navigateByUrl('/something-went-wrong');
+          router.navigateByUrl('/error/500');
         }
-        // Customize error handling based on status code, request type, etc.
 
-        // You can also return a custom observable for further handling
         return throwError(() => error);
       }
 
