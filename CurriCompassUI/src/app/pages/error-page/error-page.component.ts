@@ -25,7 +25,7 @@ export class ErrorPageComponent {
       this.message = "Something went wrong!";
       this.errorCode = "500";
     }else if(urlPath == "403"){
-      this.message = "You are not allowed to access this page!";
+      this.message = "Forbidden!";
       this.errorCode = "403";
     }else{
       this.errorCode = "404";
