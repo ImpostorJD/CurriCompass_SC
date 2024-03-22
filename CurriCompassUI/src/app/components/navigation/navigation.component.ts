@@ -14,9 +14,6 @@ import { RolesToRenderDirective } from '../../services/auth/roles-to-render.dire
     RouterLinkActive,
     RolesToRenderDirective
   ],
-  providers:[
-    RolesToRenderDirective
-  ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css'
 })
@@ -116,7 +113,13 @@ export class NavigationComponent {
   }
 
   logout(){
-    this.auth.deleteCookie('user')
-    this.router.navigate(['/login'])
+    this.auth.logout().subscribe({
+      next: ()=> {
+        this.auth.deleteCookie('user');
+        this.auth.removeUserContext();
+        this.router.navigate(['/login']);
+      },
+      error: err => console.error(err),
+    });
   }
 }

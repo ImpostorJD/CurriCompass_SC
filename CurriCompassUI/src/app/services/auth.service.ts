@@ -18,7 +18,7 @@ export class AuthService {
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService)
 
-  currentUser:any = null;
+  private currentUser:any = null;
 
   /**
    * function for authenticating user
@@ -37,7 +37,7 @@ export class AuthService {
    */
   logout() :Observable<any> {
     // Send a logout request to your backend to clear the HttpOnly cookie
-    return this.req.postResource('users/logout', {}, httpOptions(this.getCookie('user')));
+    return this.req.getResource('users/logout', httpOptions(this.getCookie('user')));
   }
   /**
    * function for setting cookie for the JWT
@@ -91,6 +91,10 @@ export class AuthService {
 
   checkUser(): Observable<any>{
     return this.req.getResource('users/profile', httpOptions(this.getCookie('user')));
+  }
+
+  removeUserContext(){
+    this.currentUser = null;
   }
 
   async getUser() {
