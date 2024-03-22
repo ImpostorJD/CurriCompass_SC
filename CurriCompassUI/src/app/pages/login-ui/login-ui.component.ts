@@ -50,11 +50,11 @@ export class LoginUiComponent {
     }
 
     makeFormActive(event: any): void {
-      if(event.target.value.trim().length !== 0){
-        event.target.classList.add('active');
+      if(event.targe?.value?.trim().length !== 0){
+        event.target?.classList.add('active');
         return;
       }
-      event.target.classList.remove('active');
+      event.target?.classList.remove('active');
     }
 
     toggleFormActive(event: any): void {
