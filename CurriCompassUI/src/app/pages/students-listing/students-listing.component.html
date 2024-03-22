@@ -2,7 +2,12 @@
   <h1 class="font-bold font-sans text-2xl uppercase">Students</h1>
   <div class="mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
     <span>Search For Students</span>
-    <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchStudent" [ngModelOptions]="{standalone:true}">
+    <div class="relative w-full">
+      <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchStudent" [ngModelOptions]="{standalone:true}">
+      <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
+        search
+      </i>
+    </div>
   </div>
   <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
     <!-- Add a table to display students -->

@@ -17,14 +17,7 @@ export class MainHeaderComponent {
 
   user:any;
 
-  ngOnInit() {
-    this.auth.checkUser().subscribe({
-      next: (res:any) => {
-        this.user = res[1];
-      },
-
-      error: err => console.log(err),
-
-    });
+  async ngOnInit() {
+    this.user = await this.auth.getUser();
   }
 }

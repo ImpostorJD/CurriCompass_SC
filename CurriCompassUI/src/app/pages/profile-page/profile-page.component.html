@@ -1,127 +1,131 @@
 <div class="min-h-full h-auto w-full bg-slate-100 px-4 py-2 gap-2 flex flex-col">
   <h1 class="text-[2rem] font-bold font-poppins">Personal Details</h1>
   <div class="h-fit w-full flex bg-white shadow-lg">
-    <table class="h-full border border-collapse flex w-full table-condensed">
-      <thead class="flex flex-col h-full justify-around w-[25%]">
-        <tr class="w-full h-full">
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center flex-wrap" *appRolesToRender="['Student']">
-            Student No.
-          </th>
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center flex-wrap">
-            First Name
-          </th>
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center">
-            Middle Initial
-          </th>
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center">
-            Last Name
-          </th>
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center">
-            Email
-          </th>
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center">
-            Contact Number
-          </th>
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center" *appRolesToRender="['Student']">
-            Enrolled At
-          </th>
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center" *appRolesToRender="['Student']">
-            Program
-          </th>
-          <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center" *appRolesToRender="['Student']">
-            Specialization
-          </th>
-        </tr>
-      </thead>
-      <tbody class="flex-auto flex flex-col h-full">
-        <tr class="w-full h-full flex flex-col">
-          <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
-            {{ user?.student_record?.student_no }}
-          </td>
-          <td class="border-slate-600 border h-[3.55rem] p-2">
-            {{ user?.userfname }}
-          </td>
-          <td class="border-slate-600 border h-[3.55rem] p-2">
-            {{ user?.usermiddle }}
-          </td>
-          <td class="border-slate-600 border h-[3.55rem] p-2">
-            {{ user?.userlname }}
-          </td>
-          <td class="border-slate-600 border h-[3.55rem] p-2">
-            {{ user?.email }}
-          </td>
-          <td class="border-slate-600 border h-[3.55rem] p-2">
-            {{ user?.contact_no }}
-          </td>
-          <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
-            {{ user?.student_record.school_year != null ? formatDate.formatToYear(user.student_record.school_year.sy_start) + " - " + formatDate.formatToYear(user.student_record.school_year.sy_end) : "Not yet set." }}
-          </td>
-          <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
-            {{ user?.student_record != null && user?.student_record?.curriculum == null ? "Not yet set" : user?.student_record?.curriculum.program.programdesc  }}
-          </td>
-          <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
-            {{ user?.student_record != null && user?.student_record?.curriculum == null ? "None" : user?.student_record?.curriculum.specialization != null ? user?.student_record?.curriculum.specialization : "None"  }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    @if(user){
+      <table class="h-full border border-collapse flex w-full table-condensed">
+        <thead class="flex flex-col h-full justify-around w-[25%]">
+          <tr class="w-full h-full">
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center flex-wrap" *appRolesToRender="['Student']">
+              Student No.
+            </th>
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center flex-wrap">
+              First Name
+            </th>
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center">
+              Middle Initial
+            </th>
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center">
+              Last Name
+            </th>
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center">
+              Email
+            </th>
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center">
+              Contact Number
+            </th>
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center" *appRolesToRender="['Student']">
+              Enrolled At
+            </th>
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center" *appRolesToRender="['Student']">
+              Program
+            </th>
+            <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center" *appRolesToRender="['Student']">
+              Specialization
+            </th>
+          </tr>
+        </thead>
+        <tbody class="flex-auto flex flex-col h-full">
+          <tr class="w-full h-full flex flex-col">
+            <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
+              {{ user?.student_record?.student_no }}
+            </td>
+            <td class="border-slate-600 border h-[3.55rem] p-2">
+              {{ user?.userfname }}
+            </td>
+            <td class="border-slate-600 border h-[3.55rem] p-2">
+              {{ user?.usermiddle }}
+            </td>
+            <td class="border-slate-600 border h-[3.55rem] p-2">
+              {{ user?.userlname }}
+            </td>
+            <td class="border-slate-600 border h-[3.55rem] p-2">
+              {{ user?.email }}
+            </td>
+            <td class="border-slate-600 border h-[3.55rem] p-2">
+              {{ user?.contact_no }}
+            </td>
+            <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
+              {{ user?.student_record.school_year != null ? formatDate.formatToYear(user.student_record.school_year.sy_start) + " - " + formatDate.formatToYear(user.student_record.school_year.sy_end) : "Not yet set." }}
+            </td>
+            <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
+              {{ user?.student_record != null && user?.student_record?.curriculum == null ? "Not yet set" : user?.student_record?.curriculum.program.programdesc  }}
+            </td>
+            <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
+              {{ user?.student_record != null && user?.student_record?.curriculum == null ? "None" : user?.student_record?.curriculum.specialization != null ? user?.student_record?.curriculum.specialization : "None"  }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    }
   </div>
-  <div class="h-auto w-full" *appRolesToRender="['Student']" [ngIf]="user?.student_record.cid != null">
-    <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
-      <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
-        <tr class="h-full w-full flex flex-row">
-          <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-            Course Code
-          </th>
-          <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-            Credits
-          </th>
-          <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-            Year Level
-          </th>
-          <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-            Semester
-          </th>
-          <th class="border border-slate-600 w-[20%] flex items-center justify-center">
-            SY Taken
-          </th>
-          <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-            Sem Taken
-          </th>
-          <th class="border border-slate-600 flex-auto flex items-center justify-center">
-            Remark
-          </th>
-        </tr>
-      </thead>
-      <tbody class="h-[25rem] overflow-y-auto">
-        @if(user.student_record.cid != null){
-          @for(cs of user.student_record.curriculum.curriculum_subjects; track $index){
-            <tr class="flex flex-row w-full hover:bg-green-300">
-              <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                {{ cs.subjects.subjectcode }}
-              </td>
-              <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                {{ cs.subjects.subjectcredits }}
-              </td>
-              <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                {{ cs.year_level }}
-              </td>
-              <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                {{ cs.semesters.semdesc }}
-              </td>
-              <td class="border border-slate-600 w-[20%] flex items-center justify-center">
-                {{ formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_start) + " - " + formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_end) }}
-              </td>
-              <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                {{ getSubjectTakenItem(cs.subjects.subjectid).taken_at }}
-              </td>
-              <td class="border border-slate-600 w-[20%] flex items-center justify-center relative group/remark">
-                {{ getSubjectTakenItem(cs.subjects.subjectid).remark }}
-              </td>
-            </tr>
+@if(user?.student_record && user.student_record.cid != null){
+    <div class="h-auto w-full" *appRolesToRender="['Student']">
+      <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
+        <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
+          <tr class="h-full w-full flex flex-row">
+            <th class="border border-slate-600 w-[10%] flex items-center justify-center">
+              Course Code
+            </th>
+            <th class="border border-slate-600 w-[10%] flex items-center justify-center">
+              Credits
+            </th>
+            <th class="border border-slate-600 w-[10%] flex items-center justify-center">
+              Year Level
+            </th>
+            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
+              Semester
+            </th>
+            <th class="border border-slate-600 w-[20%] flex items-center justify-center">
+              SY Taken
+            </th>
+            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
+              Sem Taken
+            </th>
+            <th class="border border-slate-600 flex-auto flex items-center justify-center">
+              Remark
+            </th>
+          </tr>
+        </thead>
+        <tbody class="h-[25rem] overflow-y-auto">
+          @if(user.student_record.cid != null){
+            @for(cs of user.student_record.curriculum.curriculum_subjects; track $index){
+              <tr class="flex flex-row w-full hover:bg-green-300">
+                <td class="border border-slate-600 w-[10%] flex items-center justify-center">
+                  {{ cs.subjects.subjectcode }}
+                </td>
+                <td class="border border-slate-600 w-[10%] flex items-center justify-center">
+                  {{ cs.subjects.subjectcredits }}
+                </td>
+                <td class="border border-slate-600 w-[10%] flex items-center justify-center">
+                  {{ cs.year_level }}
+                </td>
+                <td class="border border-slate-600 w-[15%] flex items-center justify-center">
+                  {{ cs.semesters.semdesc }}
+                </td>
+                <td class="border border-slate-600 w-[20%] flex items-center justify-center">
+                  {{ formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_start) + " - " + formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_end) }}
+                </td>
+                <td class="border border-slate-600 w-[15%] flex items-center justify-center">
+                  {{ getSubjectTakenItem(cs.subjects.subjectid).taken_at }}
+                </td>
+                <td class="border border-slate-600 w-[20%] flex items-center justify-center relative group/remark">
+                  {{ getSubjectTakenItem(cs.subjects.subjectid).remark }}
+                </td>
+              </tr>
+            }
           }
-        }
-      </tbody>
-    </table>
-  </div>
+        </tbody>
+      </table>
+    </div>
+  }
 </div>

@@ -29,9 +29,17 @@
       }
     </div>
     <div class="relative h-[3rem] after:absolute after:w-full after:h-full after:z-20 cursor-pointer" (click)="toggleFormActive($event)">
-      <input type="password" class="idle text-slate-500 cursor-pointer focus:outline-0"
+      <input class="idle text-slate-500 cursor-pointer focus:outline-0"
+      [type]="showPass ? 'text' : 'password'"
+      #password
       (input)="makeFormActive($event)"
       formControlName="password">
+      <i
+        class="z-40 material-symbols-outlined absolute right-[3%] bottom-[25%]"
+        [ngClass]="{'inline': checkIfActive(), 'hidden' : !checkIfActive()}"
+        (click)="toggleVisibility($event)">
+        visibility_lock
+      </i>
       <label for="password">Password</label>
       @if(
           loginPayload.get('password')?.invalid &&

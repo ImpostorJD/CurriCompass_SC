@@ -143,14 +143,11 @@ class StudentRecordsController extends Controller
             'usermiddle' => ['required','string','max:255'],
             'email' => ['required','string','email','max:255'],
             'contact_no' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
-            'password' => ['required','string'],
-            'roles' => ['required','array'],
-            'roles.*.roleid' => ['required', 'integer'],
             "studentid" => ['required', 'string'],
             'sy'=> ['required','integer'],
             "status" => ['required','string'],
             "program" => ['required','integer'],
-            "specialization" => ['required','string'],
+            "specialization" => ['nullable','string'],
             "subjects_taken" => ['nullable','array'],
             "subjects_taken*.subjectid" => ['required','integer'],
             "subjects_taken*.taken_at" => ['required','string'],
@@ -169,6 +166,7 @@ class StudentRecordsController extends Controller
         $user = User::with('student_record')
             ->where('userid', $id)
             ->first();
+
 
         if(!$user){
             return response()->json([

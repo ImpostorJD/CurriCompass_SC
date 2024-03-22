@@ -115,25 +115,26 @@ class SchoolYearController extends Controller
 
     public function destroy(Request $request, String $id)
     {
-        $currentRecord = SchoolYear::find('sy', $id)
+        $currentRecord = SchoolYear::where('sy', $id)
             ->with('student_records')
             ->with('curriculum')
-            ->with('curriculum_subjects');
+            ->with('subjects_taken')
+            ->first();
 
         if($currentRecord) {
             $deletable = true;
             $messages = [];
-            if ($currentRecord->student_records->count() > 0) {
+            if ($currentRecord->student_records()->count() > 0) {
                 $messages['student_records'] = "School year currently have student records.";
                 $deletable = false;
             }
 
-            if ($currentRecord->curriculum->count() > 0) {
+            if ($currentRecord->curriculum()->count() > 0) {
                 $messages['curriculum'] = "School year currently have curricula.";
                 $deletable = false;
             }
 
-            if ($currentRecord->curriculum_subjects->count() > 0) {
+            if ($currentRecord->subjects_taken()->count() > 0) {
                 $messages['subjects_taken'] = "School year currently have subjects taken.";
                 $deletable = false;
             }

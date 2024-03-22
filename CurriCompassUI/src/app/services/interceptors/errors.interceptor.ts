@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
  * 3/1/2024
  *
  * To be provided as an interceptor to redirect the user to appropriate error page.
- * TODO: Implement interceptors
  *
  * @param req
  * @param next
@@ -23,6 +22,7 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
 
       // Handle errors here
       if (error instanceof HttpErrorResponse) {
+
         if (error.status == 401) {
           if(router.url == "login") {
             return next(req);
@@ -43,7 +43,12 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
             return next(req);
           }
           router.navigateByUrl('/error/403');
-        } else {
+        } else if(error.status === 406) {
+          return next(req);
+
+        }else if(error.status === 400) {
+          return next(req);
+        }else{
           router.navigateByUrl('/error/500');
         }
 

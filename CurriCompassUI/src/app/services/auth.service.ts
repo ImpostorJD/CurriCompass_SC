@@ -17,6 +17,9 @@ export class AuthService {
   constructor() { }
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService)
+
+  currentUser:any = null;
+
   /**
    * function for authenticating user
    *
@@ -88,5 +91,13 @@ export class AuthService {
 
   checkUser(): Observable<any>{
     return this.req.getResource('users/profile', httpOptions(this.getCookie('user')));
+  }
+
+  async getUser() {
+    if(this.currentUser == null){
+      const resp = await this.checkUserAsync();
+      this.currentUser = resp[1];
+    }
+    return this.currentUser
   }
 }

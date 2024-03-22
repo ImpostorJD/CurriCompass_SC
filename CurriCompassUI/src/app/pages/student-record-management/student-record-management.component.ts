@@ -160,8 +160,6 @@ export class StudentRecordManagementComponent {
 
   handleSubmit(){
 
-    console.log(this.studentProfileField.value);
-
     if(this.studentProfileField.status == "INVALID") {
       markFormGroupAsDirtyAndInvalid(this.studentProfileField);
       return;
@@ -230,6 +228,7 @@ export class StudentRecordManagementComponent {
           this.studentProfileField.get('studentid')?.patchValue(this.studentProfile.student_record.student_no);
           this.studentProfileField.get('year_level')?.patchValue(this.studentProfile.student_record.year_level);
           this.studentProfileField.get('status')?.patchValue(this.studentProfile.student_record.status);
+          this.studentProfileField.get('sy')?.patchValue(this.studentProfile.student_record.sy);
           this.subjectTaken = this.studentProfile.student_record.subjects_taken;
 
           if (this.studentProfile.student_record.cid != null) {

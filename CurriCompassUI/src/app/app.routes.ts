@@ -50,35 +50,45 @@ export const routes: Routes = [
         },
 
         {
-          path: 'programs', children: [
+          path: 'programs',
+          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          children: [
             { path : '', component: ProgramListComponent },
             { path : 'add-program', component: ProgramsFormComponent },
             { path : ':id', component: EditProgramsComponent },
           ]
         },
 
-        { path: 'courses', children: [
+        { path: 'courses',
+          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+         children: [
             { path: '', component: CoursesListComponent },
             { path : 'add-course', component: CourseFormComponent },
             { path : ':id', component: EditCourseComponent },
           ]
         },
 
-        { path: 'curricula', children: [
+        { path: 'curricula',
+          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          children: [
             { path : '', component: CurriculaListComponent },
             { path : 'add-curriculum', component: AddCurriculumComponent },
             { path : ':id', component: EditCurriculumComponent },
           ]
         },
 
-        { path : 'students', children: [
+        { path : 'students',
+          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          children: [
             { path : '', component: StudentsListingComponent },
             { path : 'add-student', component: StudentFormComponent },
             { path : ':id', component: StudentRecordManagementComponent },
           ]
         },
 
-        { path: 'school-calendar', children: [
+        { path: 'school-calendar',
+          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          children: [
             { path: '', component: SchoolYearPageComponent },
             { path: 'add-school-year', component: AddSchoolYearComponent },
             { path: ':id', component: EditSchoolYearComponent },

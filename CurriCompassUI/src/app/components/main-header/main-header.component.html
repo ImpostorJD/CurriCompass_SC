@@ -1,6 +1,6 @@
 
 <header class="flex flex-row-reverse h-[5rem] w-full p-2 relative overflow-x-hidden gap-1 after:absolute after:bg-green-600 after:bottom-0 after:h-[0.19rem] after:w-[95%] after:right-[2%] after:rounded-md">
-  <!-- <button class="w-fit h-full border-green-600 px-5 flex items-center content-center rounded-md text-green-800 hover:text-white hover:bg-green-700 hover:border-green-700 transition-all">
+  <!-- TO BE ADDED IN CAP 2: <button class="w-fit h-full border-green-600 px-5 flex items-center content-center rounded-md text-green-800 hover:text-white hover:bg-green-700 hover:border-green-700 transition-all">
     <i class="material-symbols-outlined">settings</i>
   </button> -->
   <a
@@ -9,9 +9,11 @@
   >
     <i class="material-symbols-outlined w-[30%] text-center">account_circle</i>
     <div class="flex-auto flex flex-col justify-center">
-      <span class="text-[0.88rem] font-semibold">
-        {{ user?.userlname! + ", " + user?.userfname! | ellipsis:10 }}
-      </span>
+      @if(user){
+        <span class="text-[0.88rem] font-semibold">
+          {{ user?.userlname + ", " + user?.userfname | ellipsis:10 }}
+        </span>
+      }
       <span class="text-[0.79rem]">
         {{  user?.user_roles[0].rolename! }}
       </span>

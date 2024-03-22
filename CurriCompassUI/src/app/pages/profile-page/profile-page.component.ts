@@ -26,13 +26,7 @@ export class ProfilePageComponent {
       .find((s:any) => s.subjectid === index);
   }
 
-  ngOnInit(){
-    this.auth.checkUser().subscribe({
-      next: (res:any) => {
-        this.user = res[1];
-      },
-
-      error: error => console.log(error),
-    })
+  async ngOnInit(){
+    this.user = await this.auth.getUser();
   }
 }

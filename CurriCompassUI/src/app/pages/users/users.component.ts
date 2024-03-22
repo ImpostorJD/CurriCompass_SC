@@ -6,7 +6,6 @@ import { httpOptions } from '../../../configs/Constants';
 import { FormsModule } from '@angular/forms';
 import { UserFilterPipe } from '../../services/search-filters/user-filter.pipe';
 import { AuthService } from '../../services/auth.service';
-import { RolesToRenderDirective } from '../../services/auth/roles-to-render.directive';
 
 @Component({
   selector: 'app-users',
@@ -16,7 +15,6 @@ import { RolesToRenderDirective } from '../../services/auth/roles-to-render.dire
     RouterLink,
     FormsModule,
     UserFilterPipe,
-    RolesToRenderDirective,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
@@ -35,7 +33,6 @@ export class UsersComponent {
       .subscribe({
         next: (res:any) => {
           this.users = res[0];
-          //console.log(this.users);
         },
         error: err => console.error(err),
       });

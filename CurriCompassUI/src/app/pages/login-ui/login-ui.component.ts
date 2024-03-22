@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -20,12 +20,24 @@ export class LoginUiComponent {
       private fb: FormBuilder,
     ){}
 
+    @ViewChild('password') passwordElement!: ElementRef;
+
     auth: AuthService = inject(AuthService);
+    showPass:boolean = false;
 
     loginPayload = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
+
+    toggleVisibility(e:any){
+      if(this.showPass){
+        e.target.innerHTML = "password";
+      }else{
+        e.target.innerHTML = "visibility_lock";
+      }
+      this.showPass = !this.showPass;
+    }
 
     onLoginAttempt() {
       if(this.loginPayload.status === "INVALID"){
@@ -47,6 +59,15 @@ export class LoginUiComponent {
             }
           }
         })
+    }
+
+    checkIfActive() {
+      const e = this.passwordElement?.nativeElement;
+
+      if(!e){
+        return false;
+      }
+      return e.classList.contains('active');
     }
 
     makeFormActive(event: any): void {
