@@ -20,6 +20,15 @@ class SubjectsTaken extends Model
         'remark'
     ];
 
+    protected function setKeysForSaveQuery($query)
+    {
+        $query
+            ->where('srid', '=', $this->getAttribute('srid'))
+            ->where('subjectid', '=', $this->getAttribute('subjectid'));
+
+        return $query;
+    }
+
     public function studentrecord(){
         return $this->belongsTo(StudentRecord::class, 'srid', 'srid');
     }

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('course_availabilities', function (Blueprint $table) {
-        $table->unsignedBigInteger('subjectid')->unique();
+            $table->unsignedBigInteger('subjectid')->unique();
             $table->unsignedBigInteger('semid');
 
             $table->foreign('subjectid')

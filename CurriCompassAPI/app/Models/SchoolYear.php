@@ -14,6 +14,10 @@ class SchoolYear extends Model
         'sy_end',
     ];
 
+    public function consultations(){
+        return $this->hasMany(Consultation::class, 'semid', 'semid');
+    }
+
     public function student_records() {
         return $this->hasMany(StudentRecord::class, 'sy', 'sy');
     }

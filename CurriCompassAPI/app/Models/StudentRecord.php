@@ -20,6 +20,14 @@ class StudentRecord extends Model
         'sy'
     ];
 
+    public function enlistment(){
+        return $this->hasMany(Enlistment::class, 'srid', 'srid');
+    }
+
+    public function consultation(){
+        return $this->hasMany(Consultation::class, 'srid', 'srid');
+    }
+
     public function subjects_taken() {
         return $this->hasMany(subjectsTaken::class, 'srid', 'srid');
     }

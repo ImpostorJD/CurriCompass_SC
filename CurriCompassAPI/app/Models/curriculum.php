@@ -16,6 +16,10 @@ class Curriculum extends Model
         'sy',
     ];
 
+    public function consultations(){
+        return $this->hasMany(Consultation::class, 'cid', 'cid');
+    }
+
     public function program(){
         return $this->belongsTo(Programs::class, 'programid', 'programid');
     }

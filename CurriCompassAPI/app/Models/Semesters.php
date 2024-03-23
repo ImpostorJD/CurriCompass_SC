@@ -15,6 +15,10 @@ class Semesters extends Model
         'semdesc'
     ];
 
+    public function consultations(){
+        return $this->hasMany(Consultation::class, 'semid', 'semid');
+    }
+
     public function course_availability(){
         return $this->hasMany(CourseAvailability::class, 'semid', 'semid');
     }

@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+//TODO: Add Documentation
 class HasAnyRole
 {
     /**
