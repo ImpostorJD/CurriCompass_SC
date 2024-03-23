@@ -14,4 +14,12 @@ class User_Role extends Model
         'userid',
         'roleid',
     ];
+    protected function setKeysForSaveQuery($query)
+    {
+        $query
+            ->where('userid', '=', $this->getAttribute('userid'))
+            ->where('roleid', '=', $this->getAttribute('roleid'));
+
+        return $query;
+    }
 }

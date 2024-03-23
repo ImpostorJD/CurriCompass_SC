@@ -13,6 +13,7 @@ export function AuthGuard(allowedRoles: string[]): CanActivateFn {
     const getUserCookie = inject(AuthService).getCookie('user');
     try{
       const resp:any = await inject(AuthService).getUser();
+
       if (allowedRoles.length > 0) {
         const user = await resp[1];
         for(let role of allowedRoles) {

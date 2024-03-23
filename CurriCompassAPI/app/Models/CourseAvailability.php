@@ -5,39 +5,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CurriculumSubjects extends Model
+class CourseAvailability extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
+    protected $primaryKey = ['subjectid','semid'];
     public $incrementing = false;
-    protected $primaryKey = ['cid', 'subjectid'];
-    protected $fillables = [
-        'cid',
-        'subjectid',
+    public $timestamps = false;
+
+
+    protected $fillable = [
         'semid',
-        'year_level',
+        'subjectid'
     ];
 
     protected function setKeysForSaveQuery($query)
     {
         $query
-            ->where('cid', '=', $this->getAttribute('cid'))
+            ->where('semid', '=', $this->getAttribute('semid'))
             ->where('subjectid', '=', $this->getAttribute('subjectid'));
 
         return $query;
-    }
-
-    public function curricula(){
-        return $this->belongsTo(Curriculum::class, 'cid', 'cid');
-    }
-
-    public function subjects(){
-        return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
     }
 
     public function semesters(){
         return $this->belongsTo(Semesters::class, 'semid', 'semid');
     }
 
+    public function subjects() {
+        return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
+    }
 }

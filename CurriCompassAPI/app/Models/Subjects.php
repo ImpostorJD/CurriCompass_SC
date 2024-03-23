@@ -14,7 +14,10 @@ class Subjects extends Model
         'subjectname',
         'subjectcode',
         'subjectcredits',
-        'subjecttype'
+        'subjectunitlab',
+        'subjectunitlec',
+        'subjecthourslec',
+        'subjecthourslab',
     ];
 
     public function subjectsTaken()
@@ -29,6 +32,10 @@ class Subjects extends Model
 
     public function pre_requisites(){
         return $this->hasOne(Pre_Requisites::class, 'subjectid', 'subjectid');
+    }
+
+    public function course_availability(){
+        return $this->hasOne(CourseAvailability::class, 'subjectid', 'subjectid');
     }
 
     public function pre_requisites_subjects(){

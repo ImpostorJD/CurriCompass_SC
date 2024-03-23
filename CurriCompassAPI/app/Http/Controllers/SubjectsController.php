@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CourseAvailability;
 use App\Models\Pre_Requisites;
 use App\Models\Pre_Requisites_Subjects;
 use App\Models\Subjects;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,7 +32,11 @@ class SubjectsController extends Controller
             'subjectname' => ['required', 'string'],
             'subjectcode' => ['required', 'string'],
             'subjectcredits' => ['required', 'int'],
-            'subjecttype' => ['required', 'string'],
+            'subjectunitlab' => ['required', 'integer'],
+            'subjectunitlec' => ['required', 'integer'],
+            'subjecthourslec' => ['required', 'decimal:0'],
+            'subjecthourslab' => ['required', 'decimal:0'],
+            'semavailability' => ['required', 'integer'],
         ]);
 
         if($validate->fails()){
@@ -48,13 +52,21 @@ class SubjectsController extends Controller
             'subjectname' => $request['subjectname'],
             'subjectcode' => $request['subjectcode'],
             'subjectcredits' => $request['subjectcredits'],
-            'subjecttype' => $request['subjecttype'],
+            'subjectunitlab' => $request['subjectunitlab'],
+            'subjectunitlec' => $request['subjectunitlec'],
+            'subjecthourslec' => $request['subjecthourslec'],
+            'subjecthourslab' => $request['subjecthourslab'],
         ]);
 
         $pre_requisite = Pre_Requisites::create([
             'subjectid' => $subject->subjectid,
             'year_level' => $request->year_level,
             'completion' => $request->completion,
+        ]);
+
+        CourseAvailability::create([
+            'semid' => $request['semavailability'],
+            'subjectid' => $subject->subjectid,
         ]);
 
         if(sizeof($request->subjects) > 0) {
@@ -72,17 +84,52 @@ class SubjectsController extends Controller
         ], 201);
     }
 
+    public function course_availability(Request $request){
+        return response()->json([
+            ['status' => 'success'],
+            CourseAvailability::with('subjects')
+                ->orderBy('semid', 'ASC')
+                ->get(),
+            ], 200);
+    }
+
+    public function course_availability_update(Request $request, String $id){
+        $validate = Validator::make($request->all(), [
+            'semavailability' => ['required', 'integer'],
+        ]);
+
+        if($validate->fails()){
+            return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
+        }
+
+        $res = CourseAvailability::where('subjectid', $id)->first();
+        if($res != null) {
+            return response()->json([
+                ['status' => 'success'],
+                $res->update([
+                    'semid' => $request->semavailability
+                ])
+            ], 200);
+        }
+
+        return response()->json([
+            ['status' => 'not found'],
+        ], 404);
+    }
+
     public function show(string $id)
     {
         $res = Subjects::with(['pre_requisites' => function($query){
-            $query->with('pre_requisites_subjects')->get();
-        }])->where('subjectid', '=', $id)->first();
+            $query->with('pre_requisites_subjects');
+        }])->with('course_availability')
+            ->where('subjectid', '=', $id)->first();
 
         if($res != null) {
             return response()->json([
                 ['status' => 'success'],
                 $res], 200);
         }
+
         return response()->json([
             ['status' => 'not found'],
             ], 404);
@@ -96,14 +143,19 @@ class SubjectsController extends Controller
             'subjectname' => ['required', 'string'],
             'subjectcode' => ['required', 'string'],
             'subjectcredits' => ['required', 'int'],
-            'subjecttype' => ['required', 'string'],
+            'subjectunitlab' => ['required', 'integer'],
+            'subjectunitlec' => ['required', 'integer'],
+            'subjecthourslec' => ['required', 'decimal:0'],
+            'subjecthourslab' => ['required', 'decimal:0'],
+            'semavailability' => ['required', 'integer'],
         ]);
+
 
         if($validate->fails()){
             return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
         }
 
-        $res = Subjects::where('subjectid', '=', $id)->first();
+        $res = Subjects::where('subjectid', '=', $id)->with('course_availability')->first();
 
         if($res != null) {
             if ($res->subjectcode != $request->subjectcode) return response()->json([['status' => 'conflict'], "Subject code is already in use."], 409);
@@ -111,10 +163,18 @@ class SubjectsController extends Controller
                 'subjectname' => $request['subjectname'],
                 'subjectcode' => $request['subjectcode'],
                 'subjectcredits' => $request['subjectcredits'],
-                'subjecttype' => $request['subjecttype'],
+                'subjectunitlab' => $request['subjectunitlab'],
+                'subjectunitlec' => $request['subjectunitlec'],
+                'subjecthourslec' => $request['subjecthourslec'],
+                'subjecthourslab' => $request['subjecthourslab'],
             ]);
 
             $pre_requisite = Pre_Requisites::where('subjectid', $id)->first();
+
+            $res->course_availability()->update([
+                'semid' => $request['semavailability'],
+            ]);
+
             $pre_requisite->update([
                 'year_level' => $request->year_level,
                 'completion' => $request->completion,
@@ -141,6 +201,7 @@ class SubjectsController extends Controller
             ['status' => 'not found'],
             ], 404);
     }
+
 
     public function destroy(string $id)
     {

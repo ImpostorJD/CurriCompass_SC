@@ -1,7 +1,8 @@
-import { Injectable, inject } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Observable, lastValueFrom } from 'rxjs';
 import { HttpReqHandlerService } from './http-req-handler.service';
 import { httpOptions } from '../../configs/Constants';
+import { isPlatformBrowser } from '@angular/common';
 
 
 /**
@@ -14,7 +15,7 @@ import { httpOptions } from '../../configs/Constants';
 })
 export class AuthService {
 
-  constructor() { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService)
 
@@ -45,10 +46,13 @@ export class AuthService {
    * @returns void
    */
   setCookie(ckey:string ,cvalue:string, exdays:number = 7) {
+    if (isPlatformBrowser(this.platformId)) {
       const d = new Date();
       d.setTime(d.getTime() + (exdays*24*60*60*1000));
       let expires = "expires=" + d.toUTCString();
       document.cookie = ckey + "=" + cvalue + ";" + expires + ";path=/";
+      return;
+    }
   }
 
   /**
@@ -57,32 +61,36 @@ export class AuthService {
    * @returns string
    */
   getCookie(ckey:string) {
-      let key:string = ckey + "=";
-      let decodedCookie:string = decodeURIComponent(document.cookie);
-      let cookieAttributes:string[] = decodedCookie.split(';');
-      for(let i = 0; i < cookieAttributes.length; i++) {
-        let cookie = cookieAttributes[i];
-        while (cookie.charAt(0) == ' ') {
-          cookie = cookie.substring(1);
-        }
-        if (cookie.indexOf(key) == 0) {
-          return cookie.substring(key.length, cookie.length);
+      if (isPlatformBrowser(this.platformId)) {
+        let key:string = ckey + "=";
+        let decodedCookie:string = decodeURIComponent(document.cookie);
+        let cookieAttributes:string[] = decodedCookie.split(';');
+        for(let i = 0; i < cookieAttributes.length; i++) {
+          let cookie = cookieAttributes[i];
+          while (cookie.charAt(0) == ' ') {
+            cookie = cookie.substring(1);
+          }
+          if (cookie.indexOf(key) == 0) {
+            return cookie.substring(key.length, cookie.length);
+          }
         }
       }
       return "";
-  }
-
-  /**
-   * function for deleting cookie for the JWT
-   *
-   * @param ckey key for the cookie
-   * @returns void
-   */
-  deleteCookie(ckey:string){
-    if(this.getCookie(ckey)){
-          document.cookie = ckey + "=;expires="+ 0 + ";path=/"
     }
-    return;
+
+    /**
+     * function for deleting cookie for the JWT
+    *
+    * @param ckey key for the cookie
+    * @returns void
+    */
+   deleteCookie(ckey:string){
+     if(isPlatformBrowser(this.platformId)){
+       if(this.getCookie(ckey)){
+         document.cookie = ckey + "=;expires="+ 0 + ";path=/"
+        }
+        return;
+      }
   }
 
   async checkUserAsync(): Promise<any> {

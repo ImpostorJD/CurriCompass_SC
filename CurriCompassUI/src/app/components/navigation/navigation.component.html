@@ -28,15 +28,18 @@
         <a
           *appRolesToRender="button.allowedRoles"
           [routerLink]="button.path"
-           class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl relative before:absolute before:h-full before:-z-10 hover:before:bg-green-600 transition-all"
-           [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl before:w-full': panelToggled, 'md:justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
-           routerLinkActive="before:bg-green-600 text-white"
-           [routerLinkActiveOptions]="{exact: true}"
+          class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl relative before:absolute before:h-full before:-z-10 hover:before:bg-green-600 transition-all before:group"
+          [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl before:w-full': panelToggled, 'md:justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
+          routerLinkActive="before:bg-green-600 text-white"
+          [routerLinkActiveOptions]="{exact: true}"
         >
           <i class="{{button.icon_type}}">{{button.icon}}</i>
           <span
             [ngClass]="{'md:inline': panelToggled, 'md:hidden': !panelToggled}"
           >{{button.name}}</span>
+          <div class="group-hover:visible hidden transition-all text-center absolute bg-black min-w-[64px] h-auto text-white right-[50%] p-2 bottom-[-80%] translate-x-1/2 z-20">
+            {{button.name}}
+          </div>
         </a>
       }
     </div>

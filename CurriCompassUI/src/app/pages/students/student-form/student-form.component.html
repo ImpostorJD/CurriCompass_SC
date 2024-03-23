@@ -1,0 +1,175 @@
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="userField">
+  <h1 class="font-bold font-sans text-[2rem] uppercase">Add Student</h1>
+  <div class="flex lg:flex-row gap-2 flex-col">
+    <div class="flex flex-col gap-2 border-slate-400 border-1 lg:w-[50%] w-full p-5 border-[1px] rounded-sm shadow-lg bg-white">
+      <h2 class="font-bold text-[1.33rem]">Basic Information</h2>
+      <div class="flex flex-col gap-1">
+        <div class="flex flex-col">
+          <span>Student ID</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="studentid"/>
+          @if(
+            userField.get('studentid')?.invalid &&
+            (userField.get('studentid')?.touched ||
+            userField.get('studentid')?.dirty)
+          ){
+            <div class="text-red-600">
+              @if(userField.get('studentid')?.hasError('required')){
+                Student ID is required!
+              }
+              @if(userField.get('studentid')?.hasError('duplicate')){
+                Student ID is already in use!
+              }
+            </div>
+          }
+        </div>
+        <div class="flex flex-col">
+          <span>first name</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userfname"/>
+          @if(
+            userField.get('userfname')?.invalid &&
+            (userField.get('userfname')?.touched ||
+            userField.get('userfname')?.dirty)
+          ){
+            <div class="text-red-600">
+              First name is required!
+            </div>
+          }
+        </div>
+        <div class="flex flex-col">
+          <span>middle name</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="usermiddle"/>
+          @if(
+            userField.get('usermiddle')?.invalid &&
+            (userField.get('usermiddle')?.touched ||
+            userField.get('usermiddle')?.dirty)
+          ){
+            <div class="text-red-600">
+              Middle name is required!
+            </div>
+          }
+        </div>
+        <div class="flex flex-col">
+          <span>surname</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userlname"/>
+          @if(
+            userField.get('userlname')?.invalid &&
+            (userField.get('userlname')?.touched ||
+            userField.get('userlname')?.dirty)
+          ){
+            <div class="text-red-600">
+              Last name is required!
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2 border-slate-400 border-[1px] lg:w-[50%] w-full p-5 rounded-sm shadow-lg bg-white">
+      <h2 class="font-bold text-[1.33rem]">Credentials</h2>
+      <div class="flex flex-col">
+        <div class="flex flex-col">
+          <span>email</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email"/>
+          @if(
+            userField.get('email')?.invalid &&
+            (userField.get('email')?.touched ||
+            userField.get('email')?.dirty)
+          ){
+            <div class="text-red-600">
+              @if(userField.get('email')?.hasError('required')){
+                Email is required!
+              }
+              @else if(userField.get('email')?.hasError('email')){
+                Email is in invalid format!
+              }
+              @else if(userField.get('email')?.hasError('duplicate')){
+                Email is already in use!
+              }
+            </div>
+          }
+        </div>
+        <div class="flex flex-col">
+          <span>password</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" type="password" formControlName="password"/>
+          @if(
+            userField.get('password')?.invalid &&
+            (userField.get('password')?.touched ||
+            userField.get('password')?.dirty)
+          ){
+            <div class="text-red-600">
+              Password is required!
+            </div>
+          }
+        </div>
+        <div class="flex flex-col">
+          <span>contact number</span>
+          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="contactno"/>
+          @if(
+            userField.get('contactno')?.invalid &&
+            (userField.get('contactno')?.touched ||
+            userField.get('contactno')?.dirty)
+          ){
+            <div class="text-red-600">
+              @if(userField.get('contactno')?.hasError('required')){
+                Contact number is required!
+              }
+              @else if(userField.get('contactno')?.hasError('pattern')){
+                Contact number is in invalid format!
+              }
+            </div>
+          }
+        </div>
+        <div class="flex flex-col">
+          <span>Status</span>
+          <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="status">
+            <option [value]="null" disabled selected>
+              Please Select
+            </option>
+            <option value="Regular">
+              Regular
+            </option>
+            <option value="Irregular">
+              Irregular
+            </option>
+          </select>
+          @if(
+            userField.get('status')?.invalid &&
+            (userField.get('status')?.touched ||
+            userField.get('status')?.dirty)
+          ){
+            <div class="text-red-600">
+              Status is required!
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-center gap-2 py-2">
+    <a
+      [routerLink]="'/students'"
+      class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+      <i class="material-symbols-outlined">
+        person_cancel
+      </i>
+      <span class="hidden lg:block">
+        Cancel
+      </span>
+    </a>
+    <button
+      (click)="handleSubmit('no_record')"
+      class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center border-green-600 border-[1px] rounded-md text-green-600 transition-all hover:bg-green-600 hover:text-white uppercase">
+      <i class="material-symbols-outlined">person_add</i>
+      <span class="hidden lg:block">
+        Save Without Student Information
+      </span>
+    </button>
+    <button
+      (click)="handleSubmit('with_record')"
+      class="w-full flex flex-row gap-2 px-4 py-2 bg-green-600 items-center justify-center rounded-md text-white hover:bg-green-800 transition-all uppercase">
+      <i class="material-symbols-outlined">user_attributes</i>
+      <span class="hidden lg:block">
+        Add Student Information
+      </span>
+    </button>
+  </div>
+</form>

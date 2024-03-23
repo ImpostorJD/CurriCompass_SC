@@ -34,63 +34,80 @@ export class NavigationComponent {
       allowedRoles: ['Admin', 'Faculty', 'Student'],
       icon_type: "material-symbols-outlined",
       icon: "dashboard",
-      path: "/"
+      path: "/",
+      hoverGroup: 'dashboard',
     },
     {
       name : "Profile",
       allowedRoles: ['Admin', 'Faculty', 'Student'],
       icon_type: "material-symbols-outlined",
       icon: "account_circle",
-      path: "/profile"
+      path: "/profile",
+      hoverGroup: 'profile',
     },
     {
       name : "Users",
       allowedRoles: ['Admin'],
       icon_type: "material-symbols-outlined",
       icon: "groups",
-      path: "/users"
+      path: "/users",
+      hoverGroup: 'users',
     },
     {
       name : "Student Records",
       allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "person_book",
-      path: "/students"
+      path: "/students",
+      hoverGroup: 'students',
     },
     {
       name : "Curriculum",
       allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "contract",
-      path: "/curricula"
+      path: "/curricula",
+      hoverGroup: 'curricula',
     },
     {
       name : "Program",
       allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "book",
-      path: "/programs"
+      path: "/programs",
+      hoverGroup: 'programs',
     },
     {
       name : "Courses",
       allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
-      icon: "menu_book",
-      path: "/courses"
+      icon: "book_5",
+      path: "/courses",
+      hoverGroup: 'courses',
     },
     {
       name : "School Calendar",
       allowedRoles: ['Admin', 'Faculty'],
       icon_type: "material-symbols-outlined",
       icon: "event_note",
-      path: "/school-calendar"
+      path: "/school-calendar",
+      hoverGroup: 'school_calendar',
     },
     {
       name : "Consulatation",
       allowedRoles: ['Student'],
       icon_type: "material-symbols-outlined",
       icon: "explore",
-      path: "/consulatation"
+      path: "/consulatation",
+      hoverGroup: 'consultation',
+    },
+    {
+      name : "Course Availability",
+      allowedRoles: ['Admin', 'Faculty'],
+      icon_type: "material-symbols-outlined",
+      icon: "menu_book",
+      path: "/course-availability",
+      hoverGroup: 'course_availability',
     },
 
   ];

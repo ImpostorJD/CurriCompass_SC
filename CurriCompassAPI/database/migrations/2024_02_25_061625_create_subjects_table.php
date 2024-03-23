@@ -16,7 +16,11 @@ return new class extends Migration
             $table->string('subjectcode')->unique();
             $table->string('subjectname');
             $table->integer('subjectcredits');
-            $table->enum('subjecttype', ['Lab', 'Lec']);
+            $table->integer('subjectunitlec');
+            $table->integer('subjectunitlab');
+            $table->double('subjecthourslec');
+            $table->double('subjecthourslab');
+
             $table->timestamps();
         });
     }

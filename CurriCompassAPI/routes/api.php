@@ -67,6 +67,13 @@ Route::controller(RoleController::class)
             ->middleware('auth.anyrole:Admin');
     });
 
+Route::get('course-availability', [SubjectsController::class, 'course_availability'])
+    ->middleware('auth.anyrole:Admin, Faculty');
+
+Route::patch('course-availability/{id}', [SubjectsController::class, 'course_availability_update'])
+    ->middleware('auth.anyrole:Admin, Faculty');
+
+
 Route::controller(SubjectsController::class)
     ->prefix('/subjects')
     ->group(function (){
@@ -83,6 +90,7 @@ Route::controller(SubjectsController::class)
         Route::patch('/{id}', 'update')
             ->middleware('auth.anyrole:Admin, Faculty');
     });
+
 
 Route::controller(ProgramsController::class)
     ->prefix('/programs')

@@ -1,35 +1,40 @@
 import { Routes } from '@angular/router';
-import { StudentFormComponent } from './pages/student-form/student-form.component';
-import { LoginUiComponent } from './pages/login-ui/login-ui.component';
+
 import { BaselayoutComponent } from './components/baselayout/baselayout.component';
-import { UserFormComponent } from './pages/user-form/user-form.component';
-import { ProgramsFormComponent } from './pages/programs-form/programs-form.component';
-import { CourseFormComponent } from './pages/course-form/course-form.component';
-import { EditUserFormComponent } from './pages/edit-user-form/edit-user-form.component';
-import { AddCurriculumComponent } from './pages/add-curriculum/add-curriculum.component';
-import { StudentRecordManagementComponent } from './pages/student-record-management/student-record-management.component';
-import { StudentsListingComponent } from './pages/students-listing/students-listing.component';
-import { ProgramListComponent } from './pages/program-list/program-list.component';
-import { UsersComponent } from './pages/users/users.component';
-import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
-import { CurriculaListComponent } from './pages/curricula-list/curricula-list.component';
-import { CoursesListComponent } from './pages/courses-list/courses-list.component';
-import { EditCourseComponent } from './pages/edit-course/edit-course.component';
-import { EditProgramsComponent } from './pages/edit-programs/edit-programs.component';
-import { EditCurriculumComponent } from './pages/edit-curriculum/edit-curriculum.component';
-import { SchoolYearPageComponent } from './pages/school-year-page/school-year-page.component';
-import { EditSchoolYearComponent } from './pages/edit-school-year/edit-school-year.component';
-import { AddSchoolYearComponent } from './pages/add-school-year/add-school-year.component';
-import { AnonGuard } from './services/auth/anon-access.guard';
-import { AuthGuard } from './services/auth/auth-access.guard';
+
+import { LoginUiComponent } from './pages/users/login-ui/login-ui.component';
+import { UserFormComponent } from './pages/users/user-form/user-form.component';
+import { EditUserFormComponent } from './pages/users/edit-user-form/edit-user-form.component';
+import { UsersComponent } from './pages/users/users-listing/users.component';
+import { ProfilePageComponent } from './pages/users/profile-page/profile-page.component';
+
+import { StudentFormComponent } from './pages/students/student-form/student-form.component';
+import { StudentsListingComponent } from './pages/students/students-listing/students-listing.component';
+import { StudentRecordManagementComponent } from './pages/students/student-record-management/student-record-management.component';
+
+import { AddCurriculumComponent } from './pages/curriculum/add-curriculum/add-curriculum.component';
+import { CurriculaListComponent } from './pages/curriculum/curricula-list/curricula-list.component';
+import { EditCurriculumComponent } from './pages/curriculum/edit-curriculum/edit-curriculum.component';
+
+import { CourseFormComponent } from './pages/courses/course-form/course-form.component';
+import { CoursesListComponent } from './pages/courses/courses-list/courses-list.component';
+import { EditCourseComponent } from './pages/courses/edit-course/edit-course.component';
+import { CourseAvailabilityComponent } from './pages/courses/course-availability/course-availability.component';
+
+import { ProgramsFormComponent } from './pages/program/programs-form/programs-form.component';
+import { ProgramListComponent } from './pages/program/program-list/program-list.component';
+import { EditProgramsComponent } from './pages/program/edit-programs/edit-programs.component';
+
+import { SchoolYearPageComponent } from './pages/school-year/school-year-page/school-year-page.component';
+import { EditSchoolYearComponent } from './pages/school-year/edit-school-year/edit-school-year.component';
+import { AddSchoolYearComponent } from './pages/school-year/add-school-year/add-school-year.component';
+
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
+import { AnonGuard } from './services/auth/anon-access.guard';
+import { AuthGuard } from './services/auth/auth-access.guard';
+
 export const routes: Routes = [
-    {
-      path: 'login',
-      component: LoginUiComponent,
-      canActivate: [AnonGuard]
-    },
 
     { path: '',
       component: BaselayoutComponent,
@@ -94,7 +99,21 @@ export const routes: Routes = [
             { path: ':id', component: EditSchoolYearComponent },
           ]
         },
+
+        { path: 'course-availability',
+          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          children: [
+            { path: '', component: CourseAvailabilityComponent },
+
+            ]
+        },
       ]
+    },
+
+    {
+      path: 'login',
+      component: LoginUiComponent,
+      canActivate: [AnonGuard]
     },
     {
       path: "**", component: ErrorPageComponent

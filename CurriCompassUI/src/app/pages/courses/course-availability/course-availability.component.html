@@ -1,0 +1,56 @@
+<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
+  <h1 class="font-bold font-sans text-2xl uppercase">Courses Availability</h1>
+  <div class="mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
+    <span>Search For Courses</span>
+    <div class="relative w-full">
+      <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchCourse" [ngModelOptions]="{standalone:true}">
+      <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
+        search
+      </i>
+    </div>
+  </div>
+  <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
+    <table class="table-auto w-full border-collapse border border-slate-300">
+      <thead class="bg-slate-300">
+        <tr class="flex flex-row py-2">
+          <th class="w-[30%] py-2">
+            Course Code
+          </th>
+          <th class="lg:w-[35%] py-2 flex-auto hidden lg:block">
+            Course Title
+          </th>
+          <th class="lg:w-[10%] py-2 flex-auto">
+            Credits
+          </th>
+          <th class="w-[25%] lg:flex-auto py-2 flex items-center justify-center">
+            Availability Semester
+          </th>
+        </tr>
+      </thead>
+      <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
+        @for(course of courses|courseAvailableFilter:searchCourse; track $index){
+          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
+            <td class="w-[30%] flex px-1 items-center">
+              <span>{{ course.subjects.subjectcode }}</span>
+            </td>
+            <td class="lg:w-[35%] hidden lg:flex px-1 items-center">
+              <span>{{ course.subjects.subjectname }}</span>
+            </td>
+            <td class="lg:w-[10%] flex-auto px-1 flex items-center justify-center">
+              <span>{{ course.subjects.subjectcredits }}</span>
+            </td>
+            <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+              <select class="w-full h-full border-0 p-2" (change)="updateCourseAvailability(course.subjectid, $event)">
+                @for(sem of semesters; track $index){
+                  <option [value]="sem.semid" [selected]="course.semid == sem.semid">
+                    {{sem.semdesc}}
+                  </option>
+                }
+              </select>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

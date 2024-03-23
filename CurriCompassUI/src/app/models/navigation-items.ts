@@ -7,5 +7,6 @@ export default interface NavigationItems {
   allowedRoles: Array<string>;
   icon_type: string;
   icon: string;
+  hoverGroup: string;
 
 }
