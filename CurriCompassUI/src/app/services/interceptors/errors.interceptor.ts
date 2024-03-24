@@ -39,7 +39,7 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
             return next(req);
           }
           router.navigateByUrl('/error/403');
-        } else if(error.status === 406) {
+        } else if(error.status === 409) {
           return next(req);
 
         }else if(error.status === 400) {

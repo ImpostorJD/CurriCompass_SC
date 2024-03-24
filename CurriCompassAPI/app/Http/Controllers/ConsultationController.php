@@ -139,7 +139,14 @@ class ConsultationController extends Controller
                 ->where('year_level', $request->year_level)
                 ->first();
 
-            if ($recordToCompare && sizeof(array_diff($res, $recordToCompare)) == 0){
+            if ($recordToCompare &&
+                (
+                    $res->cid != $request->cid &&
+                    $res->srid != $request->srid &&
+                    $res->semid != $request->semid &&
+                    $res->year_level != $request->year_level
+                )
+            ){
                 return response()->json([
                     ['status' => 'Conflict'],
                     ['message' => 'consultation record with the combination already exists.']

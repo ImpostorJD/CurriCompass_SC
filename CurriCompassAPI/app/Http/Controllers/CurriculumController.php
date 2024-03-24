@@ -115,7 +115,7 @@ class CurriculumController extends Controller
             ->where('specialization', $request->specialization)
             ->where('sy', $request->sy)
             ->first();
-        $curriculum = Curriculum::find($id);
+        $curriculum = Curriculum::where('cid', $id)->first();
 
         if(!$curriculum){
             return response()->json(['status' => 'not found'], 404);

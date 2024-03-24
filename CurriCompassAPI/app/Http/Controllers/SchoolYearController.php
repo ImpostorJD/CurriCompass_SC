@@ -92,8 +92,8 @@ class SchoolYearController extends Controller
                 ->first();
 
             if($existing &&
-            ($currentRecord->sy_start != $existing->sy_start &&
-            $currentRecord->sy_end != $existing->sy_end)){
+            ($currentRecord->sy_start != $request->sy_start &&
+            $currentRecord->sy_end != $request->sy_end)){
                 return response()->json([
                     ['status' => 'Conflict'],
                     ["message" => "Duplicate in combination of year start and year end."]

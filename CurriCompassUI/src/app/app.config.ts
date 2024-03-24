@@ -7,7 +7,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { errorsInterceptor } from './services/interceptors/errors.interceptor';
 import { HttpReqHandlerService } from './services/http-req-handler.service';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/auth/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
