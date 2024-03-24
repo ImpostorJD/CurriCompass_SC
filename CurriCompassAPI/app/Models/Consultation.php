@@ -14,6 +14,7 @@ class Consultation extends Model
     protected $fillable = [
         'sy',
         'cid',
+        'semid',
         'year_level',
         'srid'
     ];

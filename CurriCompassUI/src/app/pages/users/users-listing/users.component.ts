@@ -4,8 +4,8 @@ import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions } from '../../../../configs/Constants';
 import { FormsModule } from '@angular/forms';
-import { UserFilterPipe } from '../../../services/search-filters/user-filter.pipe';
-import { AuthService } from '../../../services/auth.service';
+import { UserFilterPipe } from '../../../services/filter/search-filters/user-filter.pipe';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-users',

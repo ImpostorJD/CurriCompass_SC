@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('coid')
                 ->references('coid')
                 ->on('consultations')
-                ->onDelete('restrict');
+                ->onDelete('cascade');
 
             $table->foreign('subjectid')
                 ->references('subjectid')

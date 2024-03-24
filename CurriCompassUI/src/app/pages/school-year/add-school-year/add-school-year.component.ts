@@ -4,8 +4,8 @@ import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import moment from 'moment';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
-import { AuthService } from '../../../services/auth.service';
 import { httpOptions } from '../../../../configs/Constants';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-add-school-year',

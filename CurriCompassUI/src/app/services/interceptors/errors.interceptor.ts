@@ -1,9 +1,9 @@
 import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../auth.service';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 /**
  * 3/1/2024
  *
@@ -32,11 +32,7 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
           router.navigateByUrl('/login');
 
         } else if (error.status === 404) {
-
-          if(router.url == "login") {
-            return next(req);
-          }
-          router.navigateByUrl('/error/404');
+          return next(req);
 
         } else if (error.status === 403) {
           if(router.url == "login") {

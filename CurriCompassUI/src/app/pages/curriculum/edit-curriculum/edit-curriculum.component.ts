@@ -4,11 +4,11 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../../services/remove-input-error.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
-import { CourseFilterPipe } from '../../../services/search-filters/course-pipe.pipe';
+import { CourseFilterPipe } from '../../../services/filter/search-filters/course-pipe.pipe';
 import { CoursesServiceService } from '../../../services/courses-service.service';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { FormatDateService } from '../../../services/format/format-date.service';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-edit-curriculum',

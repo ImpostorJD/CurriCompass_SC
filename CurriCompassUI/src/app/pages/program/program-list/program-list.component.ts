@@ -5,8 +5,8 @@ import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions } from '../../../../configs/Constants';
 import { FormsModule } from '@angular/forms';
-import { ProgramFilterPipe } from '../../../services/search-filters/program-filter.pipe';
-import { AuthService } from '../../../services/auth.service';
+import { ProgramFilterPipe } from '../../../services/filter/search-filters/program-filter.pipe';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-program-list',

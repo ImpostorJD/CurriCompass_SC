@@ -5,7 +5,7 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-user-form',

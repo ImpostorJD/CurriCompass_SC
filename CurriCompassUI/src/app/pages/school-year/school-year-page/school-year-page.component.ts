@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions } from '../../../../configs/Constants';
 import { FormatDateService } from '../../../services/format/format-date.service';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-school-year-page',

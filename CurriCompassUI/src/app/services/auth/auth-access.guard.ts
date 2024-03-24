@@ -1,6 +1,6 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { AuthService } from '../auth.service';
 import { inject } from '@angular/core';
+import { AuthService } from './auth.service';
 /**
  * 3/1/2024
  * Middleware to intercept requests to validate login context.

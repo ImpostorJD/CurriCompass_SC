@@ -7,7 +7,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { httpOptions, markFormGroupAsDirtyAndInvalid, sortSemester, yearLevel } from '../../../../configs/Constants';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { FormatDateService } from '../../../services/format/format-date.service';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-student-record-management',

@@ -5,10 +5,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
 import { RemoveInputErrorService } from '../../../services/remove-input-error.service';
-import { CourseFilterPipe } from '../../../services/search-filters/course-pipe.pipe';
+import { CourseFilterPipe } from '../../../services/filter/search-filters/course-pipe.pipe';
 import { CoursesServiceService } from '../../../services/courses-service.service';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-edit-course',

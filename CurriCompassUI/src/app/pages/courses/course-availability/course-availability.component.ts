@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions } from '../../../../configs/Constants';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CourseAvailableFilterPipe } from '../../../services/search-filters/course-available-filter.pipe';
+import { CourseAvailableFilterPipe } from '../../../services/filter/search-filters/course-available-filter.pipe';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-course-availability',

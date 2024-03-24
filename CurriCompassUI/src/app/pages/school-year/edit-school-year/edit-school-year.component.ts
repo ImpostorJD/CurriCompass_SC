@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import moment from 'moment';
 import { httpOptions } from '../../../../configs/Constants';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-edit-school-year',

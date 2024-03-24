@@ -4,11 +4,10 @@ import { FormArray, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, 
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
-import { RemoveInputErrorService } from '../../../services/remove-input-error.service';
-import { CourseFilterPipe } from '../../../services/search-filters/course-pipe.pipe';
+import { CourseFilterPipe } from '../../../services/filter/search-filters/course-pipe.pipe';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { CoursesServiceService } from '../../../services/courses-service.service';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-course-form',

@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
-import { CourseFilterPipe } from '../../../services/search-filters/course-pipe.pipe';
+import { CourseFilterPipe } from '../../../services/filter/search-filters/course-pipe.pipe';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../services/auth.service';
 import { CoursesServiceService } from '../../../services/courses-service.service';
 import { httpOptions } from '../../../../configs/Constants';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-courses-list',

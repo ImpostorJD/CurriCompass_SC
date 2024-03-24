@@ -1,8 +1,8 @@
 import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Observable, lastValueFrom } from 'rxjs';
-import { HttpReqHandlerService } from './http-req-handler.service';
-import { httpOptions } from '../../configs/Constants';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpReqHandlerService } from '../http-req-handler.service';
+import { httpOptions } from '../../../configs/Constants';
 
 
 /**

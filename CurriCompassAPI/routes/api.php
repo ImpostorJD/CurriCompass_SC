@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ProgramsController;
 use App\Http\Controllers\RoleController;
@@ -67,10 +68,12 @@ Route::controller(RoleController::class)
             ->middleware('auth.anyrole:Admin');
     });
 
-Route::get('course-availability', [SubjectsController::class, 'course_availability'])
+Route::get('course-availability',
+    [SubjectsController::class, 'course_availability'])
     ->middleware('auth.anyrole:Admin, Faculty');
 
-Route::patch('course-availability/{id}', [SubjectsController::class, 'course_availability_update'])
+Route::patch('course-availability/{id}',
+    [SubjectsController::class, 'course_availability_update'])
     ->middleware('auth.anyrole:Admin, Faculty');
 
 
@@ -175,5 +178,21 @@ Route::controller(SchoolYearController::class)
             ->middleware('auth.anyrole:Admin, Faculty');
 
         Route::patch('/{id}', 'update')
+            ->middleware('auth.anyrole:Admin, Faculty');
+    });
+
+Route::controller(ConsultationController::class)
+    ->prefix('/consultation')
+    ->group(function (){
+        Route::get('/', 'index')
+            ->middleware('auth.anyrole:Admin, Faculty');
+
+        Route::get('/{id}', 'show');
+
+        Route::post('/', 'store');
+
+        Route::patch('/{id}', 'update');
+
+        Route::delete('/{id}', 'destroy')
             ->middleware('auth.anyrole:Admin, Faculty');
     });

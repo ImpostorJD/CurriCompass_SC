@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpReqHandlerService } from './http-req-handler.service';
 import { httpOptions } from '../../configs/Constants';
 import { catchError, map, of } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AuthService } from './auth/auth.service';
 
 @Injectable({
   providedIn: 'root',

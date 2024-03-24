@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
 import { RolesToRenderDirective } from '../../../services/auth/roles-to-render.directive';
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-profile-page',

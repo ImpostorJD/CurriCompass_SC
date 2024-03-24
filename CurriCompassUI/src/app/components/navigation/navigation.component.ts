@@ -3,8 +3,9 @@ import { Component, Inject, inject } from '@angular/core';
 import NavigationItems from '../../models/navigation-items';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+
 import { RolesToRenderDirective } from '../../services/auth/roles-to-render.directive';
+import { AuthService } from '../../services/auth/auth.service';
 @Component({
   selector: 'app-navigation',
   standalone: true,
