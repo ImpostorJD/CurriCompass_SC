@@ -73,7 +73,6 @@ export class CourseFormComponent {
           console.log(err.status);
           this.courseField.get('subjectcode')?.setErrors({duplicate: true});
         }
-
       }
     })
   }
