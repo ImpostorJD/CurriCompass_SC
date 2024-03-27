@@ -247,6 +247,7 @@ class UserController extends Controller
             ->with('user_roles', function ($query){
                 $query->where('rolename', '=', 'Student');
             })->with(['student_record' => function($query) {
+                $query->with('enlistment');
                 $query->with(['subjects_taken' => function($query){
                     $query->with('subjects');
                     $query->with('school_year');

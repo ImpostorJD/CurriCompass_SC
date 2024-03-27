@@ -1,0 +1,184 @@
+<div class="w-full h-full bg-slate-100 flex flex-col gap-3 p-2">
+  <h1 class="text-[2rem] font-bold font-poppins">Add Consultation</h1>
+  <div class="w-full bg-white shadow-lg">
+    <table class="flex table-auto flex-row">
+      <thead class="flex min-w-[15rem]">
+        <tr class="w-full flex flex-col">
+          <th class="p-2 w-full border-[1px] border-black flex items-start">
+            Curriculum
+          </th>
+          <th class="p-2 w-full border-[1px] border-black flex items-start">
+            School Year
+          </th>
+          <th class="p-2 w-full border-[1px] border-black flex items-start">
+            Semesters
+          </th>
+          <th class="p-2 w-full border-[1px] border-black flex items-start">
+            Year Level
+          </th>
+          <th class="p-2 w-full border-[1px] border-black flex items-start">
+            Block
+          </th>
+        </tr>
+      </thead>
+      <tbody class="flex w-full">
+        <tr class="flex flex-col w-full">
+          <td class="h-full w-full border-[1px] border-black flex items-start">
+            <select class="h-full w-full p-2">
+              <option [ngValue]="null" selected disabled>
+                Please Select
+              </option>
+              @for(c of curricula; track $index){
+                <option [ngValue]="c.cid">
+                  {{ c.program.programdesc + (c.specialization) ? ' specialization in ' + c.specialization : '' }}
+                </option>
+              }
+
+            </select>
+          </td>
+          <td class="h-full w-full border-[1px] border-black flex items-start">
+            <select class="h-full w-full p-2">
+              <option [ngValue]="null" selected disabled>
+                Please Select
+              </option>
+              @for(sy of schoolYears; track $index){
+                <option [ngValue]="sy.sy">
+                  {{ sy.sy_start }}
+                </option>
+              }
+
+            </select>
+          </td>
+          <td class="h-full w-full border-[1px] border-black flex items-start">
+            <select class="h-full w-full p-2">
+              <option [ngValue]="null" selected disabled>
+                Please Select
+              </option>
+              @for(sem of semesters; track $index){
+                <option [ngValue]="sem.semid">
+                  {{ sem.semdesc }}
+                </option>
+              }
+
+            </select>
+          </td>
+          <td class="h-full w-full border-[1px] border-black flex items-start">
+            <select class="h-full w-full p-2">
+              <option [ngValue]="null" selected disabled>
+                Please Select
+              </option>
+              <option value="1st Year">
+                1st Year
+              </option>
+              <option value="2nd Year">
+                2nd Year
+              </option>
+              <option value="3rd Year">
+                3rd Year
+              </option>
+              <option value="4th Year">
+                4th Year
+              </option>
+            </select>
+          </td>
+          <td class="h-full w-full border-[1px] border-black flex items-start">
+            <input class="w-full h-full p-2" placeholder="leave null if not applicable">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="w-full">
+    <table class="w-full table-auto flex flex-col bg-white">
+      <thead class="flex w-full bg-slate-300 rounded-t-md">
+        <tr class="flex flex-row w-full">
+          <th class="w-[16.67%] h-full border-[1px] border-black p-2 rounded-tl-md">
+            Course
+          </th>
+          <th class="w-[16.67%] h-full border-[1px] border-black p-2">
+            Descriptive Title
+          </th>
+          <th class="w-[16.67%] h-full border-[1px] border-black p-2">
+            Units
+          </th>
+          <th class="w-[16.67%] h-full border-[1px] border-black p-2">
+            Time
+          </th>
+          <th class="w-[16.67%] h-full border-[1px] border-black p-2">
+            Days
+          </th>
+          <th class="w-[16.67%] h-full border-[1px] border-black py-2 px-4 rounded-tr-md flex justify-center">
+            <button class="flex flex-row gap-1 items-center border-[1px] rounded-md transition-all p-2"
+              [disabled]="this.semSubjects.length >= 7"
+              [ngClass]="{'text-slate-400 border-green-300 bg-slate-50 cursor-default': this.semSubjects.length >= 7, 'border-green-600 bg-transparent hover:bg-green-600 text-green-600 hover:text-white' : this.semSubjects.length < 7}"
+              (click)="addSemSubject()">
+              <i class="material-symbols-outlined">
+                add
+              </i>
+              <span class="md:block hidden">
+                Add Subject
+              </span>
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="flex flex-col w-full h-[20rem] overflow-y-auto">
+        @for(s of semSubjects.controls; track $index){
+          <tr class="w-full flex flex-row h-[3.54rem]">
+            <td class="flex w-[16.67%] h-full border-[1px] border-black">
+              <select class="w-full h-full">
+                <option [ngValue]="null" selected disabled>
+                  Please Select
+                </option>
+              </select>
+            </td>
+            <td class="w-[16.67%] h-full border-[1px] border-black p-2">
+              Descriptive Title (NON SELECT)
+            </td>
+            <td class="w-[16.67%] h-full border-[1px] border-black p-2">
+              Units (NON SELECT)
+            </td>
+            <td class="w-[16.67%] h-full border-[1px] border-black">
+              <select class="w-full h-full">
+                <option [ngValue]="null" selected disabled>
+                  Please Select
+                </option>
+              </select>
+            </td>
+            <td class="w-[16.67%] h-full border-[1px] border-black">
+              <select class="w-full h-full">
+                <option [ngValue]="null" selected disabled>
+                  Please Select
+                </option>
+              </select>
+            </td>
+            <td class="w-[16.67%] h-full border-[1px] border-black p-2 flex items-center justify-center">
+              <button class="border-[1px] border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all p-2 flex justify-center items-center rounded-md"
+                (click)="popSemSubject($index)">
+                <i class="material-symbols-outlined">
+                  delete
+                </i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="flex h-[3rem] justify-end gap-2">
+    <a [routerLink]="'/consultation'" class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+      <i class="material-symbols-outlined">
+        close
+      </i>
+      <span class="hidden lg:block">
+        Discard
+      </span>
+    </a>
+    <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase" (click)="handleSubmit()">
+      <i class="material-symbols-outlined">add</i>
+      <span class="hidden lg:block">
+        Add Consultation
+      </span>
+    </button>
+  </div>
+</div>

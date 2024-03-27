@@ -1,0 +1,96 @@
+<div class="bg-slate-100 min-w-full h-full">
+  <!--This is for student-->
+  <div *appRolesToRender="['Student']" class="w-full h-full">
+
+  </div>
+  <!--this is for faculty/admin-->
+  <div *appRolesToRender="['Admin','Faculty']" class="w-full h-full flex flex-col gap-4">
+    <h1 class="font-bold font-sans text-2xl uppercase">Programs Consultation</h1>
+    <div class="mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
+      <span>Search For Programs</span>
+      <div class="relative w-full">
+        <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchConsultation" [ngModelOptions]="{standalone:true}">
+        <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
+          search
+        </i>
+      </div>
+    </div>
+  <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
+    <table class="table-auto w-full border-collapse border border-slate-300">
+      <thead class="bg-slate-300">
+        <tr class="flex flex-row py-2">
+          <th class="w-[16.67%] py-2">
+            Program Code
+          </th>
+          <th class="w-[16.67%] py-2">
+            Specialization
+          </th>
+          <th class="lg:w-[16.67%] py-2 flex-auto">
+            Year Level
+          </th>
+          <th class="lg:w-[16.67%] py-2 flex-auto">
+            Block
+          </th>
+          <th class="lg:w-[16.67%] py-2 flex-auto">
+            Semester
+          </th>
+          <th class="w-[16.67%] lg:flex-auto py-2 flex items-center justify-center">
+            <a
+               class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
+              [routerLink]="'/consultation/add-consultation'"
+            >
+              <i class="material-symbols-outlined">add</i>
+              <span class="lg:inline hidden">Add Consultation</span>
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
+        @for(c of consultations; track $index){
+          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
+            <td class="w-[16.67%] px-1 flex items-center justify-center">
+              <span>
+                {{ c?.curriculum.program.programcode }}
+              </span>
+            </td>
+            <td class="w-[16.67%] px-1 flex items-center justify-center">
+              <span>
+                {{ c?.curriculum.specialization ? c?.curriculum.specialization : "None" }}
+              </span>
+            </td>
+            <td class="lg:w-[16.67%] px-1 flex items-center justify-center">
+              <span>
+                {{ c?.year_level }}
+              </span>
+            </td>
+            <td class="lg:w-[16.67%] px-1 flex items-center justify-center">
+              <span>
+                {{ c?.block }}
+              </span>
+            </td>
+            <td class="lg:w-[16.67%] px-1 flex items-center justify-center">
+              <span>
+                {{ c?.semesters.semdesc }}
+              </span>
+            </td>
+            <td class="w-[16.67%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+              <a
+                 class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
+                [routerLink]="'/consultation/' + c?.coid">
+                <i class="material-symbols-outlined">
+                  visibility
+                </i>
+              </a>
+              <button
+                class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md">
+                <i class="material-symbols-outlined">
+                  delete
+                </i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

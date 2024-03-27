@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('consultation_subjects', function (Blueprint $table) {
             $table->unsignedBigInteger('coid');
             $table->unsignedBigInteger('subjectid');
+            //TODO: Convert to enum
+            $table->string('days');
+            //TODO: Convert to enum
+            $table->string('time');
 
             $table->foreign('coid')
                 ->references('coid')

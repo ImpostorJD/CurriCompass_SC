@@ -57,7 +57,7 @@ export class EditCourseComponent {
     subjecthourslec: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
     subjecthourslab: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
     semavailability: new FormControl(null, [Validators.required]),
-    completion: new FormControl(null, [Validators.min(0), Validators.max(1)]),
+    //completion: new FormControl(null, [Validators.min(0), Validators.max(1)]),
     year_level: new FormControl(null),
     subjects: this.fb.array([]),
   });
@@ -151,7 +151,7 @@ export class EditCourseComponent {
         next: (c:any) => {
           this.courseField.patchValue(c);
           this.courseField.controls['year_level'].setValue(c.pre_requisites.year_level);
-          this.courseField.controls['completion'].setValue(c.pre_requisites.completion);
+          //this.courseField.controls['completion'].setValue(c.pre_requisites.completion);
           this.courseField.controls['semavailability'].setValue(c.course_availability.semid);
           if (c.pre_requisites.pre_requisites_subjects.length > 0) {
             c.pre_requisites.pre_requisites_subjects.forEach((subject:any, i: number) => {

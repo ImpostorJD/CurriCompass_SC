@@ -52,7 +52,7 @@ export class CourseFormComponent {
     subjecthourslec: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
     subjecthourslab: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
     semavailability: new FormControl(null, [Validators.required]),
-    completion: new FormControl(null, [Validators.min(0), Validators.max(1)]),
+    //completion: new FormControl(null, [Validators.min(0), Validators.max(1)]),
     year_level: new FormControl(null),
     subjects: this.fb.array([]),
   });

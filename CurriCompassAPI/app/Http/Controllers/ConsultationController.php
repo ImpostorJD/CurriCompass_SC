@@ -21,9 +21,14 @@ class ConsultationController extends Controller
         return response()->json([
             ['status' => 'success'],
             Consultation::with('school_year')
-                ->with('curriculum')
+                ->with(['curriculum' => function($query){
+                    $query->with('program');
+                    $query->orderBy('programid', 'DESC');
+                }])
                 ->with('semesters')
-                ->with('student_record')
+                ->where('srid', null)
+                ->orderBy('year_level', 'ASC')
+                ->orderBy('semid', 'DESC')
                 ->get(),
         ], 200);
     }
@@ -36,8 +41,11 @@ class ConsultationController extends Controller
             'semid' => ['required', 'integer'],
             'srid' => ['nullable', 'integer'],
             'year_level' => ['required', 'string'],
+            'section' => ['nullable', 'string'],
             'subjects' => ['required', 'array'],
             'subjects*.subjectid' => ['required', 'integer'],
+            'subjects*.days' => ['required', 'string'],
+            'subjects*.time' => ['required', 'string'],
         ]);
 
         if ($validators->fails()){
@@ -53,6 +61,7 @@ class ConsultationController extends Controller
                 ->where('srid', $request->srid)
                 ->where('semid', $request->semid)
                 ->where('year_level', $request->year_level)
+                ->where('section', $request->section)
                 ->first()
         ){
             return response()->json([
@@ -73,6 +82,8 @@ class ConsultationController extends Controller
             ConsultationSubjects::create([
                 'coid' => $consultation->coid,
                 'subjectid' => $subject['subjectid'],
+                'days' => $subject['days'],
+                'time' => $subject['time'],
             ]);
         }
 
@@ -85,7 +96,9 @@ class ConsultationController extends Controller
     public function show(string $id)
     {
         $res = Consultation::where('coid', $id)
-            ->with('curriculum')
+            ->with(['curriculum' => function($query){
+                $query->with('program');
+            }])
             ->with('semesters')
             ->with('student_record')
             ->with(['consultation_subjects' => function($query){
@@ -113,8 +126,11 @@ class ConsultationController extends Controller
             'semid' => ['required', 'integer'],
             'srid' => ['nullable', 'integer'],
             'year_level' => ['required', 'string'],
+            'section' => ['nullable', 'string'],
             'subjects' => ['required', 'array'],
             'subjects*.subjectid' => ['required', 'integer'],
+            'subjects*.days' => ['required', 'string'],
+            'subjects*.time' => ['required', 'string'],
         ]);
 
         if ($validators->fails()){
@@ -136,6 +152,7 @@ class ConsultationController extends Controller
                 ->where('cid', $request->cid)
                 ->where('srid', $request->srid)
                 ->where('semid', $request->semid)
+                ->where('section', $request->section)
                 ->where('year_level', $request->year_level)
                 ->first();
 
@@ -143,6 +160,7 @@ class ConsultationController extends Controller
                 (
                     $res->cid != $request->cid &&
                     $res->srid != $request->srid &&
+                    $res->section != $request->section &&
                     $res->semid != $request->semid &&
                     $res->year_level != $request->year_level
                 )
@@ -157,17 +175,19 @@ class ConsultationController extends Controller
                 'sy' => $request->sy,
                 'cid' => $request->cid,
                 'semid' => $request->semid,
+                'section' => $request->section,
                 'year_level' => $request->year_level,
                 'srid' => $request->srid
             ]);
 
             $res->consultation_subjects()->delete();
 
-
             foreach($request->subjects as $subject){
                 ConsultationSubjects::create([
                     'coid' => $res->coid,
                     'subjectid' => $subject['subjectid'],
+                    'days' => $subject['days'],
+                    'time' => $subject['time'],
                 ]);
             }
 

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id('prid');
             $table->unsignedBigInteger('subjectid')->unique();
             $table->enum('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year'])->nullable();
-            $table->double('completion')->nullable();
+            //$table->double('completion')->nullable();
             $table->foreign('subjectid')
-            ->references('subjectid')
-            ->on('subjects')
-            ->onDelete('cascade');
+                ->references('subjectid')
+                ->on('subjects')
+                ->onDelete('cascade');
 
         });
     }

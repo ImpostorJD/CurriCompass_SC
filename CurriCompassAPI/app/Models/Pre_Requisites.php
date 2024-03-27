@@ -15,7 +15,6 @@ class Pre_Requisites extends Model
     protected $fillable = [
         'subjectid',
         'year_level',
-        'completion',
     ];
 
     public function subjects(){

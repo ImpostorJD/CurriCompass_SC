@@ -14,7 +14,9 @@ class ConsultationSubjects extends Model
     public $incrementing = false;
     protected $fillable = [
         'coid',
-        'subjectid'
+        'subjectid',
+        'days',
+        'time'
     ];
     protected function setKeysForSaveQuery($query)
     {

@@ -31,25 +31,30 @@ export class CourseAvailabilityComponent {
   searchCourse:string = '';
 
   updateCourseAvailability(subjectid:number, event: any) {
+    console.log(event.target.value);
     this.req.patchResource('course-availability/' + subjectid, {
-      "semavailability" : event.target.value,
+      "semavailability" : parseInt(event.target.value),
     },
     httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
-        this.courses.find((course:any) => course.subjectid === subjectid).semid = parseInt(event.target.value);
+        this.getCourseAvailability();
       },
 
       error: err => console.error(err),
     })
   }
 
-  ngOnInit() {
+  getCourseAvailability(){
     this.req.getResource('course-availability', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
         this.courses = res[1];
       },
       error: err => console.error(err),
     });
+  }
+
+  ngOnInit() {
+    this.getCourseAvailability();
 
     this.req.getResource('semesters', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {

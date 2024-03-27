@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cid');
             $table->enum('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year']);
             $table->unsignedBigInteger('srid')->nullable();
+            $table->string('section')->nullable();
 
             $table->foreign('semid')
                 ->references('semid')
@@ -39,7 +40,7 @@ return new class extends Migration
                 ->on('student_records')
                 ->onDelete('restrict');
 
-            $table->unique(['sy', 'cid', 'semid','srid']);
+            $table->unique(['sy', 'cid', 'semid','srid', 'section']);
         });
     }
 

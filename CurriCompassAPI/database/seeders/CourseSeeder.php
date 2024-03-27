@@ -50,13 +50,13 @@ class CourseSeeder extends Seeder
             [
                 'subjectid' => 1,
                 'year_level' => null,
-                'completion' => null
+                //'completion' => null
             ],
 
             [
                 'subjectid' => 2,
                 'year_level' => null,
-                'completion' => null
+                //'completion' => null
             ],
         ]);
 

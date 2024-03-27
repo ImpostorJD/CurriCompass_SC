@@ -14,11 +14,6 @@ class SchoolYear extends Model
         'sy_end',
     ];
 
-    public function equals(SchoolYear $other)
-    {
-        return $this->sy_start === $other->sy_start && $this->sy_end === $other->sy_end;
-    }
-
     public function consultations(){
         return $this->hasMany(Consultation::class, 'semid', 'semid');
     }

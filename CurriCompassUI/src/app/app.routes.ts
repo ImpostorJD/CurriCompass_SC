@@ -33,6 +33,9 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 import { AnonGuard } from './services/auth/anon-access.guard';
 import { AuthGuard } from './services/auth/auth-access.guard';
+import { ConsultationPageComponent } from './pages/consultation/consultation-page/consultation-page.component';
+import { AddConsultationComponent } from './pages/consultation/add-consultation/add-consultation.component';
+import { EditConsultationComponent } from './pages/consultation/edit-consultation/edit-consultation.component';
 
 export const routes: Routes = [
 
@@ -40,6 +43,10 @@ export const routes: Routes = [
       component: BaselayoutComponent,
       canActivate:[AuthGuard([])],
       children: [
+        {
+          path: '', redirectTo: 'consultation', pathMatch:'full'
+        },
+
         {
           path : 'profile',
           component: ProfilePageComponent
@@ -104,9 +111,29 @@ export const routes: Routes = [
           canActivate: [AuthGuard(['Admin', 'Faculty'])],
           children: [
             { path: '', component: CourseAvailabilityComponent },
-
-            ]
+          ]
         },
+
+        {
+          path: "consultation",
+          children: [
+            {
+              path: '',
+              canActivate: [AuthGuard(['Admin', 'Faculty', 'Student'])],
+              component: ConsultationPageComponent
+            },
+            {
+              path: 'add-consultation',
+              canActivate: [AuthGuard(['Admin', 'Faculty'])],
+              component: AddConsultationComponent
+            },
+            {
+              path: ':id',
+              canActivate: [AuthGuard(['Admin', 'Faculty'])],
+              component: EditConsultationComponent
+            },
+          ]
+        }
       ]
     },
 
@@ -115,6 +142,7 @@ export const routes: Routes = [
       component: LoginUiComponent,
       canActivate: [AnonGuard]
     },
+
     {
       path: "**", component: ErrorPageComponent
     }

@@ -30,13 +30,22 @@ export class NavigationComponent {
   initialCheckDone: boolean = false;
 
   readonly buttons: Array<NavigationItems> = [
+    /**Commented out for the sake of demonstration for cap 1: Should I not develop this on time. */
+    // {
+    //   name : "Dashboard",
+    //   allowedRoles: ['Admin', 'Faculty', 'Student'],
+    //   icon_type: "material-symbols-outlined",
+    //   icon: "dashboard",
+    //   path: "/",
+    //   hoverGroup: 'dashboard',
+    // },
     {
-      name : "Dashboard",
-      allowedRoles: ['Admin', 'Faculty', 'Student'],
+      name : "Consulatation",
+      allowedRoles: ['Admin','Faculty','Student'],
       icon_type: "material-symbols-outlined",
-      icon: "dashboard",
-      path: "/",
-      hoverGroup: 'dashboard',
+      icon: "explore",
+      path: "/consultation",
+      hoverGroup: 'consultation',
     },
     {
       name : "Profile",
@@ -93,14 +102,6 @@ export class NavigationComponent {
       icon: "event_note",
       path: "/school-calendar",
       hoverGroup: 'school_calendar',
-    },
-    {
-      name : "Consulatation",
-      allowedRoles: ['Student'],
-      icon_type: "material-symbols-outlined",
-      icon: "explore",
-      path: "/consulatation",
-      hoverGroup: 'consultation',
     },
     {
       name : "Course Availability",

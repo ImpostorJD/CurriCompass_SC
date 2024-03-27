@@ -16,7 +16,8 @@ class Consultation extends Model
         'cid',
         'semid',
         'year_level',
-        'srid'
+        'srid',
+        'section'
     ];
 
     public function enilstment(){
