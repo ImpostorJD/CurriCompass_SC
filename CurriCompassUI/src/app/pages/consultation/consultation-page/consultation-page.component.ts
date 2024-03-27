@@ -28,6 +28,26 @@ export class ConsultationPageComponent {
   searchConsultation:string = '';
   consultations: any = null;
 
+  deleteConsultation(index:number) {
+    this.req.deleteResource('consultation' + index, httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: () => {
+        this.getConsultations();
+      },
+
+      error: err => console.error(err),
+    })
+  }
+
+  getConsultations(){
+    this.req.getResource('consultation', httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (res:any) => {
+        this.consultations = res[1];
+      },
+
+      error: err => console.error(err),
+    })
+  }
+
   async ngOnInit() {
     const user = await this.auth.getUser();
 
@@ -37,13 +57,7 @@ export class ConsultationPageComponent {
       }
     }
 
-    this.req.getResource('consultation', httpOptions(this.auth.getCookie('user'))).subscribe({
-      next: (res:any) => {
-        this.consultations = res[1];
-      },
-
-      error: err => console.error(err),
-    })
+    this.getConsultations();
 
   }
 }

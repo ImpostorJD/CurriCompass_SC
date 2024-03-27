@@ -32,8 +32,10 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
           router.navigateByUrl('/login');
 
         } else if (error.status === 404) {
-          return next(req);
-
+          if(router.url == "login") {
+            return next(req);
+          }
+          router.navigateByUrl('/error/not-found');
         } else if (error.status === 403) {
           if(router.url == "login") {
             return next(req);
