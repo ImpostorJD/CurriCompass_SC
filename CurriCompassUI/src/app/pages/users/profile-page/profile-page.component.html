@@ -113,13 +113,13 @@
                   {{ cs.semesters.semdesc }}
                 </td>
                 <td class="border border-slate-600 w-[20%] flex items-center justify-center">
-                  {{ formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_start) + " - " + formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_end) }}
+                  {{ user.student_record.subjects_taken.length != 0 ? formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_start) + " - " + formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_end): 'not yet taken' }}
                 </td>
                 <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                  {{ getSubjectTakenItem(cs.subjects.subjectid).taken_at }}
+                  {{ user.student_record.subjects_taken.length != 0 ? getSubjectTakenItem(cs.subjects.subjectid).taken_at : 'not yet taken' }}
                 </td>
                 <td class="border border-slate-600 w-[20%] flex items-center justify-center relative group/remark">
-                  {{ getSubjectTakenItem(cs.subjects.subjectid).remark }}
+                  {{ user.student_record.subjects_taken.length != 0 ? getSubjectTakenItem(cs.subjects.subjectid).remark : "none" }}
                 </td>
               </tr>
             }

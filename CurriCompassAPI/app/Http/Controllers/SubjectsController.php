@@ -196,7 +196,8 @@ class SubjectsController extends Controller
     public function course_availability(Request $request){
         return response()->json([
             ['status' => 'success'],
-            CourseAvailability::with('subjects')
+            CourseAvailability::where('semid', $request->semid)
+                ->with('subjects')
                 ->orderBy('semid', 'ASC')
                 ->get(),
             ], 200);

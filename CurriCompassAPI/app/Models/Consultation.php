@@ -10,6 +10,7 @@ class Consultation extends Model
     use HasFactory;
 
     protected $primaryKey = 'coid';
+    public $timestamps = false;
 
     protected $fillable = [
         'sy',

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Consultation;
 use App\Models\ConsultationSubjects;
 use Illuminate\Http\Request;
-use Nette\Utils\Validators;
+use Illuminate\Support\Facades\Validator;
 
 //TODO: Add documentation
 class ConsultationController extends Controller
@@ -35,7 +35,7 @@ class ConsultationController extends Controller
 
     public function store(Request $request)
     {
-        $validators = Validators::make($request->all(), [
+        $validators = Validator::make($request->all(), [
             'sy' => ['required', 'integer'],
             'cid' => ['required', 'integer'],
             'semid' => ['required', 'integer'],
@@ -120,7 +120,7 @@ class ConsultationController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $validators = Validators::make($request->all(), [
+        $validators = Validator::make($request->all(), [
             'sy' => ['required', 'integer'],
             'cid' => ['required', 'integer'],
             'semid' => ['required', 'integer'],

@@ -1,7 +1,88 @@
 <div class="bg-slate-100 min-w-full h-full">
   <!--This is for student-->
-  <div *appRolesToRender="['Student']" class="w-full h-full">
+  <div *appRolesToRender="['Student']" class="w-full h-full p-4 flex flex-col gap-2">
+   <span class="text-[2rem] font-bold">
+    Course Enlistment
+   </span>
+    @if(!disabledButton){
+      <button class="w-full px-4 py-2 border-green-600 border-[1px] text-green-600 hover:text-white hover:bg-green-600 rounded-md" (click)="updateEnlistment()">
+        Get Recent Enlistment
+      </button>
+    }
+    @for(e of studentRecords?.enlistment; track $index){
+      <div class="flex flex-col bg-white">
+        <div class="flex flex-row">
+          <span class="font-bold w-[15rem] p-2 border-[1px] border-black">
+            Curriculum:
+          </span>
+          <span class="flex-auto p-2 border-[1px] border-black">
+            {{ studentRecords.curriculum.program.programdesc + " Specialization in " + studentRecords.curriculum.specialization }}
+          </span>
+        </div>
+        <div class="flex flex-row">
+          <span class="font-bold w-[15rem] p-2 border-[1px] border-black">
+            School Year:
+          </span>
+          <span class="flex-auto p-2 border-[1px] border-black">
+            {{ dateformat.formatToYear(e.consultation.school_year.sy_start)  + " - " + dateformat.formatToYear(e.consultation.school_year.sy_end) }}
+          </span>
+        </div>
+        <div class="flex flex-row">
+          <span class="font-bold w-[15rem] p-2 border-[1px] border-black">
+            Semester:
+          </span>
+          <span class="flex-auto p-2 border-[1px] border-black">
+            {{ e.consultation.semesters.semdesc }}
+          </span>
+        </div>
 
+      </div>
+      <div class="w-full">
+        <table class="w-full table-auto flex flex-col bg-white">
+          <thead class="flex w-full bg-slate-300 rounded-t-md">
+            <tr class="flex flex-row w-full">
+              <th class="w-[20%] h-full border-[1px] border-black p-2 rounded-tl-md">
+                Course
+              </th>
+              <th class="w-[20%] h-full border-[1px] border-black p-2">
+                Descriptive Title
+              </th>
+              <th class="w-[20%] h-full border-[1px] border-black p-2">
+                Units
+              </th>
+              <th class="w-[20%] h-full border-[1px] border-black p-2">
+                Time
+              </th>
+              <th class="w-[20%] h-full border-[1px] border-black p-2 rounded-tr-md">
+                Days
+              </th>
+            </tr>
+          </thead>
+          <tbody class="flex flex-col w-full">
+            @for(s of e.consultation.consultation_subjects; track $index){
+              <tr class="w-full flex flex-row h-[3.54rem]">
+                <td class="flex w-[20%] h-full border-[1px] border-black relative group">
+                 {{ s.subjects.subjectcode }}
+                </td>
+                <td class="w-[20%] h-full border-[1px] border-black p-2">
+                  {{ s.subjects.subjectname }}
+                </td>
+                <td class="w-[20%] h-full border-[1px] border-black p-2">
+                  {{ s.subjects.subjectcredits }}
+                </td>
+                <td class="w-[20%] h-full border-[1px] border-black relative group">
+                  {{ s.time }}
+                </td>
+                <td class="w-[20%] h-full border-[1px] border-black relative group">
+                {{ s.days }}
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   </div>
   <!--this is for faculty/admin-->
   <div *appRolesToRender="['Admin','Faculty']" class="w-full h-full flex flex-col gap-4">
@@ -58,17 +139,17 @@
                 {{ c?.curriculum.specialization ? c?.curriculum.specialization : "None" }}
               </span>
             </td>
-            <td class="lg:w-[16.67%] px-1 flex items-center justify-center">
-              <span>
+            <td class="w-[16.67%] px-1 flex items-center justify-center">
+              <span>.
                 {{ c?.year_level }}
               </span>
             </td>
-            <td class="lg:w-[16.67%] px-1 flex items-center justify-center">
+            <td class="w-[16.67%] px-1 flex items-center justify-center">
               <span>
                 {{ c?.block }}
               </span>
             </td>
-            <td class="lg:w-[16.67%] px-1 flex items-center justify-center">
+            <td class="w-[16.67%] px-1 flex items-center justify-center">
               <span>
                 {{ c?.semesters.semdesc }}
               </span>

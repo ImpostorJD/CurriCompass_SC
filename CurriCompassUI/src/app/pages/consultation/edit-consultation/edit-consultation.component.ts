@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { CoursesServiceService } from '../../../services/courses-service.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
+import { FormatDateService } from '../../../services/format/format-date.service';
 
 @Component({
   selector: 'app-edit-consultation',
@@ -31,7 +32,8 @@ export class EditConsultationComponent {
     private fb: FormBuilder,
     private fac: FormArrayControlUtilsService,
     public coursePipe: CourseFilterPipe,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public dateformat: FormatDateService,
   ){}
 
   private routerId: number = null!;
@@ -55,7 +57,7 @@ export class EditConsultationComponent {
     semid: new FormControl(null, [Validators.required]),
     year_level: new FormControl(null, [Validators.required]),
     section: new FormControl(null),
-    semSubjects: this.fb.array([]),
+    subjects: this.fb.array([]),
   });
 
   addSemSubject(){
@@ -80,12 +82,9 @@ export class EditConsultationComponent {
   }
 
   courseSelected(index: number, event: any) {
-
-    const courseid = event.target.value;
+    const courseid = this.getReqCourseControl(index).value
     this.selectedCourses[index] = parseInt(courseid);
-
     const selectedCourse = this.courses.find((c:any) => c.subjectid === parseInt(courseid));
-
     this.getUnitsControl(index).setValue(selectedCourse.subjectcredits);
     this.getDescriptionControl(index).setValue(selectedCourse.subjectname);
 
@@ -119,7 +118,7 @@ export class EditConsultationComponent {
 
 
   get semSubjects(): FormArray{
-    return this.semConsultation.get('semSubjects') as FormArray;
+    return this.semConsultation.get('subjects') as FormArray;
   }
 
   isSelectedCourseFiltered(index: number): boolean {
@@ -132,6 +131,32 @@ export class EditConsultationComponent {
 
   }
 
+  getCoursesAvailable(){
+    if(!this.semConsultation.get('cid')?.value){
+      return;
+    }
+    if(!this.semConsultation.get('semid')?.value){
+      return;
+    }
+    if(!this.semConsultation.get('year_level')?.value){
+      return;
+    }
+
+    this.req.postResource('course-availability', this.semConsultation.value, httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (res:any)=> {
+        this.courses = [];
+        this.fac.clearControls(this.semSubjects);
+        this.selectedCourses = [];
+        this.currentUnits = 0;
+        res[1].forEach((e:any) => {
+          this.courses.push(e.subjects);
+        });
+      },
+
+      error: error => console.log(error),
+    });
+  }
+
   getSelectedCourse(i: number | string) {
     if (typeof i == "string"){
       i = parseInt(i);
@@ -140,14 +165,13 @@ export class EditConsultationComponent {
   }
 
   handleSubmit(){
-    console.log("Submit works");
 
     if(this.semConsultation.status === "INVALID"){
       markFormGroupAsDirtyAndInvalid(this.semConsultation);
       return;
     }
 
-    this.req.postResource('consultation', this.semConsultation.value, httpOptions(this.auth.getCookie('user'))).subscribe({
+    this.req.postResource('consultation/'+ this.routerId, {}, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.router.navigateByUrl('/consultation');
       },
@@ -158,11 +182,6 @@ export class EditConsultationComponent {
       }
     })
   }
-
-  applyToAllRegular(){
-    //TODO: Add regular student enlistment
-  }
-
   ngOnInit(){
 
     this.req.getResource('curriculum', httpOptions(this.auth.getCookie('user'))).subscribe({
@@ -186,13 +205,6 @@ export class EditConsultationComponent {
       error: (err:any) => console.log(err),
      });
 
-    this.courseService.getCourses().subscribe({
-      next: (res: any) => {
-        this.courses = res;
-      },
-      error: err => console.error(err),
-    });
-
     this.activatedRoute.params.subscribe(params => {
       this.routerId = params['id'];
 
@@ -201,7 +213,18 @@ export class EditConsultationComponent {
           next: (res: any) => {
             const data = res[1];
             this.semConsultation.patchValue(data);
+            this.req.postResource('course-availability', this.semConsultation.value, httpOptions(this.auth.getCookie('user'))).subscribe({
+              next: (res:any) => {
+                this.courses = [];
+                this.selectedCourses = [];
+                this.currentUnits = 0;
+                res[1].forEach((e:any) => {
+                  this.courses.push(e.subjects);
+                });
+              },
 
+              error: error => console.log(error),
+            });
             if(data.consultation_subjects.length > 0) {
               data.consultation_subjects.forEach((e:any, index:number) => {
                 const subjectField = this.fb.group({

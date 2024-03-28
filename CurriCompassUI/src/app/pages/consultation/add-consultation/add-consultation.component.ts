@@ -8,6 +8,7 @@ import { FormArrayControlUtilsService } from '../../../services/form-array-contr
 import { CoursesServiceService } from '../../../services/courses-service.service';
 import { CourseFilterPipe } from '../../../services/filter/search-filters/course-pipe.pipe';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
+import { FormatDateService } from '../../../services/format/format-date.service';
 
 @Component({
   selector: 'app-add-consultation',
@@ -31,7 +32,8 @@ export class AddConsultationComponent {
     private router: Router,
     private fb: FormBuilder,
     private fac: FormArrayControlUtilsService,
-    public coursePipe: CourseFilterPipe
+    public coursePipe: CourseFilterPipe,
+    public dateformat: FormatDateService,
   ){}
 
   private auth: AuthService = inject(AuthService);
@@ -53,7 +55,7 @@ export class AddConsultationComponent {
     semid: new FormControl(null, [Validators.required]),
     year_level: new FormControl(null, [Validators.required]),
     section: new FormControl(null),
-    semSubjects: this.fb.array([]),
+    subjects: this.fb.array([]),
   });
 
   addSemSubject(){
@@ -78,12 +80,9 @@ export class AddConsultationComponent {
   }
 
   courseSelected(index: number, event: any) {
-
-    const courseid = event.target.value;
+    const courseid = this.getReqCourseControl(index).value
     this.selectedCourses[index] = parseInt(courseid);
-
     const selectedCourse = this.courses.find((c:any) => c.subjectid === parseInt(courseid));
-
     this.getUnitsControl(index).setValue(selectedCourse.subjectcredits);
     this.getDescriptionControl(index).setValue(selectedCourse.subjectname);
 
@@ -117,7 +116,7 @@ export class AddConsultationComponent {
 
 
   get semSubjects(): FormArray{
-    return this.semConsultation.get('semSubjects') as FormArray;
+    return this.semConsultation.get('subjects') as FormArray;
   }
 
   isSelectedCourseFiltered(index: number): boolean {
@@ -130,6 +129,32 @@ export class AddConsultationComponent {
 
   }
 
+  getCoursesAvailable(){
+    if(!this.semConsultation.get('cid')?.value){
+      return;
+    }
+    if(!this.semConsultation.get('semid')?.value){
+      return;
+    }
+    if(!this.semConsultation.get('year_level')?.value){
+      return;
+    }
+
+    this.req.postResource('course-availability', this.semConsultation.value, httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (res:any)=> {
+        this.courses = [];
+        this.fac.clearControls(this.semSubjects);
+        this.selectedCourses = [];
+        this.currentUnits = 0;
+        res[1].forEach((e:any) => {
+          this.courses.push(e.subjects);
+        });
+      },
+
+      error: error => console.log(error),
+    });
+  }
+
   getSelectedCourse(i: number | string) {
     if (typeof i == "string"){
       i = parseInt(i);
@@ -138,7 +163,6 @@ export class AddConsultationComponent {
   }
 
   handleSubmit(){
-    console.log("Submit works");
 
     if(this.semConsultation.status === "INVALID"){
       markFormGroupAsDirtyAndInvalid(this.semConsultation);
@@ -178,13 +202,6 @@ export class AddConsultationComponent {
       },
       error: (err:any) => console.log(err),
      });
-
-    this.courseService.getCourses().subscribe({
-      next: (res: any) => {
-        this.courses = res;
-      },
-      error: err => console.error(err),
-    })
   }
 
 }

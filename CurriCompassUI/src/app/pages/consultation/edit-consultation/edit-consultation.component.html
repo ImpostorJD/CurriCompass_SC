@@ -24,13 +24,15 @@
       <tbody class="flex w-full">
         <tr class="flex flex-col w-full">
           <td class="h-[3rem] w-full border-[1px] border-black flex items-start relative group/cid">
-            <select class="h-full w-full p-2" formControlName="cid" [ngClass]="{'border-red-600 border-[1px]': semConsultation.get('cid')?.invalid }">
+            <select class="h-full w-full p-2"
+              (change)="getCoursesAvailable()"
+              formControlName="cid" [ngClass]="{'border-red-600 border-[1px]': semConsultation.get('cid')?.invalid }">
               <option [ngValue]="null" selected disabled>
                 Please Select
               </option>
               @for(c of curricula; track $index){
                 <option [ngValue]="c.cid">
-                  {{ c.program.programdesc + (c.specialization) ? ' specialization in ' + c.specialization : '' }}
+                  {{ c.program.programdesc + ((c.specialization) ? ' specialization in ' + c.specialization : '' )}}
                 </option>
               }
             </select>
@@ -48,13 +50,16 @@
             }
           </td>
           <td class="h-[3rem] w-full border-[1px] border-black flex items-start relative group/sy">
-            <select class="h-full w-full p-2" formControlName="sy" [ngClass]="{'border-red-600 border-[1px]': semConsultation.get('sy')?.invalid }">
+            <select class="h-full w-full p-2"
+              (change)="getCoursesAvailable()"
+              formControlName="sy"
+              [ngClass]="{'border-red-600 border-[1px]': semConsultation.get('sy')?.invalid }">
               <option [ngValue]="null" selected disabled>
                 Please Select
               </option>
               @for(sy of schoolYears; track $index){
                 <option [ngValue]="sy.sy">
-                  {{ sy.sy_start }}
+                  {{ dateformat.formatToYear(sy.sy_start)  + " - " + dateformat.formatToYear(sy.sy_end) }}
                 </option>
               }
             </select>
@@ -70,7 +75,11 @@
             }
           </td>
           <td class="h-[3rem] w-full border-[1px] border-black flex items-start relative group/semid">
-            <select class="h-full w-full p-2" formControlName="semid" [ngClass]="{'border-red-600 border-[1px]': semConsultation.get('semid')?.invalid }">
+            <select
+              (change)="getCoursesAvailable()"
+              class="h-full w-full p-2"
+              formControlName="semid"
+              [ngClass]="{'border-red-600 border-[1px]': semConsultation.get('semid')?.invalid }">
               <option [ngValue]="null" selected disabled>
                 Please Select
               </option>
@@ -92,7 +101,9 @@
             }
           </td>
           <td class="h-[3rem] w-full border-[1px] border-black flex items-start group/year_level relative">
-            <select class="h-full w-full p-2" formControlName="year_level" [ngClass]="{'border-red-600 border-[1px]': semConsultation.get('year_level')?.invalid }">
+            <select
+              (change)="getCoursesAvailable()"
+              class="h-full w-full p-2" formControlName="year_level" [ngClass]="{'border-red-600 border-[1px]': semConsultation.get('year_level')?.invalid }">
               <option [ngValue]="null" selected disabled>
                 Please Select
               </option>
@@ -157,13 +168,13 @@
           </th>
           <th class="w-[16.67%] h-full border-[1px] border-black py-2 px-4 rounded-tr-md flex justify-center">
             <button class="flex flex-row gap-1 items-center border-[1px] rounded-md transition-all p-2"
-              [disabled]="this.semSubjects.length >= 7"
-              [ngClass]="{'text-slate-400 border-green-300 bg-slate-50 cursor-default': this.semSubjects.length >= 7, 'border-green-600 bg-transparent hover:bg-green-600 text-green-600 hover:text-white' : this.semSubjects.length < 7}"
+              [disabled]="this.semSubjects.length >= 7 || this.semConsultation.get('semid')?.value == null || this.semConsultation.get('year_level')?.value == null || this.semConsultation.get('cid')?.value == null"
+              [ngClass]="{'text-slate-400 border-green-300 bg-slate-50 cursor-default': this.semSubjects.length >= 7 || this.semConsultation.get('semid')?.value == null || this.semConsultation.get('year_level')?.value == null || this.semConsultation.get('cid')?.value == null, 'border-green-600 bg-transparent hover:bg-green-600 text-green-600 hover:text-white' : this.semSubjects.length < 7 && this.semConsultation.get('semid')?.value != null && this.semConsultation.get('year_level')?.value != null && this.semConsultation.get('cid')?.value != null}"
               (click)="addSemSubject()">
               <i class="material-symbols-outlined">
                 add
               </i>
-              <span class="md:block hidden">
+              <span class="lg:block hidden">
                 Add Subject
               </span>
             </button>
@@ -296,12 +307,7 @@
         Discard
       </span>
     </a>
-    <button (click)="applyToAllRegular()"  class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center hover:bg-green-600 text-green-600 border-[1px] rounded-md hover:text-white border-green-600 transition-all uppercase">
-      <i class="material-symbols-outlined">school</i>
-      <span class="hidden lg:block">
-        Apply to Regular Students
-      </span>
-    </button>
+
     <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase" (click)="handleSubmit()">
       <i class="material-symbols-outlined">edit</i>
       <span class="hidden lg:block">

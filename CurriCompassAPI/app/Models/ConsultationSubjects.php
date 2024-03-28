@@ -28,7 +28,7 @@ class ConsultationSubjects extends Model
     }
 
     public function subjects(){
-        return $this->belongsTo(Subjects::class, 'subjectid', 'subjecid');
+        return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
     }
 
     public function consultation(){
