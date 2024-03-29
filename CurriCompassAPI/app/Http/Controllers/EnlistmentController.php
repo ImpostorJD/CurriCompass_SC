@@ -56,7 +56,7 @@ class EnlistmentController extends Controller
                     ->where('cid', $student->cid)
                     ->where('year_level', $student->year_level)
                     ->where('semid', $consultationLatest)
-                    ->orderBy('semid', 'DESC')
+                    ->orderBy(1, 'DESC')
                     ->get();
 
                 //filters students volume exceeding from 45 to the next block
