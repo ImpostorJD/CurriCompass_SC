@@ -33,7 +33,7 @@ export class CoursesListComponent {
 
   getCourses(){
     this.courseService.getCourses().subscribe((c:any) => {
-      this.courses = c;
+      this.courses = c.sort((a:any, b:any) => a.subjectcode.localeCompare(b.subjectcode));
     });
   }
 

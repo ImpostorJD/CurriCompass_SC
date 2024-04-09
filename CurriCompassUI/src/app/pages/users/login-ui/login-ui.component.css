@@ -12,7 +12,7 @@
   }
 
   .idle ~ label{
-    @apply absolute z-20 text-green-700 -bottom-4 text-2xl left-1 h-full transition-all;
+    @apply absolute z-20 text-green-800 -bottom-4 text-2xl left-1 h-full transition-all;
   }
 
   .idle:focus ~ label{

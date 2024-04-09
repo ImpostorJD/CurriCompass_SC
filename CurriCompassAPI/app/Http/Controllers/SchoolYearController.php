@@ -51,8 +51,11 @@ class SchoolYearController extends Controller
             ], 400);
         }
 
-        $existing = SchoolYear::where('sy_end', $request->sy_end)
-            ->where('sy_start', $request->sy_start)
+        // $existing = SchoolYear::where('sy_end', $request->sy_end)
+        //     ->where('sy_start', $request->sy_start)
+        //     ->first();
+        $existing = SchoolYear::whereYear('sy_end', '=', date('Y', strtotime($request->sy_end)))
+            ->whereYear('sy_start', '=', date('Y', strtotime($request->sy_start)))
             ->first();
 
         if($existing){

@@ -42,7 +42,7 @@
             <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
               <select class="w-full h-full border-0 p-2" (change)="updateCourseAvailability(course.subjectid, $event)">
                 @for(sem of semesters; track $index){
-                  <option [value]="sem.semid" [selected]="course.semid == sem.semid">
+                  <option [ngValue]="sem.semid" [selected]="course.semid == sem.semid">
                     {{sem.semdesc}}
                   </option>
                 }

@@ -31,13 +31,22 @@ export class CourseAvailabilityComponent {
   searchCourse:string = '';
 
   updateCourseAvailability(subjectid:number, event: any) {
-    console.log(event.target.value);
     this.req.patchResource('course-availability/' + subjectid, {
       "semavailability" : parseInt(event.target.value),
     },
     httpOptions(this.auth.getCookie('user'))).subscribe({
-      next: () => {
-        this.getCourseAvailability();
+      next: (e: any) => {
+
+        (this.courses.find((i:any) => i.subjectid === e[1].subjectid)).semid = e[1].semid;
+        // this.getCourseAvailability();
+        this.courses.sort((a:any,b:any) => {
+          if (a.semid !== b.semid) {
+            return a.semid - b.semid;
+          } else {
+            return a.subjects.subjectcode.localeCompare(b.subjects.subjectcode);
+          }
+        })
+
       },
 
       error: err => console.error(err),
@@ -45,9 +54,15 @@ export class CourseAvailabilityComponent {
   }
 
   getCourseAvailability(){
-    this.req.getResource('course-availability', httpOptions(this.auth.getCookie('user'))).subscribe({
+    this.req.postResource('course-availability', {}, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
-        this.courses = res[1];
+        this.courses = res[1].sort((a:any,b:any) => {
+          if (a.semid !== b.semid) {
+            return a.semid - b.semid;
+          } else {
+            return a.subjects.subjectcode.localeCompare(b.subjects.subjectcode);
+          }
+        });
       },
       error: err => console.error(err),
     });

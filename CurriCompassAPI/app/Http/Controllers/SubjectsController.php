@@ -194,16 +194,26 @@ class SubjectsController extends Controller
     }
 
     public function course_availability(Request $request){
-        return response()->json([
-            ['status' => 'success'],
-            CourseAvailability::where('semid', $request->semid)
+        $course = null;
+        if ($request->semid != null){
+            $course = CourseAvailability::where('semid', $request->semid)
                 ->with('subjects')
                 ->orderBy('semid', 'ASC')
-                ->get(),
+                ->get();
+        }else{
+
+            $course = CourseAvailability::with('subjects')
+                ->orderBy('semid', 'ASC')
+                ->get();
+        }
+
+        return response()->json([
+            ['status' => 'success'],
+            $course
             ], 200);
     }
 
-    public function course_availability_update(Request $request, String $id){
+    public function course_availability_update(Request $request, int $id){
         $validate = Validator::make($request->all(), [
             'semavailability' => ['required', 'integer'],
         ]);
@@ -212,9 +222,10 @@ class SubjectsController extends Controller
             return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
         }
 
-        $res = CourseAvailability::where('subjectid', $id)->first()->delete();
+        $res = CourseAvailability::where('subjectid', $id)->first();
 
         if($res != null) {
+            $res->delete();
             return response()->json([
                 ['status' => 'success'],
                 CourseAvailability::create([

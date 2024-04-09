@@ -20,11 +20,10 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
   return next(req).pipe(
     catchError((error: HttpEvent<any>) => {
 
-      // Handle errors here
       if (error instanceof HttpErrorResponse) {
 
         if (error.status == 401) {
-          if(router.url == "login") {
+          if(router.url == "/login") {
             return next(req);
           }
 
@@ -32,12 +31,12 @@ export const errorsInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next
           router.navigateByUrl('/login');
 
         } else if (error.status === 404) {
-          if(router.url == "login") {
+          if(router.url == "/login") {
             return next(req);
           }
           router.navigateByUrl('/error/not-found');
         } else if (error.status === 403) {
-          if(router.url == "login") {
+          if(router.url == "/login") {
             return next(req);
           }
           router.navigateByUrl('/error/403');

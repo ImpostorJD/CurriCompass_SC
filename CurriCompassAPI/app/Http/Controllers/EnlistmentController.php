@@ -42,6 +42,9 @@ class EnlistmentController extends Controller
             ->first();
 
         if($student){
+            if(!$student->cid)return response()->json([
+                ["message" => "No assigned curriculum yet."]
+            ], 400);
             $latestYear = SchoolYear::orderBy('sy', 'DESC')->first();
 
             if ($student->status == "Regular"){
@@ -55,8 +58,8 @@ class EnlistmentController extends Controller
                 $consultationsBlocks = Consultation::where('sy', $latestYear->sy)
                     ->where('cid', $student->cid)
                     ->where('year_level', $student->year_level)
-                    ->where('semid', $consultationLatest)
-                    ->orderBy(1, 'DESC')
+                    ->where('semid', $consultationLatest->semid)
+                    ->orderByRaw('1 ASC')
                     ->get();
 
                 //filters students volume exceeding from 45 to the next block
@@ -73,8 +76,9 @@ class EnlistmentController extends Controller
                 }
 
                 //validate if user already have enlistment
-                $enlistment = Enlistment::where('coid', $consultationLatest->coid)
-                    ->where('srid', $student->srid)->first();
+                $enlistment = Enlistment::where('srid', $student->srid)
+                    ->where('coid', $consultationLatest->coid)
+                    ->first();
 
                 if($enlistment == null){
                     return response()->json([

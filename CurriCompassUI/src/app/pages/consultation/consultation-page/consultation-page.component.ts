@@ -47,9 +47,10 @@ export class ConsultationPageComponent {
   async updateEnlistment(){
     const user = await this.auth.getUser();
     for(let userRole of user?.user_roles) {
+      console.log(user);
       if (userRole.rolename.includes("Student")){
         this.req.postResource('enlistment', {
-          'student_no' : user.student_no
+          'student_no' : user.student_record.student_no
         }, httpOptions(this.auth.getCookie('user'))).subscribe({
           next: (res:any) => {
             console.log(res);

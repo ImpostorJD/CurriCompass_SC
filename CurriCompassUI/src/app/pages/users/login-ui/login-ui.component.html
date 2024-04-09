@@ -15,7 +15,7 @@
         (loginPayload.get('email')?.touched ||
         loginPayload.get('email')?.dirty)
       ){
-        <div class="text-red-600 absolute bottom-[-80%]">
+        <div class="text-red-600 absolute bottom-[-50%]">
           @if(loginPayload.get('email')?.hasError('required')){
             Email is required!
           }
@@ -46,7 +46,7 @@
           (loginPayload.get('password')?.touched ||
           loginPayload.get('password')?.dirty)
         ){
-          <div class="text-red-600 absolute bottom-[-80%]">
+          <div class="text-red-600 absolute bottom-[-50%]">
             @if(loginPayload.get('password')?.hasError('required')){
               Password is required!
             }

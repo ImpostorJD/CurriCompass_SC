@@ -23,7 +23,7 @@
     class="md:static md:before:hidden before:block bg-green-600 md:bg-clip-padding md:backdrop-filter md:backdrop-blur-md md:bg-opacity-60 md:flex-auto rounded-tr-md flex flex-col transition-all duration-[350ms] absolute h-[90%] bottom-0 w-full z-30"
     [ngClass]="{'right-0 before:absolute before:bg-black before:bg-opacity-35 before:h-full before:w-[100vw] before:-z-20 before:left-[100%]': panelToggled, 'right-[100%] before:hidden': !panelToggled}"
   >
-    <div class="flex-auto text-white flex flex-col overflow-auto z-30">
+    <div class="flex-auto text-white flex flex-col gap-1 overflow-auto z-30">
       @for (button of buttons; track $index) {
         <div class="relative group">
           <a
