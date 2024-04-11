@@ -126,6 +126,10 @@ npm uninstall [dependency]
 ```shell
 cd ./CurriCompassAPI
 ```
+- Install Composer Dependency
+```shell
+composer install
+``` 
 - Run the initializer CLI command via
 
 ```shell
