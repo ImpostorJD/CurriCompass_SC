@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
  *
  * Usage: { path: '</url path>', component: </Component>, canActivate: AuthGuard(["roles_array"])},
  */
+
 export function AuthGuard(allowedRoles: string[]): CanActivateFn {
   return async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree>  => {
 
@@ -16,11 +17,13 @@ export function AuthGuard(allowedRoles: string[]): CanActivateFn {
 
       if (allowedRoles.length > 0) {
         const user = await resp[1];
-        for(let role of allowedRoles) {
+        if (user){
+          for(let role of allowedRoles) {
 
-          for(let userRole of user?.user_roles) {
-            if (role.includes(userRole.rolename)){
-              return true;
+            for(let userRole of user!.user_roles) {
+              if (role.includes(userRole.rolename)){
+                return true;
+              }
             }
           }
         }
@@ -29,7 +32,7 @@ export function AuthGuard(allowedRoles: string[]): CanActivateFn {
       }
 
     }catch(e){
-      console.log('Unhandled error:', e);
+      //console.log('Unhandled error:', e);
     }
     return getUserCookie != null;
   };

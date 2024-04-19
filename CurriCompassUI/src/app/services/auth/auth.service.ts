@@ -15,9 +15,10 @@ import { httpOptions } from '../../../configs/Constants';
 })
 export class AuthService {
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
-
-  private req: HttpReqHandlerService = inject(HttpReqHandlerService)
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(HttpReqHandlerService) private req: HttpReqHandlerService,
+  ) { }
 
   private currentUser:any = null;
 
