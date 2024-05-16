@@ -38,16 +38,17 @@ export class UsersComponent {
       });
   }
 
-  deleteUser(userid:number){
-    this.req.deleteResource('users/'+ userid,
-      httpOptions(this.auth.getCookie('user')))
-      .subscribe({
-        next: () => {
-          this.getUser();
-        },
-        error: err => console.error(err),
-      });
+  deleteUser(id: number){
 
+    if(confirm("Are you sure to delete this User?")){
+    this.req.deleteResource('users/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: () => {
+        this.getUser();
+      },
+
+      error: error => console.error(error),
+    });
+  }
   }
 
   ngOnInit(){

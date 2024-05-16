@@ -7,6 +7,7 @@ import { httpOptions } from '../../../../configs/Constants';
 import { FormsModule } from '@angular/forms';
 import { ProgramFilterPipe } from '../../../services/filter/search-filters/program-filter.pipe';
 import { AuthService } from '../../../services/auth/auth.service';
+import { NgConfirmModule, NgConfirmService } from 'ng-confirm-box';
 
 @Component({
   selector: 'app-program-list',
@@ -16,6 +17,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     RouterLink,
     FormsModule,
     ProgramFilterPipe,
+    NgConfirmModule
   ],
   templateUrl: './program-list.component.html',
   styleUrl: './program-list.component.css'
@@ -41,6 +43,7 @@ export class ProgramListComponent {
   }
 
   deleteProgram(id: number){
+    if(confirm("Are you sure to delete this program?")){
     this.req.deleteResource('programs/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getPrograms();
@@ -51,6 +54,7 @@ export class ProgramListComponent {
 
   }
 
+  }
   ngOnInit(){
     this.getPrograms();
   }

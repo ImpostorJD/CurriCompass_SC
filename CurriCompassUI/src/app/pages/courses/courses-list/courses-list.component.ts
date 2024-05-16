@@ -38,13 +38,18 @@ export class CoursesListComponent {
   }
 
   deleteCourse(id: number){
+
+    if(confirm("Are you sure to delete this course?")){
     this.req.deleteResource('subjects/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
-        this.getCourses()
+        this.getCourses();
       },
-      error: err => console.error(err),
-    })
+
+      error: error => console.error(error),
+    });
   }
+  }
+
 
   ngOnInit() {
     this.getCourses();

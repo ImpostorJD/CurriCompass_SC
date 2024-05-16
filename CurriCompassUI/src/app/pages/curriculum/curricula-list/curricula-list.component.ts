@@ -40,12 +40,16 @@ export class CurriculaListComponent {
   }
 
   deleteCurricula(id: number){
+
+    if(confirm("Are you sure to delete this Curriculum?")){
     this.req.deleteResource('curriculum/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
-        this.getCurricula()
+        this.getCurricula();
       },
-      error: err => console.error(err),
-    })
+
+      error: error => console.error(error),
+    });
+  }
   }
 
   ngOnInit(){

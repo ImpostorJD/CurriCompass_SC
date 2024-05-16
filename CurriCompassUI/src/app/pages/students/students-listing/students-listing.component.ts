@@ -29,14 +29,17 @@ export class StudentsListingComponent {
   searchStudent:string = '';
   students:any = null;
 
-  deleteStudent(id : number) {
-    this.req.deleteResource('student-records/' + id,
-    httpOptions(this.auth.getCookie('user'))).subscribe({
+  deleteStudent(id: number){
+
+    if(confirm("Are you sure to delete this Students Record?")){
+    this.req.deleteResource('student-records/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getStudents();
       },
-      error: err => console.error(err),
-    })
+
+      error: error => console.error(error),
+    });
+  }
   }
 
   getStudents(){
