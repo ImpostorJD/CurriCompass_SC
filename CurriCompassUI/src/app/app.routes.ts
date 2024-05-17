@@ -25,44 +25,44 @@ export const routes: Routes = [
         },
 
         { path: 'users',
-          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          canActivate: [AuthGuard(['Admin', 'Staff'])],
           loadChildren: () => import('./pages/users/users.routes')
             .then((mod) => mod.usersRoutes)
         },
 
         {
           path: 'programs',
-          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          canActivate: [AuthGuard(['Admin', 'Staff'])],
           loadChildren: () => import('./pages/program/programs.routes')
             .then((mod) => mod.programsRoutes)
         },
 
         { path: 'courses',
-          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          canActivate: [AuthGuard(['Admin', 'Staff'])],
           loadChildren: () => import('./pages/courses/courses.routes')
             .then((mod) => mod.coursesRoutes)
         },
 
         { path: 'curricula',
-          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          canActivate: [AuthGuard(['Admin', 'Staff'])],
           loadChildren: () => import('./pages/curriculum/curricula.routes')
             .then((mod) => mod.curriculaRoutes)
         },
 
         { path : 'students',
-          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          canActivate: [AuthGuard(['Admin', 'Staff'])],
           loadChildren: () => import('./pages/students/students.routes')
             .then((mod) => mod.studentRoutes),
         },
 
         { path: 'school-calendar',
-          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          canActivate: [AuthGuard(['Admin', 'Staff'])],
           loadChildren: () => import('./pages/school-year/school-year.routes')
             .then(mod => mod.schoolYearRoutes)
         },
 
         { path: 'course-availability',
-          canActivate: [AuthGuard(['Admin', 'Faculty'])],
+          canActivate: [AuthGuard(['Admin', 'Staff'])],
           loadChildren: () => import('./pages/courses/courses.availability.routes')
             .then(mod => mod.courseAvailabilityRoutes),
         },

@@ -33,7 +33,7 @@ export class NavigationComponent {
     /**Commented out for the sake of demonstration for cap 1: Should I not develop this on time. */
     // {
     //   name : "Dashboard",
-    //   allowedRoles: ['Admin', 'Faculty', 'Student'],
+    //   allowedRoles: ['Admin', 'Staff', 'Student'],
     //   icon_type: "material-symbols-outlined",
     //   icon: "dashboard",
     //   path: "/",
@@ -41,7 +41,7 @@ export class NavigationComponent {
     // },
     {
       name : "Consulatation",
-      allowedRoles: ['Admin','Faculty','Student'],
+      allowedRoles: ['Admin','Staff','Student'],
       icon_type: "material-symbols-outlined",
       icon: "explore",
       path: "/consultation",
@@ -49,7 +49,7 @@ export class NavigationComponent {
     },
     {
       name : "Profile",
-      allowedRoles: ['Admin', 'Faculty', 'Student'],
+      allowedRoles: ['Admin', 'Staff', 'Student'],
       icon_type: "material-symbols-outlined",
       icon: "account_circle",
       path: "/profile",
@@ -65,7 +65,7 @@ export class NavigationComponent {
     },
     {
       name : "Student Records",
-      allowedRoles: ['Admin', 'Faculty'],
+      allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",
       icon: "person_book",
       path: "/students",
@@ -73,7 +73,7 @@ export class NavigationComponent {
     },
     {
       name : "Curriculum",
-      allowedRoles: ['Admin', 'Faculty'],
+      allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",
       icon: "contract",
       path: "/curricula",
@@ -81,7 +81,7 @@ export class NavigationComponent {
     },
     {
       name : "Program",
-      allowedRoles: ['Admin', 'Faculty'],
+      allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",
       icon: "book",
       path: "/programs",
@@ -89,7 +89,7 @@ export class NavigationComponent {
     },
     {
       name : "Courses",
-      allowedRoles: ['Admin', 'Faculty'],
+      allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",
       icon: "book_5",
       path: "/courses",
@@ -97,7 +97,7 @@ export class NavigationComponent {
     },
     {
       name : "School Calendar",
-      allowedRoles: ['Admin', 'Faculty'],
+      allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",
       icon: "event_note",
       path: "/school-calendar",
@@ -105,7 +105,7 @@ export class NavigationComponent {
     },
     {
       name : "Course Availability",
-      allowedRoles: ['Admin', 'Faculty'],
+      allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",
       icon: "menu_book",
       path: "/course-availability",

@@ -7,17 +7,17 @@ import { EditConsultationComponent } from "./edit-consultation/edit-consultation
 export const consultationRoutes: Routes = [
   {
     path: '',
-    canActivate: [AuthGuard(['Admin', 'Faculty', 'Student'])],
+    canActivate: [AuthGuard(['Admin', 'Staff', 'Student'])],
     component: ConsultationPageComponent
   },
   {
     path: 'add-consultation',
-    canActivate: [AuthGuard(['Admin', 'Faculty'])],
+    canActivate: [AuthGuard(['Admin', 'Staff'])],
     component: AddConsultationComponent
   },
   {
     path: ':id',
-    canActivate: [AuthGuard(['Admin', 'Faculty'])],
+    canActivate: [AuthGuard(['Admin', 'Staff'])],
     component: EditConsultationComponent
   },
 ]

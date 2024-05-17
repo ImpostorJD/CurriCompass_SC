@@ -31,8 +31,15 @@ export function AuthGuard(allowedRoles: string[]): CanActivateFn {
         inject(Router).navigateByUrl('/');
       }
 
-    }catch(e){
-      //console.log('Unhandled error:', e);
+    }catch(_){
+      /**
+       * BUG: auth_access_guard not working properly (an admin logged cannot view admin dashboard)
+       * <Description>
+       *  when try catch is not implemented, the inject() throws an error as it should be declare in the constructor
+       *  however the function has no default constructor.
+       *
+       * </Description>
+       */
     }
     return getUserCookie != null;
   };
