@@ -51,7 +51,7 @@
             </a>
             <button
               class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"
-              (click)="deleteProgram(program.programid)"
+              (click)="modalUtility.enableModal(program.programid)"
             >
                 <i class="material-symbols-outlined">
                   delete
@@ -64,3 +64,6 @@
     </table>
   </div>
 </div>
+@if(modalUtility.modalEnabled) {
+  <app-delete-modal [item]="modalUtility.selectedItem" (deleteItem)="deleteProgram($event)" (collapseModal)="modalUtility.disableModal()"></app-delete-modal>
+}

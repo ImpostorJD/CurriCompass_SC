@@ -58,7 +58,7 @@
                 visibility
               </i>
             </a>
-            <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="deleteCurricula(curriculum.cid)">
+            <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="modalUtility.enableModal(curriculum.cid)">
                 <i class="material-symbols-outlined">
                   delete
                 </i>
@@ -70,3 +70,6 @@
     </table>
   </div>
 </div>
+@if(modalUtility.modalEnabled) {
+  <app-delete-modal [item]="modalUtility.selectedItem" (deleteItem)="deleteCurricula($event)" (collapseModal)="modalUtility.disableModal()"></app-delete-modal>
+}

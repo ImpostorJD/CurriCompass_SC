@@ -25,26 +25,26 @@ export const routes: Routes = [
         },
 
         { path: 'users',
-          canActivate: [AuthGuard(['Admin', 'Staff'])],
+          canActivate: [AuthGuard(['Admin'])],
           loadChildren: () => import('./pages/users/users.routes')
             .then((mod) => mod.usersRoutes)
         },
 
         {
           path: 'programs',
-          canActivate: [AuthGuard(['Admin', 'Staff'])],
+          canActivate: [AuthGuard(['Admin'])],
           loadChildren: () => import('./pages/program/programs.routes')
             .then((mod) => mod.programsRoutes)
         },
 
         { path: 'courses',
-          canActivate: [AuthGuard(['Admin', 'Staff'])],
+          canActivate: [AuthGuard(['Admin'])],
           loadChildren: () => import('./pages/courses/courses.routes')
             .then((mod) => mod.coursesRoutes)
         },
 
         { path: 'curricula',
-          canActivate: [AuthGuard(['Admin', 'Staff'])],
+          canActivate: [AuthGuard(['Admin'])],
           loadChildren: () => import('./pages/curriculum/curricula.routes')
             .then((mod) => mod.curriculaRoutes)
         },

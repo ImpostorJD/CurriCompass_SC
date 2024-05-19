@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { CoursesServiceService } from '../../../services/courses-service.service';
 import { httpOptions } from '../../../../configs/Constants';
 import { AuthService } from '../../../services/auth/auth.service';
+import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
+import { ModalUtilityService } from '../../../services/modal-utility.service';
 
 @Component({
   selector: 'app-courses-list',
@@ -16,6 +18,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     RouterLink,
     CourseFilterPipe,
     FormsModule,
+    DeleteModalPopupComponent
   ],
   templateUrl: './courses-list.component.html',
   styleUrl: './courses-list.component.css'
@@ -28,6 +31,8 @@ export class CoursesListComponent {
   private auth: AuthService = inject(AuthService);
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
 
+  modalUtility: ModalUtilityService = inject(ModalUtilityService);
+
   searchCourse:string = '';
   courses: any = null;
 
@@ -37,9 +42,7 @@ export class CoursesListComponent {
     });
   }
 
-  deleteCourse(id: number){
-
-    if(confirm("Are you sure to delete this course?")){
+  deleteCourse(id: number) {
     this.req.deleteResource('subjects/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getCourses();
@@ -47,7 +50,7 @@ export class CoursesListComponent {
 
       error: error => console.error(error),
     });
-  }
+    this.modalUtility.disableModal();
   }
 
 

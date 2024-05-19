@@ -4,12 +4,15 @@ import { HttpReqHandlerService } from '../../../services/http-req-handler.servic
 import { httpOptions } from '../../../../configs/Constants';
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
+import { ModalUtilityService } from '../../../services/modal-utility.service';
 
 @Component({
   selector: 'app-school-year-page',
   standalone: true,
   imports: [
     RouterLink,
+    DeleteModalPopupComponent
   ],
   templateUrl: './school-year-page.component.html',
   styleUrl: './school-year-page.component.css'
@@ -21,6 +24,7 @@ export class SchoolYearPageComponent {
 
   private auth: AuthService = inject(AuthService);
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  modalUtility: ModalUtilityService = inject(ModalUtilityService);
 
   schoolYears:any = null;
   showError = false;
@@ -48,6 +52,7 @@ export class SchoolYearPageComponent {
         }
       },
     })
+    this.modalUtility.disableModal();
   }
 
   ngOnInit(){

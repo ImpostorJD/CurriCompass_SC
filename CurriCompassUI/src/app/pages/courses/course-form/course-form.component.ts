@@ -17,7 +17,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     CommonModule,
     RouterLink,
     CourseFilterPipe,
-    FormsModule
+    FormsModule,
   ],
   providers: [
     CoursesServiceService,

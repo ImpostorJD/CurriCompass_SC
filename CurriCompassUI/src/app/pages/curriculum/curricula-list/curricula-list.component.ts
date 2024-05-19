@@ -6,6 +6,8 @@ import { httpOptions } from '../../../../configs/Constants';
 import { CurriculumFilterPipe } from '../../../services/filter/search-filters/curriculum-filter.pipe';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ModalUtilityService } from '../../../services/modal-utility.service';
+import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
 
 @Component({
   selector: 'app-curricula-list',
@@ -15,6 +17,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     RouterLink,
     CurriculumFilterPipe,
     FormsModule,
+    DeleteModalPopupComponent
   ],
 
   templateUrl: './curricula-list.component.html',
@@ -25,6 +28,7 @@ export class CurriculaListComponent {
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
   private auth: AuthService = inject(AuthService);
+  modalUtility: ModalUtilityService = inject(ModalUtilityService);
 
   searchCurricula: string = '';
   curricula: any  = null;
@@ -41,7 +45,6 @@ export class CurriculaListComponent {
 
   deleteCurricula(id: number){
 
-    if(confirm("Are you sure to delete this Curriculum?")){
     this.req.deleteResource('curriculum/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getCurricula();
@@ -49,7 +52,7 @@ export class CurriculaListComponent {
 
       error: error => console.error(error),
     });
-  }
+    this.modalUtility.disableModal();
   }
 
   ngOnInit(){

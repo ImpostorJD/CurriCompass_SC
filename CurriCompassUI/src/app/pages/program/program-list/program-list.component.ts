@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
@@ -7,7 +6,8 @@ import { httpOptions } from '../../../../configs/Constants';
 import { FormsModule } from '@angular/forms';
 import { ProgramFilterPipe } from '../../../services/filter/search-filters/program-filter.pipe';
 import { AuthService } from '../../../services/auth/auth.service';
-import { NgConfirmModule, NgConfirmService } from 'ng-confirm-box';
+import { ModalUtilityService } from '../../../services/modal-utility.service';
+import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
 
 @Component({
   selector: 'app-program-list',
@@ -17,7 +17,7 @@ import { NgConfirmModule, NgConfirmService } from 'ng-confirm-box';
     RouterLink,
     FormsModule,
     ProgramFilterPipe,
-    NgConfirmModule
+    DeleteModalPopupComponent
   ],
   templateUrl: './program-list.component.html',
   styleUrl: './program-list.component.css'
@@ -28,6 +28,7 @@ export class ProgramListComponent {
 
   private auth: AuthService = inject(AuthService);
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
+  modalUtility: ModalUtilityService = inject(ModalUtilityService);
 
   searchProgram:string = "";
   programs :any = null;
@@ -43,7 +44,6 @@ export class ProgramListComponent {
   }
 
   deleteProgram(id: number){
-    if(confirm("Are you sure to delete this program?")){
     this.req.deleteResource('programs/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getPrograms();
@@ -51,9 +51,7 @@ export class ProgramListComponent {
 
       error: error => console.error(error),
     });
-
-  }
-
+    this.modalUtility.disableModal();
   }
   ngOnInit(){
     this.getPrograms();

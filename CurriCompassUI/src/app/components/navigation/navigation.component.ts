@@ -73,7 +73,7 @@ export class NavigationComponent {
     },
     {
       name : "Curriculum",
-      allowedRoles: ['Admin', 'Staff'],
+      allowedRoles: ['Admin'],
       icon_type: "material-symbols-outlined",
       icon: "contract",
       path: "/curricula",
@@ -81,7 +81,7 @@ export class NavigationComponent {
     },
     {
       name : "Program",
-      allowedRoles: ['Admin', 'Staff'],
+      allowedRoles: ['Admin'],
       icon_type: "material-symbols-outlined",
       icon: "book",
       path: "/programs",
@@ -89,7 +89,7 @@ export class NavigationComponent {
     },
     {
       name : "Courses",
-      allowedRoles: ['Admin', 'Staff'],
+      allowedRoles: ['Admin'],
       icon_type: "material-symbols-outlined",
       icon: "book_5",
       path: "/courses",

@@ -6,6 +6,8 @@ import { httpOptions } from '../../../../configs/Constants';
 import { FormsModule } from '@angular/forms';
 import { UserFilterPipe } from '../../../services/filter/search-filters/user-filter.pipe';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ModalUtilityService } from '../../../services/modal-utility.service';
+import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
 
 @Component({
   selector: 'app-users',
@@ -15,6 +17,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     RouterLink,
     FormsModule,
     UserFilterPipe,
+    DeleteModalPopupComponent
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
@@ -24,6 +27,7 @@ export class UsersComponent {
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
   private auth: AuthService = inject(AuthService);
+  modalUtility: ModalUtilityService = inject(ModalUtilityService);
 
   searchUser:string ='';
   users: any = null!;
