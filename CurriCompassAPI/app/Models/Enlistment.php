@@ -13,14 +13,19 @@ class Enlistment extends Model
 
     public $fillable = [
         'srid',
-        'coid'
+        'cid',
+        'year_level_id'
     ];
-
-    public function consultation(){
-        return $this->belongsTo(Consultation::class, 'coid', 'coid');
-    }
 
     public function student_record(){
         return $this->belongsTo(StudentRecord::class, 'studentid', 'studentid');
+    }
+
+    public function year_level(){
+        return $this->belongsTo(YearLevel::class, 'year_level_id', 'year_level_id');
+    }
+
+    public function curriculum(){
+        return $this->belongsTo(Curriculum::class, 'cid', 'cid');
     }
 }

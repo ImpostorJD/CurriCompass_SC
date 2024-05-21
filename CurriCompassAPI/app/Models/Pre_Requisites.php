@@ -14,7 +14,7 @@ class Pre_Requisites extends Model
     protected $primaryKey = 'prid';
     protected $fillable = [
         'subjectid',
-        'year_level',
+        'year_level_id',
     ];
 
     public function subjects(){
@@ -23,5 +23,9 @@ class Pre_Requisites extends Model
 
     public function pre_requisites_subjects(){
         return $this->hasMany(Pre_Requisites_Subjects::class, 'prid', 'prid');
+    }
+
+    public function year_level(){
+        return $this->belongsTo(YearLevel::class, 'year_level_id', 'year_level_id');
     }
 }

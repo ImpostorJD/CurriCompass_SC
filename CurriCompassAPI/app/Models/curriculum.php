@@ -16,10 +16,6 @@ class Curriculum extends Model
         'sy',
     ];
 
-    public function consultations(){
-        return $this->hasMany(Consultation::class, 'cid', 'cid');
-    }
-
     public function program(){
         return $this->belongsTo(Programs::class, 'programid', 'programid');
     }
@@ -34,5 +30,9 @@ class Curriculum extends Model
 
     public function school_year(){
         return $this->belongsTo(SchoolYear::class, 'sy', 'sy');
+    }
+
+    public function enlistment(){
+        return $this->hasMany(Enlistment::class, 'cid', 'cid');
     }
 }

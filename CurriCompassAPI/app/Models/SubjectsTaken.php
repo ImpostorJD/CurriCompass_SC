@@ -16,6 +16,7 @@ class SubjectsTaken extends Model
         'srid',
         'subjectid',
         'taken_at',
+        'grade',
         'sy',
         'remark'
     ];

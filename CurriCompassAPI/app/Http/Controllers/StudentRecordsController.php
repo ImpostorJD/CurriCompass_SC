@@ -36,8 +36,11 @@ class StudentRecordsController extends Controller
     public function show(Request $request, String $id){
         $user = User::whereHas('user_roles', function ($query){
                 $query->where('rolename', '=', 'Student');
-            })->with(['student_record' => function($query) use ($id){
+            })->whereHas('student_record', function($query) use ($id){
                 $query->where('student_no', $id);
+
+            })->with(['student_record' => function($query){
+                $query->with('year_level');
                 $query->with(['subjects_taken' => function($query){
                     $query->with('subjects');
                     $query->with('school_year');
@@ -127,7 +130,7 @@ class StudentRecordsController extends Controller
             ['status' => 'student record created successfully.'],
             StudentRecord::create([
                 'userid' => $user->userid,
-                'year_level' => null,
+                'year_level_id' => null,
                 'status' => $request->status,
                 'student_no' => $request->studentid,
                 'cid' => null,
@@ -211,7 +214,7 @@ class StudentRecordsController extends Controller
         })->first();
 
         $user->student_record()->update([
-            'year_level' => $request['year_level'],
+            'year_level_id' => $request['year_level_id'],
             'status' => $request['status'],
             'student_no' => $request['studentid'],
             'cid' => $curriculum['cid'],

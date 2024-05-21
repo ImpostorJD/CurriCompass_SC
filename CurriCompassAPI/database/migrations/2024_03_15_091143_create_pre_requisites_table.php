@@ -14,13 +14,17 @@ return new class extends Migration
         Schema::create('pre__requisites', function (Blueprint $table) {
             $table->id('prid');
             $table->unsignedBigInteger('subjectid')->unique();
-            $table->enum('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year'])->nullable();
+            $table->unsignedBigInteger('year_level_id')->nullable();
             //$table->double('completion')->nullable();
             $table->foreign('subjectid')
                 ->references('subjectid')
                 ->on('subjects')
                 ->onDelete('cascade');
 
+            $table->foreign('year_level_id')
+                ->references('year_level_id')
+                ->on('year_levels')
+                ->onDelete('restrict');
         });
     }
 

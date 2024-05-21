@@ -30,29 +30,6 @@ export class CourseAvailabilityComponent {
 
   searchCourse:string = '';
 
-  updateCourseAvailability(subjectid:number, event: any) {
-    this.req.patchResource('course-availability/' + subjectid, {
-      "semavailability" : parseInt(event.target.value),
-    },
-    httpOptions(this.auth.getCookie('user'))).subscribe({
-      next: (e: any) => {
-
-        (this.courses.find((i:any) => i.subjectid === e[1].subjectid)).semid = e[1].semid;
-        // this.getCourseAvailability();
-        this.courses.sort((a:any,b:any) => {
-          if (a.semid !== b.semid) {
-            return a.semid - b.semid;
-          } else {
-            return a.subjects.subjectcode.localeCompare(b.subjects.subjectcode);
-          }
-        })
-
-      },
-
-      error: err => console.error(err),
-    })
-  }
-
   getCourseAvailability(){
     this.req.postResource('course-availability', {}, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
@@ -69,13 +46,6 @@ export class CourseAvailabilityComponent {
   }
 
   ngOnInit() {
-    this.getCourseAvailability();
-
-    this.req.getResource('semesters', httpOptions(this.auth.getCookie('user'))).subscribe({
-      next: (res:any) => {
-        this.semesters = res[1];
-      },
-      error: err => console.error(err),
-    })
+    //this.getCourseAvailability();
   }
 }

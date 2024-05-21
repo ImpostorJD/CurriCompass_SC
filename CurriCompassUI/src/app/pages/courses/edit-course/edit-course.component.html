@@ -127,7 +127,7 @@
               }
           }
         </div>
-        <div class="flex flex-col">
+        <!-- <div class="flex flex-col">
           <span>Preferred Semester Availability</span>
           <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="semavailability">
             <option [ngValue]="null" selected disabled>
@@ -146,7 +146,7 @@
                 Field is required!
               </div>
           }
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="gap-2 bg-white border-slate-400 border-1 flex-auto flex flex-col p-5 border-[1px] rounded-sm shadow-lg">
@@ -166,22 +166,15 @@
           </div> -->
           <div class="flex flex-col">
             <span>Year Level</span>
-            <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="year_level">
+            <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="year_level_id">
               <option [ngValue]="null" selected>
                 None
               </option>
-              <option value="1st Year">
-                1st Year
-              </option>
-              <option value="2nd Year">
-                2nd Year
-              </option>
-              <option value="3rd Year">
-                3rd Year
-              </option>
-              <option value="4th Year">
-                4th Year
-              </option>
+              @for(y of year_levels; track $index){
+                <option [ngValue]="y.year_level_id">
+                  {{y.year_level_desc}}
+                </option>
+              }
             </select>
 
           </div>

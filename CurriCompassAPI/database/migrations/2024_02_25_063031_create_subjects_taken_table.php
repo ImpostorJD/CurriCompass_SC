@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subjectid');
             $table->enum('taken_at', ['Sem 1', 'Sem 2', 'Sem 3', 'Credited']);
             $table->unsignedBigInteger('sy');
+            $table->double('grade');
             $table->enum('remark', ["Excelent", "Very Good", "Good", "Fair", "Passing", "Failed", "Widthdrawn", "Incomplete", "None"]);
             $table->foreign('srid')
                 ->references('srid')

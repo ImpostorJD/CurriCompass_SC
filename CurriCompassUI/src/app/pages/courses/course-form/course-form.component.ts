@@ -42,6 +42,7 @@ export class CourseFormComponent {
   courseList: any = null;
   selectedCourses: Array<any> = [];
   semesters: any = null;
+  year_levels: any = null;
 
   courseField = this.fb.group({
     subjectcode: new FormControl('', [Validators.required]),
@@ -51,9 +52,9 @@ export class CourseFormComponent {
     subjectunitlec: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),
     subjecthourslec: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
     subjecthourslab: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
-    semavailability: new FormControl(null, [Validators.required]),
+    // semavailability: new FormControl(null, [Validators.required]),
     //completion: new FormControl(null, [Validators.min(0), Validators.max(1)]),
-    year_level: new FormControl(null),
+    year_level_id: new FormControl(null),
     subjects: this.fb.array([]),
   });
 
@@ -131,13 +132,19 @@ export class CourseFormComponent {
       },
       error: (err:any) => console.log(err),
    });
-
-   this.req.getResource('semesters', httpOptions(this.auth.getCookie('user'))).subscribe({
+   this.req.getResource('year-level', httpOptions(this.auth.getCookie('user'))).subscribe({
     next: (s:any) => {
-      this.semesters = s[1];
-    },
+          this.year_levels = s[1];
+        },
     error: (err:any) => console.log(err),
-   });
+  });
+
+  //  this.req.getResource('semesters', httpOptions(this.auth.getCookie('user'))).subscribe({
+  //   next: (s:any) => {
+  //     this.semesters = s[1];
+  //   },
+  //   error: (err:any) => console.log(err),
+  //  });
   }
 
 }

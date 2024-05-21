@@ -13,17 +13,26 @@
     <table class="table-auto w-full border-collapse border border-slate-300">
       <thead class="bg-slate-300">
         <tr class="flex flex-row py-2">
-          <th class="w-[30%] py-2">
+          <th class="w-[20%] py-2">
             Course Code
           </th>
-          <th class="lg:w-[35%] py-2 flex-auto hidden lg:block">
-            Course Title
+          <th class="lg:w-[20%] py-2 flex-auto">
+            Availability
           </th>
-          <th class="lg:w-[10%] py-2 flex-auto">
-            Credits
+          <th class="lg:w-[20%] py-2 flex-auto md:block hidden">
+            Day
           </th>
-          <th class="w-[25%] lg:flex-auto py-2 flex items-center justify-center">
-            Availability Semester
+          <th class="md:w-[20%] flex-auto py-2 md:flex justify-center hidden">
+            Time
+          </th>
+          <th class="w-[20%] p-2 md:flex items-center justify-center">
+            <a
+            class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
+           [routerLink]="'/course-availability/add-course-availability'"
+         >
+           <i class="material-symbols-outlined">add</i>
+           <span class="lg:inline hidden">Add Course Availability</span>
+         </a>
           </th>
         </tr>
       </thead>
@@ -40,13 +49,7 @@
               <span>{{ course.subjects.subjectcredits }}</span>
             </td>
             <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
-              <select class="w-full h-full border-0 p-2" (change)="updateCourseAvailability(course.subjectid, $event)">
-                @for(sem of semesters; track $index){
-                  <option [ngValue]="sem.semid" [selected]="course.semid == sem.semid">
-                    {{sem.semdesc}}
-                  </option>
-                }
-              </select>
+
             </td>
           </tr>
         }

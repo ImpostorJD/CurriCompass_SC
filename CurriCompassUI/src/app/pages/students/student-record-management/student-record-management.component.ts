@@ -46,6 +46,7 @@ export class StudentRecordManagementComponent {
   curricula:any = null;
   curriculumSubjects:any = null;
   subjectTaken: any = null;
+  year_levels: any = null;
 
   studentProfileField =  this.fb.group({
     "studentid" : new FormControl('', [Validators.required]),
@@ -57,7 +58,7 @@ export class StudentRecordManagementComponent {
     "email" : new FormControl('', [Validators.required, Validators.email]),
     "program" : new FormControl('', [Validators.required]),
     "specialization" : new FormControl(null),
-    "year_level" : new FormControl(null, [Validators.required]),
+    "year_level_id" : new FormControl(null, [Validators.required]),
     "status" : new FormControl(null, [Validators.required]),
     "subjects_taken" : this.fb.array([]),
   });
@@ -118,7 +119,7 @@ export class StudentRecordManagementComponent {
     this.req.getResource('curriculum/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.curriculumSubjects = res[1].curriculum_subjects
-          .sort((a: any, b: any) => yearLevel(a.year_level, b.year_level))
+          .sort((a: any, b: any) => yearLevel(a.year_level.year_level_desc, b.year_level.year_level_desc))
           .sort((a: any, b: any) =>  sortSemester(a.semesters.semdesc, b.semesters.semdesc));
         this.curriculumSubjects.forEach((element:any) => {
           this.addSubjectsTaken(element);
@@ -141,7 +142,7 @@ export class StudentRecordManagementComponent {
     this.studentProfileField.get('specialization')?.value
       : null;
     const programid = parseInt(this!.studentProfileField!.get('program')!.value!);
-    this.getCurriculumSubjects(this.curricula.find((e:any) => e.specialization === specialization && e.programid === programid).cid);
+    this.getCurriculumSubjects(this.curricula.find((e:any) => e.specialization === specialization && e.programid === programid)!.cid);
   }
 
   setSpecializations(programid: number){
@@ -205,6 +206,13 @@ export class StudentRecordManagementComponent {
       error: (err: any) => console.error(err),
     });
 
+    this.req.getResource('year-level', httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (res: any) => {
+        this.year_levels = res[1];
+      },
+      error: (err: any) => console.error(err),
+    })
+
     this.req.getResource('programs', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.programs = res[1];
@@ -226,7 +234,7 @@ export class StudentRecordManagementComponent {
           this.studentProfile = res[1];
           this.studentProfileField.patchValue(this.studentProfile);
           this.studentProfileField.get('studentid')?.patchValue(this.studentProfile.student_record.student_no);
-          this.studentProfileField.get('year_level')?.patchValue(this.studentProfile.student_record.year_level);
+          this.studentProfileField.get('year_level_id')?.patchValue(this.studentProfile.student_record?.year_level?.year_level_id);
           this.studentProfileField.get('status')?.patchValue(this.studentProfile.student_record.status);
           this.studentProfileField.get('sy')?.patchValue(this.studentProfile.student_record.sy);
           this.subjectTaken = this.studentProfile.student_record.subjects_taken;

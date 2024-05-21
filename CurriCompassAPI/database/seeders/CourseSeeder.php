@@ -975,406 +975,406 @@ class CourseSeeder extends Seeder
         DB::table('pre__requisites')->insert([
             [
                 'subjectid' => 1,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
 
             [
                 'subjectid' => 2,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
 
             [
                 'subjectid' => 3,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
 
             [
                 'subjectid' => 4,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
 
             [
                 'subjectid' => 5,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 6,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 7,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 8,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 9,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 10,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 11,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 12,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 13,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 14,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 15,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 16,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 17,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 18,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 19,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 20,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 21,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 22,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 23,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 24,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 25,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 26,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 27,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 28,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 29,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 30,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 31,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 32,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 33,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 34,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 35,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 36,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 37,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 38,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 39,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 40,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 41,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 42,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 43,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 44,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 45,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 46,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 47,
-                'year_level' => '3rd Year',
+                'year_level_id' => 3,
                 //'completion' => null
             ],
             [
                 'subjectid' => 48,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 49,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 50,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 51,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 52,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 53,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 54,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 55,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 56,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 57,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 58,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 59,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 60,
-                'year_level' => '4th Year',
+                'year_level_id' => 4,
                 //'completion' => null
             ],
             [
                 'subjectid' => 61,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 62,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 63,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 64,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 65,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 66,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 67,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 68,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 69,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 70,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 71,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 72,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 73,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 74,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 75,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 76,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 77,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 78,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 79,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
             [
                 'subjectid' => 80,
-                'year_level' => null,
+                'year_level_id' => null,
                 //'completion' => null
             ],
         ]);
@@ -1574,328 +1574,329 @@ class CourseSeeder extends Seeder
             ],
         ]);
 
-        DB::table('course_availabilities')->insert([
-               [
-                   'subjectid' => 1,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 2,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 3,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 4,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 5,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 6,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 7,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 8,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 9,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 10,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 11,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 12,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 13,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 14,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 15,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 16,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 17,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 18,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 19,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 20,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 21,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 22,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 23,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 24,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 25,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 26,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 27,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 28,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 29,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 30,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 31,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 32,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 33,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 34,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 35,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 36,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 37,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 38,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 39,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 40,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 41,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 42,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 43,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 44,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 45,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 46,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 47,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 48,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 49,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 50,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 51,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 52,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 53,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 54,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 55,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 56,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 57,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 58,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 59,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 60,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 61,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 62,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 63,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 64,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 65,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 66,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 67,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 68,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 69,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 70,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 71,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 72,
-                    'semid' => 1,
-               ],
-               [
-                   'subjectid' => 73,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 74,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 75,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 76,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 77,
-                    'semid' => 2,
-               ],
-               [
-                   'subjectid' => 78,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 79,
-                    'semid' => 3,
-               ],
-               [
-                   'subjectid' => 80,
-                    'semid' => 3,
-               ],
-            ]);
+        // DB::table('course_availabilities')->insert([
+        //        [
+        //            'subjectid' => 1,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 2,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 3,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 4,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 5,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 6,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 7,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 8,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 9,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 10,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 11,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 12,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 13,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 14,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 15,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 16,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 17,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 18,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 19,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 20,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 21,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 22,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 23,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 24,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 25,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 26,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 27,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 28,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 29,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 30,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 31,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 32,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 33,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 34,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 35,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 36,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 37,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 38,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 39,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 40,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 41,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 42,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 43,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 44,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 45,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 46,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 47,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 48,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 49,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 50,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 51,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 52,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 53,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 54,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 55,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 56,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 57,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 58,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 59,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 60,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 61,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 62,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 63,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 64,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 65,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 66,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 67,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 68,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 69,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 70,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 71,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 72,
+        //             'semid' => 1,
+        //        ],
+        //        [
+        //            'subjectid' => 73,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 74,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 75,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 76,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 77,
+        //             'semid' => 2,
+        //        ],
+        //        [
+        //            'subjectid' => 78,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 79,
+        //             'semid' => 3,
+        //        ],
+        //        [
+        //            'subjectid' => 80,
+        //             'semid' => 3,
+        //        ],
+        //     ]);
 
-    }
+
+        }
 }

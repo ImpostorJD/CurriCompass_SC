@@ -33,6 +33,8 @@ class InitSample extends Command
         echo("Role Table successfully seeded.\n");
         $this->call('db:seed', ['--class' => 'UserSeeder']);
         echo("User Table successfully seeded. \n");
+        $this->call('db:seed', ['--class' => 'YearLevelSeeder']);
+        echo("Year Level Table successfully seeded. \n");
         $this->call('db:seed', ['--class' => 'SemesterSeeder']);
         echo("Semester Table successfully seeded.\n");
         $this->call('db:seed', ['--class' => 'ProgramSeeder']);

@@ -50,6 +50,7 @@ export class EditCurriculumComponent {
   courses: any = null;
   semesters: any = null;
   selectedCourses: Array<any> = [];
+  year_levels: any = null;
 
   curriculum = this.fb.group({
     programid : new FormControl(null, [Validators.required]),
@@ -86,13 +87,13 @@ export class EditCurriculumComponent {
     const csubject: any = this.fb.group({
       'subjectid' : new FormControl(null, [Validators.required]),
       'semid' : new FormControl(null, [Validators.required]),
-      'year_level' : new FormControl(null, [Validators.required]),
+      'year_level_id' : new FormControl(null, [Validators.required]),
     });
     this.fac.addControl(this.csubjectsFormArray, csubject);
   }
 
   getYearLevelControl(index: number): FormControl{
-    return this.fac.getFormControl(index, this.csubjectsFormArray, "year_level");
+    return this.fac.getFormControl(index, this.csubjectsFormArray, "year_level_id");
   }
 
   getCsubjectsControl(index: number): FormControl{
@@ -126,8 +127,9 @@ export class EditCurriculumComponent {
     if(this.csubjectsFormArray.length <= 0 ){
       return;
     }
+    console.log(this.curriculum.value);
 
-    this.req.patchResource('curriculum/' + this.routeId, this.curriculum.value, httpOptions).subscribe({
+    this.req.patchResource('curriculum/' + this.routeId, this.curriculum.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.router.navigateByUrl('/curricula');
       },
@@ -140,6 +142,13 @@ export class EditCurriculumComponent {
   }
 
   ngOnInit(){
+    this.req.getResource('year-level', httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (res: any)=> {
+        this.year_levels = res[1];
+      },
+      error: err => console.error(err),
+    });
+
     this.req.getResource('programs', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.programs = res[1];
@@ -178,7 +187,7 @@ export class EditCurriculumComponent {
               const csubject: any = this.fb.group({
                 'subjectid' : new FormControl(cs.subjectid, [Validators.required]),
                 'semid' : new FormControl(cs.semid, [Validators.required]),
-                'year_level' : new FormControl(cs.year_level, [Validators.required]),
+                'year_level_id' : new FormControl(cs.year_level.year_level_id, [Validators.required]),
               });
               this.csubjectsFormArray.push(csubject);
               this.selectedCourses[index] = parseInt(cs.subjectid);

@@ -12,20 +12,16 @@ class StudentRecord extends Model
     protected $primaryKey = 'srid';
 
     protected $fillable = [
-        'userid',
-        'year_level',
-        'status',
         'student_no',
+        'userid',
+        'year_level_id',
+        'status',
         'cid',
         'sy'
     ];
 
     public function enlistment(){
         return $this->hasMany(Enlistment::class, 'srid', 'srid');
-    }
-
-    public function consultation(){
-        return $this->hasMany(Consultation::class, 'srid', 'srid');
     }
 
     public function subjects_taken() {
@@ -42,5 +38,9 @@ class StudentRecord extends Model
 
     public function school_year() {
         return $this->belongsTo(SchoolYear::class, 'sy', 'sy');
+    }
+
+    public function year_level(){
+        return $this->belongsTo(YearLevel::class, 'year_level_id', 'year_level_id');
     }
 }

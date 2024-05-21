@@ -12,20 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('course_availabilities', function (Blueprint $table) {
+            $table->id('caid');
             $table->unsignedBigInteger('subjectid')->unique();
-            $table->unsignedBigInteger('semid');
+            $table->unsignedBigInteger('semsyid');
+            $table->enum('time', ['8-10', '8-11','10-12', '11-2', '1-3','2-5', '3-5']);
+            $table->string('section');
+            $table->integer('section_limit')->default(0);
+            $table->enum('days', ['M-Th', 'T,F', 'W,S']);
 
             $table->foreign('subjectid')
                 ->references('subjectid')
                 ->on('subjects')
                 ->onDelete('cascade');
 
-            $table->foreign('semid')
-                ->references('semid')
-                ->on('semesters')
+            $table->foreign('semsyid')
+                ->references('semsyid')
+                ->on('sem_sy')
                 ->onDelete('cascade');
 
-            $table->primary(['semid', 'subjectid']);
+
         });
     }
 

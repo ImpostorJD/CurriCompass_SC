@@ -76,13 +76,13 @@ export class ConsultationPageComponent {
   }
 
   getConsultations(){
-    this.req.getResource('consultation', httpOptions(this.auth.getCookie('user'))).subscribe({
-      next: (res:any) => {
-        this.consultations = res[1];
-      },
+    // this.req.getResource('consultation', httpOptions(this.auth.getCookie('user'))).subscribe({
+    //   next: (res:any) => {
+    //     this.consultations = res[1];
+    //   },
 
-      error: err => console.error(err),
-    })
+    //   error: err => console.error(err),
+    // })
   }
 
   async ngOnInit() {

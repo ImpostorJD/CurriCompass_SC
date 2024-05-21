@@ -114,7 +114,7 @@
                       Contact number is required!
                     }
                     @else if(studentProfileField.get('contact_no')?.hasError('pattern')){
-                      Contct number is in invalid format!
+                      Contact number is in invalid format!
                     }
                   </div>
                 }
@@ -195,25 +195,18 @@
               </td>
               <td class="border-slate-600 border h-[9.09%] relative group/year_level">
                 <select class="w-full p-2 h-full group/year_level"
-                [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('year_level')?.invalid }"
-                formControlName="year_level">
+                [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('year_level_id')?.invalid }"
+                formControlName="year_level_id">
                   <option [value]="null" selected disabled>
                     None
                   </option>
-                  <option value="1st Year">
-                    1st Year
-                  </option>
-                  <option value="2nd Year">
-                    2nd Year
-                  </option>
-                  <option value="3rd Year">
-                    3rd Year
-                  </option>
-                  <option value="4th Year">
-                    4th Year
-                  </option>
+                  @for(y of year_levels; track $index){
+                    <option [ngValue]="y.year_level_id">
+                      {{y.year_level_desc}}
+                    </option>
+                  }
                 </select>
-                @if(studentProfileField.get('year_level')?.invalid) {
+                @if(studentProfileField.get('year_level_id')?.invalid) {
                   <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
                   <div class="w-0 h-0 opacity-0 group-focus/year_level:opacity-100 group-hover/year_level:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
                   </div>
@@ -293,7 +286,7 @@
                     {{ cs.subjects.subjectcredits }}
                   </td>
                   <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                    {{ cs.year_level }}
+                    {{ cs.year_level.year_level_desc }}
                   </td>
                   <td class="border border-slate-600 w-[15%] flex items-center justify-center">
                     {{ cs.semesters.semdesc }}

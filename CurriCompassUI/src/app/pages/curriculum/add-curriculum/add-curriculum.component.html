@@ -1,4 +1,4 @@
-<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="curriculum" (submit)="handleSubmit()">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="curriculum">
   <h1 class="font-bold font-sans text-2xl uppercase">Add Curriculum</h1>
   <div class="flex lg:flex-row gap-2 flex-col bg-white mx-2">
     <div class="border-slate-400 border-1 w-full p-5 border-[1px] rounded-sm shadow-lg">
@@ -138,7 +138,7 @@
               }
             </td>
             <td class="w-[20%] px-1">
-              <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getCsemControl(outerIndex )">
+              <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getCsemControl(outerIndex)">
                 <option [ngValue]="null" disabled selected>
                   Please Select
                 </option>
@@ -156,23 +156,16 @@
             </td>
             <td class="w-[20%] px-1">
               <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getYearLevelControl(outerIndex)">
-                <option [ngValue]="null" disabled selected>
+                <option [value]="null" disabled selected>
                   Please Select
                 </option>
-                <option value="1st Year">
-                  1st Year
-                </option>
-                <option value="2nd Year">
-                  2nd Year
-                </option>
-                <option value="3rd Year">
-                  3rd Year
-                </option>
-                <option value="4th Year">
-                  4th Year
-                </option>
+                @for(y of year_levels; track $index){
+                  <option [ngValue]="y.year_level_id">
+                    {{y.year_level_desc}}
+                  </option>
+                }
               </select>
-              @if(csubject.get('year_level')?.invalid){
+              @if(csubject.get('year_level_id')?.invalid){
                 <div class="text-red-600">
                   Year Level is required!
                 </div>

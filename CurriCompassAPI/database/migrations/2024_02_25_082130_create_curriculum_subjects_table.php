@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cid');
             $table->unsignedBigInteger('subjectid');
             $table->unsignedBigInteger('semid');
-            $table->enum('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year']);
+            $table->unsignedBigInteger('year_level_id');
             $table->foreign('cid')
                 ->references('cid')
                 ->on('curricula')
@@ -28,6 +28,11 @@ return new class extends Migration
                 ->references('semid')
                 ->on('semesters')
                 ->onDelete('cascade');
+            $table->foreign('year_level_id')
+                ->references('year_level_id')
+                ->on('year_levels')
+                ->onDelete('restrict');
+
             $table->primary(['cid', 'subjectid']);
         });
     }

@@ -47,6 +47,7 @@ export class AddCurriculumComponent {
   courses: any = null;
   semesters: any = null;
   selectedCourses: Array<any> = [];
+  year_levels: any = null;
 
   curriculum = this.fb.group({
     programid : new FormControl(null, [Validators.required]),
@@ -83,13 +84,13 @@ export class AddCurriculumComponent {
     const csubject: any = this.fb.group({
       'subjectid' : new FormControl(null, [Validators.required]),
       'semid' : new FormControl(null, [Validators.required]),
-      'year_level' : new FormControl(null, [Validators.required]),
+      'year_level_id' : new FormControl(null, [Validators.required]),
     });
     this.fac.addControl(this.csubjectsFormArray, csubject);
   }
 
   getYearLevelControl(index: number): FormControl{
-    return this.fac.getFormControl(index, this.csubjectsFormArray, "year_level");
+    return this.fac.getFormControl(index, this.csubjectsFormArray, "year_level_id");
   }
 
   getCsubjectsControl(index: number): FormControl{
@@ -138,6 +139,13 @@ export class AddCurriculumComponent {
   }
 
   ngOnInit(){
+    this.req.getResource('year-level', httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (res: any)=> {
+        this.year_levels = res[1];
+      },
+      error: err => console.error(err),
+    });
+
     this.req.getResource('programs', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.programs = res[1];

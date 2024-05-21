@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('student_records', function (Blueprint $table) {
             $table->id('srid');
             $table->string('student_no')->unique();
-            $table->enum('year_level', ['1st Year', '2nd Year', '3rd Year', '4th Year'])->nullable();
+            $table->unsignedBigInteger('year_level_id')->nullable();
             $table->enum('status', ['Regular', 'Irregular', 'Graduated', 'Inactive'])->default('regular');
             $table->unsignedBigInteger('userid');
             $table->unsignedBigInteger('sy')->nullable();
@@ -33,6 +33,10 @@ return new class extends Migration
                 ->references('cid')
                 ->on('curricula')
                 ->onDelete('cascade');
+            $table->foreign('year_level_id')
+                ->references('year_level_id')
+                ->on('year_levels')
+                ->onDelete('restrict');
         });
     }
 

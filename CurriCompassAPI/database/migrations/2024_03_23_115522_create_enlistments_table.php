@@ -14,17 +14,29 @@ return new class extends Migration
         Schema::create('enlistments', function (Blueprint $table) {
             $table->id('peid');
             $table->unsignedBigInteger('srid');
-            $table->unsignedBigInteger('coid');
+            $table->unsignedBigInteger('cid');
+            $table->unsignedBigInteger('year_level_id');
+
+            $table->unique([
+                'srid',
+                'cid',
+                'year_level_id'
+            ]);
 
             $table->foreign('srid')
                 ->references('srid')
                 ->on('student_records')
                 ->onDelete('restrict');
 
-            $table->foreign('coid')
-                ->references('coid')
-                ->on('consultations')
-                ->onDelete('cascade');
+            $table->foreign('cid')
+                ->references('cid')
+                ->on('curricula')
+                ->onDelete('restrict');
+
+            $table->foreign('year_level_id')
+                ->references('year_level_id')
+                ->on('year_levels')
+                ->onDelete('restrict');
         });
     }
 

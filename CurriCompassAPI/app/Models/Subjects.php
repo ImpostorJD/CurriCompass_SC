@@ -20,11 +20,6 @@ class Subjects extends Model
         'subjecthourslab',
     ];
 
-
-    public function consultation_subjects(){
-        return $this->hasMany(Consultation::class, 'subjectid', 'subjectid');
-    }
-
     public function subjectsTaken()
     {
         return $this->hasMany(subjectsTaken::class, 'subjectid', 'subjectid');

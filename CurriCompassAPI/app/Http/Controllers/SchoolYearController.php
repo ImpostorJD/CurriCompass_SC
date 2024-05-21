@@ -123,6 +123,7 @@ class SchoolYearController extends Controller
             ->with('student_records')
             ->with('curriculum')
             ->with('subjects_taken')
+            ->with('semsy')
             ->first();
 
         if($currentRecord) {
@@ -140,6 +141,10 @@ class SchoolYearController extends Controller
 
             if ($currentRecord->subjects_taken()->count() > 0) {
                 $messages['subjects_taken'] = "School year currently have subjects taken.";
+                $deletable = false;
+            }
+            if ($currentRecord->semsy()->count() > 0) {
+                $messages['semsy'] = "School year currently have subjects taken.";
                 $deletable = false;
             }
 

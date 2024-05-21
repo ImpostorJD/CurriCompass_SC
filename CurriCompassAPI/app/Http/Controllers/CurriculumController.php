@@ -30,6 +30,7 @@ class CurriculumController extends Controller
             ->with(['curriculum_subjects'=> function($query) {
                 $query->with('subjects');
                 $query->with('semesters');
+                $query->with('year_level');
             }])->first();
 
         if ($curriculum != null) {
@@ -50,7 +51,7 @@ class CurriculumController extends Controller
             'curriculum_subjects' => ['required', 'array'],
             'curriculum_subjects*.semid' => ['required', 'integer'],
             'curriculum_subjects*.subjectid' => ['required', 'integer'],
-            'curriculum_subjects*.year_level' => ['required', 'string'],
+            'curriculum_subjects*.year_level_id' => ['required', 'integer'],
         ]);
 
         if($validate->fails()){
@@ -76,7 +77,7 @@ class CurriculumController extends Controller
                 'cid' => $curriculum->cid,
                 'subjectid' => $subject['subjectid'],
                 'semid' => $subject['semid'],
-                'year_level'=>$subject['year_level'],
+                'year_level_id'=>$subject['year_level_id'],
             ]);
         }
 
@@ -105,7 +106,7 @@ class CurriculumController extends Controller
             'curriculum_subjects' => ['required', 'array'],
             'curriculum_subjects*.semid' => ['required', 'integer'],
             'curriculum_subjects*.subjectid' => ['required', 'integer'],
-            'curriculum_subjects*.year_level' => ['required', 'string'],
+            'curriculum_subjects*.year_level_id' => ['required', 'integer'],
         ]);
 
         if($validate->fails()){
@@ -140,7 +141,7 @@ class CurriculumController extends Controller
                 'cid' => $curriculum->cid,
                 'subjectid' => $subject['subjectid'],
                 'semid' => $subject['semid'],
-                'year_level'=>$subject['year_level'],
+                'year_level_id'=>$subject['year_level_id'],
             ]);
         }
 

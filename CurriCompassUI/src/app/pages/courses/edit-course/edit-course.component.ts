@@ -45,6 +45,7 @@ export class EditCourseComponent {
   courseList: any = null;
   selectedCourses: Array<any> = [];
   semesters:any = null;
+  year_levels:any = null;
 
   routerId: number = null!;
 
@@ -58,7 +59,7 @@ export class EditCourseComponent {
     subjecthourslab: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
     semavailability: new FormControl(null, [Validators.required]),
     //completion: new FormControl(null, [Validators.min(0), Validators.max(1)]),
-    year_level: new FormControl(null),
+    year_level_id: new FormControl(null),
     subjects: this.fb.array([]),
   });
 
@@ -136,13 +137,18 @@ export class EditCourseComponent {
       },
       error: (err:any) => console.log(err),
     });
-
-    this.req.getResource('semesters', httpOptions(this.auth.getCookie('user'))).subscribe({
+    this.req.getResource('year-level', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (s:any) => {
-        this.semesters = s[1];
-      },
+            this.year_levels = s[1];
+          },
       error: (err:any) => console.log(err),
-     });
+    });
+    // this.req.getResource('semesters', httpOptions(this.auth.getCookie('user'))).subscribe({
+    //   next: (s:any) => {
+    //     this.semesters = s[1];
+    //   },
+    //   error: (err:any) => console.log(err),
+    //  });
 
     this.activeRouter.params.subscribe(params => {
       this.routerId = parseInt(params['id']);
@@ -150,9 +156,9 @@ export class EditCourseComponent {
       this.coursesService.getCourse(this.routerId).subscribe({
         next: (c:any) => {
           this.courseField.patchValue(c);
-          this.courseField.controls['year_level'].setValue(c.pre_requisites.year_level);
+          this.courseField.controls['year_level_id'].setValue(c.pre_requisites!.year_level.year_level_id);
           //this.courseField.controls['completion'].setValue(c.pre_requisites.completion);
-          this.courseField.controls['semavailability'].setValue(c.course_availability.semid);
+          //this.courseField.controls['semavailability'].setValue(c.course_availability.semid);
           if (c.pre_requisites.pre_requisites_subjects.length > 0) {
             c.pre_requisites.pre_requisites_subjects.forEach((subject:any, i: number) => {
               const csubject: any = this.fb.group({

@@ -104,6 +104,14 @@ export class NavigationComponent {
       hoverGroup: 'school_calendar',
     },
     {
+      name : "Semester Management",
+      allowedRoles: ['Admin', 'Staff'],
+      icon_type: "material-symbols-outlined",
+      icon: "calendar_view_month",
+      path: "/semester-management",
+      hoverGroup: 'school_calendar',
+    },
+    {
       name : "Course Availability",
       allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",

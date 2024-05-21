@@ -53,6 +53,7 @@ export class StudentFormComponent {
 
     this.req.postResource('student-records', this.userField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
+
         if(event === "with_record"){
           this.router.navigateByUrl(`/students/${res[1].student_no}`)
           return;

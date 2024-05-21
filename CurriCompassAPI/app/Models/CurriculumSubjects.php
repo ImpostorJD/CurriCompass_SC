@@ -16,7 +16,7 @@ class CurriculumSubjects extends Model
         'cid',
         'subjectid',
         'semid',
-        'year_level',
+        'year_level_id',
     ];
 
     protected function setKeysForSaveQuery($query)
@@ -40,4 +40,7 @@ class CurriculumSubjects extends Model
         return $this->belongsTo(Semesters::class, 'semid', 'semid');
     }
 
+    public function year_level(){
+        return $this->belongsTo(YearLevel::class, 'year_level_id',  'year_level_id');
+    }
 }

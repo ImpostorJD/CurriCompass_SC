@@ -15,8 +15,12 @@ class CourseAvailability extends Model
 
 
     protected $fillable = [
-        'semid',
-        'subjectid'
+        'semsyid',
+        'subjectid',
+        'time',
+        'section',
+        'section_limit',
+        'days'
     ];
 
     protected function setKeysForSaveQuery($query)
@@ -28,8 +32,8 @@ class CourseAvailability extends Model
         return $query;
     }
 
-    public function semesters(){
-        return $this->belongsTo(Semesters::class, 'semid', 'semid');
+    public function semester_sy(){
+        return $this->belongsTo(SemSy::class, 'semsyid', 'semsyid');
     }
 
     public function subjects() {

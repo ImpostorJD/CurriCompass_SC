@@ -1,0 +1,72 @@
+<div class="bg-slate-100 p-4 w-full h-full">
+  <h1 class="text-[2rem] font-bold mb-2">
+    Edit School Year Semester
+  </h1>
+
+  <form class="flex flex-col gap-3" [formGroup]="semsy">
+    <div>
+      School Year
+      <div class="relative w-full">
+        <select formControlName="sy"
+          class="p-2 w-full h-full border-[1px] border-black rounded-md">
+          <option selected [ngValue]="null" disabled>
+            Please Select
+          </option>
+           @for(s of schoolYears; track $index){
+              <option [ngValue]="s.sy">
+                 {{ dateformat.formatToYear(s.sy_start) + " - " + dateformat.formatToYear(s.sy_end) }}
+              </option>
+           }
+        </select>
+        <div class="text-red-600">
+          @if(semsy.get('sy')?.hasError('required')){
+            School Year is required!
+          }@else if (semsy.get('sy')?.hasError('duplicate')) {
+            School Year and semester combination already exists!
+          }
+        </div>
+      </div>
+    </div>
+    <div>
+      Semester
+      <select formControlName="semid"
+      class="p-2 w-full h-full border-[1px] border-black rounded-md">
+      <option selected [ngValue]="null" disabled>
+        Please Select
+      </option>
+       @for(s of semesters; track $index){
+          <option [ngValue]="s.semid">
+            {{ s.semdesc }}
+          </option>
+       }
+    </select>
+      @if(semsy.get('semid')?.hasError('required')){
+        <div class="text-red-600">
+          Semester is required!
+        </div>
+      }
+    </div>
+    <div class="flex flex-row justify-center gap-2">
+      <a
+        class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase"
+        [routerLink]="'/semester-management'"
+      >
+        <i class="material-symbols-outlined">
+          cancel
+        </i>
+        <span class="hidden lg:block">
+          Cancel
+        </span>
+      </a>
+      <button
+        class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase"
+        (click)="handleSubmit()"
+      >
+        <i class="material-symbols-outlined">edit</i>
+        <span class="hidden lg:block">
+          Edit Course
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

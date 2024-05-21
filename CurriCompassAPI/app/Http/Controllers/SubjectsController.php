@@ -36,8 +36,8 @@ class SubjectsController extends Controller
             'subjectunitlec' => ['required', 'integer'],
             'subjecthourslec' => ['required', 'decimal:0'],
             'subjecthourslab' => ['required', 'decimal:0'],
-            'semavailability' => ['required', 'integer'],
-            'year_level' => ['nullable', 'string'],
+            // 'semavailability' => ['required', 'integer'],
+            'year_level_id' => ['nullable', 'integer'],
             'subjects' => ['nullable', 'array'],
             'subjects*.subjectid' => ['required', 'integer'],
         ]);
@@ -63,14 +63,14 @@ class SubjectsController extends Controller
 
         $pre_requisite = Pre_Requisites::create([
             'subjectid' => $subject->subjectid,
-            'year_level' => $request->year_level,
+            'year_level_id' => $request->year_level,
            // 'completion' => $request->completion,
         ]);
 
-        CourseAvailability::create([
-            'semid' => $request['semavailability'],
-            'subjectid' => $subject->subjectid,
-        ]);
+        // CourseAvailability::create([
+        //     'semid' => $request['semavailability'],
+        //     'subjectid' => $subject->subjectid,
+        // ]);
 
         if(sizeof($request->subjects) > 0) {
             foreach($request->subjects as $subject){
@@ -91,6 +91,7 @@ class SubjectsController extends Controller
     {
         $res = Subjects::with(['pre_requisites' => function($query){
             $query->with('pre_requisites_subjects');
+            $query->with('year_level');
         }])->with('course_availability')
             ->where('subjectid', '=', $id)->first();
 
@@ -118,7 +119,7 @@ class SubjectsController extends Controller
             'subjecthourslec' => ['required', 'decimal:0'],
             'subjecthourslab' => ['required', 'decimal:0'],
             'semavailability' => ['required', 'integer'],
-            'year_level' => ['nullable', 'string'],
+            'year_level_id' => ['nullable', 'integer'],
             'subjects' => ['nullable', 'array'],
             'subjects*.subjectid' => ['required', 'integer'],
         ]);
@@ -151,7 +152,7 @@ class SubjectsController extends Controller
             ]);
 
             $pre_requisite->update([
-                'year_level' => $request->year_level,
+                'year_level_id' => $request->year_level,
                 //'completion' => $request->completion,
             ]);
 
@@ -193,50 +194,50 @@ class SubjectsController extends Controller
             ], 404);
     }
 
-    public function course_availability(Request $request){
-        $course = null;
-        if ($request->semid != null){
-            $course = CourseAvailability::where('semid', $request->semid)
-                ->with('subjects')
-                ->orderBy('semid', 'ASC')
-                ->get();
-        }else{
+    // public function course_availability(Request $request){
+    //     $course = null;
+    //     if ($request->semid != null){
+    //         $course = CourseAvailability::where('semid', $request->semid)
+    //             ->with('subjects')
+    //             ->orderBy('semid', 'ASC')
+    //             ->get();
+    //     }else{
 
-            $course = CourseAvailability::with('subjects')
-                ->orderBy('semid', 'ASC')
-                ->get();
-        }
+    //         $course = CourseAvailability::with('subjects')
+    //             ->orderBy('semid', 'ASC')
+    //             ->get();
+    //     }
 
-        return response()->json([
-            ['status' => 'success'],
-            $course
-            ], 200);
-    }
+    //     return response()->json([
+    //         ['status' => 'success'],
+    //         $course
+    //         ], 200);
+    // }
 
-    public function course_availability_update(Request $request, int $id){
-        $validate = Validator::make($request->all(), [
-            'semavailability' => ['required', 'integer'],
-        ]);
+    // public function course_availability_update(Request $request, int $id){
+    //     $validate = Validator::make($request->all(), [
+    //         'semavailability' => ['required', 'integer'],
+    //     ]);
 
-        if($validate->fails()){
-            return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
-        }
+    //     if($validate->fails()){
+    //         return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
+    //     }
 
-        $res = CourseAvailability::where('subjectid', $id)->first();
+    //     $res = CourseAvailability::where('subjectid', $id)->first();
 
-        if($res != null) {
-            $res->delete();
-            return response()->json([
-                ['status' => 'success'],
-                CourseAvailability::create([
-                    'semid' => $request['semavailability'],
-                    'subjectid' => $id,
-                ])
-            ], 200);
-        }
+    //     if($res != null) {
+    //         $res->delete();
+    //         return response()->json([
+    //             ['status' => 'success'],
+    //             CourseAvailability::create([
+    //                 'semid' => $request['semavailability'],
+    //                 'subjectid' => $id,
+    //             ])
+    //         ], 200);
+    //     }
 
-        return response()->json([
-            ['status' => 'not found'],
-        ], 404);
-    }
+    //     return response()->json([
+    //         ['status' => 'not found'],
+    //     ], 404);
+    // }
 }

@@ -34,8 +34,7 @@ export class StudentsListingComponent {
   students:any = null;
 
   deleteStudent(id: number){
-
-    if(confirm("Are you sure to delete this Students Record?")){
+    this.modalUtility.disableModal();
     this.req.deleteResource('student-records/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getStudents();
@@ -43,7 +42,6 @@ export class StudentsListingComponent {
 
       error: error => console.error(error),
     });
-  }
   }
 
   getStudents(){
