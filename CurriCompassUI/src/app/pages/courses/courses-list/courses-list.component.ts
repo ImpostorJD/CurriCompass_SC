@@ -35,6 +35,7 @@ export class CoursesListComponent {
 
   searchCourse:string = '';
   courses: any = null;
+  showError = false;
 
   getCourses(){
     this.courseService.getCourses().subscribe((c:any) => {
@@ -48,7 +49,14 @@ export class CoursesListComponent {
         this.getCourses();
       },
 
-      error: error => console.error(error),
+      error: err => {
+        if (err.status === 400) {
+          this.showError = true;
+          setTimeout(() => {
+            this.showError = false;
+          }, 2000);
+        }
+      },
     });
     this.modalUtility.disableModal();
   }

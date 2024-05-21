@@ -26,16 +26,18 @@
               </option>
            }
         </select>
-        @if(courseAvailability.get('subjectid')?.hasError('required')){
-          <div class="text-red-600">
+        <div class="text-red-600">
+          @if(courseAvailability.get('subjectid')?.hasError('required')){
             Course is required!
-          </div>
-        }
+          }@else if (courseAvailability.get('subjectid')?.hasError('duplicate')) {
+            Course with the following data already exists!
+          }
+        </div>
       </div>
     </div>
     <div>
       School Year and Semester
-      <select formControlName="semsy"
+      <select formControlName="semsyid"
           class="p-2 w-full h-full border-[1px] border-black rounded-md">
           <option selected [ngValue]="null" disabled>
             Please Select
@@ -46,7 +48,7 @@
               </option>
            }
         </select>
-      @if(courseAvailability.get('semsy')?.hasError('required')){
+      @if(courseAvailability.get('semsyid')?.hasError('required')){
         <div class="text-red-600">
           Semester - School Year is required!
         </div>

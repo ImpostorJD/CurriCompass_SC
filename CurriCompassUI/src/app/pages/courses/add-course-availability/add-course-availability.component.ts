@@ -47,7 +47,7 @@ export class AddCourseAvailabilityComponent {
 
   courseAvailability =  this.fb.group({
     subjectid: new FormControl('', [Validators.required]),
-    semsy: new FormControl('', [Validators.required]),
+    semsyid: new FormControl('', [Validators.required]),
     time: new FormControl('', [Validators.required]),
     section: new FormControl('', [Validators.required]),
     limit: new FormControl("0", [Validators.required]),
@@ -67,7 +67,7 @@ export class AddCourseAvailabilityComponent {
       },
       error: (err:any) => {
         if(err.status == 409){
-          this.semsy.get('sy')!.setErrors({'duplicate' :true});
+          this.courseAvailability.get('subjectid')!.setErrors({'duplicate' :true});
         }
       }
     });

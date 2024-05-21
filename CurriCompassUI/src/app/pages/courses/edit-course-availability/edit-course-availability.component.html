@@ -1,1 +1,154 @@
-<p>edit-course-availability works!</p>
+<div class="bg-slate-100 p-4 w-full h-full">
+  <h1 class="text-[2rem] font-bold mb-2">
+    Course Availability
+  </h1>
+  <div class="flex flex-col h-[8rem] border-slate-400 p-4 rounded-md border-[1px] bg-white mb-2">
+    <span>Filter Course</span>
+    <div class="relative w-full">
+      <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchCourse" [ngModelOptions]="{standalone:true}">
+      <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
+        Search
+      </i>
+    </div>
+  </div>
+  <form class="flex flex-col gap-3" [formGroup]="courseAvailability">
+    <div>
+      Course
+      <div class="relative w-full">
+        <select formControlName="subjectid"
+          class="p-2 w-full h-full border-[1px] border-black rounded-md">
+          <option selected [ngValue]="null" disabled>
+            Please Select
+          </option>
+           @for(c of courseList | coursePipe:searchCourse; track $index){
+              <option [ngValue]="c.subjectid">
+                  {{ c.subjectcode + " - " + c.subjectname }}
+              </option>
+           }
+        </select>
+        <div class="text-red-600">
+          @if(courseAvailability.get('subjectid')?.hasError('required')){
+            Course is required!
+          }@else if (courseAvailability.get('subjectid')?.hasError('duplicate')) {
+            Course with the following data already exists!
+          }
+        </div>
+      </div>
+    </div>
+    <div>
+      School Year and Semester
+      <select formControlName="semsyid"
+          class="p-2 w-full h-full border-[1px] border-black rounded-md">
+          <option selected [ngValue]="null" disabled>
+            Please Select
+          </option>
+           @for(s of semsy; track $index){
+              <option [ngValue]="s.semsyid">
+                 {{ "SY: " + dateformat.formatToYear(s.school_year.sy_start) + " - " + dateformat.formatToYear(s.school_year.sy_end) + " Sem: " + s.semester.semdesc }}
+              </option>
+           }
+        </select>
+      @if(courseAvailability.get('semsyid')?.hasError('required')){
+        <div class="text-red-600">
+          Semester - School Year is required!
+        </div>
+      }
+    </div>
+    <div>
+      Time Period
+      <select
+      class="p-2 w-full h-full border-[1px] border-black rounded-md" formControlName="time">
+      <option selected [ngValue]="null" disabled>
+        Please Select
+      </option>
+      <option [ngValue]="'8-10'">
+        8:00 AM - 10:00 AM
+      </option>
+      <option [ngValue]="'8-11'">
+        8:00 AM - 11:00 AM
+      </option>
+      <option [ngValue]="'10-12'">
+        10:00 AM - 12:00 PM
+      </option>
+      <option [ngValue]="'11-2'">
+        11:00 AM - 2:00 PM
+      </option>
+      <option [ngValue]="'1-3'">
+        1:00 PM - 3:00 PM
+      </option>
+      <option [ngValue]="'2-5'">
+        2:00 PM - 5:00 PM
+      </option>
+      <option [ngValue]="'3-5'">
+        3:00 PM - 5:00 PM
+      </option>
+    </select>
+    @if(courseAvailability.get('time')?.hasError('required')){
+      <div class="text-red-600">
+        Time Availability is required!
+      </div>
+    }
+    </div>
+    <div>
+      Section
+      <input class="w-full p-2 border-[1px] border-black rounded-md" formControlName="section">
+      @if(courseAvailability.get('section')?.hasError('required')){
+        <div class="text-red-600">
+          Section is required!
+        </div>
+      }
+    </div>
+    <div>
+      Section Limit
+      <input class="w-full p-2 border-[1px] border-black rounded-md" formControlName="limit" type="number" min="0">
+
+    </div>
+    <div>
+      Days
+      <select
+        formControlName="days"
+          class="p-2 w-full h-full border-[1px] border-black rounded-md">
+          <option selected [ngValue]="null" disabled>
+            Please Select
+          </option>
+          <option [ngValue]="'M-Th'">
+              {{ "Monday - Thursday" }}
+          </option>
+          <option [ngValue]="'T-F'">
+              {{ "Tuesday - Friday" }}
+          </option>
+          <option [ngValue]="'W-S'">
+              {{ "Wednesday - Saturday" }}
+          </option>
+
+        </select>
+        @if(courseAvailability.get('days')?.hasError('required')){
+          <div class="text-red-600">
+            Day Availability is required!
+          </div>
+        }
+    </div>
+    <div class="flex flex-row justify-center gap-2">
+      <a
+        class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase"
+        [routerLink]="'/course-availability'"
+      >
+        <i class="material-symbols-outlined">
+          cancel
+        </i>
+        <span class="hidden lg:block">
+          Cancel
+        </span>
+      </a>
+      <button
+        class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase"
+        (click)="handleSubmit()"
+      >
+        <i class="material-symbols-outlined">edit</i>
+        <span class="hidden lg:block">
+          Edit Course
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

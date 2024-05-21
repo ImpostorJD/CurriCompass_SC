@@ -9,28 +9,28 @@ class CourseAvailability extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = ['subjectid','semid'];
+    protected $primaryKey = 'caid';
     public $incrementing = false;
     public $timestamps = false;
 
 
     protected $fillable = [
-        'semsyid',
         'subjectid',
         'time',
+        'semsyid',
         'section',
         'section_limit',
         'days'
     ];
 
-    protected function setKeysForSaveQuery($query)
-    {
-        $query
-            ->where('semid', '=', $this->getAttribute('semid'))
-            ->where('subjectid', '=', $this->getAttribute('subjectid'));
+    // protected function setKeysForSaveQuery($query)
+    // {
+    //     $query
+    //         ->where('semid', '=', $this->getAttribute('semid'))
+    //         ->where('subjectid', '=', $this->getAttribute('subjectid'));
 
-        return $query;
-    }
+    //     return $query;
+    // }
 
     public function semester_sy(){
         return $this->belongsTo(SemSy::class, 'semsyid', 'semsyid');

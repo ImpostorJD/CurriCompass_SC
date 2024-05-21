@@ -184,6 +184,18 @@ class SubjectsController extends Controller
         $res = Subjects::where('subjectid', '=', $id)->first();
 
         if($res != null) {
+            $deletable = true;
+            $messages = [];
+            if ($res->course_availability()->count() > 0) {
+                $messages['course_availability'] = "Course Availability currently have student records.";
+                $deletable = false;
+            }
+
+            if(!$deletable) return response()->json([
+                ['status', 'bad request'],
+                $messages
+            ], 400);
+
             return response()->json([
                 ['status' => 'updated'],
                 $res->delete(),
@@ -194,50 +206,4 @@ class SubjectsController extends Controller
             ], 404);
     }
 
-    // public function course_availability(Request $request){
-    //     $course = null;
-    //     if ($request->semid != null){
-    //         $course = CourseAvailability::where('semid', $request->semid)
-    //             ->with('subjects')
-    //             ->orderBy('semid', 'ASC')
-    //             ->get();
-    //     }else{
-
-    //         $course = CourseAvailability::with('subjects')
-    //             ->orderBy('semid', 'ASC')
-    //             ->get();
-    //     }
-
-    //     return response()->json([
-    //         ['status' => 'success'],
-    //         $course
-    //         ], 200);
-    // }
-
-    // public function course_availability_update(Request $request, int $id){
-    //     $validate = Validator::make($request->all(), [
-    //         'semavailability' => ['required', 'integer'],
-    //     ]);
-
-    //     if($validate->fails()){
-    //         return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
-    //     }
-
-    //     $res = CourseAvailability::where('subjectid', $id)->first();
-
-    //     if($res != null) {
-    //         $res->delete();
-    //         return response()->json([
-    //             ['status' => 'success'],
-    //             CourseAvailability::create([
-    //                 'semid' => $request['semavailability'],
-    //                 'subjectid' => $id,
-    //             ])
-    //         ], 200);
-    //     }
-
-    //     return response()->json([
-    //         ['status' => 'not found'],
-    //     ], 404);
-    // }
 }
