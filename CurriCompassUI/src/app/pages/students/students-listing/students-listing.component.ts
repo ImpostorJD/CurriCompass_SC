@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
-import { httpOptions } from '../../../../configs/Constants';
+import { httpOptions, yearLevel } from '../../../../configs/Constants';
 import { UserFilterPipe } from '../../../services/filter/search-filters/user-filter.pipe';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
@@ -48,7 +48,7 @@ export class StudentsListingComponent {
     this.req.getResource('student-records',
     httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
-        this.students = res[1];
+        this.students = res[1].sort((a: any, b: any) => yearLevel(a.student_record.year_level.year_level_desc, b.student_record.year_level.year_level_desc));
       },
 
       error : err => console.error(err),

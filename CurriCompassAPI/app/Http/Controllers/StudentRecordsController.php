@@ -23,12 +23,12 @@ class StudentRecordsController extends Controller
             User::whereHas('user_roles', function($query){
                $query->where('rolename', '=', 'Student');
             })->with(['student_record' => function($query){
-                $query->with('school_year');
                 $query->with(['curriculum' => function($query){
                     $query->with('program');
                     $query->with('curriculum_subjects');
+                    $query->with('school_year');
                 }]);
-
+                $query->with('year_level');
             }])->get()
         ], 200);
     }
@@ -40,7 +40,6 @@ class StudentRecordsController extends Controller
                 $query->where('student_no', $id);
 
             })->with(['student_record' => function($query){
-                $query->with('year_level');
                 $query->with(['subjects_taken' => function($query){
                     $query->with('subjects');
                     $query->with('school_year');
@@ -49,10 +48,12 @@ class StudentRecordsController extends Controller
                     $query->with('program');
                     $query->with('school_year');
                     $query->with(['curriculum_subjects' => function($query){
+                        $query->with('year_level');
                         $query->with('subjects');
                         $query->with('semesters');
                     }]);
                   }]);
+                $query->with('year_level');
                 $query->with('school_year');
             }])->first();
 
@@ -227,6 +228,7 @@ class StudentRecordsController extends Controller
             $user->student_record->subjects_taken()->insert([
                 'subjectid' => $subject['subjectid'],
                 'taken_at' => $subject['taken_at'],
+                'grade' => $subject['grade'],
                 'remark' => $subject['remark'],
                 'srid' => $user->student_record->srid,
                 'sy' => $subject['sy'],

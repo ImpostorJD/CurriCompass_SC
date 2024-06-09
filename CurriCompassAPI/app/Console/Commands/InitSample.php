@@ -45,5 +45,14 @@ class InitSample extends Command
         echo("Course/Subjects Table successfully seeded.\n");
         $this->call('db:seed', ['--class' => 'curricula_seeder']);
         echo("Curricula Table successfully seeded.\n");
+        echo("Seeding WAM Students Please Wait...\n");
+        $this->call('db:seed', ['--class' => 'WebDevMockData']);
+        echo("Student WAM specialization successfully seeded.\n");
+        echo("Seeding AGD Students Please Wait...\n");
+        $this->call('db:seed', ['--class' => 'AGDMockData']);
+        echo("Student AGD specialization successfully seeded.\n");
+        echo("Seeding BPO Students Please Wait...\n");
+        $this->call('db:seed', ['--class' => 'BPOMockData']);
+        echo("Student BPO specialization successfully seeded.\n");
     }
 }

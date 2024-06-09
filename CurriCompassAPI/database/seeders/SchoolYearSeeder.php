@@ -16,8 +16,20 @@ class SchoolYearSeeder extends Seeder
     {
         DB::table('school_years')->insert([
             [
+                'sy_start' => Carbon::create('2020', '08', '23'),
+                'sy_end' =>  Carbon::create('2021', '07', '21'),
+            ],
+            [
                 'sy_start' => Carbon::create('2021', '08', '23'),
                 'sy_end' =>  Carbon::create('2022', '07', '21'),
+            ],
+            [
+                'sy_start' => Carbon::create('2022', '08', '23'),
+                'sy_end' =>  Carbon::create('2023', '07', '21'),
+            ],
+            [
+                'sy_start' => Carbon::create('2023', '08', '23'),
+                'sy_end' =>  Carbon::create('2024', '07', '21'),
             ],
         ]);
     }

@@ -44,13 +44,13 @@
               <span>{{ student.student_record.student_no }}</span>
             </td>
             <td class="lg:w-[20%] flex-auto px-1 flex items-center">
-              <span>{{ student.userfname + " " + student.userlname + " " + student.userlname }}</span>
+              <span>{{ student.userfname + " " + student.usermiddle + " " + student.userlname }}</span>
             </td>
             <td class="w-[20%] px-1 hidden lg:flex items-center">
               <span>{{ student.student_record.cid != null ? student.student_record.curriculum.program.programcode : "Not Yet Set" }}</span>
             </td>
             <td class="w-[15%] px-1 hidden lg:flex items-center">
-              <span>{{ student.student_record.year_level != null ? student.student_record.year_level : "Not Yet Set" }}</span>
+              <span>{{ student.student_record.year_level != null ? student.student_record.year_level.year_level_desc : "Not Yet Set" }}</span>
             </td>
             <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
               <a

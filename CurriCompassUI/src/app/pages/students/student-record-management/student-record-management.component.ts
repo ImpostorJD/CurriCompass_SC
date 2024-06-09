@@ -119,8 +119,8 @@ export class StudentRecordManagementComponent {
     this.req.getResource('curriculum/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.curriculumSubjects = res[1].curriculum_subjects
-          .sort((a: any, b: any) => yearLevel(a.year_level.year_level_desc, b.year_level.year_level_desc))
-          .sort((a: any, b: any) =>  sortSemester(a.semesters.semdesc, b.semesters.semdesc));
+        .sort((a: any, b: any) =>  sortSemester(a.semesters.semdesc, b.semesters.semdesc))
+        .sort((a: any, b: any) => yearLevel(a.year_level.year_level_desc, b.year_level.year_level_desc));
         this.curriculumSubjects.forEach((element:any) => {
           this.addSubjectsTaken(element);
         });

@@ -30,8 +30,6 @@ return new class extends Migration
                 ->references('semsyid')
                 ->on('sem_sy')
                 ->onDelete('cascade');
-
-
         });
     }
 
