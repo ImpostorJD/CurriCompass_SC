@@ -6,6 +6,7 @@ use App\Jobs\CalculateSimilarityJob;
 use App\Jobs\CourseAvailabilityCompareJob;
 use App\Jobs\CourseClusteringJob;
 use App\Jobs\IdentifyMissingCourseJob;
+use App\Jobs\IdentifyRemainingLabJob;
 use App\Jobs\PredictiveGradeJob;
 use App\Models\CourseAvailability;
 use App\Models\Curriculum;
@@ -35,7 +36,6 @@ class EnlistmentController extends Controller
 
     public function store(Request $request)
     {
-        //TODO: Implement algorithmic enlistment
         //validate srid of target user
         $validate = Validator::make($request->all(), [
             'srid' => ['required', 'integer']
@@ -141,13 +141,15 @@ class EnlistmentController extends Controller
             'semsyid' => $currentsemsy,
         ]);
 
-         // Process enlistment
-        $this->processEnlistment($targetStudent, $segregatedCourse, $enlistment, $time_range);
+        // identify remaining lab subjects
+        $remainingLabJob = IdentifyRemainingLabJob::dispatch($subjectsNotTaken);
+
+        // Process enlistment
+        $this->processEnlistment($targetStudent, $segregatedCourse, $enlistment, $time_range, $remainingLabJob->get());
 
         //return response
         return response()->json([
             ['status' => 'success'],
-
         ], 200);
     }
 
@@ -181,7 +183,7 @@ class EnlistmentController extends Controller
     /**
      * 06/10/2024
      *
-     * This function merely is a collection of results from jobs (asynchronously)
+     * This function is a helper function to retrieve a collection of results from jobs (asynchronously)
      */
     private function collectJobResults($jobs)
     {
@@ -193,99 +195,51 @@ class EnlistmentController extends Controller
     }
 
     /**
-     * This function is not working yet.
+     * This function is a helper function to process the actual enlistment creation.
      */
-    private function processEnlistment($targetStudent, $segregatedCourse, $enlistment, $timeRangeMap)
+    private function processEnlistment($targetStudent, $segregatedCourse, $enlistment, $timeRangeMap, $remainingLab)
     {
-        // Define constants
-        $minLabSubjects = 3;
-        $maxUnits = 21;
+        $minLabSubjects = $targetStudent->year_level_id < 4 ? min(3, $remainingLab) : $remainingLab;
+        $maxUnits = $targetStudent->year_level_id < 4 ? 21 : PHP_INT_MAX;
         $unitCount = 0;
         $enlistedLabs = 0;
         $enlistedSubjects = [];
 
-        // Check if student is less than 4th year
-        if ($targetStudent->year_level_id < 4) {
-            // Iterate through time ranges
-            foreach ($timeRangeMap as $timeKey => $overlappingTimes) {
-                foreach ($segregatedCourse as $dayPairingCourses) {
-                    foreach ($dayPairingCourses as $subjectId) {
-                        if (in_array($subjectId, $enlistedSubjects)) {
-                            continue;
-                        }
+        foreach ($timeRangeMap as $timeKey => $overlappingTimes) {
+            foreach ($segregatedCourse as $dayPairingCourses) {
+                foreach ($dayPairingCourses as $subjectId) {
+                    if (in_array($subjectId, $enlistedSubjects)) {
+                        continue;
+                    }
 
-                        // Retrieve course availability
-                        $availability = CourseAvailability::where('subjectid', $subjectId)
-                            ->whereIn('time', $overlappingTimes)
-                            ->first();
+                    $availability = CourseAvailability::where('subjectid', $subjectId)
+                        ->whereIn('time', $overlappingTimes)
+                        ->first();
 
-                        // Check if availability is found and if section limit is not met
-                        if ($availability && $this->checkAvailabilityLimit($availability)) {
-                            // Calculate units and lab count
-                            $subject = Subjects::find($subjectId);
-                            $subjectUnits = $subject->subjectcredits;
-                            $isLab = $subject->subjecthourslab > $subject->subject->subjecthourslec;
+                    if ($availability && $this->checkAvailabilityLimit($availability)) {
+                        $subject = Subjects::find($subjectId);
+                        $subjectUnits = $subject->subjectcredits;
+                        $isLab = $subject->subjecthourslab > $subject->subject->subjecthourslec;
 
-                            if ($unitCount + $subjectUnits <= $maxUnits && (!$isLab || $enlistedLabs < $minLabSubjects)) {
-                                // Add subject to enlistment
-                                EnlistmentSubjects::create([
-                                    'peid' => $enlistment->peid,
-                                    'caid' => $availability->caid,
-                                ]);
+                        if ($unitCount + $subjectUnits <= $maxUnits && (!$isLab || $enlistedLabs < $minLabSubjects)) {
+                            EnlistmentSubjects::create([
+                                'peid' => $enlistment->peid,
+                                'caid' => $availability->caid,
+                            ]);
 
-                                $enlistedSubjects[] = $subjectId;
-                                $unitCount += $subjectUnits;
+                            $enlistedSubjects[] = $subjectId;
+                            $unitCount += $subjectUnits;
 
-                                if ($isLab) {
-                                    $enlistedLabs++;
-                                }
+                            if ($isLab) {
+                                $enlistedLabs++;
                             }
                         }
                     }
-                }
-
-                if ($unitCount >= $maxUnits) {
-                    break; // Stop if max units are met
                 }
             }
-        } else {
-            // If student is 4th year or above, traverse through all subjects from morning to afternoon
-            foreach ($timeRangeMap as $timeKey => $overlappingTimes) {
-                foreach ($segregatedCourse as $dayPairingCourses) {
-                    foreach ($dayPairingCourses as $subjectId) {
-                        if (in_array($subjectId, $enlistedSubjects)) {
-                            continue; // Skip if already enlisted
-                        }
 
-                        // Retrieve course availability
-                        $availability = CourseAvailability::where('subjectid', $subjectId)
-                            ->whereIn('time', $overlappingTimes)
-                            ->first();
-
-                        // Check if availability is found and if section limit is not met
-                        if ($availability && $this->checkAvailabilityLimit($availability)) {
-                            // Calculate units and lab count
-                            $subject = Subjects::find($subjectId);
-                            $subjectUnits = $subject->subjectcredits;
-                            $isLab = $subject->subjecthourslab > $subject->subject->subjecthourslec;
-
-                            if ($unitCount + $subjectUnits <= $maxUnits) {
-                                // Add subject to enlistment
-                                EnlistmentSubjects::create([
-                                    'peid' => $enlistment->peid,
-                                    'caid' => $availability->caid,
-                                ]);
-
-                                $enlistedSubjects[] = $subjectId;
-                                $unitCount += $subjectUnits;
-
-                                if ($isLab) {
-                                    $enlistedLabs++;
-                                }
-                            }
-                        }
-                    }
-                }
+            if ($unitCount >= $maxUnits) {
+                break; // Stop if max units are met
             }
         }
     }
