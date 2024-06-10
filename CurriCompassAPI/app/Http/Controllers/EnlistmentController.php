@@ -152,6 +152,13 @@ class EnlistmentController extends Controller
         //return response
         return response()->json([
             ['status' => 'success'],
+            Enlistment::where('peid', $enlistment->peid)
+                ->with(['enlistment_subjects', function($query){
+                    $query->with(['course_availability' => function($query){
+                        $query->with('subjects');
+                    }]);
+                }])
+                ->first()
         ], 200);
     }
 
