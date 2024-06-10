@@ -76,6 +76,6 @@ class CalculateSimilarityJob implements ShouldQueue
 
         //apply normalized euclidean similarity
         $similarity = 1/ (1 + $similarity);
-        return [$this->referenceStudent->studentid => $similarity];
+        return [$this->referenceStudent->student_no => $similarity];
     }
 }
