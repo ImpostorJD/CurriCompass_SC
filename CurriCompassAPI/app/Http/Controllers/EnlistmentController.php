@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\CalculateSimilarityJob;
 use App\Jobs\CourseAvailabilityCompareJob;
 use App\Jobs\CourseClusteringJob;
 use App\Jobs\IdentifyMissingCourseJob;
@@ -17,6 +16,8 @@ use App\Models\StudentRecord;
 use App\Models\Subjects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use React\Promise;
+use App\ReactPHP\CalculateSimilarityAsync;
 
 //TODO: Add documentation
 class EnlistmentController extends Controller
@@ -67,16 +68,25 @@ class EnlistmentController extends Controller
             ->get();
 
         //calculate euclidean distance similarity asynchronously
-        $similarityJobs = [];
-        foreach($referenceStudents as $ref){
-            $similarityJobs[] = CalculateSimilarityJob::dispatch($targetStudent, $ref);
+        $similarityPromises = [];
+        foreach ($referenceStudents as $ref) {
+            $similarityPromises[] = CalculateSimilarityAsync::calculateSimilarity($targetStudent, $ref);
         }
+        // $similarityJobs = [];
+        // foreach($referenceStudents as $ref){
+        //     $similarityJobs[] = CalculateSimilarityJob::dispatch($targetStudent, $ref);
+        // }
 
         //get the similarity index results
-        $euclideanDistance = $this->collectJobResults($similarityJobs);
+        //$euclideanDistance = $this->collectJobResults($similarityJobs);
+        $euclideanDistance = $this->collectPromises($similarityPromises);
 
         //sort descending (highest to lowest 1 to 0)
         arsort($euclideanDistance);
+        $euclideanDistance = array_filter($euclideanDistance, function($value) {
+            return $value != 1;
+        });
+        dd($euclideanDistance);
 
         //retrieve courses from the curriculum
         $curriculum = Curriculum::where('cid', $targetStudent->cid)
@@ -246,6 +256,13 @@ class EnlistmentController extends Controller
         return $results;
     }
 
+    private function collectPromises($promises){
+        $resolvedResults = [];
+        Promise\all($promises)->then(function($res) use (&$resolvedResults) {
+            $resolvedResults = $res;
+        });
+        return $resolvedResults;
+    }
     /**
      * This function is a helper function to process the actual enlistment creation.
      */

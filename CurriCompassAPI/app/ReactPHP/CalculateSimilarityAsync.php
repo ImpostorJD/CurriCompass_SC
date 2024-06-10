@@ -1,34 +1,48 @@
 <?php
+namespace App\ReactPHP;
 
-require 'vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
-use React\EventLoop\Loop;
-use React\Promise\Promise;
+use App\Models\SubjectsTaken;
 
-function calculateSimilarity($targetStudent, $referenceStudent)
-{
-    // Your similarity calculation logic here
-    // Replace this with your actual similarity calculation code
-    $similarity = rand(0, 100) / 100; // Placeholder logic, replace this with your calculation
+class CalculateSimilarityAsync {
 
-    return $similarity;
-}
+    public static function calculateSimilarity($targetStudent, $referenceStudent)
+    {
+        $similarity = 0;
+        $targetCourses = SubjectsTaken::where('srid', $targetStudent['srid'])
+                ->where('grade', '<=', 3)
+                ->get()
+                ->keyBy('subjectid');
 
-function calculateSimilarityAsync($targetStudent, $referenceStudents)
-{
-    $loop = Loop::get();
-    $promises = [];
+            // Retrieve reference student's subjects taken and grades
+            $referenceCourses = SubjectsTaken::where('srid', $referenceStudent['srid'])
+                ->whereIn('subjectid', $targetCourses->keys())
+                ->get()
+                ->keyBy('subjectid');
 
-    foreach ($referenceStudents as $referenceStudent) {
-        $promise = new Promise(function ($resolve, $reject) use ($targetStudent, $referenceStudent, $loop) {
-            $loop->futureTick(function () use ($resolve, $targetStudent, $referenceStudent) {
-                $similarity = calculateSimilarity($targetStudent, $referenceStudent);
-                $resolve([$referenceStudent->student_no => $similarity]);
-            });
-        });
+            //iterate through subjects taken to get the summation of (courseGWA(reference) - courseGWA(target))^2
+            // foreach($courses as $course){
+            //     $similarity += pow(
+            //         SubjectsTaken::where('srid', $this->referenceStudent['srid'])
+            //             ->where('subjectid', $course->subjectid)->first()->grade
+            //             - $course->grade, 2);
+            // }
+            foreach ($targetCourses as $subjectId => $course) {
+                if (isset($referenceCourses[$subjectId])) {
+                    $referenceGrade = $referenceCourses[$subjectId]->grade;
+                    $targetGrade = $course->grade;
+                    $similarity += pow($referenceGrade - $targetGrade, 2);
+                }
+            }
 
-        $promises[] = $promise;
+            //get the square root of the summations of (courseGWA(reference) - courseGWA(target))^2 to get the euclidean distance
+            $similarity = sqrt($similarity);
+
+            //apply normalized euclidean similarity
+            $similarity = 1/ (1 + $similarity);
+
+        return $similarity;
     }
-
-    return $promises;
 }
+
