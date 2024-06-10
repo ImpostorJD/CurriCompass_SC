@@ -40,6 +40,7 @@ class PredictiveGradeJob implements ShouldQueue
     {
         $summationSimilarity = 0;
         $summationCourseGwa = 0;
+
         // iterate through the matrix of reference similarity (assuming all are reference students)
         if (isset($this->referenceSimilarities)){
             foreach($this->referenceSimilarities as $studentid => $similarity){
@@ -52,7 +53,7 @@ class PredictiveGradeJob implements ShouldQueue
             }
 
             //retrieve the predicted GWA
-            return $summationCourseGwa/$summationSimilarity;
+            return [$this->targetCourse => $summationCourseGwa / $summationSimilarity];
         }
 
         return;

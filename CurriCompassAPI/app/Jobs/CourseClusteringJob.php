@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\CourseAvailability;
+use App\Models\Subjects;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -46,15 +47,27 @@ class CourseClusteringJob implements ShouldQueue
             $courseAvailability = CourseAvailability::where('subjectid', $courseId)->get();
             foreach($courseAvailability as $c){
                 if($c->days == "M-Th"){
-                    $firstPairing[] = $c;
+                    $firstPairing[] = $c->subjectId;
                 } elseif($c->days == "T-F"){
-                    $secondPairing[] = $c;
+                    $secondPairing[] = $c->subjectId;
                 } elseif($c->days == "W-S"){
-                    $thirdPairing[] = $c;
+                    $thirdPairing[] = $c->subjectId;
                 }
             }
+
+            $sortedSubjectIdsMTh = $this->sortSubjectIdsByLabHours($firstPairing);
+            $sortedSubjectIdsTF = $this->sortSubjectIdsByLabHours($secondPairing);
+            $sortedSubjectIdsWS = $this->sortSubjectIdsByLabHours($thirdPairing);
         }
-        return [$firstPairing, $secondPairing, $thirdPairing];
+
+        return [$sortedSubjectIdsMTh, $sortedSubjectIdsTF, $sortedSubjectIdsWS];
     }
 
+    private function sortSubjectIdsByLabHours($subjectIds) {
+        return Subjects::whereIn('subjectid', $subjectIds)
+                        ->sortBySubjectHoursLab()
+                        ->get()
+                        ->pluck('subjectid')
+                        ->toArray();
+    }
 }

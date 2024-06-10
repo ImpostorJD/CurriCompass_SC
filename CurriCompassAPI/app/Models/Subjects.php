@@ -41,4 +41,9 @@ class Subjects extends Model
     public function pre_requisites_subjects(){
         return $this->hasMany(Pre_Requisites_Subjects::class, 'subjectid', 'subjectid');
     }
+
+    public function scopeSortBySubjectHoursLab($query)
+    {
+        return $query->orderBy('subjecthourslab', 'desc');
+    }
 }

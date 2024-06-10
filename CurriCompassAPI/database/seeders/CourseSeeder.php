@@ -861,7 +861,7 @@ class CourseSeeder extends Seeder
                 'subjectunitlec' => 3,
                 'subjecthourslec' => 4,
                 'subjecthourslab' => 0,
-                //pre-req: ICT 11 di ko makita
+                //pre-req: none
             ],
 
             [
@@ -1409,6 +1409,10 @@ class CourseSeeder extends Seeder
                 'subjectid' => 2,
             ],
             [
+                'prid' => 22,
+                'subjectid' => 9,
+            ],
+            [
                 'prid' => 23,
                 'subjectid' => 15,
             ],
@@ -1427,6 +1431,10 @@ class CourseSeeder extends Seeder
             [
                 'prid' => 30,
                 'subjectid' => 15,
+            ],
+            [
+                'prid' => 31,
+                'subjectid' => 9,
             ],
             [
                 'prid' => 32,
@@ -1471,6 +1479,10 @@ class CourseSeeder extends Seeder
             [
                 'prid' => 46,
                 'subjectid' => 38,
+            ],
+            [
+                'prid' => 49,
+                'subjectid' => 9,
             ],
             [
                 'prid' => 50,
@@ -1574,329 +1586,5 @@ class CourseSeeder extends Seeder
             ],
         ]);
 
-        // DB::table('course_availabilities')->insert([
-        //        [
-        //            'subjectid' => 1,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 2,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 3,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 4,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 5,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 6,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 7,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 8,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 9,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 10,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 11,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 12,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 13,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 14,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 15,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 16,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 17,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 18,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 19,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 20,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 21,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 22,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 23,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 24,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 25,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 26,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 27,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 28,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 29,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 30,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 31,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 32,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 33,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 34,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 35,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 36,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 37,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 38,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 39,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 40,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 41,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 42,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 43,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 44,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 45,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 46,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 47,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 48,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 49,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 50,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 51,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 52,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 53,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 54,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 55,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 56,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 57,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 58,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 59,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 60,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 61,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 62,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 63,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 64,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 65,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 66,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 67,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 68,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 69,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 70,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 71,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 72,
-        //             'semid' => 1,
-        //        ],
-        //        [
-        //            'subjectid' => 73,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 74,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 75,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 76,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 77,
-        //             'semid' => 2,
-        //        ],
-        //        [
-        //            'subjectid' => 78,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 79,
-        //             'semid' => 3,
-        //        ],
-        //        [
-        //            'subjectid' => 80,
-        //             'semid' => 3,
-        //        ],
-        //     ]);
-
-
-        }
+    }
 }

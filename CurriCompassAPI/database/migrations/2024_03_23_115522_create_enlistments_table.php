@@ -16,11 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('srid');
             $table->unsignedBigInteger('cid');
             $table->unsignedBigInteger('year_level_id');
+            $table->unsignedBigInteger('semsyid');
 
             $table->unique([
                 'srid',
                 'cid',
-                'year_level_id'
+                'year_level_id',
+                'semsyid'
             ]);
 
             $table->foreign('srid')
@@ -36,6 +38,10 @@ return new class extends Migration
             $table->foreign('year_level_id')
                 ->references('year_level_id')
                 ->on('year_levels')
+                ->onDelete('restrict');
+            $table->foreign('semsyid')
+                ->references('semsyid')
+                ->on('sem_sy')
                 ->onDelete('restrict');
         });
     }

@@ -14,7 +14,8 @@ class Enlistment extends Model
     public $fillable = [
         'srid',
         'cid',
-        'year_level_id'
+        'year_level_id',
+        'semsyid'
     ];
 
     public function student_record(){
@@ -27,5 +28,8 @@ class Enlistment extends Model
 
     public function curriculum(){
         return $this->belongsTo(Curriculum::class, 'cid', 'cid');
+    }
+    public function semsy(){
+        return $this->belongsTo(SemSy::class, 'semsyid', 'semsyid');
     }
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('time', ['8-10', '8-11','10-12', '11-2', '1-3','2-5', '3-5']);
             $table->string('section');
             $table->integer('section_limit')->default(0);
-            $table->enum('days', ['M-Th', 'T,F', 'W,S']);
+            $table->enum('days', ['M-Th', 'T-F', 'W-S']);
 
             $table->unique(['subjectid', 'semsyid', 'time','section','days']);
             $table->foreign('subjectid')
