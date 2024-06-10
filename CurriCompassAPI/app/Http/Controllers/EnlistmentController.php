@@ -38,9 +38,10 @@ class EnlistmentController extends Controller
 
     public function store(Request $request)
     {
+
         //validate srid of target user
         $validate = Validator::make($request->all(), [
-            'srid' => ['required', 'integer']
+            'srid' => ['required', 'string']
         ]);
 
         if($validate->fails()){
@@ -50,7 +51,7 @@ class EnlistmentController extends Controller
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
 
         //Retrieve curriculum and student records synchronously
-        $targetStudent = StudentRecord::where('srid', $request->srid)
+        $targetStudent = StudentRecord::where('student_no', $request['srid'])
             ->first();
 
         if($targetStudent == null){

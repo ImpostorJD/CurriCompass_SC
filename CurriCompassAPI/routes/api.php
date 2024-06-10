@@ -225,17 +225,14 @@ Route::controller(EnlistmentController::class)
     Route::get('/', 'index')
     ->middleware('auth.anyrole:Admin, Staff');
 
-    // Removed for now, consultation will be overhauled.
-    // Route::get('/{id}', 'show');
+    Route::get('/{id}', 'show');
 
-    // Route::get('/student-regular/{id}', 'getRegularEnlistment');
+    Route::post('/', 'store');
 
-    // Route::post('/', 'store');
+    Route::patch('/{id}', 'update')
+        ->middleware('auth.anyrole:Admin, Staff');
 
-    // Route::patch('/{id}', 'update')
-    //     ->middleware('auth.anyrole:Admin, Staff');
-
-    // Route::delete('/{id}', 'destroy')
-    //     ->middleware('auth.anyrole:Admin, Staff');
+    Route::delete('/{id}', 'destroy')
+        ->middleware('auth.anyrole:Admin, Staff');
 
  });
