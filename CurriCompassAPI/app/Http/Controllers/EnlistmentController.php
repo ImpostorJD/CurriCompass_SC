@@ -28,9 +28,12 @@ class EnlistmentController extends Controller
 
     public function index()
     {
+
+        $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
+
         return response()->json([
-            ['status' => 'not found'],
-            Enlistment::all(),
+            ['status' => 'success'],
+            Enlistment::where('semsyid', $currentsemsy),
         ], 200);
     }
 
@@ -155,7 +158,7 @@ class EnlistmentController extends Controller
 
     public function show(Request $request, String $id)
     {
-        $res = Enlistment::where('srid', $id)->first();
+        $res = Enlistment::where('peid', $id)->first();
 
         if($res){
             return response()->json([
@@ -172,12 +175,49 @@ class EnlistmentController extends Controller
 
     public function update(Request $request, String $id)
     {
-        //TODO: update the enlistment individually
+        $enlistment = Enlistment::where('peid', $id)->first();
+        $validate = Validator::make($request->all(), [
+            'enlistment_subjects' => ['required' => 'array'],
+            'enlistment_subjects*.caid' => ['required', 'integer'],
+        ]);
+
+        if($enlistment) {
+          //update logic
+          $enlistment->enlistment_subjects->delete();
+
+          foreach($request->enlistment_subjects as $es) {
+            EnlistmentSubjects::create([
+                'peid' => $enlistment->peid,
+                'caid' => $es['caid'],
+            ]);
+          }
+
+        return response()->json([
+            ['status' => 'success'],
+            $enlistment
+        ], 200);
+
+        }
+        return response()->json([
+            ['status' => 'not found'],
+        ], 404);
     }
 
     public function destroy(Request $request, String $id)
     {
-        //TODO: delete the enlistment individually
+        $enlistment = Enlistment::where('peid', $id)->first();
+
+        if($enlistment){
+            return response()->json([
+                ['status' => 'success'],
+                $enlistment->delete()
+            ], 200);
+        }
+
+        return response()->json([
+            ['status' => 'not found'],
+        ], 404);
+
     }
 
     /**

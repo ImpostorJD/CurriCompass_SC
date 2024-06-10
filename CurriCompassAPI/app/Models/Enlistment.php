@@ -26,6 +26,10 @@ class Enlistment extends Model
         return $this->belongsTo(YearLevel::class, 'year_level_id', 'year_level_id');
     }
 
+    public function enlistment_subjects(){
+        return $this->hasMany(EnlistmentSubjects::class, 'peid', 'peid');
+    }
+
     public function curriculum(){
         return $this->belongsTo(Curriculum::class, 'cid', 'cid');
     }
