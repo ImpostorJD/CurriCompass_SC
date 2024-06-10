@@ -181,6 +181,11 @@ class EnlistmentController extends Controller
             'enlistment_subjects*.caid' => ['required', 'integer'],
         ]);
 
+        if($validate->fails()){
+            return response()->json([
+                ['status' => 'bad request'],
+            ], 400);
+        }
         if($enlistment) {
           //update logic
           $enlistment->enlistment_subjects->delete();
