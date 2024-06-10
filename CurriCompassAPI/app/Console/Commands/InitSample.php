@@ -54,5 +54,8 @@ class InitSample extends Command
         echo("Seeding BPO Students Please Wait...\n");
         $this->call('db:seed', ['--class' => 'BPOMockData']);
         echo("Student BPO specialization successfully seeded.\n");
+        echo("Seeding Irregular Students Please Wait...\n");
+        $this->call('db:seed', ['--class' => 'MockEnrolleeSeeder']);
+        echo("Irregular Students successfully seeded.\n");
     }
 }

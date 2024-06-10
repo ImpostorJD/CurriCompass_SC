@@ -28,7 +28,6 @@ class EnlistmentController extends Controller
 
     public function index()
     {
-
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
 
         return response()->json([

@@ -16,66 +16,7 @@ class BPOMockData extends Seeder
     private $remarks = ["Excellent", "Very Good", "Very Good", "Good", "Good",  "Good", "Passing", "Passing"];
     private $roles = [3];
     private $students = [
-        [
-            'userfname' => "Darinel",
-            'userlname' => "Gonzales",
-            'usermiddle' => "Reynaldo",
-            'contact_no' => "63686448748",
-            'email' => "Gonzales@gmail.com",
-            'password' => "Gonzales185",
-            'student_no' => '2111082',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Ian",
-            'userlname' => "Rivera",
-            'usermiddle' => "Cruz",
-            'contact_no' => "63287998767",
-            'email' => "Rivera87@gmail.com",
-            'password' => "Rivera542",
-            'student_no' => '2111083',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Emily",
-            'userlname' => "Johnson",
-            'usermiddle' => "Grace",
-            'contact_no' => "63833121099",
-            'email' => "emily.grace.johnson@gmail.com",
-            'password' => "Johnson#1942",
-            'student_no' => '2111084',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Michael",
-            'userlname' => "Thompson",
-            'usermiddle' => "James",
-            'contact_no' => "63752531950",
-            'email' => "michael.james.thompson@gmail.com",
-            'password' => "Thompson#6458",
-            'student_no' => '2111085',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Sarah",
-            'userlname' => "Davis",
-            'usermiddle' => "Elizabeth",
-            'contact_no' => "63751159911",
-            'email' => "sarah.elizabeth.davis@gmail.com",
-            'password' => "Davis*3049",
-            'student_no' => '2111086',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
+
         [
             'userfname' => "Don",
             'userlname' => "Copeman",
@@ -524,7 +465,7 @@ class BPOMockData extends Seeder
                 'year_level_id' => $this->students[$i]['year_level_id'],
                 'status' => $this->students[$i]['status'],
                 'student_no' => $this->students[$i]['student_no'],
-                'cid' => 1,
+                'cid' => 2,
                 'sy' =>  $sys[$syindex]['sy'],
             ]);
 

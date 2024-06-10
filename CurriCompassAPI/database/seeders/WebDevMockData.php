@@ -23,66 +23,7 @@ class WebDevMockData extends Seeder
     private $roles = [3];
     private $students = [
         //1st Years
-        [
-            'userfname' => "Emily",
-            'userlname' => "Santos",
-            'usermiddle' => "Reyes",
-            'contact_no' => "09123456789",
-            'email' => "emilysantos@gmail.com",
-            'password' => "Test",
-            'student_no' => '2111001',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Michael",
-            'userlname' => "Hernandez",
-            'usermiddle' => "Cruz",
-            'contact_no' => "09187654321",
-            'email' => "michaelhernandez@gmail.com",
-            'password' => "Test",
-            'student_no' => '2111002',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Sophia",
-            'userlname' => "Rivera",
-            'usermiddle' => "Gomez",
-            'contact_no' => "09134567890",
-            'email' => "sophiarivera@gmail.com",
-            'password' => "Test",
-            'student_no' => '2111003',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Jacob",
-            'userlname' => "Bautista",
-            'usermiddle' => "Flores",
-            'contact_no' => "09123456789",
-            'email' => "jacobbautista@gmail.com",
-            'password' => "Test",
-            'student_no' => '2111004',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Isabella",
-            'userlname' => "Ramirez",
-            'usermiddle' => "Torres",
-            'contact_no' => "09123456789",
-            'email' => "isabellaramirez@gmail.com",
-            'password' => "Test",
-            'student_no' => '2111005',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
+
         [
             'userfname' => "Ethan",
             'userlname' => "Mendoza",

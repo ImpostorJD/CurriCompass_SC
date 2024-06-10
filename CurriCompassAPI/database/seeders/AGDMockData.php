@@ -16,66 +16,7 @@ class AGDMockData extends Seeder
     private $remarks = ["Excellent", "Very Good", "Very Good", "Good", "Good",  "Good", "Passing", "Passing"];
     private $roles = [3];
     private $students = [
-        [
-            'userfname' => "Logan",
-            'userlname' => "Harrison",
-            'usermiddle' => "Matthew",
-            'contact_no' => "638962973711",
-            'email' => "loganharrison@email.com",
-            'password' => "LogHarr2024",
-            'student_no' => '2111041',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Penelope",
-            'userlname' => "Dixon",
-            'usermiddle' => "Grace",
-            'contact_no' => "63623226534",
-            'email' => "penelopedixon@email.com",
-            'password' => "DixPen$123",
-            'student_no' => '2111042',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Lucas",
-            'userlname' => "Wright",
-            'usermiddle' => "Andrew",
-            'contact_no' => "63559330633",
-            'email' => "lucaswright@email.com",
-            'password' => "WrightLuc@",
-            'student_no' => '2111043',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Riley",
-            'userlname' => "Perez",
-            'usermiddle' => "Elizabeth",
-            'contact_no' => "63277703209",
-            'email' => "rileyppperez@email.com",
-            'password' => "PerezRiley",
-            'student_no' => '2111044',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
-        [
-            'userfname' => "Benjamin",
-            'userlname' => "Russell",
-            'usermiddle' => "Daniel",
-            'contact_no' => "63878505323",
-            'email' => "benjaminrussell@email.com",
-            'password' => "RussBen$$",
-            'student_no' => '2111045',
-            'status' => 'Regular',
-            'year_level_id' => 1,
-            'sy' => 4
-        ],
+
         [
             'userfname' => "Aria",
             'userlname' => "Griffin",
@@ -526,7 +467,7 @@ class AGDMockData extends Seeder
                 'year_level_id' => $this->students[$i]['year_level_id'],
                 'status' => $this->students[$i]['status'],
                 'student_no' => $this->students[$i]['student_no'],
-                'cid' => 1,
+                'cid' => 3,
                 'sy' =>  $sys[$syindex]['sy'],
             ]);
 
