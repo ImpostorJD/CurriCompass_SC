@@ -10,7 +10,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "php-open-source-saver/jwt-auth": "^2.1"
+        "php-open-source-saver/jwt-auth": "^2.1",
+        "react/react": "1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -24,6 +25,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "App\\ReactPHP\\": "app/ReactPHP/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }

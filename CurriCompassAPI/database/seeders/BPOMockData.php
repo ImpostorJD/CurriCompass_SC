@@ -473,10 +473,6 @@ class BPOMockData extends Seeder
                 ->where('year_level_id', '<=',$this->students[$i]['year_level_id'])
                 ->get();
 
-            // $sys = SchoolYear::orderBy('sy','desc')->limit($this->students[$i]['year_level_id'])->get();
-            // $syindex = 0;
-            // $currentYear = 1;
-
             if($currentYear < $this->students[$i]['year_level_id']){
                 $syindex = count($sys) - 1;
             }

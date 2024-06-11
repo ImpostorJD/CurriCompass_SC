@@ -10,7 +10,6 @@ class CourseAvailability extends Model
     use HasFactory;
 
     protected $primaryKey = 'caid';
-    public $incrementing = false;
     public $timestamps = false;
 
 

@@ -9,7 +9,19 @@ class EnlistmentSubjects extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
     protected $primaryKey = ['peid', 'caid'];
+    public $timestamps = false;
+    protected $fillable = [
+        'peid',
+        'caid',
+    ];
+    public function setKeysForSaveQuery($query)
+    {
+        return $query->where('peid', $this->attributes['peid'])
+                    ->where('caid', $this->attributes['caid']);
+    }
 
     public function enlistment(){
         return $this->belongsTo(Enlistment::class, 'peid', 'peid');
