@@ -10,6 +10,7 @@ class CalculateSimilarityAsync {
     public static function calculateSimilarity($targetStudent, $referenceStudent)
     {
         $similarity = 0;
+
         $targetCourses = SubjectsTaken::where('srid', $targetStudent['srid'])
                 ->where('grade', '<=', 3)
                 ->get()
@@ -21,13 +22,6 @@ class CalculateSimilarityAsync {
                 ->get()
                 ->keyBy('subjectid');
 
-            //iterate through subjects taken to get the summation of (courseGWA(reference) - courseGWA(target))^2
-            // foreach($courses as $course){
-            //     $similarity += pow(
-            //         SubjectsTaken::where('srid', $this->referenceStudent['srid'])
-            //             ->where('subjectid', $course->subjectid)->first()->grade
-            //             - $course->grade, 2);
-            // }
             foreach ($targetCourses as $subjectId => $course) {
                 if (isset($referenceCourses[$subjectId])) {
                     $referenceGrade = $referenceCourses[$subjectId]->grade;
@@ -42,7 +36,7 @@ class CalculateSimilarityAsync {
             //apply normalized euclidean similarity
             $similarity = 1/ (1 + $similarity);
 
-        return $similarity;
+        return [$referenceStudent->student_no => $similarity];
     }
 }
 

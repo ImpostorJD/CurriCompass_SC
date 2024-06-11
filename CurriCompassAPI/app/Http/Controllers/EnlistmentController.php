@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\CourseAvailabilityCompareJob;
 use App\Jobs\CourseClusteringJob;
-use App\Jobs\IdentifyMissingCourseJob;
 use App\Jobs\IdentifyRemainingLabJob;
-use App\Jobs\PredictiveGradeJob;
 use App\Models\CourseAvailability;
 use App\Models\Curriculum;
 use App\Models\Enlistment;
@@ -18,6 +15,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use React\Promise;
 use App\ReactPHP\CalculateSimilarityAsync;
+use App\ReactPHP\CompareCourseAvailabilityAsync;
+use App\ReactPHP\IdentifyMissingCourseAsync;
+use App\ReactPHP\PredictiveGradeAsync;
+use App\ReactPHP\RemainingLabAsync;
+use App\ReactPHP\SegregateCourseAsync;
 
 //TODO: Add documentation
 class EnlistmentController extends Controller
@@ -72,21 +74,16 @@ class EnlistmentController extends Controller
         foreach ($referenceStudents as $ref) {
             $similarityPromises[] = CalculateSimilarityAsync::calculateSimilarity($targetStudent, $ref);
         }
-        // $similarityJobs = [];
-        // foreach($referenceStudents as $ref){
-        //     $similarityJobs[] = CalculateSimilarityJob::dispatch($targetStudent, $ref);
-        // }
 
-        //get the similarity index results
-        //$euclideanDistance = $this->collectJobResults($similarityJobs);
         $euclideanDistance = $this->collectPromises($similarityPromises);
+        $euclideanDistance = $this->flattenArray($euclideanDistance);
 
         //sort descending (highest to lowest 1 to 0)
         arsort($euclideanDistance);
+
         $euclideanDistance = array_filter($euclideanDistance, function($value) {
-            return $value != 1;
+            return $value != 0;
         });
-        dd($euclideanDistance);
 
         //retrieve courses from the curriculum
         $curriculum = Curriculum::where('cid', $targetStudent->cid)
@@ -95,50 +92,48 @@ class EnlistmentController extends Controller
 
         //retrieve courses with the following criteria: failed, withdrawn
         //handle asynchronously
-        $subjectJobs = [];
+        $subjectPromises = [];
         foreach($curriculum->curriculum_subjects as $course) {
-            $subjectJobs[] = IdentifyMissingCourseJob::dispatch($course->subjectid, $targetStudent);
+            $subjectPromises[] = IdentifyMissingCourseAsync::identifyMissingCourse($course->subjectid, $targetStudent);
         }
 
         //get all subjects taken
-        $rawSubjectsNotTaken = $this->collectJobResults($subjectJobs);
+        $subjectsNotTaken = $this->collectPromises($subjectPromises);
 
         //filter out all null value
-        $subjectsNotTaken = array_filter($rawSubjectsNotTaken, function($value) {
+        $subjectsNotTaken = array_filter($subjectsNotTaken, function($value) {
             return !is_null($value);
         });
 
         //predict grade weighted average asynchronously
-        $weightedGradeJob = [];
+        $weightedGradePromise = [];
         foreach($subjectsNotTaken as $sub){
-            $weightedGradeJob[] = PredictiveGradeJob::dispatch($sub, $euclideanDistance);
+            $weightedGradePromise[] = PredictiveGradeAsync::gradedWeightAverage($sub, $euclideanDistance);
         }
 
         //retrieve result of predicted GWA
-        $predictedGwa = $this->collectJobResults($weightedGradeJob);
+        $predictedGwa = $this->collectPromises($weightedGradePromise);
+        $predictedGwa = $this->flattenArray($predictedGwa);
         asort($predictedGwa);
 
-        $courseAvailabilityJob = [];
-        foreach($weightedGradeJob as $sub){
-            $courseAvailabilityJob[] = CourseAvailabilityCompareJob::dispatch($sub, $targetStudent);
+        $courseAvailabilityPromise = [];
+        foreach($predictedGwa as $subid => $grade){
+            $courseAvailabilityPromise[] = CompareCourseAvailabilityAsync::compareCourseAvailability($subid, $targetStudent);
         }
 
         //retrieve course availability
-        $rawCourseAvailability = $this->collectJobResults($courseAvailabilityJob);
+        $courseAvailability = $this->collectPromises($courseAvailabilityPromise);
 
         //filter null
-        $courseAvailability = array_filter($rawCourseAvailability, function($value) {
+        $courseAvailability = array_filter($courseAvailability, function($value) {
             return !is_null($value);
         });
 
         //segregate asynchronously
-        $segregateCourseJob = [];
-        foreach($courseAvailability as $course){
-            $segregateCourseJob[] = CourseClusteringJob::dispatch($course);
-        }
+        $segregateCoursePromise = SegregateCourseAsync::courseClustering($courseAvailability);
 
         //retrieve segregated course availability
-        $segregatedCourse = $this->collectJobResults($segregateCourseJob);
+        $segregatedCourse = $this->collectPromises($segregateCoursePromise);
 
         //loop through this
         $time_range = [
@@ -147,29 +142,29 @@ class EnlistmentController extends Controller
             '2-5' => ['1-3', '2-5', '3-5'],
         ];
 
+
+        // identify remaining lab subjects
+        $remainingLab = RemainingLabAsync::getRemainingLab($subjectsNotTaken);
+
         $enlistment = Enlistment::create([
             'srid' => $targetStudent->srid,
             'cid' => $targetStudent->cid,
             'year_level_id' => $targetStudent->year_level_id,
-            'semsyid' => $currentsemsy,
+            'semsyid' => $currentsemsy->semsyid,
         ]);
 
-        // identify remaining lab subjects
-        $remainingLabJob = IdentifyRemainingLabJob::dispatch($subjectsNotTaken);
-
         // Process enlistment
-        $this->processEnlistment($targetStudent, $segregatedCourse, $enlistment, $time_range, $remainingLabJob->get());
+        $this->processEnlistment($targetStudent, $segregatedCourse, $enlistment, $time_range, $remainingLab);
 
         //return response
         return response()->json([
             ['status' => 'success'],
             Enlistment::where('peid', $enlistment->peid)
-                ->with(['enlistment_subjects', function($query){
+                ->with(['enlistment_subjects' => function($query){
                     $query->with(['course_availability' => function($query){
                         $query->with('subjects');
                     }]);
-                }])
-                ->first()
+                }])->first()
         ], 200);
     }
 
@@ -242,26 +237,23 @@ class EnlistmentController extends Controller
 
     }
 
-    /**
-     * 06/10/2024
-     *
-     * This function is a helper function to retrieve a collection of results from jobs (asynchronously)
-     */
-    private function collectJobResults($jobs)
-    {
-        $results = [];
-        foreach ($jobs as $job) {
-            $results[] = $job->get();
-        }
-        return $results;
-    }
-
     private function collectPromises($promises){
         $resolvedResults = [];
         Promise\all($promises)->then(function($res) use (&$resolvedResults) {
             $resolvedResults = $res;
         });
         return $resolvedResults;
+    }
+
+    private function flattenArray($arr){
+        $flattenedArray = [];
+        foreach ($arr as $item) {
+            foreach ($item as $key => $value) {
+                $flattenedArray[$key] = $value;
+            }
+        }
+
+        return $flattenedArray;
     }
     /**
      * This function is a helper function to process the actual enlistment creation.
@@ -288,7 +280,7 @@ class EnlistmentController extends Controller
                     if ($availability && $this->checkAvailabilityLimit($availability)) {
                         $subject = Subjects::find($subjectId);
                         $subjectUnits = $subject->subjectcredits;
-                        $isLab = $subject->subjecthourslab > $subject->subject->subjecthourslec;
+                        $isLab = $subject->subjecthourslab > $subject->subjecthourslec;
 
                         if ($unitCount + $subjectUnits <= $maxUnits && (!$isLab || $enlistedLabs < $minLabSubjects)) {
                             EnlistmentSubjects::create([
