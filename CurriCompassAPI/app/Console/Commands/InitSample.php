@@ -43,6 +43,8 @@ class InitSample extends Command
         echo("School Year Table successfully seeded. \n");
         $this->call('db:seed', ['--class' => 'CourseSeeder']);
         echo("Course/Subjects Table successfully seeded.\n");
+        $this->call('db:seed', ['--class' => 'CourseAvailabilitySeeder']);
+        echo("Course Availability Table successfully seeded.\n");
         $this->call('db:seed', ['--class' => 'curricula_seeder']);
         echo("Curricula Table successfully seeded.\n");
         echo("Seeding WAM Students Please Wait...\n");
