@@ -7,7 +7,7 @@ use App\Models\Curriculum;
 use App\Models\CurriculumSubjects;
 use App\Models\SemSy;
 use App\Models\Subjects;
-use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents
 
 class CourseAvailabilitySeeder extends Seeder
 {
@@ -72,6 +72,4 @@ class CourseAvailabilitySeeder extends Seeder
 
 
         }
-
-    }
 }
