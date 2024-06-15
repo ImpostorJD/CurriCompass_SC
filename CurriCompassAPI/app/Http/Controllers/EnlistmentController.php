@@ -19,7 +19,10 @@ use App\ReactPHP\CompareCourseAvailabilityAsync;
 use App\ReactPHP\IdentifyMissingCourseAsync;
 use App\ReactPHP\PredictiveGradeAsync;
 use App\ReactPHP\RemainingLabAsync;
+use App\ReactPHP\RemainingSubAsync;
 use App\ReactPHP\SegregateCourseAsync;
+use App\ReactPHP\SortByCurriculumSubjectAsync;
+
 
 //TODO: Add documentation
 class EnlistmentController extends Controller
@@ -130,10 +133,12 @@ class EnlistmentController extends Controller
         });
 
         //segregate asynchronously
-        $segregateCoursePromise = SegregateCourseAsync::courseClustering($courseAvailability);
-
+        //$segregateCoursePromise = SegregateCourseAsync::courseClustering($courseAvailability);
+        $courseAvailability = SortByCurriculumSubjectAsync::courseSorting($courseAvailability);
+        //dd($courseAvailabilitySorted);
         //retrieve segregated course availability
-        $segregatedCourse = $this->collectPromises($segregateCoursePromise);
+        //$segregatedCourse = $this->collectPromises($segregateCoursePromise);
+        //dd($segregatedCourse);
 
         //loop through this
         $time_range = [
@@ -144,7 +149,10 @@ class EnlistmentController extends Controller
 
 
         // identify remaining lab subjects
-        $remainingLab = RemainingLabAsync::getRemainingLab($subjectsNotTaken);
+        //$remainingLab = RemainingLabAsync::getRemainingLab($subjectsNotTaken);
+        $dayPairings = ['M-Th', 'T-F', 'W-S'];
+
+        $remainingSub = RemainingSubAsync::getRemainingSubCount($subjectsNotTaken, $targetStudent);
 
         $enlistment = Enlistment::create([
             'srid' => $targetStudent->srid,
@@ -154,8 +162,8 @@ class EnlistmentController extends Controller
         ]);
 
         // Process enlistment
-        $this->processEnlistment($targetStudent, $segregatedCourse, $enlistment, $time_range, $remainingLab);
 
+        $this->processEnlistment($targetStudent, $dayPairings, $courseAvailability, $enlistment, $time_range, $remainingSub);
         //return response
         return response()->json([
             ['status' => 'success'],
@@ -258,56 +266,193 @@ class EnlistmentController extends Controller
     /**
      * This function is a helper function to process the actual enlistment creation.
      */
-    private function processEnlistment($targetStudent, $segregatedCourse, $enlistment, $timeRangeMap, $remainingLab)
+    // private function processEnlistment($targetStudent, $segregatedCourse, $enlistment, $timeRangeMap, $remainingLab)
+    // {
+    //     $minLabSubjects = $targetStudent->year_level_id < 4 ? 2 : $remainingLab;
+    //     $maxUnits = $targetStudent->year_level_id < 4 ? 21 : PHP_INT_MAX;
+    //     $unitCount = 0;
+    //     $enlistedLabs = 0;
+    //     $enlistedSubjects = [];
+    //     $flattenedTimeRange = $this->flattenArrayUnique($timeRangeMap);
+    //     // dd($segregatedCourse);
+    //     foreach($flattenedTimeRange as $time) { //iterate through time
+
+    //         foreach ($segregatedCourse as $dayPairingCourses) { //loop through mth tf ws
+
+    //             foreach ($dayPairingCourses as $subjectCode) { //loop through each courses\
+
+    //                 if (!array_key_exists($subjectCode, $enlistedSubjects)) { //if subject is not within the enlistmnet subject, proceed
+    //                     $subject = Subjects::where('subjectcode', $subjectCode)->first();
+    //                     $availability = CourseAvailability::where('subjectid', $subject->subjectid)
+    //                         ->where('time', $time)
+    //                         ->first();
+    //                     if ($availability != null && $this->checkAvailabilityLimit($availability)) {
+    //                         $subjectUnits = $subject->subjectcredits;
+    //                         $isLab = floatval($subject->subjecthourslab) > floatval($subject->subjecthourslec);
+    //                         //dd($isLab);
+
+    //                         $subjectOverlap = false;
+    //                         foreach ($enlistedSubjects as $enlistedSub => $enlistedTimeDay) {
+    //                             if ($this->isDayTimeOverlap($enlistedTimeDay, [$availability->time, $availability->days], $timeRangeMap)) {
+    //                                 $subjectOverlap = true;
+    //                                 break;
+    //                             }
+    //                         }
+
+    //                         if (!$subjectOverlap && ($isLab == false || $enlistedLabs < $minLabSubjects) && $unitCount + $subjectUnits < $maxUnits){
+    //                             EnlistmentSubjects::create([
+    //                                 'peid' => $enlistment->peid,
+    //                                 'caid' => $availability->caid,
+    //                             ]);
+
+    //                             $enlistedSubjects[$subjectCode] = [$availability->time, $availability->days];
+    //                             $unitCount += $subjectUnits;
+
+    //                             if ($isLab) {
+    //                                 $enlistedLabs++;
+    //                             }
+    //                         }
+
+
+    //                     }
+
+
+    //                 }
+
+    //             }
+    //         }
+
+    //         if ($unitCount >= $maxUnits) {
+    //             break; // Stop if max units are met
+    //         }
+
+    //     }
+
+    // }
+    private function processEnlistment($targetStudent, $dayPairings, $courses, $enlistment, $timeRangeMap, $remainingSub)
     {
-        $minLabSubjects = $targetStudent->year_level_id < 4 ? min(3, $remainingLab) : $remainingLab;
-        $maxUnits = $targetStudent->year_level_id < 4 ? 21 : PHP_INT_MAX;
+        $maxUnits = $targetStudent->year_level_id < 4 ? 21 : PHP_INT_MAX; // Max units for 1st-3rd year, unlimited for 4th year
         $unitCount = 0;
-        $enlistedLabs = 0;
         $enlistedSubjects = [];
+        $flattenedTimeRange = $this->flattenArrayUnique($timeRangeMap);
+        // Debug: Initial values
+        // echo "max units $maxUnits";
+        // echo "Initial unitCount: $unitCount \n, remainingSub: $remainingSub \n";
 
-        foreach ($timeRangeMap as $timeKey => $overlappingTimes) {
-            foreach ($segregatedCourse as $dayPairingCourses) {
-                foreach ($dayPairingCourses as $subjectId) {
-                    if (in_array($subjectId, $enlistedSubjects)) {
-                        continue;
-                    }
+        // Loop while unit constraints for 1st-3rd year or remaining subjects for 4th year
+        while (($targetStudent->year_level_id < 4 && $unitCount < $maxUnits) || ($targetStudent->year_level_id == 4 && $remainingSub > 0)) {
 
-                    $availability = CourseAvailability::where('subjectid', $subjectId)
-                        ->whereIn('time', $overlappingTimes)
-                        ->first();
+            foreach ($flattenedTimeRange as $time) {
+                foreach ($dayPairings as $dayPairing) { // iterate over M-Th, T-F, W-S
+                    foreach ($courses as $subjectId) { // iterate over subjects
+                        $subject = Subjects::where('subjectcode', $subjectId)->first();
+                        // echo "current subject: $subjectId";
+                        if (!array_key_exists($subjectId, $enlistedSubjects)) {
+                            $availability = CourseAvailability::where('subjectid', $subject->subjectid)
+                                ->where('time', $time)
+                                ->where('days', $dayPairing)
+                                ->first();
 
-                    if ($availability && $this->checkAvailabilityLimit($availability)) {
-                        $subject = Subjects::find($subjectId);
-                        $subjectUnits = $subject->subjectcredits;
-                        $isLab = $subject->subjecthourslab > $subject->subjecthourslec;
+                            if ($availability != null && $this->checkAvailabilityLimit($availability)) {
+                                $subjectUnits = $subject->subjectcredits;
 
-                        if ($unitCount + $subjectUnits <= $maxUnits && (!$isLab || $enlistedLabs < $minLabSubjects)) {
-                            EnlistmentSubjects::create([
-                                'peid' => $enlistment->peid,
-                                'caid' => $availability->caid,
-                            ]);
+                                // Check for overlap with already enlisted subjects
+                                $subjectOverlap = false;
+                                foreach ($enlistedSubjects as $enlistedSub => $enlistedTimeDay) {
+                                    if ($this->isDayTimeOverlap($enlistedTimeDay, [$availability->time, $availability->days], $timeRangeMap)) {
+                                        $subjectOverlap = true;
+                                        // echo "subject $subjectId overlaps: $subjectOverlap";
+                                        break;
+                                    }
+                                }
 
-                            $enlistedSubjects[] = $subjectId;
-                            $unitCount += $subjectUnits;
+                                if (!$subjectOverlap && $unitCount + $subjectUnits <= $maxUnits) {
+                                    if (!EnlistmentSubjects::where('peid', $enlistment->peid)
+                                        ->where('caid', $availability->caid)
+                                        ->exists()) {
+                                        EnlistmentSubjects::create([
+                                            'peid' => $enlistment->peid,
+                                            'caid' => $availability->caid,
+                                        ]);
 
-                            if ($isLab) {
-                                $enlistedLabs++;
+                                        $enlistedSubjects[$subjectId] = [$availability->time, $availability->days];
+                                        $unitCount += $subjectUnits;
+                                        $remainingSub--;
+
+                                        $subjectEnlistedThisIteration = true; // Mark that a subject was enlisted
+                                    }
+                                }
                             }
                         }
                     }
+                  
                 }
+             
             }
 
-            if ($unitCount >= $maxUnits) {
-                break; // Stop if max units are met
+            // Debug: Log after each iteration
+            // echo "After iteration: unitCount: $unitCount, remainingSub: $remainingSub\n";
+
+
+            if ($availability && $this->checkAvailabilityLimit($availability)) {
+                $subject = Subjects::find($subjectId);
+                $subjectUnits = $subject->subjectcredits;
+                $isLab = $subject->subjecthourslab > $subject->subjecthourslec;
+
+
+            // }
+            // if (!$subjectEnlistedThisIteration) {
+            //     // If no subjects were enlisted in this iteration, exit the loop to avoid infinite looping
+            //     break;
+            // }
+        }
+    }
+
+
+    private function isDayTimeOverlap($enlistedTimeDay, $timeDay, $timeRange)
+    {
+        $checkOverlap = $this->getTimeRangeKeys($enlistedTimeDay[0], $timeRange); //get keys for time range for checking later
+
+        $timeOverlap = false;
+        foreach($checkOverlap as $t){
+            if(in_array($timeDay[0], $timeRange[$t])){
+                $timeOverlap = true;
+                break;
             }
         }
+        //$timeOverlap = $enlistedTimeDay[0] === $timeDay[0];
+        $dayOverlap = $enlistedTimeDay[1] === $timeDay[1];
+
+        return $timeOverlap && $dayOverlap; // Both time and day must overlap
+    }
+    private function flattenArrayUnique($timeRangeMap)
+    {
+        $flattened = [];
+        foreach ($timeRangeMap as $key => $times) {
+            foreach ($times as $time) {
+                $flattened[] = $time;
+            }
+        }
+        return array_unique($flattened); // Ensure unique times
+    }
+
+    private function getTimeRangeKeys($timeValue, $timeRangeMap) {
+        $keys = [];
+
+        foreach ($timeRangeMap as $key => $times) {
+            if (in_array($timeValue, $times)) {
+                $keys[] = $key;
+            }
+        }
+
+        return $keys;
     }
 
     private function checkAvailabilityLimit($availability)
     {
+        if($availability->section_limit == 0) return true;
         // Count current enrollments in this availability
+        if ($availability->section_limit == 0) return true; //experimental change, should return if section limit is 0
         $currentEnrolledCount = EnlistmentSubjects::where('caid', $availability->caid)->count();
         return $currentEnrolledCount < $availability->section_limit;
     }

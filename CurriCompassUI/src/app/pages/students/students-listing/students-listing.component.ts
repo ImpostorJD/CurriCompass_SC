@@ -3,11 +3,11 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions, yearLevel } from '../../../../configs/Constants';
-import { UserFilterPipe } from '../../../services/filter/search-filters/user-filter.pipe';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { ModalUtilityService } from '../../../services/modal-utility.service';
 import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
+import { StudentFilterPipe } from '../../../services/filter/search-filters/student-filter.pipe';
 
 @Component({
   selector: 'app-students-listing',
@@ -16,7 +16,7 @@ import { DeleteModalPopupComponent } from '../../../components/delete-modal-popu
     CommonModule,
     RouterLink,
     FormsModule,
-    UserFilterPipe,
+    StudentFilterPipe,
     DeleteModalPopupComponent
   ],
   templateUrl: './students-listing.component.html',

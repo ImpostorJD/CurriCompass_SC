@@ -469,9 +469,17 @@ class BPOMockData extends Seeder
                 'sy' =>  $sys[$syindex]['sy'],
             ]);
 
-            $curriculum_subjects = CurriculumSubjects::where('cid', 2)
-                ->where('year_level_id', '<=',$this->students[$i]['year_level_id'])
-                ->get();
+            $curriculum_subjects = [];
+
+            if ($this->students[$i]['year_level_id']  < 4){
+                $curriculum_subjects = CurriculumSubjects::where('cid', 2)
+                    ->where('year_level_id', '<',$this->students[$i]['year_level_id'])
+                    ->get();
+            }else{
+                $curriculum_subjects = CurriculumSubjects::where('cid', 2)
+                    ->where('year_level_id', '<=',$this->students[$i]['year_level_id'])
+                    ->get();
+            }
 
             if($currentYear < $this->students[$i]['year_level_id']){
                 $syindex = count($sys) - 1;
