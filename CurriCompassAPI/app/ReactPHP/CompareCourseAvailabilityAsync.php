@@ -49,6 +49,7 @@ class CompareCourseAvailabilityAsync {
         }
 
         return $course_code;
+
     }
 }
 

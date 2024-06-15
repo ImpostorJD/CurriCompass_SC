@@ -2,8 +2,8 @@
 namespace App\ReactPHP;
 
 use App\Models\CourseAvailability;
+
 use App\Models\CurriculumSubjects;
-use App\Models\Subjects;
 
 require __DIR__ ."/../../vendor/autoload.php";
 
@@ -12,7 +12,6 @@ class SegregateCourseAsync {
         $firstPairing = [];
         $secondPairing = [];
         $thirdPairing = [];
-
 
         //iterates through the courses
         foreach($coursesId as $coursecode){
@@ -32,10 +31,11 @@ class SegregateCourseAsync {
                     $thirdPairing[] = $c->subjectid;
                 }
             }
-
+          
             $sortedSubjectIdsMTh = self::sortSubjectbyCurriculumSubject($firstPairing);
             $sortedSubjectIdsTF = self::sortSubjectbyCurriculumSubject($secondPairing);
             $sortedSubjectIdsWS = self::sortSubjectbyCurriculumSubject($thirdPairing);
+
         }
 
         return [$sortedSubjectIdsMTh, $sortedSubjectIdsTF, $sortedSubjectIdsWS];

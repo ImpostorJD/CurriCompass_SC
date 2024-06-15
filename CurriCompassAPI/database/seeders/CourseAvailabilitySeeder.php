@@ -7,14 +7,12 @@ use App\Models\Curriculum;
 use App\Models\CurriculumSubjects;
 use App\Models\SemSy;
 use App\Models\Subjects;
-<<<<<<< Updated upstream
 use Illuminate\Database\Console\Seeds\WithoutModelEvents
-=======
-use Illuminate\Database\Seeder;
->>>>>>> Stashed changes
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CourseAvailabilitySeeder extends Seeder
 {
+
     private $time_range_lab = [
         '8-11', '11-2', '2-5',
     ];
@@ -86,10 +84,43 @@ class CourseAvailabilitySeeder extends Seeder
                     }
                 }
             }
-<<<<<<< Updated upstream
 
+        $semSy = SemSy::orderBy('semsyid', 'desc')->first();
 
-=======
->>>>>>> Stashed changes
+        foreach ($curricula as $curriculum){
+            $curriculum_subjects = CurriculumSubjects::where('cid', $curriculum->cid)
+                ->get();
+
+            $numOfSec = rand(1, 2);
+            foreach($curriculum_subjects as $csubject){
+                $subject = Subjects::where('subjectid', $csubject->subjectid)->first();
+                $secLimit = $subject->subjecthourslab > $subject->subjecthourslec ? rand(26, 45) : 0;
+                for($i = 0; $i < $numOfSec; $i++){
+                    $daysPairing = $this->days_pairing[rand(0, count($this->days_pairing) - 1)];
+                    $timeSlot = $subject->subjecthourslab > $subject->subjecthourslec ? $this->time_range_lab[rand(0, count($this->time_range_lab) - 1)] : $this->time_range_lec[rand(0, count($this->time_range_lec) - 1)];
+
+                    $existingCourseAvailability = CourseAvailability::where('subjectid', $subject->subjectid)
+                        ->where('days', $daysPairing)
+                        ->where('time', $timeSlot)
+                        ->first();
+
+                    if($existingCourseAvailability == null) {
+                        CourseAvailability::create([
+                            'subjectid' => $subject->subjectid,
+                            'time' => $timeSlot,
+                            'semsyid' => $semSy->semsyid,
+                            'section' => "CITE" . ($i + 1),
+                            'section_limit' => $secLimit,
+                            'days' => $daysPairing
+                        ]);
+                    }
+                }
+                // if ($csubject->semid == $semSy->semid){
+
+                // }
+
+            }
+
         }
+    }
 }

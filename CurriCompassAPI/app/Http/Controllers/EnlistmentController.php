@@ -23,6 +23,7 @@ use App\ReactPHP\RemainingSubAsync;
 use App\ReactPHP\SegregateCourseAsync;
 use App\ReactPHP\SortByCurriculumSubjectAsync;
 
+
 //TODO: Add documentation
 class EnlistmentController extends Controller
 {
@@ -138,6 +139,7 @@ class EnlistmentController extends Controller
         //retrieve segregated course availability
         //$segregatedCourse = $this->collectPromises($segregateCoursePromise);
         //dd($segregatedCourse);
+
         //loop through this
         $time_range = [
             '8-11' => ['8-10', '8-11', '10-12'],
@@ -145,11 +147,13 @@ class EnlistmentController extends Controller
             '2-5' => ['1-3', '2-5', '3-5'],
         ];
 
+
         // identify remaining lab subjects
         //$remainingLab = RemainingLabAsync::getRemainingLab($subjectsNotTaken);
         $dayPairings = ['M-Th', 'T-F', 'W-S'];
 
         $remainingSub = RemainingSubAsync::getRemainingSubCount($subjectsNotTaken, $targetStudent);
+
         $enlistment = Enlistment::create([
             'srid' => $targetStudent->srid,
             'cid' => $targetStudent->cid,
@@ -158,8 +162,8 @@ class EnlistmentController extends Controller
         ]);
 
         // Process enlistment
-        $this->processEnlistment($targetStudent, $dayPairings, $courseAvailability, $enlistment, $time_range, $remainingSub);
 
+        $this->processEnlistment($targetStudent, $dayPairings, $courseAvailability, $enlistment, $time_range, $remainingSub);
         //return response
         return response()->json([
             ['status' => 'success'],
@@ -338,8 +342,6 @@ class EnlistmentController extends Controller
         // Loop while unit constraints for 1st-3rd year or remaining subjects for 4th year
         while (($targetStudent->year_level_id < 4 && $unitCount < $maxUnits) || ($targetStudent->year_level_id == 4 && $remainingSub > 0)) {
 
-            $subjectEnlistedThisIteration = false; // Track if any subject was enlisted this iteration
-
             foreach ($flattenedTimeRange as $time) {
                 foreach ($dayPairings as $dayPairing) { // iterate over M-Th, T-F, W-S
                     foreach ($courses as $subjectId) { // iterate over subjects
@@ -383,22 +385,20 @@ class EnlistmentController extends Controller
                             }
                         }
                     }
-                    if ($subjectEnlistedThisIteration) {
-                        break; // Exit the loop if we enlisted a subject
-                    }
+                  
                 }
-                if ($subjectEnlistedThisIteration) {
-                    break; // Exit the loop if we enlisted a subject
-                }
+             
             }
 
             // Debug: Log after each iteration
             // echo "After iteration: unitCount: $unitCount, remainingSub: $remainingSub\n";
 
-            // foreach ($enlistedSubjects as $s => $timeDay){
-            //     echo "subject: $s";
-            //     echo "time: $timeDay[0]";
-            //     echo "time: $timeDay[1]";
+
+            if ($availability && $this->checkAvailabilityLimit($availability)) {
+                $subject = Subjects::find($subjectId);
+                $subjectUnits = $subject->subjectcredits;
+                $isLab = $subject->subjecthourslab > $subject->subjecthourslec;
+
 
             // }
             // if (!$subjectEnlistedThisIteration) {
