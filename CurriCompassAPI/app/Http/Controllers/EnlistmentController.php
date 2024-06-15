@@ -331,17 +331,20 @@ class EnlistmentController extends Controller
         $unitCount = 0;
         $enlistedSubjects = [];
         $flattenedTimeRange = $this->flattenArrayUnique($timeRangeMap);
+        // Debug: Initial values
+        // echo "max units $maxUnits";
+        // echo "Initial unitCount: $unitCount \n, remainingSub: $remainingSub \n";
 
-        // dd($courses);
         // Loop while unit constraints for 1st-3rd year or remaining subjects for 4th year
         while (($targetStudent->year_level_id < 4 && $unitCount < $maxUnits) || ($targetStudent->year_level_id == 4 && $remainingSub > 0)) {
 
+            $subjectEnlistedThisIteration = false; // Track if any subject was enlisted this iteration
+
             foreach ($flattenedTimeRange as $time) {
-                foreach ($dayPairings as $dayPairing) {// iterate over M-Th, T-F, W-S
+                foreach ($dayPairings as $dayPairing) { // iterate over M-Th, T-F, W-S
                     foreach ($courses as $subjectId) { // iterate over subjects
                         $subject = Subjects::where('subjectcode', $subjectId)->first();
-                        //$subjectCode = $subject->subjectcode;
-                        //dd(array_key_exists($subject->subjectcode, $enlistedSubjects));
+                        // echo "current subject: $subjectId";
                         if (!array_key_exists($subjectId, $enlistedSubjects)) {
                             $availability = CourseAvailability::where('subjectid', $subject->subjectid)
                                 ->where('time', $time)
@@ -350,21 +353,21 @@ class EnlistmentController extends Controller
 
                             if ($availability != null && $this->checkAvailabilityLimit($availability)) {
                                 $subjectUnits = $subject->subjectcredits;
-                                //$isLab = floatval($subject->subjecthourslab) > floatval($subject->subjecthourslec);
 
                                 // Check for overlap with already enlisted subjects
                                 $subjectOverlap = false;
                                 foreach ($enlistedSubjects as $enlistedSub => $enlistedTimeDay) {
                                     if ($this->isDayTimeOverlap($enlistedTimeDay, [$availability->time, $availability->days], $timeRangeMap)) {
                                         $subjectOverlap = true;
+                                        // echo "subject $subjectId overlaps: $subjectOverlap";
                                         break;
                                     }
                                 }
 
-                                if ($subjectOverlap == false && $unitCount + $subjectUnits <= $maxUnits) {
+                                if (!$subjectOverlap && $unitCount + $subjectUnits <= $maxUnits) {
                                     if (!EnlistmentSubjects::where('peid', $enlistment->peid)
-                                    ->where('caid', $availability->caid)
-                                    ->exists()) {
+                                        ->where('caid', $availability->caid)
+                                        ->exists()) {
                                         EnlistmentSubjects::create([
                                             'peid' => $enlistment->peid,
                                             'caid' => $availability->caid,
@@ -374,16 +377,34 @@ class EnlistmentController extends Controller
                                         $unitCount += $subjectUnits;
                                         $remainingSub--;
 
+                                        $subjectEnlistedThisIteration = true; // Mark that a subject was enlisted
                                     }
-
-                                    //$subjectEnlistedThisIteration = true; // At least one subject was enlisted
-                                    //break; // Break the innermost loop as we've enlisted one subject
                                 }
                             }
                         }
                     }
+                    if ($subjectEnlistedThisIteration) {
+                        break; // Exit the loop if we enlisted a subject
+                    }
+                }
+                if ($subjectEnlistedThisIteration) {
+                    break; // Exit the loop if we enlisted a subject
                 }
             }
+
+            // Debug: Log after each iteration
+            // echo "After iteration: unitCount: $unitCount, remainingSub: $remainingSub\n";
+
+            // foreach ($enlistedSubjects as $s => $timeDay){
+            //     echo "subject: $s";
+            //     echo "time: $timeDay[0]";
+            //     echo "time: $timeDay[1]";
+
+            // }
+            // if (!$subjectEnlistedThisIteration) {
+            //     // If no subjects were enlisted in this iteration, exit the loop to avoid infinite looping
+            //     break;
+            // }
         }
     }
 
@@ -429,6 +450,7 @@ class EnlistmentController extends Controller
 
     private function checkAvailabilityLimit($availability)
     {
+        if($availability->section_limit == 0) return true;
         // Count current enrollments in this availability
         $currentEnrolledCount = EnlistmentSubjects::where('caid', $availability->caid)->count();
         return $currentEnrolledCount < $availability->section_limit;
