@@ -430,6 +430,7 @@ class EnlistmentController extends Controller
     private function checkAvailabilityLimit($availability)
     {
         // Count current enrollments in this availability
+        if ($availability->section_limit == 0) return true; //experimental change, should return if section limit is 0
         $currentEnrolledCount = EnlistmentSubjects::where('caid', $availability->caid)->count();
         return $currentEnrolledCount < $availability->section_limit;
     }
