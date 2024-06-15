@@ -48,7 +48,7 @@ class CompareCourseAvailabilityAsync {
             }
         }
 
-        return $course->subjectid;
+        return $course_code;
     }
 }
 

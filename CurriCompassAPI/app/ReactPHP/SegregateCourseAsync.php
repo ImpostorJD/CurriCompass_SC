@@ -2,6 +2,7 @@
 namespace App\ReactPHP;
 
 use App\Models\CourseAvailability;
+use App\Models\CurriculumSubjects;
 use App\Models\Subjects;
 
 require __DIR__ ."/../../vendor/autoload.php";
@@ -12,10 +13,14 @@ class SegregateCourseAsync {
         $secondPairing = [];
         $thirdPairing = [];
 
+
         //iterates through the courses
-        foreach($coursesId as $courseId){
+        foreach($coursesId as $coursecode){
+
+            $subject = Subjects::where('subjectcode', $coursecode)->first();
+
             // retrieve availability of courses
-            $courseAvailability = CourseAvailability::where('subjectid', $courseId)->get();
+            $courseAvailability = CourseAvailability::where('subjectid', $subject->subjectid)->get();
 
             foreach($courseAvailability as $c){
 
@@ -28,19 +33,26 @@ class SegregateCourseAsync {
                 }
             }
 
-            $sortedSubjectIdsMTh = self::sortSubjectIdsByLabHours($firstPairing);
-            $sortedSubjectIdsTF = self::sortSubjectIdsByLabHours($secondPairing);
-            $sortedSubjectIdsWS = self::sortSubjectIdsByLabHours($thirdPairing);
+            $sortedSubjectIdsMTh = self::sortSubjectbyCurriculumSubject($firstPairing);
+            $sortedSubjectIdsTF = self::sortSubjectbyCurriculumSubject($secondPairing);
+            $sortedSubjectIdsWS = self::sortSubjectbyCurriculumSubject($thirdPairing);
         }
 
         return [$sortedSubjectIdsMTh, $sortedSubjectIdsTF, $sortedSubjectIdsWS];
     }
 
-    private static function sortSubjectIdsByLabHours($subjectIds) {
-        return Subjects::whereIn('subjectid', $subjectIds)
-                        ->sortBySubjectHoursLab()
+    private static function sortSubjectbyCurriculumSubject($subjectIds) {
+        $csubjects = CurriculumSubjects::whereIn('subjectid', $subjectIds)
+            ->orderBy('year_level_id', 'asc')
+            ->orderBy('semid', 'asc')
+            ->get()
+            ->pluck('subjectid')
+            ->toArray();
+
+        return Subjects::whereIn('subjectid', $csubjects)
+                        // ->sortBySubjectHoursLab()
                         ->get()
-                        ->pluck('subjectid')
+                        ->pluck('subjectcode')
                         ->toArray();
     }
 }

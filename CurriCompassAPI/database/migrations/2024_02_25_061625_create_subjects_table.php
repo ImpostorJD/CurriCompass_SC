@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('subjectcredits');
             $table->integer('subjectunitlec');
             $table->integer('subjectunitlab');
-            $table->double('subjecthourslec');
-            $table->double('subjecthourslab');
+            $table->float('subjecthourslec');
+            $table->float('subjecthourslab');
 
             $table->timestamps();
         });

@@ -17,7 +17,7 @@ class SemSySeeder extends Seeder
         $sy = SchoolYear::orderBy('sy', 'desc')->first();
 
         SemSy::create([
-           'semid' => 2,
+           'semid' => 1,
            'sy' => $sy->sy,
         ]);
     }
