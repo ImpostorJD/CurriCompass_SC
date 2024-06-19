@@ -52,7 +52,7 @@ export class EditSchoolYearComponent {
 
     this.req.patchResource('school-year/' + this.routerId, this.schoolYearField.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
-        this.route.navigateByUrl('/school-calendar')
+        this.route.navigateByUrl('/school-year')
       },
       error: err => {
         if (err.status === 409) {

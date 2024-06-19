@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\MarkStudentAsInactive;
+use App\Models\Enlistment;
+use App\Models\SchoolYear;
+use App\Models\Semesters;
 use App\Models\SemSy;
+use App\Models\StudentRecord;
+use App\Models\User;
+use App\ReactPHP\CompareSubjectTakenAndEnlistedSubject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use React\Promise;
 
 class SemSyController extends Controller
 {
@@ -135,5 +143,127 @@ class SemSyController extends Controller
         return response()->json([
             ['status' => 'not found'],
         ], 404);
+    }
+
+    public function generateLatest(){
+
+        if(SemSy::all()->count() == 0){
+            $school_year = SchoolYear::orderBy('sy', 'desc')->first();
+            $semester = Semesters::orderBy('semid', 'asc')->first();
+
+            return response()->json([
+                SemSy::create([
+                    'sy'=> $school_year->sy,
+                    'semid'=> $semester->semid
+                ])
+            ],200);
+        }else{
+
+            $createable = true;
+
+            $semsy = SemSy::orderBy('semsyid', 'desc')
+                ->with('semester')
+                ->with('school_year')
+                ->first();
+
+            $student_records = StudentRecord::where('status', "!=", "Graduated")
+                ->where('status', "!=", "Inactive")
+                ->whereHas('enlistment', function($query) use ($semsy){
+                    $query->where('semsyid', $semsy->semsyid);
+                    })
+                ->with(['enlistment'=> function($query){
+                    $query->with(['enlistment_subjects' => function($query){
+                        $query->with('course_availability');
+                    }]);
+                }])->get()->keyBy('srid')->toArray();
+
+            //synchronous: use promise to iterate over students not marked as inactive, graduate and::
+            //promise: check if enlisted subjects of students (iteratively) have recorded corresponding subject_taken
+            $checkGradedEnlistmentPromises = array_map(
+                fn($ref) => CompareSubjectTakenAndEnlistedSubject::compareAsync($ref),
+                $student_records
+            );
+
+            $checkGradedEnlistment = $this->collectPromises($checkGradedEnlistmentPromises);
+            $checkGradedEnlistment = $this->flattenArray($checkGradedEnlistment);
+            $checkGradedEnlistment = array_filter($checkGradedEnlistment, function($value) {
+                return $value != true;
+            });
+
+            $messages = [];
+            if (count($checkGradedEnlistment) > 0) {
+                $messages['student_records'] = ["The following students have not yet been graded:" => array_keys($checkGradedEnlistment)];
+                $createable = false;
+            }
+            $latestSy = SchoolYear::where('sy', '>', $semsy->sy)->first();
+
+            if($semsy->semid == 3){
+                if($latestSy == null){
+                    $messages['school_year'] = "Succeeding school year is missing.";
+                    $createable = false;
+                }
+            }
+
+            if(!$createable) return response()->json([
+                ['status', 'bad request'],
+                $messages
+            ], 400);
+
+            //dunno if applicable, increment year level id however i do think this
+            //should be applied in the enlistment part so leave as a comment for now,
+            // will uncomment once this is deemed needed
+            // if($semsy->semid == 3){
+            //     // Update year_level_id for students
+            //     foreach (array_keys($student_records) as $srid) {
+            //         $studentRecord = StudentRecord::where('srid', $srid)->first();
+            //         if ($studentRecord && $studentRecord->year_level_id < 4) {
+            //             $studentRecord->year_level_id + 1;
+            //             $studentRecord->save();
+            //         }
+            //     }
+
+            // }
+
+            return response()->json([
+                //job: use promise to iterate over students that has no enlistment, mark as inactive
+                MarkStudentAsInactive::dispatch($semsy),
+                SemSy::create([
+                    'sy' => $semsy->semid != 3 ? $semsy->sy : $latestSy->sy,
+                    'semid' => $semsy->semid != 3 ? $semsy->semid + 1 : 1,
+                ]),
+
+            ],200);
+        }
+
+    }
+
+    public function latest(){
+
+        return response()->json([
+            ['status' => 'success'],
+            SemSy::orderBy('semsyid', 'desc')
+            ->with('semester')
+            ->with('school_year')
+            ->first()
+        ], 200);
+    }
+
+    private function collectPromises($promises){
+        $resolvedResults = [];
+        Promise\all($promises)->then(function($res) use (&$resolvedResults) {
+            $resolvedResults = $res;
+        });
+        return $resolvedResults;
+    }
+
+    private function flattenArray($arr){
+        $flattenedArray = [];
+        foreach ($arr as $item) {
+            foreach ($item as $key => $value) {
+                $flattenedArray[$key] = $value;
+            }
+        }
+
+        return $flattenedArray;
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\CourseAvailability;
+use App\Models\EnlistmentSubjects;
+use App\Models\SemSy;
+use App\Models\StudentRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,9 +20,14 @@ class CourseAvailabilityController extends Controller
      */
     public function index()
     {
+
+        $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
         return response()->json([
             ['status' => 'success'],
-            CourseAvailability::with(['semester_sy'=> function($query){
+            CourseAvailability::whereHas('semester_sy', function($query) use($currentsemsy){
+                $query->where('semsyid', $currentsemsy->semsyid);
+            })
+            ->with(['semester_sy'=> function($query){
                 $query->with('school_year');
                 $query->with('semester');
             }])->with('subjects')
@@ -184,5 +192,64 @@ class CourseAvailabilityController extends Controller
         return response()->json([
             ['status' => 'not found'],
         ], 404);
+    }
+
+    public function latestAvailabilityForStudent($srid)
+    {
+
+        $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
+        $studentRecord = StudentRecord::where('student_no', $srid)
+            ->with('subjects_taken')
+            ->first();
+        $cav = CourseAvailability::whereHas('semester_sy', function($query) use($currentsemsy){
+            $query->where('semsyid', $currentsemsy->semsyid);
+        })
+            ->whereHas('subjects', function($query) use($studentRecord){
+                $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
+                $query->whereHas('curriculumsubjects', function($query) use($studentRecord){
+                    $query->where('cid', $studentRecord->cid);
+                });
+                $query->whereHas('pre_requisites', function($query) use($studentRecord){
+                    $query->where('year_level_id', null)
+                        ->orWhere('year_level_id', "<=", $studentRecord->year_level_id)
+                        ->orWhere(function($query) use($studentRecord){
+                            $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
+                        })
+                        ->orWhere(function($query) use($studentRecord){
+                            //check if studentrecord subject taken is passed or not
+                            $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray())
+                                ->whereHas('subjects', function($query) use($studentRecord){
+                                    $query->whereHas('subjectsTaken', function($query) use($studentRecord){
+                                        $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid'))
+                                            ->where('grade', "!=", null)
+                                            ->orWhere('grade', ">", 3);
+                                    });
+                                });
+                        });
+
+                });
+        })
+        ->with(['semester_sy'=> function($query){
+            $query->with('school_year');
+            $query->with('semester');
+        }])->with('subjects')
+            ->get();
+
+        $filteredCav = [];
+        foreach($cav as $c){
+            if($c->section_limit != 0){
+                $enlisted = EnlistmentSubjects::where('caid', $c->caid)->count();
+                if($enlisted < $c->section_limit){
+                    $filteredCav[] = $c;
+                }
+            }else{
+                $filteredCav[] = $c;
+            }
+        }
+
+        return response()->json([
+            ['status' => 'success'],
+            $filteredCav
+        ], 200);
     }
 }

@@ -479,7 +479,7 @@ class WebDevMockData extends Seeder
             ]);
 
             $curriculum_subjects = CurriculumSubjects::where('cid', 1)
-                ->where('year_level_id', '<=',$this->students[$i]['year_level_id'])
+                ->where('year_level_id', '<',$this->students[$i]['year_level_id'])
                 ->get();
 
 

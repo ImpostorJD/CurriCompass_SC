@@ -15,7 +15,9 @@ export const routes: Routes = [
       canActivate:[AuthGuard([])],
       children: [
         {
-          path: '', redirectTo: 'consultation', pathMatch:'full'
+          path: '',
+          loadChildren: () => import('./pages/consultation/consultation.routes')
+            .then(mod => mod.consultationRoutes)
         },
 
         {
@@ -55,7 +57,7 @@ export const routes: Routes = [
             .then((mod) => mod.studentRoutes),
         },
 
-        { path: 'school-calendar',
+        { path: 'school-year',
           canActivate: [AuthGuard(['Admin', 'Staff'])],
           loadChildren: () => import('./pages/school-year/school-year.routes')
             .then(mod => mod.schoolYearRoutes)
@@ -72,12 +74,6 @@ export const routes: Routes = [
           loadChildren: () => import('./pages/courses/courses.availability.routes')
             .then(mod => mod.courseAvailabilityRoutes),
         },
-
-        {
-          path: "consultation",
-          loadChildren: () => import('./pages/consultation/consultation.routes')
-            .then(mod => mod.consultationRoutes)
-        }
       ]
     },
 

@@ -33,6 +33,9 @@ class PredictiveGradeAsync {
 
         }
 
+        if($summationSimilarity == 0){
+            return [$targetCourseCode->subjectcode => 1];
+        }
         //retrieve the predicted GWA
         return [$targetCourseCode->subjectcode => $summationCourseGwa / $summationSimilarity];
 

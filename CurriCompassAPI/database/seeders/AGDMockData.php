@@ -472,7 +472,7 @@ class AGDMockData extends Seeder
             ]);
 
             $curriculum_subjects = CurriculumSubjects::where('cid', 3)
-                ->where('year_level_id', '<=',$this->students[$i]['year_level_id'])
+                ->where('year_level_id', '<',$this->students[$i]['year_level_id'])
                 ->get();
 
             // $sys = SchoolYear::orderBy('sy','desc')->limit($this->students[$i]['year_level_id'])->get();

@@ -80,7 +80,10 @@ Route::controller(RoleController::class)
 Route::controller(CourseAvailabilityController::class)
     ->prefix('course-availability')
     ->group(function(){
-        Route::get('/', 'index')
+    Route::get('/', 'index')
+        ->middleware('auth.anyrole:Admin, Staff');
+
+    Route::get('/student-subject/{id}', 'latestAvailabilityForStudent')
         ->middleware('auth.anyrole:Admin, Staff');
 
     Route::get('/{id}', 'show')
@@ -154,10 +157,15 @@ Route::controller(SemSyController::class)
         Route::get('/', 'index')
             ->middleware('auth.anyrole:Admin, Staff');
 
+        Route::get('/current', 'latest');
+
         Route::get('/{id}', 'show')
-            ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin, Staff');
 
         Route::post('/', 'store')
+            ->middleware('auth.anyrole:Admin, Staff');
+
+        Route::post('/generate-latest', 'generateLatest')
             ->middleware('auth.anyrole:Admin, Staff');
 
         Route::delete('/{id}', 'destroy')

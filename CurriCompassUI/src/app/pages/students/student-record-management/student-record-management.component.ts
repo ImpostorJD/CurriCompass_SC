@@ -8,6 +8,7 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid, sortSemester, yearLevel } 
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { allOrNoneValidator } from '../../../services/validators/all-or-none.validator';
 
 @Component({
   selector: 'app-student-record-management',
@@ -74,6 +75,7 @@ export class StudentRecordManagementComponent {
     let taken_at = null;
     let remark = null;
     let sy = null;
+    let grade = null;
 
     if(subject != null && typeof subject != "undefined"){
       taken_at = subject.taken_at;
@@ -86,7 +88,8 @@ export class StudentRecordManagementComponent {
       "taken_at": new FormControl(taken_at),
       "remark": new FormControl(remark),
       "sy": new FormControl(sy),
-    });
+      "grade": new FormControl(grade),
+    },  { validators: [allOrNoneValidator(['remark', 'grade', 'taken_at', 'sy'], 'subjectid')] });
 
     this.fac.addControl(this.subjectsTakenArray, subjectField);
   }
@@ -103,6 +106,10 @@ export class StudentRecordManagementComponent {
     return this.fac.getFormControl(index, this.subjectsTakenArray, 'remark');
   }
 
+  getGradeControl(index: number): FormControl{
+    return this.fac.getFormControl(index, this.subjectsTakenArray, 'grade');
+  }
+
   getTakenAtControl(index: number): FormControl{
     return this.fac.getFormControl(index, this.subjectsTakenArray, 'taken_at');
   }
@@ -110,8 +117,27 @@ export class StudentRecordManagementComponent {
   getSchoolYearControl(index: number): FormControl {
     return this.fac.getFormControl(index, this.subjectsTakenArray, 'sy');
   }
+
+  getGradeOfSubject(subjectid: number) {
+    return this.curriculumSubjects.find((s:any) => s.subjectid === subjectid).grade;
+  }
+
   getRemarkOfSubject(subjectid: number) {
     return this.curriculumSubjects.find((s:any) => s.subjectid === subjectid).remark;
+  }
+
+  changeGradeRemark(index: number){
+
+    if (this.getGradeControl(index).invalid) return;
+
+    const grade = this.getGradeControl(index).value;
+    let remark = grade == 1 ? "Excellent" :
+    (grade == 1.25 || grade == 1.50 ? "Very Good" :
+    (grade == 1.75 || grade == 2 || grade == 2.25 ? "Good" :
+    (grade == 2.5 ? "Fair" :
+    (grade == 2.75 || grade == 3 ? "Passing" : "Failed"))));
+
+    this.getRemarkControl(index).patchValue(remark);
   }
 
   getCurriculumSubjects(id: number){
@@ -125,9 +151,7 @@ export class StudentRecordManagementComponent {
           this.addSubjectsTaken(element);
         });
       },
-
       error: (err: any) => console.error(err),
-
     });
   }
 
@@ -160,7 +184,6 @@ export class StudentRecordManagementComponent {
   }
 
   handleSubmit(){
-
     if(this.studentProfileField.status == "INVALID") {
       markFormGroupAsDirtyAndInvalid(this.studentProfileField);
       return;

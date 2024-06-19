@@ -25,20 +25,36 @@ class InitDb extends Command
      */
     public function handle()
     {
-        //
         echo("migrating databases... \n Please wait...\n");
         $this->call('migrate:fresh');
         echo("successfully migrated.\n");
-        echo("Commencing database seeding:");
+        echo("Commencing database seeding:\n");
+
         $this->call('db:seed', ['--class' => 'RoleSeeder']);
-        echo("Role Table successfully seeded. \n");
-        $this->call('db:seed', ['--class' => 'YearLevelSeeder']);
-        echo("Year Level Table successfully seeded. \n");
+        echo("Role Table successfully seeded.\n");
+
         $this->call('db:seed', ['--class' => 'UserSeeder']);
         echo("User Table successfully seeded. \n");
+
+        $this->call('db:seed', ['--class' => 'YearLevelSeeder']);
+        echo("Year Level Table successfully seeded. \n");
+
+        $this->call('db:seed', ['--class' => 'SemesterSeeder']);
+        echo("Semester Table successfully seeded.\n");
+
+        $this->call('db:seed', ['--class' => 'ProgramSeeder']);
+        echo("Program Table successfully seeded.\n");
+
         $this->call('db:seed', ['--class' => 'SchoolYearSeeder']);
         echo("School Year Table successfully seeded. \n");
-        $this->call('db:seed', ['--class' => 'SemesterSeeder']);
-        echo("Semester Table successfully seeded. \n");
+
+        $this->call('db:seed', ['--class' => 'CourseSeeder']);
+        echo("Course/Subjects Table successfully seeded.\n");
+
+        $this->call('db:seed', ['--class' => 'curricula_seeder']);
+        echo("Curricula Table successfully seeded.\n");
+
+
+
     }
 }

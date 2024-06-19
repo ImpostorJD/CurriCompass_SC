@@ -85,13 +85,16 @@
             <th class="border border-slate-600 w-[15%] flex items-center justify-center">
               Semester
             </th>
-            <th class="border border-slate-600 w-[20%] flex items-center justify-center">
+            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
               SY Taken
             </th>
             <th class="border border-slate-600 w-[15%] flex items-center justify-center">
               Sem Taken
             </th>
-            <th class="border border-slate-600 flex-auto flex items-center justify-center">
+            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
+              Grade
+            </th>
+            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
               Remark
             </th>
           </tr>
@@ -107,18 +110,21 @@
                   {{ cs.subjects.subjectcredits }}
                 </td>
                 <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                  {{ cs.year_level }}
+                  {{ cs.year_level.year_level_desc }}
                 </td>
                 <td class="border border-slate-600 w-[15%] flex items-center justify-center">
                   {{ cs.semesters.semdesc }}
                 </td>
-                <td class="border border-slate-600 w-[20%] flex items-center justify-center">
+                <td class="border border-slate-600 w-[15%] flex items-center justify-center">
                   {{ user.student_record.subjects_taken.length != 0 ? formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_start) + " - " + formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_end): 'not yet taken' }}
                 </td>
                 <td class="border border-slate-600 w-[15%] flex items-center justify-center">
                   {{ user.student_record.subjects_taken.length != 0 ? getSubjectTakenItem(cs.subjects.subjectid).taken_at : 'not yet taken' }}
                 </td>
-                <td class="border border-slate-600 w-[20%] flex items-center justify-center relative group/remark">
+                <td class="border border-slate-600 w-[15%] flex items-center justify-center">
+                  {{ user.student_record.subjects_taken.length != 0 ? getSubjectTakenItem(cs.subjects.subjectid).grade : 'not yet taken' }}
+                </td>
+                <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group/remark">
                   {{ user.student_record.subjects_taken.length != 0 ? getSubjectTakenItem(cs.subjects.subjectid).remark : "none" }}
                 </td>
               </tr>

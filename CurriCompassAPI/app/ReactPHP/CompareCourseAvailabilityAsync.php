@@ -9,7 +9,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 class CompareCourseAvailabilityAsync {
 
-    public static function compareCourseAvailability($course_code, $targetStudent){
+    public static function compareCourseAvailability($course_code, $targetStudent ,$grade){
         //check if courese is available
         $course = Subjects::where('subjectcode', $course_code)->first();
 
@@ -48,7 +48,7 @@ class CompareCourseAvailabilityAsync {
             }
         }
 
-        return $course_code;
+        return [$course_code => $grade];
 
     }
 }

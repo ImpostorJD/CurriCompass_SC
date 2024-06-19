@@ -261,16 +261,19 @@
               <th class="border border-slate-600 w-[10%] flex items-center justify-center">
                 Year Level
               </th>
-              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
+              <th class="border border-slate-600 w-[10%] flex items-center justify-center">
                 Semester
               </th>
-              <th class="border border-slate-600 w-[20%] flex items-center justify-center">
+              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
                 SY Taken
               </th>
               <th class="border border-slate-600 w-[15%] flex items-center justify-center">
                 Sem Taken
               </th>
-              <th class="border border-slate-600 flex-auto flex items-center justify-center">
+              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
+                Grade
+              </th>
+              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
                 Remark
               </th>
             </tr>
@@ -288,11 +291,13 @@
                   <td class="border border-slate-600 w-[10%] flex items-center justify-center">
                     {{ cs.year_level.year_level_desc }}
                   </td>
-                  <td class="border border-slate-600 w-[15%] flex items-center justify-center">
+                  <td class="border border-slate-600 w-[10%] flex items-center justify-center">
                     {{ cs.semesters.semdesc }}
                   </td>
-                  <td class="border border-slate-600 w-[20%] flex items-center justify-center">
-                    <select class="h-full w-full p-2" [formControl]="getSchoolYearControl($index)">
+                  <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group">
+                    <select
+                    [ngClass]="{'border-red-600 border-[1px]': getSchoolYearControl($index).invalid }"
+                      class="h-full w-full p-2" [formControl]="getSchoolYearControl($index)">
                       <option [ngValue]="null" disabled selected>
                         Please Select
                       </option>
@@ -302,9 +307,19 @@
                         </option>
                       }
                     </select>
+                    @if(getSchoolYearControl($index).invalid){
+                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                      </div>
+                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
+                        School Year is required!
+                      </div>
+                    }
                   </td>
-                  <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                    <select class="h-full w-full p-2" [formControl]="getTakenAtControl($index)">
+                  <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group">
+                    <select class="h-full w-full p-2"
+                      [ngClass]="{'border-red-600 border-[1px]': getTakenAtControl($index).invalid }"
+                      [formControl]="getTakenAtControl($index)">
                       <option [ngValue]="null" disabled selected>
                         Please Select
                       </option>
@@ -321,10 +336,66 @@
                         3rd Semester
                       </option>
                     </select>
+                    @if(getTakenAtControl($index).invalid){
+                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                      </div>
+                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
+                        Taken at is required
+                      </div>
+                    }
                   </td>
-                  <td class="border border-slate-600 w-[20%] flex items-center justify-center relative group/remark">
+                  <td class="border border-slate-600 w-[15%] flex items-center justify-center group relative">
                     <select
-                      class="w-full p-2 h-full group/remark"
+                      class="h-full w-full p-2"
+                      [ngClass]="{'border-red-600 border-[1px]': getGradeControl($index).invalid }"
+                      [formControl]="getGradeControl($index)" (change)="changeGradeRemark($index)">
+                      <option [ngValue]="null" disabled selected>
+                        Please Select
+                      </option>
+                      <option [ngValue]="1">
+                        1
+                      </option>
+                      <option [ngValue]="1.25">
+                        1.25
+                      </option>
+                      <option [ngValue]="1.5">
+                        1.50
+                      </option>
+                      <option [ngValue]="1.5">
+                        1.75
+                      </option>
+                      <option [ngValue]="2">
+                        2
+                      </option>
+                      <option [ngValue]="2.25">
+                        2.25
+                      </option>
+                      <option [ngValue]="2.5">
+                        2.50
+                      </option>
+                      <option [ngValue]="2.75">
+                        2.75
+                      </option>
+                      <option [ngValue]="3">
+                        3
+                      </option>
+                      <option [ngValue]="5">
+                        5
+                      </option>
+                    </select>
+                    @if(getGradeControl($index).invalid){
+                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                      </div>
+                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
+                        Grade is required
+                      </div>
+                    }
+                  </td>
+                  <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group">
+                    <select
+                      class="w-full p-2 h-full group"
                       [ngClass]="{'border-red-600 border-[1px]': getRemarkControl($index).invalid }"
                       [formControl]="getRemarkControl($index)">
                       <option value="None">
@@ -357,10 +428,10 @@
                     </select>
                     @if(getRemarkControl($index).invalid) {
                       <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                      <div class="w-0 h-0 opacity-0 group-focus/remark:opacity-100 group-hover/remark:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                      <div class="w-0 h-0 opacity-0 group-focus/remark:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
                       </div>
-                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/remark:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/remark:opacity-100">
-                        Status is required!
+                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
+                        Remark/s is required!
                       </div>
                     }
                   </td>

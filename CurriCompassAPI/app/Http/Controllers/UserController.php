@@ -258,6 +258,7 @@ class UserController extends Controller
                     $query->with(['curriculum_subjects' => function($query){
                         $query->with('subjects');
                         $query->with('semesters');
+                        $query->with('year_level');
                     }]);
                   }]);
                 $query->with('school_year');

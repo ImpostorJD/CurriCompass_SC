@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreign('srid')
                 ->references('srid')
                 ->on('student_records')
-                ->onDelete('restrict');
+                ->onDelete('cascade');
 
             $table->foreign('cid')
                 ->references('cid')

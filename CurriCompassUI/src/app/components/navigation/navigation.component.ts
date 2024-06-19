@@ -44,7 +44,7 @@ export class NavigationComponent {
       allowedRoles: ['Admin','Staff','Student'],
       icon_type: "material-symbols-outlined",
       icon: "explore",
-      path: "/consultation",
+      path: "/",
       hoverGroup: 'consultation',
     },
     {
@@ -96,12 +96,12 @@ export class NavigationComponent {
       hoverGroup: 'courses',
     },
     {
-      name : "School Calendar",
+      name : "School Year",
       allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",
       icon: "event_note",
-      path: "/school-calendar",
-      hoverGroup: 'school_calendar',
+      path: "/school-year",
+      hoverGroup: 'school_year',
     },
     {
       name : "Semester Management",

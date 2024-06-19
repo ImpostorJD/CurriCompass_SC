@@ -1,94 +1,76 @@
 <div class="bg-slate-100 min-w-full h-full p-5">
   <!--This is for student-->
   <div *appRolesToRender="['Student']" class="w-full h-full p-4 flex flex-col gap-2">
-   <span class="text-[2rem] font-bold">
-    Course Enlistment
-   </span>
-    @if(!disabledButton){
-      <button class="w-full px-4 py-2 border-green-600 border-[1px] text-green-600 hover:text-white hover:bg-green-600 rounded-md" (click)="updateEnlistment()">
-        Get Recent Enlistment
+
+   @if(currentSemSy){
+    <span class="text-[2rem] font-bold">
+      Course Enlistment for {{ dateformat.formatToYear(semSy?.school_year?.sy_start)  + " - " + dateformat.formatToYear(semSy?.school_year?.sy_end) }} - {{ semSy?.semester?.semdesc }}
+     </span>
+    @if(studentSelected && studentSelected!.student_record!.enlistment.length == 0){
+      <button class="py-2 px-4 bg-green-600 rounded-md text-white hover:bg-green-700 transition-all" (click)="generateEnlistment()" [disabled]="disableEnlistment">
+        Generate Enlistment
       </button>
-    }
-    @for(e of studentRecords?.enlistment; track $index){
-      <div class="flex flex-col bg-white">
-        <div class="flex flex-row">
-          <span class="font-bold w-[15rem] p-2 border-[1px] border-black">
-            Curriculum:
-          </span>
-          <span class="flex-auto p-2 border-[1px] border-black">
-            {{ studentRecords.curriculum.program.programdesc + " Specialization in " + studentRecords.curriculum.specialization }}
-          </span>
-        </div>
-        <div class="flex flex-row">
-          <span class="font-bold w-[15rem] p-2 border-[1px] border-black">
-            School Year:
-          </span>
-          <span class="flex-auto p-2 border-[1px] border-black">
-            {{ dateformat.formatToYear(e.consultation.school_year.sy_start)  + " - " + dateformat.formatToYear(e.consultation.school_year.sy_end) }}
-          </span>
-        </div>
-        <div class="flex flex-row">
-          <span class="font-bold w-[15rem] p-2 border-[1px] border-black">
-            Semester:
-          </span>
-          <span class="flex-auto p-2 border-[1px] border-black">
-            {{ e.consultation.semesters.semdesc }}
-          </span>
-        </div>
+    }@else {
+      <div class="w-full h-full">
 
-      </div>
-      <div class="w-full">
-        <table class="w-full table-auto flex flex-col bg-white">
-          <thead class="flex w-full bg-slate-300 rounded-t-md">
-            <tr class="flex flex-row w-full">
-              <th class="w-[20%] h-full border-[1px] border-black p-2 rounded-tl-md">
-                Course
-              </th>
-              <th class="w-[20%] h-full border-[1px] border-black p-2">
-                Descriptive Title
-              </th>
-              <th class="w-[20%] h-full border-[1px] border-black p-2">
-                Units
-              </th>
-              <th class="w-[20%] h-full border-[1px] border-black p-2">
-                Time
-              </th>
-              <th class="w-[20%] h-full border-[1px] border-black p-2 rounded-tr-md">
-                Days
-              </th>
-            </tr>
-          </thead>
-          <tbody class="flex flex-col w-full">
-            @for(s of e.consultation.consultation_subjects; track $index){
-              <tr class="w-full flex flex-row h-[3.54rem]">
-                <td class="flex w-[20%] h-full border-[1px] border-black relative group">
-                 {{ s.subjects.subjectcode }}
-                </td>
-                <td class="w-[20%] h-full border-[1px] border-black p-2">
-                  {{ s.subjects.subjectname }}
-                </td>
-                <td class="w-[20%] h-full border-[1px] border-black p-2">
-                  {{ s.subjects.subjectcredits }}
-                </td>
-                <td class="w-[20%] h-full border-[1px] border-black relative group">
-                  {{ s.time }}
-                </td>
-                <td class="w-[20%] h-full border-[1px] border-black relative group">
-                {{ s.days }}
-                </td>
+         <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
+           <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
+             <tr class="h-full w-full flex flex-row">
+               <th class="border border-slate-600 w-[25%] flex items-center justify-center">
+                 Course Code
+               </th>
+               <th class="border border-slate-600  w-[25%] flex items-center justify-center">
+                 Section
+               </th>
+               <th class="border border-slate-600 w-[25%] flex items-center justify-center">
+                 Time
+               </th>
+               <th class="border border-slate-600 w-[25%] flex items-center justify-center">
+                 Day
+               </th>
 
-              </tr>
-            }
-          </tbody>
-        </table>
+
+             </tr>
+           </thead>
+           <tbody class="min-h-[10rem] overflow-y-auto">
+              @for(sub of studentSelected?.student_record?.enlistment[0]?.enlistment_subjects; track $index){
+                <tr class="flex flex-row w-full hover:bg-green-300">
+                  <td class="border border-slate-600  w-[25%] flex items-center justify-center relative group">
+                    {{ sub.course_availability.subjects.subjectcode }}
+                  </td>
+                  <td class="border border-slate-600  w-[25%] flex items-center justify-center">
+                    {{ sub.course_availability.section }}
+                  </td>
+                  <td class="border border-slate-600  w-[25%] flex items-center justify-center">
+                    {{ sub.course_availability.time }}
+                  </td>
+                  <td class="border border-slate-600  w-[25%] flex items-center justify-center">
+                    {{ sub.course_availability.days }}
+                  </td>
+                </tr>
+              }
+           </tbody>
+         </table>
+         <div class="w-full">
+           <span>
+             <span class="font-bold">
+               Total Units:
+             </span>
+             <span>{{ currentUnits }}</span>
+           </span>
+         </div>
       </div>
-    }
+     }
+  }
+
   </div>
   <!--this is for faculty/admin-->
   <div *appRolesToRender="['Admin','Staff']" class="w-full h-full flex flex-col gap-4">
-    <h1 class="font-extrabold font-sans text-2xl uppercase">Programs Consultation</h1>
+    @if(semSy){
+      <h1 class="font-extrabold font-sans text-2xl uppercase">Students Consultation as of {{ dateformat.formatToYear(semSy?.school_year?.sy_start)  + " - " + dateformat.formatToYear(semSy?.school_year?.sy_end) }} - {{ semSy?.semester?.semdesc }}</h1>
+    }
     <div class="mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
-      <span>Search For Programs</span>
+      <span>Search For Students</span>
       <div class="relative w-full">
         <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchConsultation" [ngModelOptions]="{standalone:true}">
         <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
@@ -100,75 +82,57 @@
     <table class="table-auto w-full border-collapse border border-slate-300">
       <thead class="bg-slate-300">
         <tr class="flex flex-row py-2">
-          <th class="w-[16.67%] py-2">
-            Program Code
+          <th class="w-[20%] py-2">
+            Student No.
           </th>
-          <th class="w-[16.67%] py-2">
-            Specialization
+          <th class="w-[20%] py-2">
+            Name
           </th>
-          <th class="lg:w-[16.67%] py-2 flex-auto">
+          <th class="lg:w-[20%] py-2 flex-auto">
             Year Level
           </th>
-          <th class="lg:w-[16.67%] py-2 flex-auto">
-            Block
+          <th class="lg:w-[20%] py-2 flex-auto">
+            Program
           </th>
-          <th class="lg:w-[16.67%] py-2 flex-auto">
-            Semester
+          <th class="lg:w-[20%] py-2 flex-auto">
+            Enlisted
           </th>
-          <th class="w-[16.67%] lg:flex-auto py-2 flex items-center justify-center">
-            <a
-               class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
-              [routerLink]="'/consultation/add-consultation'"
-            >
-              <i class="material-symbols-outlined">add</i>
-              <span class="lg:inline hidden">Add Consultation</span>
-            </a>
-          </th>
+
         </tr>
       </thead>
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
-        @for(c of consultations; track $index){
-          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
-            <td class="w-[16.67%] px-1 flex items-center justify-center">
+        @for(enlisted of studentRecords | studentFilter:searchConsultation; track $index){
+          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100 cursor-pointer" (click)="clickStudent( enlisted?.student_record?.student_no )">
+            <td class="w-[20%] px-1 flex items-center justify-center">
               <span>
-                {{ c?.curriculum.program.programcode }}
+                {{ enlisted?.student_record?.student_no }}
               </span>
             </td>
-            <td class="w-[16.67%] px-1 flex items-center justify-center">
+            <td class="w-[20%] px-1 flex items-center justify-center">
               <span>
-                {{ c?.curriculum.specialization ? c?.curriculum.specialization : "None" }}
+                {{ enlisted.userfname + " " + enlisted.usermiddle + " " + enlisted.userlname }}
               </span>
             </td>
-            <td class="w-[16.67%] px-1 flex items-center justify-center">
-              <span>.
-                {{ c?.year_level }}
-              </span>
-            </td>
-            <td class="w-[16.67%] px-1 flex items-center justify-center">
+            <td class="w-[20%] px-1 flex items-center justify-center">
               <span>
-                {{ c?.block }}
+                {{ enlisted?.student_record?.year_level?.year_level_desc }}
               </span>
             </td>
-            <td class="w-[16.67%] px-1 flex items-center justify-center">
+            <td class="w-[20%] px-1 flex items-center justify-center">
               <span>
-                {{ c?.semesters.semdesc }}
+                {{ enlisted?.student_record?.curriculum?.program?.programcode }}
               </span>
             </td>
-            <td class="w-[16.67%] flex justify-center items-center px-1 lg:gap-2 gap-1">
-              <a
-                 class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
-                [routerLink]="'/consultation/' + c?.coid">
-                <i class="material-symbols-outlined">
-                  visibility
-                </i>
-              </a>
-              <button
-                (click)="deleteConsultation(c)"
-                class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md">
-                <i class="material-symbols-outlined">
-                  delete
-                </i>
-              </button>
+            <td class="w-[20%] px-1 flex items-center justify-center" >
+              @if(enlisted?.student_record?.enlistment?.length == 0){
+                <span class="p-2 w-full flex justify-center rounded-md border-[1px] border-green-600 text-green-600">
+                   N/A
+                </span>
+              }@else {
+               <span class="p-2 flex w-full justify-center rounded-md bg-green-600 text-white cursor-default">
+                 Enlisted
+              </span>
+              }
             </td>
           </tr>
         }

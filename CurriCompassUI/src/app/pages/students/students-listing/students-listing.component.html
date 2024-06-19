@@ -26,6 +26,9 @@
           <th class="w-[15%] py-2 hidden lg:block">
             Year Level
           </th>
+          <th class="w-[15%] py-2 hidden lg:block">
+            Status
+          </th>
           <th class="w-[25%] lg:flex-auto py-2 flex items-center justify-center">
             <a
                class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
@@ -52,19 +55,22 @@
             <td class="w-[15%] px-1 hidden lg:flex items-center">
               <span>{{ student.student_record.year_level != null ? student.student_record.year_level.year_level_desc : "Not Yet Set" }}</span>
             </td>
+            <td class="w-[15%] px-1 hidden lg:flex items-center">
+              <span>{{ student.student_record.status != null ? student.student_record.status : "Not Yet Set" }}</span>
+            </td>
             <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
               <a
                 class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
                 [routerLink]="'/students/' + student.student_record.student_no"
               >
-              <i class="material-symbols-outlined">
-                visibility
-              </i>
-            </a>
-            <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"  (click)="modalUtility.enableModal(student.userid)">
                 <i class="material-symbols-outlined">
-                  delete
+                  visibility
                 </i>
+              </a>
+              <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"  (click)="modalUtility.enableModal(student.userid)">
+                  <i class="material-symbols-outlined">
+                    delete
+                  </i>
               </button>
             </td>
           </tr>

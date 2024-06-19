@@ -22,8 +22,9 @@ export class ProfilePageComponent {
   user:any;
 
   getSubjectTakenItem(index: number){
-    return this.user.student_record.subjects_taken
-      .find((s:any) => s.subjectid === index);
+    let course = this.user.student_record.subjects_taken
+    .find((s:any) => s.subjectid === index);
+    return course;
   }
 
   async ngOnInit(){

@@ -5,6 +5,6 @@ import { EditSemesterAvailabilityComponent } from "./edit-semester-availability/
 
 export const semesterRoutes: Routes = [
   { path: '', component: SemesterManagementComponent },
-  { path: 'add-semester', component: AddSemesterAvailabilityComponent },
-  { path: ':id', component: EditSemesterAvailabilityComponent },
+  // { path: 'add-semester', component: AddSemesterAvailabilityComponent },
+  // { path: ':id', component: EditSemesterAvailabilityComponent },
 ]
