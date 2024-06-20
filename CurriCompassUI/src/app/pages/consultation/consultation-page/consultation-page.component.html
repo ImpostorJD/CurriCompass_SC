@@ -140,3 +140,19 @@
     </table>
   </div>
 </div>
+@if(showError){
+  <div *appRolesToRender="['Student']" class="absolute top-0 right-0 w-[100vw] h-[100vh] bg-black bg-opacity-75 flex justify-center items-center">
+    <div class="min-w-[50rem] min-h-[30rem] bg-red-100 p-2 flex justify-center rounded-md text-red-600 border-red-600 border-[1px]">
+      <div class="relative w-full h-full flex flex-col p-4">
+        <strong class="font-bold text-2xl">Error!</strong>
+        <div class="flex flex-col gap-1">
+          <span class="block sm:inline">{{ message }}</span>
+
+        </div>
+        <span class="absolute top-0 right-0" (click)="resetError()">
+          <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+        </span>
+      </div>
+    </div>
+  </div>
+}

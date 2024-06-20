@@ -19,7 +19,7 @@ class Enlistment extends Model
     ];
 
     public function student_record(){
-        return $this->belongsTo(StudentRecord::class, 'studentid', 'studentid');
+        return $this->belongsTo(StudentRecord::class, 'srid', 'srid');
     }
 
     public function year_level(){

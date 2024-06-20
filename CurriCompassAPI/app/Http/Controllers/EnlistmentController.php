@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\EnlistmentAlgorithm;
+use App\Models\CourseAvailability;
 use App\Models\Enlistment;
 use App\Models\EnlistmentSubjects;
 use App\Models\SemSy;
@@ -59,14 +60,21 @@ class EnlistmentController extends Controller
             return response()->json(["status" => "student record is missing"], 400);
         }
 
-        $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
-
         //Retrieve curriculum and student records synchronously
         $targetStudent = StudentRecord::where('student_no', $request['srid'])
             ->first();
 
         if($targetStudent == null){
             return response()->json(["status" => "not found"], 404);
+        }
+
+        $currentsemsy = SemSy::orderBy('semsyid', 'desc')
+            ->with('semester')
+            ->with('school_year')
+            ->first();
+
+        if(CourseAvailability::where('semsyid', $currentsemsy->semsyid)->count() == 0){
+            return response()->json(["status" => "No course available set for the current semester."], 400);
         }
 
         if(Enlistment::where('srid', $targetStudent->srid)
@@ -156,11 +164,12 @@ class EnlistmentController extends Controller
             $query->where('student_no', $id);
         })->where('peid', $request->enlistmentId)->first();
 
+
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
         $taken_at = $currentsemsy->semid == 1 ? "Sem 1" : ($currentsemsy->semid == 2 ? "Sem 2" : "Sem 3");
         if($enlistment) {
           //update logic
-          $enlistment->enlistment_subjects->delete();
+          $enlistment->enlistment_subjects()->delete();
 
 
           foreach($request->subjects as $es) {
@@ -179,7 +188,7 @@ class EnlistmentController extends Controller
                     ($es['grade'] == 2.75 || $es['grade'] == 3 ? "Passing" : "Failed"))));
 
                 SubjectsTaken::create([
-                    'srid' => StudentRecord::where('student_no', $id)->first()->pluck('srid'),
+                    'srid' => StudentRecord::where('student_no', $id)->first()->srid,
                     'subjectid' => $es['subjectid'],
                     'taken_at'=> $taken_at,
                     'grade' => $es['grade'],

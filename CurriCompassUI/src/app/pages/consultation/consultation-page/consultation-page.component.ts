@@ -41,6 +41,8 @@ export class ConsultationPageComponent {
   disabledButton:boolean = true;
   isAdmin = true;
   currentUnits = 0;
+  showError = false;
+  message = '';
 
   semSy:any = null;
   studentRecords:any = null;
@@ -49,11 +51,29 @@ export class ConsultationPageComponent {
     this.router.navigateByUrl('/consultation/' + id)
   }
 
+  resetError(){
+    this.showError = false;
+    this.message = "";
+  }
+
   generateEnlistment(){
     this.disableEnlistment = true;
     this.req.postResource('enlistment', {"srid" : this.currentLogged.student_record.student_no }, httpOptions(this.auth.getCookie('user')))
-      .subscribe(() => {
-        this.getUser();
+      .subscribe({
+        next: () => {
+          this.getUser();
+        },
+        error: (err:any) => {
+          if (err.status == 400) {
+            let error_messages = err.error.status;
+            this.message = error_messages;
+            this.showError = true;
+            // setTimeout(() => {
+            //   this.showError = false;
+            //   this.messages = [];
+            // }, 5000);
+          }
+        },
       });
   }
 

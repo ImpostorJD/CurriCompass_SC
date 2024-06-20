@@ -198,8 +198,13 @@ class CourseAvailabilityController extends Controller
     {
 
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
+        $currentsem = $currentsemsy->semid ==  1 ? "Sem 1" : ($currentsemsy->semid ==  2 ? "Sem 2" : "Sem 3");
         $studentRecord = StudentRecord::where('student_no', $srid)
-            ->with('subjects_taken')
+            ->with(['subjects_taken' => function ($query) use ($currentsemsy, $currentsem){
+                $query->where('sy', '!=', $currentsemsy->sy);
+                $query->where('taken_at', '!=', $currentsem);
+
+            }])
             ->first();
         $cav = CourseAvailability::whereHas('semester_sy', function($query) use($currentsemsy){
             $query->where('semsyid', $currentsemsy->semsyid);

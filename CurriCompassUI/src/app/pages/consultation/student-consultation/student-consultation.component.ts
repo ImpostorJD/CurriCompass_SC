@@ -50,7 +50,9 @@ export class StudentConsultationComponent {
   currentUnits = 0;
   searchCourses = "";
   subjectNotTaken = 0;
-    enlistedSlot:any = {};
+  enlistedSlot:any = {};
+  showError = false;
+  message = '';
 
   private time_range: any  = {
     '8-11' : ['8-10', '8-11', '10-12'],
@@ -139,9 +141,25 @@ export class StudentConsultationComponent {
   generateEnlistment(){
     this.disableEnlistment = true;
     this.req.postResource('enlistment', {"srid" : this.routeId }, httpOptions(this.auth.getCookie('user')))
-      .subscribe(() => {
-        this.getUser();
+      .subscribe({
+        next: () => {
+          this.getUser();
+        },
+        error: (err:any) => {
+          if (err.status === 400) {
+
+            let error_messages = err.error.status;
+            this.message = error_messages;
+            this.showError = true;
+          }
+        },
       });
+  }
+
+
+  resetError(){
+    this.showError = false;
+    this.message = "";
   }
 
   getUser(){
@@ -156,7 +174,11 @@ export class StudentConsultationComponent {
   }
 
   getSubject(caid:number){
-    return this.courses.find((c:any) => c.caid === caid);
+    let course = this.courses.find((s:any) => s.caid === caid);
+    if(course){
+      return course;
+    }
+    return null;
   }
 
   getSubjectTakenGrade(subjectid: number) {
@@ -174,12 +196,14 @@ export class StudentConsultationComponent {
     this.studentSelected.student_record.enlistment[0].enlistment_subjects.forEach((data:any, i: number) => {
 
       let subjectselected:any = this.getSubject(data.caid);
-      let subjectTaken:any = this.getSubjectTakenGrade(subjectselected.subjects.subjectid);
+      let subjectTaken:any = this.getSubjectTakenGrade(subjectselected.subjectid);
+
       const csubject = this.fb.group({
         'caid' : new FormControl(data.caid, [Validators.required]),
         'subjectid' : new FormControl(subjectselected.subjects.subjectid, [Validators.required]),
         'grade' : new FormControl(subjectTaken, Validators.pattern("^[0-9]+(\.?[0-9]+)?")),
       });
+
       this.currentUnits += subjectselected.subjects.subjectcredits;
       this.selectedCourses[i] = parseInt(subjectselected.subjects.subjectid);
       this.enlistedSlot[data.caid] = [data.course_availability.time, data.course_availability.days];
@@ -236,7 +260,7 @@ export class StudentConsultationComponent {
       return;
     }
 
-    this.req.patchResource('enlistment/' + this.studentSelected.student_record.student_no,
+    this.req.patchResource('enlistment/' + this.routeId,
       this.userEnlistment.value,
       httpOptions(this.auth.getCookie('user'))
     ).subscribe({
@@ -260,10 +284,10 @@ export class StudentConsultationComponent {
         .subscribe({
           next: (data: any) => {
             this.courses = data[1];
+            this.getUser()
           },
           error: console.error
         })
-      this.getUser()
     });
 
 

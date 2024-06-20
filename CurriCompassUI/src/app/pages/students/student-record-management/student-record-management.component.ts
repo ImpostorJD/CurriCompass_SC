@@ -81,6 +81,7 @@ export class StudentRecordManagementComponent {
       taken_at = subject.taken_at;
       remark = subject.remark;
       sy = subject.sy;
+      grade = parseFloat(subject.grade);
     }
 
     const subjectField = this.fb.group({

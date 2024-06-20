@@ -11,6 +11,7 @@ class SubjectsTaken extends Model
 
     public $table = "subjects_taken";
     public $incrementing = false;
+    public $timestamps = false;
     protected $primaryKey = ['srid', 'subjectid'];
     protected $fillable = [
         'srid',
