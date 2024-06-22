@@ -116,16 +116,16 @@
                   {{ cs.semesters.semdesc }}
                 </td>
                 <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                  {{ user.student_record.subjects_taken.length != 0 ? formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_start) + " - " + formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_end): 'not yet taken' }}
+                  {{ user.student_record.subjects_taken.length != 0 && getSubjectTakenItem(cs.subjects.subjectid) ? formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_start) + " - " + formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_end): 'not yet taken' }}
                 </td>
                 <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                  {{ user.student_record.subjects_taken.length != 0 ? getSubjectTakenItem(cs.subjects.subjectid).taken_at : 'not yet taken' }}
+                  {{ user.student_record.subjects_taken.length != 0 && getSubjectTakenItem(cs.subjects.subjectid) ? getSubjectTakenItem(cs.subjects.subjectid).taken_at : 'not yet taken' }}
                 </td>
                 <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                  {{ user.student_record.subjects_taken.length != 0 ? getSubjectTakenItem(cs.subjects.subjectid).grade : 'not yet taken' }}
+                  {{ user.student_record.subjects_taken.length != 0 && getSubjectTakenItem(cs.subjects.subjectid) ? getSubjectTakenItem(cs.subjects.subjectid).grade : 'not yet taken' }}
                 </td>
                 <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group/remark">
-                  {{ user.student_record.subjects_taken.length != 0 ? getSubjectTakenItem(cs.subjects.subjectid).remark : "none" }}
+                  {{ user.student_record.subjects_taken.length != 0 && getSubjectTakenItem(cs.subjects.subjectid) ? getSubjectTakenItem(cs.subjects.subjectid).remark : "none" }}
                 </td>
               </tr>
             }

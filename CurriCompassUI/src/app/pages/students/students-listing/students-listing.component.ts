@@ -48,7 +48,7 @@ export class StudentsListingComponent {
     this.req.getResource('student-records',
     httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
-        this.students = res[1].sort((a: any, b: any) => yearLevel(a.student_record.year_level.year_level_desc, b.student_record.year_level.year_level_desc));
+        this.students = res[1].sort((a: any, b: any) => yearLevel(a.student_record?.year_level?.year_level_desc, b.student_record?.year_level?.year_level_desc));
       },
 
       error : err => console.error(err),

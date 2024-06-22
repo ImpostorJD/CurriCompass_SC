@@ -4,11 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../../services/remove-input-error.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
-import { CourseFilterPipe } from '../../../services/filter/search-filters/course-pipe.pipe';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { CoursesServiceService } from '../../../services/courses-service.service';
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { CourseFilterPipe } from '../../../services/filter/search-filters/course-pipe.pipe';
 
 @Component({
   selector: 'app-add-curriculum',
@@ -102,17 +102,18 @@ export class AddCurriculumComponent {
   }
 
   isSelectedCourseFiltered(index: number): boolean {
-    const selectedCourseId = parseInt(this.getCsubjectsControl(index).value);
+    // const selectedCourseId = parseInt(this.getCsubjectsControl(index).value);
+    const selectedCourseId = this.getCsubjectsControl(index).value;
     if (typeof selectedCourseId != "number") {
       return false;
     }
     const filteredCourses = this.coursePipe.transform(this.courses, this.searchCourse);
-    return typeof filteredCourses.find(course => course.subjectid === selectedCourseId) == "undefined" ? false: true;
+    return !filteredCourses.find(course => course.subjectid === selectedCourseId)? true : false;
 
   }
 
   getSelectedCourse(i: number){
-    return this.courses.find((c:any) => c.subjecid = i);
+    return this.courses.find((c:any) => c.subjectid == i);
   }
 
   handleSubmit(){

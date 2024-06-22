@@ -37,6 +37,11 @@ export function markFormGroupAsDirtyAndInvalid(formGroup: FormGroup) {
 }
 
 export const yearLevel = (a:string, b:string) => {
+  if (!a && !b) return 0;
+  // Place nulls at the bottom
+  if (!a) return 1;
+  if (!b) return -1;
+
   const numericPartA = parseInt(a.replace(/\D/g, ''), 10);
   const numericPartB = parseInt(b.replace(/\D/g, ''), 10);
 

@@ -105,7 +105,7 @@
                   Please Select
                 </option>
                 @if(searchCourse.trim().length > 0 &&
-                      isSelectedCourseFiltered(outerIndex) == false &&
+                      isSelectedCourseFiltered(outerIndex) == true &&
                       getCsubjectsControl(outerIndex).value != null &&
                       getCsubjectsControl(outerIndex).value != "null"
                     ){
@@ -117,7 +117,7 @@
                       </option>
                     }
                 @if(searchCourse.trim().length > 0 &&
-                  getCsubjectsControl(outerIndex).value !== null &&
+                  getCsubjectsControl(outerIndex).value != null &&
                   !isSelectedCourseFiltered(outerIndex)
                 ){
                   <option [disabled]="isCourseSelected(getCsubjectsControl(outerIndex).value)"

@@ -31,6 +31,7 @@ class EnlistmentController extends Controller
             $query->where('status', '!=', 'Graduated');
             $query->where('status', '!=', 'Inactive');
             $query->where('status', '!=', null);
+            $query->whereHas('curriculum');
          })
          ->with(['student_record' => function($query) use ($currentsemsy){
             $query->with(['curriculum' => function($query){
@@ -66,6 +67,10 @@ class EnlistmentController extends Controller
 
         if($targetStudent == null){
             return response()->json(["status" => "not found"], 404);
+        }
+
+        if($targetStudent->cid == null){
+            return response()->json(["status" => "User is not assigned to a curriculum yet."], 400);
         }
 
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')
@@ -178,6 +183,7 @@ class EnlistmentController extends Controller
                 'caid' => $es['caid'],
             ]);
 
+            $studentRecord = StudentRecord::where('student_no', $id)->first();
 
             if($es['grade'] != null) {
 
@@ -187,14 +193,20 @@ class EnlistmentController extends Controller
                     ($es['grade'] == 2.5 ? "Fair" :
                     ($es['grade'] == 2.75 || $es['grade'] == 3 ? "Passing" : "Failed"))));
 
+                $subjectTaken = SubjectsTaken::where('subjectid', $es['subjectid'])->where('srid',$studentRecord->srid)->first();
+                if($subjectTaken) {
+                    $subjectTaken->delete();
+                }
+
                 SubjectsTaken::create([
-                    'srid' => StudentRecord::where('student_no', $id)->first()->srid,
+                    'srid' => $studentRecord->srid,
                     'subjectid' => $es['subjectid'],
                     'taken_at'=> $taken_at,
                     'grade' => $es['grade'],
                     'sy' => $currentsemsy->sy,
                     'remark' => $remark,
                 ]);
+
             }
           }
 

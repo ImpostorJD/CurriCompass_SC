@@ -156,7 +156,7 @@ export class EditCourseComponent {
       this.coursesService.getCourse(this.routerId).subscribe({
         next: (c:any) => {
           this.courseField.patchValue(c);
-          this.courseField.controls['year_level_id'].setValue(c.pre_requisites!.year_level.year_level_id);
+          this.courseField.controls['year_level_id'].setValue(c.pre_requisites?.year_level?.year_level_id ? c.pre_requisites?.year_level?.year_level_id : null);
           //this.courseField.controls['completion'].setValue(c.pre_requisites.completion);
           //this.courseField.controls['semavailability'].setValue(c.course_availability.semid);
           if (c.pre_requisites.pre_requisites_subjects.length > 0) {

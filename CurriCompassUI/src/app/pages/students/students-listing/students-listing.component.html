@@ -53,7 +53,7 @@
               <span>{{ student.student_record.cid != null ? student.student_record.curriculum.program.programcode : "Not Yet Set" }}</span>
             </td>
             <td class="w-[15%] px-1 hidden lg:flex items-center">
-              <span>{{ student.student_record.year_level != null ? student.student_record.year_level.year_level_desc : "Not Yet Set" }}</span>
+              <span>{{ student.student_record?.year_level != null ? student.student_record.year_level.year_level_desc : "Not Yet Set" }}</span>
             </td>
             <td class="w-[15%] px-1 hidden lg:flex items-center">
               <span>{{ student.student_record.status != null ? student.student_record.status : "Not Yet Set" }}</span>

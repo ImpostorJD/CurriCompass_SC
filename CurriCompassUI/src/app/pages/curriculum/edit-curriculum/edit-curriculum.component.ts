@@ -114,7 +114,7 @@ export class EditCurriculumComponent {
   }
 
   getSelectedCourse(i: number){
-    return this.courses.find((c:any) => c.subjecid = i);
+    return this.courses.find((c:any) => c.subjectid == i);
   }
 
   handleSubmit(){

@@ -63,7 +63,7 @@ class SubjectsController extends Controller
 
         $pre_requisite = Pre_Requisites::create([
             'subjectid' => $subject->subjectid,
-            'year_level_id' => $request->year_level,
+            'year_level_id' => $request->year_level_id,
            // 'completion' => $request->completion,
         ]);
 
