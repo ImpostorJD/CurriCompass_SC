@@ -28,5 +28,19 @@ class UserSeeder extends Seeder
             'roleid' => 1,
         ]);
 
+        DB::table('users')->insert([
+        'userfname' => "Sample",
+        'userlname' => "Staff",
+        'usermiddle' => "Sample",
+        'contact_no' => "091234567",
+        'email' => "samplestaff@gmail.com",
+        'password' => Hash::make("admin"),
+        ]);
+
+        DB::table('user__roles')->insert([
+            'userid' => 2,
+            'roleid' => 2,
+        ]);
+
     }
 }

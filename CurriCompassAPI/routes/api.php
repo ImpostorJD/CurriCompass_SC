@@ -218,13 +218,13 @@ Route::controller(SchoolYearController::class)
         Route::get('/{id}', 'show');
 
         Route::post('/', 'store')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin');
 
         Route::delete('/{id}', 'destroy')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin');
 
         Route::patch('/{id}', 'update')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin');
     });
 
 Route::controller(EnlistmentController::class)

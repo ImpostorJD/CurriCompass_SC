@@ -140,3 +140,22 @@ composer install
 php artisan serve
 ```
 - It should be running on port 8000 by default.
+
+## CREDENTIALS FOR TESTING
+### Admin
+```
+email: administrator@baliuagu.edu.ph
+password: admin
+```
+
+### Staff
+```
+email: samplestaff@baliuagu.edu.ph
+password: staff
+```
+
+### Student
+```
+email: sampleuser@gmail.com
+password: test
+```

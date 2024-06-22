@@ -97,7 +97,7 @@ export class NavigationComponent {
     },
     {
       name : "School Year",
-      allowedRoles: ['Admin', 'Staff'],
+      allowedRoles: ['Admin'],
       icon_type: "material-symbols-outlined",
       icon: "event_note",
       path: "/school-year",

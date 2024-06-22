@@ -58,7 +58,7 @@ export const routes: Routes = [
         },
 
         { path: 'school-year',
-          canActivate: [AuthGuard(['Admin', 'Staff'])],
+          canActivate: [AuthGuard(['Admin'])],
           loadChildren: () => import('./pages/school-year/school-year.routes')
             .then(mod => mod.schoolYearRoutes)
         },

@@ -36,6 +36,19 @@ class WebDevMockData extends Seeder
             'year_level_id' => 1,
             'sy' => 4
         ],
+
+        [
+            'userfname' => "Sample",
+            'userlname' => "User",
+            'usermiddle' => "Sample",
+            'contact_no' => "09123456789",
+            'email' => "sampleuser@gmail.com",
+            'password' => "test",
+            'student_no' => '222222',
+            'status' => 'Regular',
+            'year_level_id' => 1,
+            'sy' => 4
+        ],
         [
             'userfname' => "Olivia",
             'userlname' => "Perez",
