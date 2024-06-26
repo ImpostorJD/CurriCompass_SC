@@ -23,7 +23,7 @@ enum EnvironmentType {
   };
 
   export const environment = {
-    environment: EnvironmentType.LOCAL,
-    apiUrl: apiUrls[EnvironmentType.LOCAL],
+    environment: EnvironmentType.DEV,
+    apiUrl: apiUrls[EnvironmentType.DEV],
   };
 
