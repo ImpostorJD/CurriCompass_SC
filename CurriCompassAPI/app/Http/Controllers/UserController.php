@@ -54,7 +54,7 @@ class UserController extends Controller
                     'token' => $token,
                     'type' => 'bearer',
                 ]
-        ]);
+        ], 200);
     }
 
     public function register(Request $request){
