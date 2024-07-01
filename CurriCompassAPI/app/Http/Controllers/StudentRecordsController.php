@@ -156,7 +156,7 @@ class StudentRecordsController extends Controller
             "subjects_taken*.subjectid" => ['required','integer'],
             "subjects_taken*.taken_at" => ['required','string'],
             "subjects_taken*.sy" => ['required','integer'],
-            "subjects_taken*.remark" => ['required','string'],
+            //"subjects_taken*.remark" => ['required','string'],
         ]);
 
         if($validate->fails()){
@@ -225,11 +225,15 @@ class StudentRecordsController extends Controller
         $user->student_record->subjects_taken()->delete();
 
         foreach($request->subjects_taken as $subject){
+
+            $grade = $subject['grade'] ? $subject['grade'] : null;
+            $remark = $subject['remark'] ?  $subject['remark'] : null;
+
             $user->student_record->subjects_taken()->insert([
                 'subjectid' => $subject['subjectid'],
                 'taken_at' => $subject['taken_at'],
-                'grade' => $subject['grade'],
-                'remark' => $subject['remark'],
+                'grade' => $grade,
+                'remark' => $remark,
                 'srid' => $user->student_record->srid,
                 'sy' => $subject['sy'],
             ]);

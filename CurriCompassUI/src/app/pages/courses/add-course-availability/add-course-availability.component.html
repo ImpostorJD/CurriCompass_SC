@@ -57,31 +57,24 @@
     <div>
       Time Period
       <select
-      class="p-2 w-full h-full border-[1px] border-black rounded-md" formControlName="time">
+        class="p-2 w-full h-full border-[1px] border-black rounded-md" formControlName="time">
       <option selected [ngValue]="null" disabled>
         Please Select
       </option>
-      <option [ngValue]="'8-10'">
-        8:00 AM - 10:00 AM
-      </option>
-      <option [ngValue]="'8-11'">
-        8:00 AM - 11:00 AM
-      </option>
-      <option [ngValue]="'10-12'">
-        10:00 AM - 12:00 PM
-      </option>
-      <option [ngValue]="'11-2'">
-        11:00 AM - 2:00 PM
-      </option>
-      <option [ngValue]="'1-3'">
-        1:00 PM - 3:00 PM
-      </option>
-      <option [ngValue]="'2-5'">
-        2:00 PM - 5:00 PM
-      </option>
-      <option [ngValue]="'3-5'">
-        3:00 PM - 5:00 PM
-      </option>
+      @if(isLabHoursGreaterThanLecHours()){
+        @for(time of timeSlot.lab; track $index){
+          <option [ngValue]="time.value">
+            {{time.text}}
+          </option>
+        }
+      }@else {
+        @for(time of timeSlot.lec; track $index){
+          <option [ngValue]="time.value">
+            {{time.text}}
+          </option>
+        }
+      }
+
     </select>
     @if(courseAvailability.get('time')?.hasError('required')){
       <div class="text-red-600">

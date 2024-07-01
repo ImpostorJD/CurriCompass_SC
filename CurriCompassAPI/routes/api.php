@@ -81,22 +81,22 @@ Route::controller(CourseAvailabilityController::class)
     ->prefix('course-availability')
     ->group(function(){
     Route::get('/', 'index')
-        ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin,Staff');
 
     Route::get('/student-subject/{id}', 'latestAvailabilityForStudent')
-        ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin,Staff');
 
     Route::get('/{id}', 'show')
-        ->middleware('auth.anyrole:Admin,, Staff');
+        ->middleware('auth.anyrole:Admin,,Staff');
 
     Route::post('/', 'store')
-        ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin,Staff');
 
     Route::delete('/{id}', 'destroy')
-        ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin,Staff');
 
     Route::patch('/{id}', 'update')
-        ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin,Staff');
     });
 
 Route::controller(SubjectsController::class)
@@ -107,13 +107,13 @@ Route::controller(SubjectsController::class)
         Route::get('/{id}', 'show');
 
         Route::post('/', 'store')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::delete('/{id}', 'destroy')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::patch('/{id}', 'update')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
     });
 
 
@@ -125,13 +125,13 @@ Route::controller(ProgramsController::class)
         Route::get('/{id}', 'show');
 
         Route::post('/', 'store')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::delete('/{id}', 'destroy')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::patch('/{id}', 'update')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
     });
 
 Route::controller(SemesterController::class)
@@ -142,37 +142,37 @@ Route::controller(SemesterController::class)
         Route::get('/{id}', 'show');
 
         Route::post('/', 'store')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::delete('/{id}', 'destroy')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::patch('/{id}', 'update')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
     });
 
 Route::controller(SemSyController::class)
     ->prefix('/semester-management')
     ->group(function (){
         Route::get('/', 'index')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::get('/current', 'latest');
 
         Route::get('/{id}', 'show')
-        ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin,Staff');
 
         Route::post('/', 'store')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::post('/generate-latest', 'generateLatest')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::delete('/{id}', 'destroy')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::patch('/{id}', 'update')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
     });
 
 Route::controller(CurriculumController::class)
@@ -183,31 +183,31 @@ Route::controller(CurriculumController::class)
         Route::get('/{id}', 'show');
 
         Route::post('/', 'store')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::delete('/{id}', 'destroy')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::patch('/{id}', 'update')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
     });
 
 Route::controller(StudentRecordsController::class)
     ->prefix('/student-records')
     ->group(function (){
         Route::get('/', 'index')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::get('/{id}', 'show');
 
         Route::post('/', 'store')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::delete('/{id}', 'destroy')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::patch('/{id}', 'update')
-            ->middleware('auth.anyrole:Admin, Staff');
+            ->middleware('auth.anyrole:Admin,Staff');
     });
 
 Route::controller(SchoolYearController::class)
@@ -231,16 +231,16 @@ Route::controller(EnlistmentController::class)
  ->prefix('/enlistment')
  ->group(function (){
     Route::get('/', 'index')
-    ->middleware('auth.anyrole:Admin, Staff');
+    ->middleware('auth.anyrole:Admin,Staff');
 
     Route::get('/{id}', 'show');
 
     Route::post('/', 'store');
 
     Route::patch('/{id}', 'update')
-        ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin,Staff');
 
     Route::delete('/{id}', 'destroy')
-        ->middleware('auth.anyrole:Admin, Staff');
+        ->middleware('auth.anyrole:Admin,Staff');
 
  });

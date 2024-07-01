@@ -48,6 +48,7 @@ export class StudentRecordManagementComponent {
   curriculumSubjects:any = null;
   subjectTaken: any = null;
   year_levels: any = null;
+  gradeEditable: boolean = false;
 
   studentProfileField =  this.fb.group({
     "studentid" : new FormControl('', [Validators.required]),
@@ -90,8 +91,12 @@ export class StudentRecordManagementComponent {
       "remark": new FormControl(remark),
       "sy": new FormControl(sy),
       "grade": new FormControl(grade),
-    },  { validators: [allOrNoneValidator(['remark', 'grade', 'taken_at', 'sy'], 'subjectid')] });
+    },  { validators: [allOrNoneValidator(['taken_at', 'sy'], 'subjectid')] });
 
+    if(!this.gradeEditable){
+      subjectField.get('grade')?.disable({ emitEvent: false })
+      subjectField.get('remark')?.disable({ emitEvent: false })
+    }
     this.fac.addControl(this.subjectsTakenArray, subjectField);
   }
 
@@ -184,28 +189,63 @@ export class StudentRecordManagementComponent {
       this!.studentProfileField!.get('specialization')!.patchValue(null);
   }
 
+  enableGradeAndRemarkControls() {
+    this.subjectsTakenArray.controls.forEach((control) => {
+      control.get('grade')?.enable({ emitEvent: false });
+      control.get('remark')?.enable({ emitEvent: false });
+    });
+  }
+
+  disableGradeAndRemarkControls() {
+    if (!this.gradeEditable) {
+      this.subjectsTakenArray.controls.forEach((control) => {
+        control.get('grade')?.disable({ emitEvent: false });
+        control.get('remark')?.disable({ emitEvent: false });
+      });
+    }
+  }
+
+  patchGradeAndRemarkValues() {
+    this.subjectsTakenArray.controls.forEach((control) => {
+      const gradeControl = control.get('grade');
+      const remarkControl = control.get('remark');
+
+      // Patch values directly if controls are disabled
+      control.patchValue({
+        grade: gradeControl?.value,
+        remark: remarkControl?.value
+      }, { emitEvent: false });
+    });
+  }
+
   handleSubmit(){
+    console.log(this.studentProfileField.value);
     if(this.studentProfileField.status == "INVALID") {
       markFormGroupAsDirtyAndInvalid(this.studentProfileField);
       return;
     }
 
+    this.enableGradeAndRemarkControls();
+
     let data = this.studentProfileField.value;
-    let remarkFilled = true;
 
-    data.subjects_taken!.forEach((e:any, index: number) => {
-      if(e.taken_at != null && e.remark == null) {
-        this.getRemarkControl(index).setErrors({"required": true});
-        remarkFilled = false;
-      }
-    });
+    // let remarkFilled = true;
 
-    if (!remarkFilled) return;
+    // data.subjects_taken!.forEach((e:any, index: number) => {
+    //   if(e.taken_at != null && e.remark == null) {
+    //     this.getRemarkControl(index).setErrors({"required": true});
+    //     remarkFilled = false;
+    //   }
+    // });
 
+    // console.log(remarkFilled);
+    // if (!remarkFilled) return;
+    // this.patchGradeAndRemarkValues();
     data.subjects_taken = data.subjects_taken!.filter((e:any) => e.taken_at !== null)!;
     this.req.patchResource('student-records/' + this.studentProfile.userid, data, httpOptions(this.auth.getCookie('user')))
       .subscribe({
         next: () => {
+          this.disableGradeAndRemarkControls();
           this.router.navigateByUrl('/students');
         },
 
@@ -222,7 +262,15 @@ export class StudentRecordManagementComponent {
       });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const user = await this.auth.getUser();
+    user.user_roles.forEach((e:any) => {
+      if (e.rolename == "Admin"){
+        console.log(e.rolename);
+        this.gradeEditable = true;
+      }
+    });
+
     this.req.getResource('curriculum', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.curricula = res[1];
@@ -273,5 +321,7 @@ export class StudentRecordManagementComponent {
         error: (err: any) => console.error(err),
       })
     })
+
+
   }
 }

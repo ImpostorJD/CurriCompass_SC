@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('caid');
             $table->unsignedBigInteger('subjectid');
             $table->unsignedBigInteger('semsyid');
-            $table->enum('time', ['8-10', '8-11','10-12', '11-2', '1-3','2-5', '3-5']);
+            $table->enum('time', ['8-10', '8-11', '9-11', '10-12', '11-2', '1-3', '2-4','2-5', '3-5']);
             $table->string('section');
             $table->integer('section_limit')->default(0);
             $table->enum('days', ['M-Th', 'T-F', 'W-S']);

@@ -18,7 +18,7 @@ class CourseAvailabilitySeeder extends Seeder
     ];
 
     private $time_range_lec = [
-        '8-10', '10-12', '1-3', '3-5'
+        '8-10', '9-11', '10-12', '1-3', '2-4', '3-5'
     ];
 
     private $days_pairing = [

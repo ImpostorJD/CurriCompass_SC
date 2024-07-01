@@ -55,7 +55,49 @@ export class EditCourseAvailabilityComponent {
     days: new FormControl('', [Validators.required]),
   });
 
+  timeSlot = {
+    lab: [
+      {
+        value: '8-11',
+        text: '8:00 AM - 11:00 AM'
+      },
+      {
+        value: '11-2',
+        text: '11:00 AM - 2:00 PM'
+      },
+      {
+        value: '2-5',
+        text: '2:00 PM - 5:00 PM'
+      },
+    ],
+    lec: [
+      {
+        value: '8-10',
+        text: '8:00 AM - 10:00 AM'
+      },
+      {
+        value: '9-11',
+        text: '9:00 AM - 11:00 AM'
+      },
+      {
+        value: '10-12',
+        text: '10:00 AM - 12:00 PM'
+      },
+      {
+        value: '1-3',
+        text: '1:00 PM - 3:00 PM'
+      },
+      {
+        value: '2-4',
+        text: '2:00 PM - 4:00 PM'
+      },
+      {
+        value: '3-5',
+        text: '3:00 PM - 5:00 PM'
+      },
+    ]
 
+  }
   handleSubmit(){
     if(this.semsy.status == "INVALID") {
       markFormGroupAsDirtyAndInvalid(this.courseAvailability);
@@ -74,6 +116,15 @@ export class EditCourseAvailabilityComponent {
     });
 
 
+  }
+
+  isLabHoursGreaterThanLecHours(): boolean {
+    const subjectId = this.courseAvailability.get('subjectid')?.value;
+    const course = this.courseList.find((e: any) => e.subjectid === subjectId);
+    if (!course) {
+      return false; // or handle the case when course is not found
+    }
+    return course.subjecthourslab > course.subjecthourslec;
   }
 
   ngOnInit(){

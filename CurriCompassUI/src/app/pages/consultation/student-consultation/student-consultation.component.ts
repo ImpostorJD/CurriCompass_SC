@@ -55,9 +55,9 @@ export class StudentConsultationComponent {
   message = '';
 
   private time_range: any  = {
-    '8-11' : ['8-10', '8-11', '10-12'],
+    '8-11' : ['8-10', '8-11', '9-11', '10-12'],
     '11-2' : ['10-12', '11-2', '1-3'],
-    '2-5' : ['1-3', '2-5', '3-5'],
+    '2-5' : ['1-3','2-4','2-5', '3-5'],
   };
 
   userEnlistment = this.fb.group({
