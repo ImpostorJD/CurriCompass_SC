@@ -47,9 +47,15 @@ export class LoginUiComponent {
       this.auth.login(
         this.loginPayload.get('email')?.value!,
         this.loginPayload.get('password')?.value!).subscribe({
-          next: (res:any) => {
+          next: async (res:any) => {
             this.auth.setCookie('user', res.authorisation.token);
-            this.router.navigate(['/'])
+            const user = await this.auth.getUser();
+            if(user.firstlogin){
+              this.router.navigate(['/users/change-password']);
+            }else{
+              this.router.navigate(['/'])
+            }
+
           },
           error: err => {
             if (err.status == 401){

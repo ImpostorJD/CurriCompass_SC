@@ -48,6 +48,14 @@ export class NavigationComponent {
       hoverGroup: 'consultation',
     },
     {
+      name : "Change Password",
+      allowedRoles: ['Admin','Staff','Student'],
+      icon_type: "material-symbols-outlined",
+      icon: "key",
+      path: "/users/change-password",
+      hoverGroup: 'changepass',
+    },
+    {
       name : "Profile",
       allowedRoles: ['Admin', 'Staff', 'Student'],
       icon_type: "material-symbols-outlined",

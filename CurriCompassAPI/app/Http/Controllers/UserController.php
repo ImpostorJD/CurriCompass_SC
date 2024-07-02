@@ -135,6 +135,39 @@ class UserController extends Controller
         ]);
     }
 
+    public function change_password(Request $request, String $id) {
+
+        //retrive user information
+        $res = User::where('userid', '=', $id)->with('user_roles')->first();
+
+        if($res != null){
+            //retrieve old password and compare to sent password
+            if(Hash::check($request->newPasswordField, $res->password)){
+                return response()->json([
+                    [
+                        'status' => 'bad request',
+                        'message' => 'password not changed'
+                    ]
+                ], 400);
+            }
+
+            $res->password = Hash::make($request->newPasswordField);
+            $res->firstlogin = false;
+            $res->save();
+
+            // change password with new password
+            return response()->json([
+                "message" => "password changed",
+                $res
+            ], 200);
+
+
+        }
+        return response()->json([
+            'status' => 'not found',
+        ], 404);
+    }
+
     public function show(Request $request, String $id)
     {
 

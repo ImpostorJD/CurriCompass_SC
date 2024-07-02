@@ -38,6 +38,8 @@ Route::controller(UserController::class)
     ->group(function() {
         Route::post('/login', 'login');
 
+        Route::post('/change-password/{id}', 'change_password');
+
         Route::post('/register', 'register')
             ->middleware('auth.anyrole:Admin');
 
