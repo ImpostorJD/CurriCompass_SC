@@ -16,7 +16,7 @@ class curricula_seeder extends Seeder
         DB::table('curricula')->insert([
             [
                 "programid" => 1,
-                "specialization" => "Web and Mobile Development",
+                "specialization" => "Web and Mobile Application Development",
                 'sy' => 1,
             ],
             [

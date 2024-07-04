@@ -73,7 +73,7 @@ class StudentRecordsController extends Controller
         $validate = Validator::make($request->all(), [
             'userfname' => ['required','string','max:255'],
             'userlname' => ['required','string','max:255'],
-            'usermiddle' => ['required','string','max:255'],
+            'usermiddle' => ['nullable','string','max:255'],
             'email' => ['required','string','email','max:255'],
             'contactno' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
             'password' => ['required','string'],
@@ -117,7 +117,7 @@ class StudentRecordsController extends Controller
         $user = User::create([
             'userfname' => $request->userfname,
             'userlname' => $request->userlname,
-            'usermiddle' => $request->usermiddle,
+            'usermiddle' => $request->usermiddle ? $request->usermiddle : null,
             'contact_no' => $request->contactno,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -144,7 +144,7 @@ class StudentRecordsController extends Controller
         $validate = Validator::make($request->all(), [
             'userfname' => ['required','string','max:255'],
             'userlname' => ['required','string','max:255'],
-            'usermiddle' => ['required','string','max:255'],
+            'usermiddle' => ['nullable','string','max:255'],
             'email' => ['required','string','email','max:255'],
             'contact_no' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
             "studentid" => ['required', 'string'],
@@ -204,7 +204,7 @@ class StudentRecordsController extends Controller
         $user->update([
             'userfname' => $request->userfname,
             'userlname' => $request->userlname,
-            'usermiddle' => $request->usermiddle,
+            'usermiddle' => $request->usermiddle ? $request->usermiddle : null,
             'contact_no' => $request->contact_no,
             'email' => $request->email,
         ]);

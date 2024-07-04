@@ -71,7 +71,11 @@
                   <div class="group-focus/userfname:opacity-100 w-0 h-0 opacity-0 group-hover/userfname:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
                   </div>
                   <div class="group-hover/userfname:opacity-100 group-focus/userfname:opacity-100 z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0">
-                    First Name is required!
+                    @if(studentProfileField.get('userfname')?.hasError('required')){
+                      First name is required!
+                    }@else if (studentProfileField.get('userfname')?.hasError('pattern')) {
+                      First name is in invalid format!
+                    }
                   </div>
                 }
               </td>
@@ -84,7 +88,11 @@
                   <div class="w-0 h-0 opacity-0 group-focus/usermiddle:opacity-100 group-hover/usermiddle:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
                   </div>
                   <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/usermiddle:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/usermiddle:opacity-100">
-                    Middle Name is required!
+                    @if(studentProfileField.get('usermiddle')?.hasError('required')){
+                      Middle name is required!
+                    }@else if (studentProfileField.get('usermiddle')?.hasError('pattern')) {
+                      Middle name is in invalid format!
+                    }
                   </div>
                 }
               </td>
@@ -97,7 +105,11 @@
                   <div class="w-0 h-0 opacity-0 group-focus/userlname:opacity-100 group-hover/userlname:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
                   </div>
                   <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/userlname:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/userlname:opacity-100">
-                    Last Name is required!
+                    @if(studentProfileField.get('userlname')?.hasError('required')){
+                      Last name is required!
+                    }@else if (studentProfileField.get('userlname')?.hasError('pattern')) {
+                      Last name is in invalid format!
+                    }
                   </div>
                 }
               </td>
@@ -188,7 +200,7 @@
                 (change)="changeSpecialization()">
                   @for(c of specializations; track $index){
                     <option [ngValue]="c.specialization">
-                      {{ c.specialization != null ? c.specialization : "None" }}
+                      {{ (c.specialization != null ? c.specialization : "None")  +  " (" + dateformat.formatToYear(c.school_year.sy_start)  + " - " + dateformat.formatToYear(c.school_year.sy_end) + ")"}}
                     </option>
                   }
                 </select>
@@ -327,13 +339,13 @@
                         Credited
                       </option>
                       <option value="Sem 1">
-                        1st Semester
+                        1st Trimester
                       </option>
                       <option value="Sem 2">
-                        2nd Semester
+                        2nd Trimester
                       </option>
                       <option value="Sem 3">
-                        3rd Semester
+                        3rd Trimester
                       </option>
                     </select>
                     @if(getTakenAtControl($index).invalid){

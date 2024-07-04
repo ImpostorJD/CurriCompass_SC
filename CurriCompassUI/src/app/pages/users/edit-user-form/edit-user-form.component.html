@@ -6,20 +6,24 @@
         <h2 class="font-bold text-[1.33rem]">Basic Information</h2>
         <div class="flex flex-col">
           <div class="flex flex-col">
-            <span>first name</span>
+            <span class="capitalize">First Name</span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userfname"/>
             @if(
-                userField.get('userfname')?.invalid &&
-                (userField.get('userfname')?.touched ||
-                userField.get('userfname')?.dirty)
-              ){
-                <div class="text-red-600">
+              userField.get('userfname')?.invalid &&
+              (userField.get('userfname')?.touched ||
+              userField.get('userfname')?.dirty)
+            ){
+              <div class="text-red-600">
+                @if(userField.get('userfname')?.hasError('required')){
                   First name is required!
-                </div>
-              }
+                }@else if (userField.get('userfname')?.hasError('pattern')) {
+                  First name is in invalid format!
+                }
+              </div>
+            }
           </div>
           <div class="flex flex-col">
-            <span>middle name</span>
+            <span class="capitalize">Middle Name</span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="usermiddle"/>
             @if(
               userField.get('usermiddle')?.invalid &&
@@ -27,12 +31,16 @@
               userField.get('usermiddle')?.dirty)
             ){
               <div class="text-red-600">
-                Middle name is required!
+                @if(userField.get('usermiddle')?.hasError('required')){
+                  Middle name is required!
+                }@else if (userField.get('usermiddle')?.hasError('pattern')) {
+                  Middle name is in invalid format!
+                }
               </div>
             }
           </div>
           <div class="flex flex-col">
-            <span>surname</span>
+            <span class="capitalize">Surname</span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userlname"/>
             @if(
               userField.get('userlname')?.invalid &&
@@ -40,7 +48,11 @@
               userField.get('userlname')?.dirty)
             ){
               <div class="text-red-600">
-                Last name is required!
+                @if(userField.get('userlname')?.hasError('required')){
+                  Last name is required!
+                }@else if (userField.get('userlname')?.hasError('pattern')) {
+                  Last name is in invalid format!
+                }
               </div>
             }
           </div>
@@ -50,7 +62,7 @@
         <h2 class="font-bold text-[1.33rem]">Credentials</h2>
         <div class="flex flex-col">
           <div class="flex flex-col">
-            <span>email</span>
+            <span class="capitalize">Email</span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email"/>
             @if(
               userField.get('email')?.invalid &&
@@ -71,7 +83,7 @@
             }
           </div>
           <div class="flex flex-col">
-            <span>contact number</span>
+            <span class="capitalize">Contact Number</span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="contact_no"/>
             @if(
               userField.get('contact_no')?.invalid &&

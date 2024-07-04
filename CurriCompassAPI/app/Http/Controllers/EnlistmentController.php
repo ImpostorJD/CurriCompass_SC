@@ -157,7 +157,7 @@ class EnlistmentController extends Controller
             'enlistmentId' => ['required' => 'integer'],
             'subjects' => ['required' => 'array'],
             'subjects*.caid' => ['required', 'integer'],
-            'subjects*.grade' => ['nullable', 'integer'],
+            'subjects*.grade' => ['nullable', 'string'],
         ]);
 
         if($validate->fails()){
@@ -191,7 +191,12 @@ class EnlistmentController extends Controller
                     ($es['grade'] == 1.25 || $es['grade'] == 1.50 ? "Very Good" :
                     ($es['grade'] == 1.75 || $es['grade'] == 2 || $es['grade'] == 2.25 ? "Good" :
                     ($es['grade'] == 2.5 ? "Fair" :
-                    ($es['grade'] == 2.75 || $es['grade'] == 3 ? "Passing" : "Failed"))));
+                    ($es['grade'] == 2.75 || $es['grade'] == 3 ? "Passing" :
+                    ($es['grade'] == 5 ? "Failed" :
+                    ($es['grade'] == "x" ? "Incomplete" : "Withdrawn"))))));
+
+                $normalized_grade = filter_var($es['grade'], FILTER_VALIDATE_FLOAT) ? floatval($es['grade'] ) : null;
+
 
                 $subjectTaken = SubjectsTaken::where('subjectid', $es['subjectid'])->where('srid',$studentRecord->srid)->first();
                 if($subjectTaken) {
@@ -202,7 +207,7 @@ class EnlistmentController extends Controller
                     'srid' => $studentRecord->srid,
                     'subjectid' => $es['subjectid'],
                     'taken_at'=> $taken_at,
-                    'grade' => $es['grade'],
+                    'grade' => $normalized_grade,
                     'sy' => $currentsemsy->sy,
                     'remark' => $remark,
                 ]);

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('taken_at', ['Sem 1', 'Sem 2', 'Sem 3', 'Credited']);
             $table->unsignedBigInteger('sy');
             $table->double('grade')->nullable();
-            $table->enum('remark', ["Excellent", "Very Good", "Good", "Fair", "Passing", "Failed", "Widthdrawn", "Incomplete"])->nullable();
+            $table->enum('remark', ["Excellent", "Very Good", "Good", "Fair", "Passing", "Failed", "Withdrawn", "Incomplete"])->nullable();
             $table->foreign('srid')
                 ->references('srid')
                 ->on('student_records')

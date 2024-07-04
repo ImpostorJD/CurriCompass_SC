@@ -17,16 +17,22 @@
         Generate Enlistment
       </button>
     }@else {
-     <form class="w-full h-full" [formGroup]="userEnlistment">
-        <div class="w-full mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
-          <span>Search For Courses</span>
-          <div class="relative w-full">
-            <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchCourse" [ngModelOptions]="{standalone:true}">
-            <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
-              search
-            </i>
+
+     <form class="w-full h-full flex flex-col gap-2" [formGroup]="userEnlistment">
+        <button class = "bg-green-500 transition-all hover:bg-green-600 w-full p-2 rounded-md text-white" (click)="gradeEncode = !gradeEncode">
+          {{!gradeEncode ? "Encode Grade" : "Edit Enlistment" }}
+        </button>
+        @if(!gradeEncode){
+          <div class="w-full mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
+            <span>Search For Courses</span>
+            <div class="relative w-full">
+              <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchCourse" [ngModelOptions]="{standalone:true}">
+              <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
+                search
+              </i>
+            </div>
           </div>
-        </div>
+        }
         <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
           <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
             <tr class="h-full w-full flex flex-row">
@@ -42,20 +48,26 @@
               <th class="border border-slate-600 w-[16.67%] flex items-center justify-center">
                 Day
               </th>
-              <th class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                Grade
+              <th class="border border-slate-600 w-[16.67%] flex items-center justify-center">
+                Units
               </th>
-              <th class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                <button
-                    class="border-[1px] rounded-md shadow-md flex items-center justify-center px-4 py-2"
-                    [ngClass]="{'border-green-400 text-green-400 bg-green-100': currentUnits >= 21 || reqCourseArray.length >= subjectNotTaken, 'border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all' : currentUnits < 21 && reqCourseArray.length < subjectNotTaken }"
-                    [disabled]="currentUnits >= 21 || reqCourseArray.length >= subjectNotTaken"
-                    (click)="addReqCourseArray()"
-                  >
-                    <i class="material-symbols-outlined">add</i>
-                    <span class="lg:inline hidden">Add Course</span>
-              </button>
-              </th>
+              @if(gradeEncode){
+                <th class="border border-slate-600  w-[16.67%] flex items-center justify-center">
+                  Grade
+                </th>
+              }@else{
+                <th class="border border-slate-600  w-[16.67%] flex items-center justify-center">
+                  <button
+                      class="border-[1px] rounded-md shadow-md flex items-center justify-center px-4 py-2"
+                      [ngClass]="{'border-green-400 text-green-400 bg-green-100': currentUnits >= 21 || reqCourseArray.length >= subjectNotTaken, 'border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all' : currentUnits < 21 && reqCourseArray.length < subjectNotTaken }"
+                      [disabled]="currentUnits >= 21 || reqCourseArray.length >= subjectNotTaken"
+                      (click)="addReqCourseArray()"
+                    >
+                      <i class="material-symbols-outlined">add</i>
+                      <span class="lg:inline hidden">Add Course</span>
+                </button>
+                </th>
+              }
             </tr>
           </thead>
           <tbody class="h-[25rem] overflow-y-auto">
@@ -110,29 +122,32 @@
                   <td class="border border-slate-600  w-[16.67%] flex items-center justify-center">
                     {{ !getSubject(sub.get('caid')?.value) ? "not yet set" : getSubject(sub.get('caid')?.value).days }}
                   </td>
-                  <td class="border border-slate-600  w-[16.67%] flex items-center justify-center group relative">
-                    <input class="w-full h-full p-2 border-[1px] border-slate-700" [formControl]="getReqCourseGradeControl(outerindex)">
-                    @if(getReqCourseGradeControl(outerindex).invalid) {
-                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-                      </div>
-                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
-                        Grade is in incorrect format
-                      </div>
-                    }
-                  </td>
                   <td class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                    <button
-                      class=" flex items-center justify-center p-2 h-full flex-col text-white  lg:px-4 rounded-md"
-                      [ngClass]="{'bg-red-500 hover:bg-red-600': !getReqCourseGradeControl(outerindex).value, 'bg-red-300' : getReqCourseGradeControl(outerindex).value}"
-                      (click)="popReqCourseArray(outerindex)"
-                      [disabled]="getReqCourseGradeControl(outerindex).value">
-
-                      <i class="material-symbols-outlined">
-                        delete
-                      </i>
-                    </button>
+                    {{ !getSubject(sub.get('caid')?.value) ? "not yet set" : getSubject(sub.get('caid')?.value).subjects.subjectcredits }}
                   </td>
+                  @if(gradeEncode){
+                    <td class="border border-slate-600  w-[16.67%] flex items-center justify-center group relative">
+                      <select class="w-full h-full p-2 border-[1px] border-slate-700" [formControl]="getReqCourseGradeControl(outerindex)">
+                        @for(grade of enlistmentGradeSelection; track $index){
+                          <option [ngValue]="grade">
+                            {{grade ? grade : "None" }}
+                          </option>
+                        }
+                      </select>
+                    </td>
+                  }@else{
+                    <td class="border border-slate-600  w-[16.67%] flex items-center justify-center">
+                      <button
+                        class=" flex items-center justify-center p-2 h-full flex-col text-white  lg:px-4 rounded-md"
+                        [ngClass]="{'bg-red-500 hover:bg-red-600': !getReqCourseGradeControl(outerindex).value, 'bg-red-300' : getReqCourseGradeControl(outerindex).value}"
+                        (click)="popReqCourseArray(outerindex)"
+                        [disabled]="getReqCourseGradeControl(outerindex).value">
+                        <i class="material-symbols-outlined">
+                          delete
+                        </i>
+                      </button>
+                    </td>
+                  }
                 </tr>
               }
             }
@@ -158,7 +173,7 @@
           <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase" (click)="handleSubmit()">
             <i class="material-symbols-outlined">edit</i>
             <span class="hidden lg:block">
-              Update student record
+              {{ gradeEncode ? "Update Student Record" : "Update Enlistment" }}
             </span>
           </button>
         </div>

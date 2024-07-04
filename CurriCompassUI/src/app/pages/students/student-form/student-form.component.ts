@@ -31,9 +31,9 @@ export class StudentFormComponent {
 
   userField =  this.fb.group({
     "studentid" : new FormControl('', [Validators.required]),
-    "userfname" : new FormControl('', [Validators.required]),
-    "userlname" : new FormControl('', [Validators.required]),
-    "usermiddle" : new FormControl('', [Validators.required]),
+    "userfname" : new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
+    "userlname" : new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
+    "usermiddle" : new FormControl('', [Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
     "contactno" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
     "email" : new FormControl('', [Validators.required, Validators.email]),
     "password" : new FormControl('', [Validators.required]),

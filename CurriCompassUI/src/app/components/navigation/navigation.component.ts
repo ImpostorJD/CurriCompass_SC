@@ -30,15 +30,7 @@ export class NavigationComponent {
   initialCheckDone: boolean = false;
 
   readonly buttons: Array<NavigationItems> = [
-    /**Commented out for the sake of demonstration for cap 1: Should I not develop this on time. */
-    // {
-    //   name : "Dashboard",
-    //   allowedRoles: ['Admin', 'Staff', 'Student'],
-    //   icon_type: "material-symbols-outlined",
-    //   icon: "dashboard",
-    //   path: "/",
-    //   hoverGroup: 'dashboard',
-    // },
+
     {
       name : "Consulatation",
       allowedRoles: ['Admin','Staff','Student'],
@@ -56,14 +48,6 @@ export class NavigationComponent {
       hoverGroup: 'changepass',
     },
     {
-      name : "Profile",
-      allowedRoles: ['Admin', 'Staff', 'Student'],
-      icon_type: "material-symbols-outlined",
-      icon: "account_circle",
-      path: "/profile",
-      hoverGroup: 'profile',
-    },
-    {
       name : "Users",
       allowedRoles: ['Admin'],
       icon_type: "material-symbols-outlined",
@@ -78,6 +62,14 @@ export class NavigationComponent {
       icon: "person_book",
       path: "/students",
       hoverGroup: 'students',
+    },
+    {
+      name : "Course Availability",
+      allowedRoles: ['Admin', 'Staff'],
+      icon_type: "material-symbols-outlined",
+      icon: "menu_book",
+      path: "/course-availability",
+      hoverGroup: 'course_availability',
     },
     {
       name : "Curriculum",
@@ -119,14 +111,14 @@ export class NavigationComponent {
       path: "/semester-management",
       hoverGroup: 'school_calendar',
     },
-    {
-      name : "Course Availability",
-      allowedRoles: ['Admin', 'Staff'],
-      icon_type: "material-symbols-outlined",
-      icon: "menu_book",
-      path: "/course-availability",
-      hoverGroup: 'course_availability',
-    },
+    // {
+    //   name : "Profile",
+    //   allowedRoles: ['Admin', 'Staff', 'Student'],
+    //   icon_type: "material-symbols-outlined",
+    //   icon: "account_circle",
+    //   path: "/profile",
+    //   hoverGroup: 'profile',
+    // },
 
   ];
 

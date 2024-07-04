@@ -14,9 +14,9 @@ class SemesterSeeder extends Seeder
     public function run(): void
     {
         DB::table('semesters')->insert([
-            ["semdesc" => "1st Semester"],
-            ["semdesc" => "2nd Semester"],
-            ["semdesc" => "3rd Semester"],
+            ["semdesc" => "1st Trimester"],
+            ["semdesc" => "2nd Trimester"],
+            ["semdesc" => "3rd Trimester"],
         ]);
     }
 }

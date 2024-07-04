@@ -52,6 +52,7 @@ export class StudentConsultationComponent {
   subjectNotTaken = 0;
   enlistedSlot:any = {};
   showError = false;
+  gradeEncode = false;
   message = '';
 
   private time_range: any  = {
@@ -65,10 +66,25 @@ export class StudentConsultationComponent {
     subjects: this.fb.array([])
   });
 
-
   get reqCourseArray() {
     return this.userEnlistment.get('subjects') as FormArray;
   }
+
+  enlistmentGradeSelection = [
+    null,
+    1.00,
+    1.25,
+    1.50,
+    1.75,
+    2.00,
+    2.25,
+    2.50,
+    2.75,
+    3.00,
+    5.00,
+    "x",
+    "w",
+  ];
 
   popReqCourseArray(index : number){
     this.selectedCourses.splice(index, 1)[0];
@@ -87,7 +103,7 @@ export class StudentConsultationComponent {
     const csubject = this.fb.group({
       'caid' : new FormControl(null, [Validators.required]),
       'subjectid' : new FormControl(null, [Validators.required]),
-      'grade' : new FormControl(null, [Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
+      'grade' : new FormControl(null),
     });
     this.fac.addControl(this.reqCourseArray, csubject);
   }
@@ -184,7 +200,11 @@ export class StudentConsultationComponent {
   getSubjectTakenGrade(subjectid: number) {
     let course = this.studentSelected.student_record.subjects_taken.find((s:any) => s.subjectid === subjectid);
     if(course){
-      return parseFloat(course.grade);
+      if(course.grade != null){
+        return parseFloat(course.grade);
+      }
+
+      return course.remark == "Withdrawn" ? "w" : "x";
     }
     return null;
   }
@@ -201,7 +221,7 @@ export class StudentConsultationComponent {
       const csubject = this.fb.group({
         'caid' : new FormControl(data.caid, [Validators.required]),
         'subjectid' : new FormControl(subjectselected.subjects.subjectid, [Validators.required]),
-        'grade' : new FormControl(subjectTaken, Validators.pattern("^[0-9]+(\.?[0-9]+)?")),
+        'grade' : new FormControl(subjectTaken),
       });
 
       this.currentUnits += subjectselected.subjects.subjectcredits;
