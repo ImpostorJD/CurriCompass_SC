@@ -25,11 +25,13 @@
           <div class="flex flex-col">
             <span class="capitalize">middle name</span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="usermiddle"/>
-            @if(userField.get('usermiddle')?.hasError('required')){
-              Middle name is required!
-            }@else if (userField.get('usermiddle')?.hasError('pattern')) {
-              Middle name is in invalid format!
-            }
+            <div class="text-red-600">
+              @if(userField.get('usermiddle')?.hasError('required')){
+                Middle name is required!
+              }@else if (userField.get('usermiddle')?.hasError('pattern')) {
+                Middle name is in invalid format!
+              }
+            </div>
           </div>
           <div class="flex flex-col">
             <span class="capitalize">surname</span>
