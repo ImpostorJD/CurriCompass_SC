@@ -8,6 +8,8 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { ModalUtilityService } from '../../../services/modal-utility.service';
 import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
 import { StudentFilterPipe } from '../../../services/filter/search-filters/student-filter.pipe';
+import { SystemLoadingService } from '../../../services/system-loading.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
 
 @Component({
   selector: 'app-students-listing',
@@ -17,13 +19,15 @@ import { StudentFilterPipe } from '../../../services/filter/search-filters/stude
     RouterLink,
     FormsModule,
     StudentFilterPipe,
-    DeleteModalPopupComponent
+    DeleteModalPopupComponent,
+    LoadingComponentComponent,
   ],
   templateUrl: './students-listing.component.html',
   styleUrl: './students-listing.component.css'
 })
 export class StudentsListingComponent {
   constructor(
+    public loading: SystemLoadingService
   ){}
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
@@ -37,6 +41,7 @@ export class StudentsListingComponent {
     this.modalUtility.disableModal();
     this.req.deleteResource('student-records/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
+        this.loading.initLoading();
         this.getStudents();
       },
 
@@ -49,6 +54,7 @@ export class StudentsListingComponent {
     httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
         this.students = res[1].sort((a: any, b: any) => yearLevel(a.student_record?.year_level?.year_level_desc, b.student_record?.year_level?.year_level_desc));
+        this.loading.endLoading();
       },
 
       error : err => console.error(err),
@@ -56,6 +62,7 @@ export class StudentsListingComponent {
   }
 
   ngOnInit(){
+    this.loading.initLoading();
     this.getStudents();
   }
 }

@@ -6,6 +6,8 @@ import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } 
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-edit-user-form',
@@ -13,7 +15,8 @@ import { AuthService } from '../../../services/auth/auth.service';
   imports: [
     CommonModule,
     RouterLink,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoadingComponentComponent,
   ],
   templateUrl: './edit-user-form.component.html',
   styleUrl: './edit-user-form.component.css'
@@ -25,6 +28,7 @@ export class EditUserFormComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private fac: FormArrayControlUtilsService,
+    public loading: SystemLoadingService,
   ){}
   private req : HttpReqHandlerService = inject(HttpReqHandlerService);
   private auth: AuthService = inject(AuthService);
@@ -97,6 +101,7 @@ export class EditUserFormComponent {
     }
 
     ngOnInit(){
+      this.loading.initLoading();
       this.req.getResource('roles', httpOptions(this.auth.getCookie('user')))
         .subscribe({
           next: (res:any) => {
@@ -119,7 +124,7 @@ export class EditUserFormComponent {
                 this.selectedRoles[index] = parseInt(role.roleid);
                 this.fac.addControl(this.rolesFormArray, roleField);
               });
-
+              this.loading.endLoading();
             },
             error: err => console.log(err),
           });

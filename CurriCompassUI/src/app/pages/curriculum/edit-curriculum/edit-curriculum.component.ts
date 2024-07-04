@@ -9,6 +9,8 @@ import { CoursesServiceService } from '../../../services/courses-service.service
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { SystemLoadingService } from '../../../services/system-loading.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
 
 @Component({
   selector: 'app-edit-curriculum',
@@ -18,6 +20,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     ReactiveFormsModule,
     CourseFilterPipe,
     FormsModule,
+    LoadingComponentComponent,
   ],
   providers: [
     RemoveInputErrorService,
@@ -37,6 +40,7 @@ export class EditCurriculumComponent {
     public rs: RemoveInputErrorService,
     private activatedRoute: ActivatedRoute,
     public dateformat: FormatDateService,
+    public loading: SystemLoadingService
   ){}
 
   private auth: AuthService = inject(AuthService);
@@ -142,6 +146,7 @@ export class EditCurriculumComponent {
   }
 
   ngOnInit(){
+    this.loading.initLoading();
     this.req.getResource('year-level', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any)=> {
         this.year_levels = res[1];
@@ -193,7 +198,7 @@ export class EditCurriculumComponent {
               this.selectedCourses[index] = parseInt(cs.subjectid);
             });
           }
-
+          this.loading.endLoading();
         },
         error: err => console.error(err),
 

@@ -9,6 +9,8 @@ import { CourseFilterPipe } from '../../../services/filter/search-filters/course
 import { CoursesServiceService } from '../../../services/courses-service.service';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-edit-course',
@@ -18,7 +20,8 @@ import { AuthService } from '../../../services/auth/auth.service';
     CommonModule,
     RouterLink,
     CourseFilterPipe,
-    FormsModule
+    FormsModule,
+    LoadingComponentComponent,
   ],
   providers: [
     CourseFilterPipe,
@@ -36,6 +39,7 @@ export class EditCourseComponent {
     private coursesService: CoursesServiceService,
     private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,
+    public loading: SystemLoadingService
   ){}
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
@@ -57,7 +61,7 @@ export class EditCourseComponent {
     subjectunitlec: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),
     subjecthourslec: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
     subjecthourslab: new FormControl('', [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
-    semavailability: new FormControl(null, [Validators.required]),
+    // semavailability: new FormControl(null, [Validators.required]),
     //completion: new FormControl(null, [Validators.min(0), Validators.max(1)]),
     year_level_id: new FormControl(null),
     subjects: this.fb.array([]),
@@ -121,16 +125,18 @@ export class EditCourseComponent {
       next: () => {
         this.router.navigateByUrl('/courses');
       },
-      error: err => {
-        if(err.status == 409) {
-          console.log(err.status);
-          this.courseField.get('subjectcode')?.setErrors({duplicate: true});
+      error: (err:any) => {
+        if(err.status === 409) {
+          this.courseField.get('subjectcode')!.setErrors({duplicate: true});
+          console.log(this.courseField);
+
         }
       }
     })
   }
 
   ngOnInit(){
+    this.loading.initLoading();
     this.coursesService.getCourses().subscribe({
       next: (c:any) => {
         this.courseList = c;
@@ -169,6 +175,8 @@ export class EditCourseComponent {
 
             });
           }
+          this.loading.endLoading();
+
         },
         error: (err:any) => console.log(err),
      })

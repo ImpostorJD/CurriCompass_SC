@@ -8,6 +8,8 @@ import { CourseAvailableFilterPipe } from '../../../services/filter/search-filte
 import { AuthService } from '../../../services/auth/auth.service';
 import { ModalUtilityService } from '../../../services/modal-utility.service';
 import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-course-availability',
@@ -17,13 +19,16 @@ import { DeleteModalPopupComponent } from '../../../components/delete-modal-popu
     RouterLink,
     CourseAvailableFilterPipe,
     FormsModule,
-    DeleteModalPopupComponent
+    DeleteModalPopupComponent,
+    LoadingComponentComponent,
   ],
   templateUrl: './course-availability.component.html',
   styleUrl: './course-availability.component.css'
 })
 export class CourseAvailabilityComponent {
-  constructor(){}
+  constructor(
+    public loading: SystemLoadingService
+  ){}
 
   private auth: AuthService = inject(AuthService);
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
@@ -35,16 +40,18 @@ export class CourseAvailabilityComponent {
   searchCourse:string = '';
 
   deleteSchoolYearSem(id: number){
+    this.loading.initLoading();
     this.req.deleteResource('course-availability/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getCourseAvailability();
       },
       error: err => {
         if (err.status === 400) {
+          this.loading.endLoading();
           this.showError = true;
           setTimeout(() => {
             this.showError = false;
-          }, 2000);
+          }, 5000);
         }
       },
     })
@@ -61,12 +68,15 @@ export class CourseAvailabilityComponent {
             return a.subjects.subjectcode.localeCompare(b.subjects.subjectcode);
           }
         });
+        this.loading.endLoading();
+
       },
       error: err => console.error(err),
     });
   }
 
   ngOnInit() {
+    this.loading.initLoading();
     this.getCourseAvailability();
   }
 }

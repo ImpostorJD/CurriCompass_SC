@@ -9,6 +9,8 @@ import { HttpReqHandlerService } from '../../../services/http-req-handler.servic
 import { AuthService } from '../../../services/auth/auth.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
 import { FormatDateService } from '../../../services/format/format-date.service';
+import { SystemLoadingService } from '../../../services/system-loading.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
 
 @Component({
   standalone: true,
@@ -17,7 +19,8 @@ import { FormatDateService } from '../../../services/format/format-date.service'
     ReactiveFormsModule,
     CommonModule,
     FormsModule,
-    CourseFilterPipe
+    CourseFilterPipe,
+    LoadingComponentComponent,
   ],
   providers: [
     CoursesServiceService,
@@ -36,6 +39,7 @@ export class EditCourseAvailabilityComponent {
     private fac: FormArrayControlUtilsService,
     private coursePipe: CourseFilterPipe,
     public dateformat: FormatDateService,
+    public loading: SystemLoadingService,
   ){
 
   }
@@ -128,12 +132,14 @@ export class EditCourseAvailabilityComponent {
   }
 
   ngOnInit(){
-    this.activatedRoute.params.subscribe(params =>{
+    this.loading.initLoading();
+
+    this.activatedRoute.params.subscribe(params => {
       this.routerId = params['id'];
       this.req.getResource('course-availability/' + this.routerId, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: (ca:any) => {
           this.courseAvailability.patchValue(ca[1]);
-
+          this.loading.endLoading();
         },
         error: (err:any) => console.log(err),
       })

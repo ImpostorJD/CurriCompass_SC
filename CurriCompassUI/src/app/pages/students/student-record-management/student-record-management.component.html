@@ -1,4 +1,4 @@
-<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="studentProfileField">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative" [formGroup]="studentProfileField">
     <h1 class="font-bold font-sans text-2xl uppercase">Student Records</h1>
     <div class="flex-auto rounded-md w-full flex gap-2 p-2 flex-col">
       <div class="h-[30rem] w-full flex bg-white shadow-lg">
@@ -177,7 +177,7 @@
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('program')?.invalid }"
                   (change)="setSpecializationsEvent($event)"
                   formControlName="program">
-                  <option [value]="''" disabled selected>
+                  <option [ngValue]="null" disabled selected>
                     N/A
                   </option>
                   @for(program of programs; track $index){
@@ -198,6 +198,9 @@
               <td class="border-slate-600 border h-[9.09%]">
                 <select class="w-full p-2 h-full border-[0px]" formControlName="specialization"
                 (change)="changeSpecialization()">
+                  <option [ngValue]="null" disabled selected>
+                    N/A
+                  </option>
                   @for(c of specializations; track $index){
                     <option [ngValue]="c.specialization">
                       {{ (c.specialization != null ? c.specialization : "None")  +  " (" + dateformat.formatToYear(c.school_year.sy_start)  + " - " + dateformat.formatToYear(c.school_year.sy_end) + ")"}}
@@ -470,4 +473,7 @@
         </button>
       </div>
     </div>
+    @if(loading.loading){
+      <app-loading-component></app-loading-component>
+    }
   </form>

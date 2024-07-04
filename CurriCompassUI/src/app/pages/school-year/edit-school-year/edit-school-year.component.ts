@@ -6,6 +6,8 @@ import { HttpReqHandlerService } from '../../../services/http-req-handler.servic
 import moment from 'moment';
 import { httpOptions } from '../../../../configs/Constants';
 import { AuthService } from '../../../services/auth/auth.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-edit-school-year',
@@ -14,6 +16,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     DatePickerComponent,
     RouterLink,
     ReactiveFormsModule,
+    LoadingComponentComponent,
   ],
   templateUrl: './edit-school-year.component.html',
   styleUrl: './edit-school-year.component.css'
@@ -23,6 +26,7 @@ export class EditSchoolYearComponent {
     private fb: FormBuilder,
     private route: Router,
     private activeRouter: ActivatedRoute,
+    public loading: SystemLoadingService
   ){}
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
   private auth: AuthService = inject(AuthService);
@@ -77,6 +81,7 @@ export class EditSchoolYearComponent {
   }
 
   ngOnInit() {
+    this.loading.initLoading();
     this.activeRouter.params.subscribe(params => {
       this.routerId = parseInt(params['id']);
       this.req.getResource('school-year/' + this.routerId, httpOptions(this.auth.getCookie('user'))).subscribe({
@@ -84,6 +89,7 @@ export class EditSchoolYearComponent {
           this.schoolYear = res[1];
           this.schoolYearField.get('sy_start')!.patchValue(moment(res[1].sy_start).format("YYYY/MM/DD"));
           this.schoolYearField.get('sy_end')!.patchValue(moment(res[1].sy_end).format("YYYY/MM/DD"));
+          this.loading.endLoading();
         },
 
         error: error => console.error(error),

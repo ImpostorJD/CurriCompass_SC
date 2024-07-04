@@ -5,6 +5,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions } from '../../../../configs/Constants';
 import { AuthService } from '../../../services/auth/auth.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-edit-programs',
@@ -13,6 +15,7 @@ import { AuthService } from '../../../services/auth/auth.service';
     ReactiveFormsModule,
     CommonModule,
     RouterLink,
+    LoadingComponentComponent,
   ],
   templateUrl: './edit-programs.component.html',
   styleUrl: './edit-programs.component.css'
@@ -22,6 +25,7 @@ export class EditProgramsComponent {
     private fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    public loading: SystemLoadingService
   ){}
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
@@ -49,12 +53,14 @@ export class EditProgramsComponent {
   }
 
   ngOnInit(){
+    this.loading.initLoading();
     this.activatedRoute.params.subscribe(params => {
       this.routerId = parseInt(params['id']);
 
       this.req.getResource('programs/' + this.routerId, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: (res: any) => {
           this.programsField.patchValue(res[1]);
+          this.loading.endLoading();
         },
         error: err => console.error(err),
       })

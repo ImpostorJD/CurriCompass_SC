@@ -7,6 +7,8 @@ import { ModalUtilityService } from '../../../services/modal-utility.service';
 import { httpOptions } from '../../../../configs/Constants';
 import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
 import { CommonModule } from '@angular/common';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-semester-management',
@@ -14,7 +16,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     RouterLink,
     DeleteModalPopupComponent,
-    CommonModule
+    CommonModule,
+    LoadingComponentComponent,
   ],
   templateUrl: './semester-management.component.html',
   styleUrl: './semester-management.component.css'
@@ -22,6 +25,7 @@ import { CommonModule } from '@angular/common';
 export class SemesterManagementComponent {
   constructor(
     public dateformat: FormatDateService,
+    public loading: SystemLoadingService
   ){}
 
   private auth: AuthService = inject(AuthService);
@@ -76,12 +80,14 @@ export class SemesterManagementComponent {
     this.req.getResource('semester-management', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
         this.schoolYearSem = res[1];
+        this.loading.endLoading();
       },
       error: err => console.error(err),
     })
   }
 
   deleteSchoolYearSem(id: number){
+    this.loading.initLoading();
     this.req.deleteResource('semester-management/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
         this.getSchoolYearSem();
@@ -89,6 +95,7 @@ export class SemesterManagementComponent {
       error: err => {
         if (err.status === 400) {
           this.showError = true;
+          this.loading.endLoading();
           setTimeout(() => {
             this.showError = false;
           }, 2000);
@@ -99,6 +106,7 @@ export class SemesterManagementComponent {
   }
 
   ngOnInit(){
+    this.loading.initLoading();
     this.getSchoolYearSem();
   }
 }

@@ -1,4 +1,4 @@
-<div class="bg-slate-100 min-w-full h-full p-5">
+<div class="bg-slate-100 min-w-full h-full p-5 relative">
   <!--This is for student-->
   <div *appRolesToRender="['Student']" class="w-full h-full p-4 flex flex-col gap-2">
 
@@ -144,6 +144,10 @@
     </table>
   </div>
 </div>
+
+@if(loading.loading){
+  <app-loading-component></app-loading-component>
+}
 @if(showError){
   <div *appRolesToRender="['Student']" class="absolute top-0 right-0 w-[100vw] h-[100vh] bg-black bg-opacity-75 flex justify-center items-center">
     <div class="min-w-[50rem] min-h-[30rem] bg-red-100 p-2 flex justify-center rounded-md text-red-600 border-red-600 border-[1px]">

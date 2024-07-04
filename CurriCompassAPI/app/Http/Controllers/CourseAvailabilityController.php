@@ -165,8 +165,8 @@ class CourseAvailabilityController extends Controller
     public function destroy(string $id)
     {
         $currentRecord = CourseAvailability::where('caid', $id)
-        //->with('enlistment')
-        ->first();
+            ->with('enlistment_subjects')
+            ->first();
 
         if($currentRecord) {
 
@@ -174,7 +174,7 @@ class CourseAvailabilityController extends Controller
             $deletable = true;
             $messages = [];
             if ($currentRecord->enlistment_subjects()->count() > 0) {
-                $messages['course_availability'] = "Course is currently enlisted to students";
+                $messages['c    ourse_availability'] = "Course is currently enlisted to students";
                 $deletable = false;
             }
 

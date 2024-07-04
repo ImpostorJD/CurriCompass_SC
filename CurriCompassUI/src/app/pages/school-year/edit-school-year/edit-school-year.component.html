@@ -1,5 +1,8 @@
 
-<form  class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto"[formGroup]="schoolYearField">
+<form  class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative" [formGroup]="schoolYearField">
+  @if(loading.loading){
+    <app-loading-component></app-loading-component>
+  }
   <h1 class="font-bold font-sans text-[2rem] uppercase">Edit School Year</h1>
   <div class="flex gap-4 flex-col bg-white mx-2 min-h-[30rem] p-4">
     <div>

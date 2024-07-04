@@ -118,7 +118,7 @@ class SubjectsController extends Controller
             'subjectunitlec' => ['required', 'integer'],
             'subjecthourslec' => ['required', 'decimal:0'],
             'subjecthourslab' => ['required', 'decimal:0'],
-            'semavailability' => ['required', 'integer'],
+            // 'semavailability' => ['required', 'integer'],
             'year_level_id' => ['nullable', 'integer'],
             'subjects' => ['nullable', 'array'],
             'subjects*.subjectid' => ['required', 'integer'],
@@ -129,12 +129,15 @@ class SubjectsController extends Controller
         }
 
         $res = Subjects::where('subjectid', '=', $id)->with('course_availability')->first();
+        $existing_record = Subjects::where('subjectcode', '=', $request->subjectcode)->first();
 
         if($res != null) {
-            if ($res->subjectcode != $request->subjectcode) return response()->json([
-                ['status' => 'conflict'],
-                ["message" => "Subject code is already in use."]
-            ], 409);
+            if ($existing_record && $existing_record->subjectid != $id) {
+                return response()->json([
+                    ['status' => 'conflict'],
+                    ["message" => "Subject code is already in use."]
+                ], 409);
+            }
             $res->update([
                 'subjectname' => $request['subjectname'],
                 'subjectcode' => $request['subjectcode'],
@@ -146,10 +149,6 @@ class SubjectsController extends Controller
             ]);
 
             $pre_requisite = Pre_Requisites::where('subjectid', $id)->first();
-
-            $res->course_availability()->update([
-                'semid' => $request['semavailability'],
-            ]);
 
             $pre_requisite->update([
                 'year_level_id' => $request->year_level,

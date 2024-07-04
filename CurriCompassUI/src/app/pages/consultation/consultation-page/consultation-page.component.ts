@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { StudentFilterPipe } from '../../../services/filter/search-filters/student-filter.pipe';
+import { SystemLoadingService } from '../../../services/system-loading.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
 
 @Component({
   selector: 'app-consultation-page',
@@ -17,7 +19,8 @@ import { StudentFilterPipe } from '../../../services/filter/search-filters/stude
     CommonModule,
     FormsModule,
     RouterLink,
-    StudentFilterPipe
+    StudentFilterPipe,
+    LoadingComponentComponent
   ],
   providers:[],
   templateUrl: './consultation-page.component.html',
@@ -27,6 +30,7 @@ export class ConsultationPageComponent {
   constructor(
     public dateformat: FormatDateService,
     public router: Router,
+    public loading: SystemLoadingService
   ){}
 
   auth: AuthService = inject(AuthService);
@@ -57,6 +61,7 @@ export class ConsultationPageComponent {
   }
 
   generateEnlistment(){
+    this.loading.initLoading();
     this.disableEnlistment = true;
     this.req.postResource('enlistment', {"srid" : this.currentLogged.student_record.student_no }, httpOptions(this.auth.getCookie('user')))
       .subscribe({
@@ -81,10 +86,10 @@ export class ConsultationPageComponent {
     this.req.getResource('enlistment/' + this.currentLogged.student_record.student_no, httpOptions(this.auth.getCookie('user'))).subscribe((data:any)=>{
       this.studentSelected = data[1];
       this.currentSemSy = data[2];
-
       this.studentSelected.student_record?.enlistment[0]?.enlistment_subjects.forEach((data:any)=>{
         this.currentUnits += data.course_availability.subjects.subjectcredits;
       });
+      this.loading.endLoading();
     });
   }
 
@@ -92,13 +97,16 @@ export class ConsultationPageComponent {
     this.req.getResource('enlistment', httpOptions(this.auth.getCookie('user')))
         .subscribe((data:any) => {
           this.studentRecords = data[1].sort((a: any, b: any) => yearLevel(a.student_record.year_level.year_level_desc, b.student_record.year_level.year_level_desc));
+          this.loading.endLoading();
         });
   }
 
   async ngOnInit() {
+    this.loading.initLoading();
     this.req.getResource('semester-management/current', httpOptions(this.auth.getCookie('user')))
       .subscribe((data:any) => {
         this.semSy = data[1];
+        this.loading.endLoading();
       });
 
     const resp = await this.auth.checkUserAsync();
@@ -119,6 +127,7 @@ export class ConsultationPageComponent {
       this.retrieveStudents();
     }else{
       this.getUser();
+
     }
   }
 

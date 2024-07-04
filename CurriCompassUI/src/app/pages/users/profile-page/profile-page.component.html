@@ -1,4 +1,7 @@
-<div class="min-h-full h-auto w-full bg-slate-100 px-4 py-2 gap-2 flex flex-col">
+<div class="min-h-full h-auto w-full bg-slate-100 px-4 py-2 gap-2 flex flex-col relative">
+  @if(loading.loading){
+    <app-loading-component></app-loading-component>
+  }
   <h1 class="text-[2rem] font-bold font-poppins">Personal Details</h1>
   <div class="h-fit w-full flex bg-white shadow-lg">
     @if(user){

@@ -1,62 +1,67 @@
 <div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative">
-  <h1 class="font-bold font-sans text-2xl uppercase">School Year</h1>
-  <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
-    <table class="table-auto w-full border-collapse border border-slate-300">
-      <thead class="bg-slate-300">
-        <tr class="flex flex-row py-2">
-          <th class="w-[33.3%] py-2">
-            School Year Start
-          </th>
-          <th class="lg:w-[33.3%] py-2 flex-auto">
-            School Year End
-          </th>
-          <th class="w-[33.3%] lg:flex-auto py-2 flex items-center justify-center">
-            <a
-               class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
-              [routerLink]="'/school-year/add-school-year'"
-            >
-              <i class="material-symbols-outlined">add</i>
-              <span class="lg:inline hidden">Add School Year</span>
-            </a>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
-        @for(sy of schoolYears; track $index){
-          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
-            <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
-              <span>
-                 {{ dateformat.formatToYear(sy.sy_start) }}
-                </span>
-              </td>
+  @if(loading.loading){
+    <app-loading-component></app-loading-component>
+  }@else {
+    <h1 class="font-bold font-sans text-2xl uppercase">School Year</h1>
+    <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
+      <table class="table-auto w-full border-collapse border border-slate-300">
+        <thead class="bg-slate-300">
+          <tr class="flex flex-row py-2">
+            <th class="w-[33.3%] py-2">
+              School Year Start
+            </th>
+            <th class="lg:w-[33.3%] py-2 flex-auto">
+              School Year End
+            </th>
+            <th class="w-[33.3%] lg:flex-auto py-2 flex items-center justify-center">
+              <a
+                 class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
+                [routerLink]="'/school-year/add-school-year'"
+              >
+                <i class="material-symbols-outlined">add</i>
+                <span class="lg:inline hidden">Add School Year</span>
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
+          @for(sy of schoolYears; track $index){
+            <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
               <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
                 <span>
-                  {{ dateformat.formatToYear(sy.sy_end) }}
-              </span>
-            </td>
-            <td class="w-[33.3%] flex justify-center items-center px-1 lg:gap-2 gap-1">
-              <a
-                class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
-              [routerLink]="'/school-year/'+ sy.sy"
-              >
-              <i class="material-symbols-outlined">
-                visibility
-              </i>
-            </a>
-            <button
-              class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"
-              (click)="modalUtility.enableModal(sy.sy)"
-            >
+                   {{ dateformat.formatToYear(sy.sy_start) }}
+                  </span>
+                </td>
+                <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
+                  <span>
+                    {{ dateformat.formatToYear(sy.sy_end) }}
+                </span>
+              </td>
+              <td class="w-[33.3%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+                <a
+                  class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
+                [routerLink]="'/school-year/'+ sy.sy"
+                >
                 <i class="material-symbols-outlined">
-                  delete
+                  visibility
                 </i>
-              </button>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+              </a>
+              <button
+                class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"
+                (click)="modalUtility.enableModal(sy.sy)"
+              >
+                  <i class="material-symbols-outlined">
+                    delete
+                  </i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
   <div class="bg-red-100 border border-red-400 text-red-700 rounded absolute bottom-0 right-0" role="alert">
     @if(showError){
       <div class="relative w-full h-full flex flex-col p-4">

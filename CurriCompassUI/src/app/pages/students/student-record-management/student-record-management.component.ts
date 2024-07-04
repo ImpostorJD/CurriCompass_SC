@@ -9,6 +9,8 @@ import { FormArrayControlUtilsService } from '../../../services/form-array-contr
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { allOrNoneValidator } from '../../../services/validators/all-or-none.validator';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-student-record-management',
@@ -17,6 +19,7 @@ import { allOrNoneValidator } from '../../../services/validators/all-or-none.val
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
+    LoadingComponentComponent,
   ],
   providers: [
     RemoveInputErrorService,
@@ -32,6 +35,7 @@ export class StudentRecordManagementComponent {
     private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,
     public dateformat: FormatDateService,
+    public loading: SystemLoadingService,
   ){}
 
   private auth: AuthService = inject(AuthService);
@@ -156,6 +160,7 @@ export class StudentRecordManagementComponent {
         this.curriculumSubjects.forEach((element:any) => {
           this.addSubjectsTaken(element);
         });
+        this.loading.endLoading();
       },
       error: (err: any) => console.error(err),
     });
@@ -172,7 +177,13 @@ export class StudentRecordManagementComponent {
     this.studentProfileField.get('specialization')?.value
       : null;
     const programid = parseInt(this!.studentProfileField!.get('program')!.value!);
-    this.getCurriculumSubjects(this.curricula.find((e:any) => e.specialization === specialization && e.programid === programid)!.cid);
+    try{
+      this.getCurriculumSubjects(
+        this.curricula.find((e:any) => e.specialization === specialization && e.programid === programid)!.cid
+      );
+
+    }catch(err){
+    }
   }
 
   setSpecializations(programid: number){
@@ -263,10 +274,10 @@ export class StudentRecordManagementComponent {
   }
 
   async ngOnInit() {
+    this.loading.initLoading();
     const user = await this.auth.getUser();
     user.user_roles.forEach((e:any) => {
       if (e.rolename == "Admin"){
-        console.log(e.rolename);
         this.gradeEditable = true;
       }
     });
@@ -317,6 +328,7 @@ export class StudentRecordManagementComponent {
             this.studentProfileField.get('specialization')?.patchValue(this.studentProfile.student_record.curriculum.specialization);
             this.getCurriculumSubjects(this.studentProfile.student_record.cid);
           }
+
         },
         error: (err: any) => console.error(err),
       })

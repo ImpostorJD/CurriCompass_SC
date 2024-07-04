@@ -1,68 +1,73 @@
 <form
-  class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto"
+  class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative"
   [formGroup]="programsField"
   (submit)="handleSubmit()"
 >
-  <h1 class="font-bold font-sans text-[2rem] uppercase">Add Program</h1>
-  <div class="flex lg:flex-row gap-2 flex-col bg-white mx-1 xl:mx-48 lg:mx-28 min-h-[30rem]">
-    <div class="border-slate-400 border-1 w-full p-5 border-[1px] rounded-sm shadow-lg">
-      <div class="flex flex-col">
+
+  @if(loading.loading){
+    <app-loading-component></app-loading-component>
+  }@else{
+    <h1 class="font-bold font-sans text-[2rem] uppercase">Edit Program</h1>
+    <div class="flex lg:flex-row gap-2 flex-col bg-white mx-1 xl:mx-48 lg:mx-28 min-h-[30rem]">
+      <div class="border-slate-400 border-1 w-full p-5 border-[1px] rounded-sm shadow-lg">
         <div class="flex flex-col">
-          <span>Program Code</span>
-          <input
-            class="border-slate-500 border-[1px] rounded-sm p-2 my-4"
-            formControlName="programcode"/>
-          @if(
-            programsField.get('programcode')?.invalid &&
-            (programsField.get('programcode')?.touched ||
-            programsField.get('programcode')?.dirty)
-          ){
-            @if(programsField.get('programcode')?.hasError('required')){
+          <div class="flex flex-col">
+            <span>Program Code</span>
+            <input
+              class="border-slate-500 border-[1px] rounded-sm p-2 my-4"
+              formControlName="programcode"/>
+            @if(
+              programsField.get('programcode')?.invalid &&
+              (programsField.get('programcode')?.touched ||
+              programsField.get('programcode')?.dirty)
+            ){
+              @if(programsField.get('programcode')?.hasError('required')){
+                <div class="text-red-600">
+                  Program code is required!
+                </div>
+              }
+
+              @else if(programsField.get('programcode')?.hasError('duplicate')){
+                <div class="text-red-600">
+                  Program code is in use!
+                </div>
+              }
+
+            }
+          </div>
+          <div class="flex flex-col">
+            <span>Program Description</span>
+            <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="programdesc"/>
+            @if(
+              programsField.get('programdesc')?.invalid &&
+              (programsField.get('programdesc')?.touched ||
+              programsField.get('programdesc')?.dirty)
+            ){
               <div class="text-red-600">
-                Program code is required!
+                Program description is required!
               </div>
             }
-
-            @else if(programsField.get('programcode')?.hasError('duplicate')){
-              <div class="text-red-600">
-                Program code is in use!
-              </div>
-            }
-
-          }
-        </div>
-        <div class="flex flex-col">
-          <span>Program Description</span>
-          <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="programdesc"/>
-          @if(
-            programsField.get('programdesc')?.invalid &&
-            (programsField.get('programdesc')?.touched ||
-            programsField.get('programdesc')?.dirty)
-          ){
-            <div class="text-red-600">
-              Program description is required!
-            </div>
-          }
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="flex flex-row justify-center gap-2 py-2 mx-1 xl:mx-48 lg:mx-28">
-    <a
-      [routerLink]="'/programs'"
-      class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
-      <i class="material-symbols-outlined">
-        cancel
-      </i>
-      <span class="hidden lg:block">
-        Cancel
-      </span>
-    </a>
-    <button (click)="handleSubmit()" class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
-      <i class="material-symbols-outlined">edit</i>
-      <span class="hidden lg:block">
-         Edit Program
-      </span>
-    </button>
-  </div>
+    <div class="flex flex-row justify-center gap-2 py-2 mx-1 xl:mx-48 lg:mx-28">
+      <a
+        [routerLink]="'/programs'"
+        class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
+        <i class="material-symbols-outlined">
+          cancel
+        </i>
+        <span class="hidden lg:block">
+          Cancel
+        </span>
+      </a>
+      <button (click)="handleSubmit()" class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
+        <i class="material-symbols-outlined">edit</i>
+        <span class="hidden lg:block">
+           Edit Program
+        </span>
+      </button>
+    </div>
+  }
 </form>

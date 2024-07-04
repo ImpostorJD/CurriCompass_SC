@@ -8,6 +8,8 @@ import { UserFilterPipe } from '../../../services/filter/search-filters/user-fil
 import { AuthService } from '../../../services/auth/auth.service';
 import { ModalUtilityService } from '../../../services/modal-utility.service';
 import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-users',
@@ -17,13 +19,16 @@ import { DeleteModalPopupComponent } from '../../../components/delete-modal-popu
     RouterLink,
     FormsModule,
     UserFilterPipe,
-    DeleteModalPopupComponent
+    DeleteModalPopupComponent,
+    LoadingComponentComponent,
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
 export class UsersComponent {
-  constructor(){}
+  constructor(
+    public loading: SystemLoadingService
+  ){}
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
   private auth: AuthService = inject(AuthService);
@@ -32,30 +37,32 @@ export class UsersComponent {
   searchUser:string ='';
   users: any = null!;
 
+
   getUser(){
     this.req.getResource('users', httpOptions(this.auth.getCookie('user')))
       .subscribe({
         next: (res:any) => {
           this.users = res[0];
+          this.loading.endLoading();
         },
         error: err => console.error(err),
       });
   }
 
   deleteUser(id: number){
-
-    if(confirm("Are you sure to delete this User?")){
+    this.modalUtility.disableModal();
     this.req.deleteResource('users/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
+        this.loading.initLoading();
         this.getUser();
       },
 
       error: error => console.error(error),
     });
   }
-  }
 
   ngOnInit(){
+    this.loading.initLoading();
     this.getUser();
   }
 }

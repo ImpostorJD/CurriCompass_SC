@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { ModalUtilityService } from '../../../services/modal-utility.service';
 import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-curricula-list',
@@ -17,14 +19,17 @@ import { DeleteModalPopupComponent } from '../../../components/delete-modal-popu
     RouterLink,
     CurriculumFilterPipe,
     FormsModule,
-    DeleteModalPopupComponent
+    DeleteModalPopupComponent,
+    LoadingComponentComponent,
   ],
 
   templateUrl: './curricula-list.component.html',
   styleUrl: './curricula-list.component.css'
 })
 export class CurriculaListComponent {
-  constructor(){}
+  constructor(
+    public loading: SystemLoadingService
+  ){}
 
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
   private auth: AuthService = inject(AuthService);
@@ -38,15 +43,17 @@ export class CurriculaListComponent {
     this.req.getResource('curriculum', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
         this.curricula = res[1];
+        this.loading.endLoading();
       },
       error: err => console.error(err),
     })
   }
 
   deleteCurricula(id: number){
-
+    this.loading.initLoading();
     this.req.deleteResource('curriculum/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
+
         this.getCurricula();
       },
 
@@ -56,6 +63,7 @@ export class CurriculaListComponent {
   }
 
   ngOnInit(){
+    this.loading.initLoading();
     this.getCurricula()
   }
 }

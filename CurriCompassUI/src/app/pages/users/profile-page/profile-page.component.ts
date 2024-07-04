@@ -3,11 +3,17 @@ import { RolesToRenderDirective } from '../../../services/auth/roles-to-render.d
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth/auth.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { SystemLoadingService } from '../../../services/system-loading.service';
 
 @Component({
   selector: 'app-profile-page',
   standalone: true,
-  imports: [RolesToRenderDirective, CommonModule],
+  imports: [
+    RolesToRenderDirective,
+    CommonModule,
+    LoadingComponentComponent,
+  ],
   providers: [FormatDateService],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.css'
@@ -15,6 +21,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 export class ProfilePageComponent {
   constructor(
     public formatDate: FormatDateService,
+    public loading: SystemLoadingService
   ){}
 
   auth: AuthService = inject(AuthService);
@@ -42,6 +49,8 @@ export class ProfilePageComponent {
   }
 
   async ngOnInit(){
+    this.loading.initLoading();
     this.user = await this.auth.getUser();
+    this.loading.endLoading();
   }
 }

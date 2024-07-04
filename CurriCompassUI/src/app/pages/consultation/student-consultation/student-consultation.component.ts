@@ -9,6 +9,8 @@ import { RemoveInputErrorService } from '../../../services/remove-input-error.se
 import { httpOptions } from '../../../../configs/Constants';
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { CommonModule, NgClass } from '@angular/common';
+import { SystemLoadingService } from '../../../services/system-loading.service';
+import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
 
 @Component({
   selector: 'app-student-consultation',
@@ -18,7 +20,8 @@ import { CommonModule, NgClass } from '@angular/common';
     CourseAvailableFilterPipe,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    LoadingComponentComponent
   ],providers:[
     CourseAvailableFilterPipe
   ],
@@ -33,9 +36,9 @@ export class StudentConsultationComponent {
     private fb: FormBuilder,
     private coursePipe: CourseAvailableFilterPipe,
     private fac: FormArrayControlUtilsService,
-    public rs: RemoveInputErrorService){
-
-  }
+    public rs: RemoveInputErrorService,
+    public loading: SystemLoadingService
+  ){}
 
   searchCourse = "";
   private auth: AuthService = inject(AuthService);
@@ -155,6 +158,7 @@ export class StudentConsultationComponent {
   }
 
   generateEnlistment(){
+    this.loading.initLoading();
     this.disableEnlistment = true;
     this.req.postResource('enlistment', {"srid" : this.routeId }, httpOptions(this.auth.getCookie('user')))
       .subscribe({
@@ -180,12 +184,17 @@ export class StudentConsultationComponent {
 
   getUser(){
     this.reqCourseArray.clear();
-    this.req.getResource('enlistment/' + this.routeId, httpOptions(this.auth.getCookie('user'))).subscribe((data:any)=>{
-      this.studentSelected = data[1];
-      this.currentSemSy = data[2];
-      this.subjectNotTaken = data[3];
-      this.setEnlistment();
-
+    this.req.getResource('enlistment/' + this.routeId, httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (data:any) => {
+        this.studentSelected = data[1];
+        this.currentSemSy = data[2];
+        this.subjectNotTaken = data[3];
+        this.setEnlistment();
+      },
+      error: (err:any) => {
+        console.log(err);
+        this.loading.endLoading();
+      }
     });
   }
 
@@ -212,6 +221,11 @@ export class StudentConsultationComponent {
   setEnlistment(){
 
     this.currentUnits = 0;
+    if(!this.studentSelected.student_record.enlistment[0]){
+      this.loading.endLoading();
+      return;
+    }
+
     this.userEnlistment.get('enlistmentId')?.patchValue(this.studentSelected.student_record.enlistment[0].peid);
     this.studentSelected.student_record.enlistment[0].enlistment_subjects.forEach((data:any, i: number) => {
 
@@ -229,6 +243,7 @@ export class StudentConsultationComponent {
       this.enlistedSlot[data.caid] = [data.course_availability.time, data.course_availability.days];
       this.fac.addControl(this.reqCourseArray, csubject);
     });
+    this.loading.endLoading();
   }
 
   checkSubjectOverlap(caid: string) {
@@ -297,6 +312,7 @@ export class StudentConsultationComponent {
 
   ngOnInit(){
 
+    this.loading.initLoading();
     this.activatedRoute.params.subscribe(params => {
 
       this.routeId = params["id"];

@@ -1,4 +1,4 @@
-<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto">
+<div class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative">
   <h1 class="font-bold font-sans text-2xl uppercase">Users</h1>
   <div class="mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
     <span>Search For Users</span>
@@ -72,6 +72,9 @@
       </tbody>
     </table>
   </div>
+  @if(loading.loading){
+    <app-loading-component></app-loading-component>
+  }
 </div>
 @if(modalUtility.modalEnabled) {
   <app-delete-modal [item]="modalUtility.selectedItem" (deleteItem)="deleteUser($event)" (collapseModal)="modalUtility.disableModal()"></app-delete-modal>

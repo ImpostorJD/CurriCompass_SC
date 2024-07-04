@@ -32,7 +32,7 @@ class CourseAvailability extends Model
     // }
 
     public function enlistment_subjects(){
-        return $this->hasMany(CourseAvailability::class, 'caid', 'caid');
+        return $this->hasMany(EnlistmentSubjects::class, 'caid', 'caid');
     }
     public function semester_sy(){
         return $this->belongsTo(SemSy::class, 'semsyid', 'semsyid');
