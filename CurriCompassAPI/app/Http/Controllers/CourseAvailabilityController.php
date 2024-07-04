@@ -174,7 +174,7 @@ class CourseAvailabilityController extends Controller
             $deletable = true;
             $messages = [];
             if ($currentRecord->enlistment_subjects()->count() > 0) {
-                $messages['c    ourse_availability'] = "Course is currently enlisted to students";
+                $messages['course_availability'] = "Course is currently enlisted to students";
                 $deletable = false;
             }
 
