@@ -173,10 +173,10 @@ class CourseAvailabilityController extends Controller
             //TODO: check for enlistment
             $deletable = true;
             $messages = [];
-            // if ($currentRecord->course_availability()->count() > 0) {
-            //     $messages['course_availability'] = "Course Availability currently have student records.";
-            //     $deletable = false;
-            // }
+            if ($currentRecord->enlistment_subjects()->count() > 0) {
+                $messages['course_availability'] = "Course is currently enlisted to students";
+                $deletable = false;
+            }
 
             if(!$deletable) return response()->json([
                 ['status', 'bad request'],
@@ -203,6 +203,9 @@ class CourseAvailabilityController extends Controller
             ->with(['subjects_taken' => function ($query) use ($currentsemsy, $currentsem){
                 $query->where('sy', '!=', $currentsemsy->sy);
                 $query->where('taken_at', '!=', $currentsem);
+                $query->where('remark', '!=', "Withdrawn");
+                $query->where('remark', '!=', "Incomplete");
+                $query->where('remark', '!=', "Fail");
 
             }])
             ->first();
@@ -214,25 +217,26 @@ class CourseAvailabilityController extends Controller
                 $query->whereHas('curriculumsubjects', function($query) use($studentRecord){
                     $query->where('cid', $studentRecord->cid);
                 });
-                $query->whereHas('pre_requisites', function($query) use($studentRecord){
-                    $query->where('year_level_id', null)
-                        ->orWhere('year_level_id', "<=", $studentRecord->year_level_id)
-                        ->orWhere(function($query) use($studentRecord){
-                            $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
-                        })
-                        ->orWhere(function($query) use($studentRecord){
-                            //check if studentrecord subject taken is passed or not
-                            $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray())
-                                ->whereHas('subjects', function($query) use($studentRecord){
-                                    $query->whereHas('subjectsTaken', function($query) use($studentRecord){
-                                        $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid'))
-                                            ->where('grade', "!=", null)
-                                            ->orWhere('grade', ">", 3);
-                                    });
-                                });
-                        });
+                // commented this out to allow irregular with not taken pre-requisite to take left subjects
+                // $query->whereHas('pre_requisites', function($query) use($studentRecord){
+                //     $query->where('year_level_id', null)
+                //         ->orWhere('year_level_id', "<=", $studentRecord->year_level_id)
+                //         ->orWhere(function($query) use($studentRecord){
+                //             $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
+                //         })
+                //         ->orWhere(function($query) use($studentRecord){
+                //             //check if studentrecord subject taken is passed or not
+                //             $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray())
+                //                 ->whereHas('subjects', function($query) use($studentRecord){
+                //                     $query->whereHas('subjectsTaken', function($query) use($studentRecord){
+                //                         $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid'))
+                //                             ->where('grade', "!=", null)
+                //                             ->orWhere('grade', ">=", 3);
+                //                     });
+                //                 });
+                //         });
 
-                });
+                // });
         })
         ->with(['semester_sy'=> function($query){
             $query->with('school_year');

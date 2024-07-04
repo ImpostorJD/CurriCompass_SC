@@ -31,6 +31,9 @@ class CourseAvailability extends Model
     //     return $query;
     // }
 
+    public function enlistment_subjects(){
+        return $this->hasMany(CourseAvailability::class, 'caid', 'caid');
+    }
     public function semester_sy(){
         return $this->belongsTo(SemSy::class, 'semsyid', 'semsyid');
     }
