@@ -186,18 +186,16 @@ class EnlistmentController extends Controller
             $studentRecord = StudentRecord::where('student_no', $id)->first();
 
             if($es['grade'] != null) {
-
+                $grade = $es['grade'];
                 $remark = $es['grade'] == 1 ? "Excellent" :
-                    ($es['grade'] == 1.25 || $es['grade'] == 1.50 ? "Very Good" :
-                    ($es['grade'] == 1.75 || $es['grade'] == 2 || $es['grade'] == 2.25 ? "Good" :
-                    ($es['grade'] == 2.5 ? "Fair" :
-                    ($es['grade'] == 2.75 || $es['grade'] == 3 ? "Passing" :
-                    ($es['grade'] == 5 ? "Failed" :
-                    ($es['grade'] == "x" ? "Incomplete" : "Withdrawn"))))));
+                    ($grade == 1.25 || $grade == 1.50 ? "Very Good" :
+                    ($grade == 1.75 || $grade == 2 || $grade == 2.25 ? "Good" :
+                    ($grade == 2.5 ? "Fair" :
+                    ($grade == 2.75 || $grade == 3 ? "Passing" :
+                    ($grade == 5 ? "Failed" :
+                    ($grade == "x" ? "Incomplete" : "Withdrawn"))))));
 
-                $normalized_grade = filter_var($es['grade'], FILTER_VALIDATE_FLOAT) ? floatval($es['grade'] ) : null;
-
-
+                $normalized_grade = is_numeric($grade) ? floatval($grade) : null;
                 $subjectTaken = SubjectsTaken::where('subjectid', $es['subjectid'])->where('srid',$studentRecord->srid)->first();
                 if($subjectTaken) {
                     $subjectTaken->delete();
