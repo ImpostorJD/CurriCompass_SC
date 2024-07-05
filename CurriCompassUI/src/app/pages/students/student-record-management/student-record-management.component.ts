@@ -329,6 +329,8 @@ export class StudentRecordManagementComponent {
             this.getCurriculumSubjects(this.studentProfile.student_record.cid);
           }
 
+          this.loading.endLoading();
+
         },
         error: (err: any) => console.error(err),
       })
