@@ -44,7 +44,7 @@
               <span>{{ user.email }}</span>
             </td>
             <td class="lg:w-[20%] flex-auto px-1 flex items-center">
-              <span>{{ user.userfname + " " + user.usermiddle + " " + user.userlname }}</span>
+              <span>{{ user.userfname + " " + (user.usermiddle ? user.usermiddle : " ") + " " + user.userlname }}</span>
             </td>
             <td class="w-[20%] px-1 hidden lg:flex items-center">
               <span>{{ user.contact_no }}</span>

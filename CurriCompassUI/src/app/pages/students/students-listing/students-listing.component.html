@@ -47,7 +47,7 @@
               <span>{{ student.student_record.student_no }}</span>
             </td>
             <td class="lg:w-[20%] flex-auto px-1 flex items-center">
-              <span>{{ student.userfname + " " + student.usermiddle + " " + student.userlname }}</span>
+              <span>{{ student.userfname + " " + (student.usermiddle ? student.usermiddle : " ") + " " + student.userlname }}</span>
             </td>
             <td class="w-[20%] px-1 hidden lg:flex items-center">
               <span>{{ student.student_record.cid != null ? student.student_record.curriculum.program.programcode : "Not Yet Set" }}</span>
