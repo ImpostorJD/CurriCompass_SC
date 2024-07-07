@@ -26,6 +26,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::get('/test', function ($request){
+    return response()->json([
+        "hello world"
+    ], 200);
+});
 Route::controller(YearLevelController::class)
     ->prefix('/year-level')
     ->group(function(){

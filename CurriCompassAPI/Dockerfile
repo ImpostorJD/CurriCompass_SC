@@ -41,7 +41,6 @@ RUN composer require react/react
 # Expose port 80 for Apache
 EXPOSE 80
 
-EXPOSE 8000
 
 # Start Apache in the foreground
 CMD ["apache2-foreground"]
