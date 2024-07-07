@@ -12,6 +12,7 @@ use App\Http\Controllers\StudentRecordsController;
 use App\Http\Controllers\SubjectsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\YearLevelController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 //TODO: Add Documentation
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/test', function ($request){
+Route::get('/test', function (Request $request){
     return response()->json([
         "hello world"
     ], 200);

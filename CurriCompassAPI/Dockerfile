@@ -29,8 +29,11 @@ WORKDIR /var/www/html
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Ensure the Composer binary is available
+ENV PATH="${PATH}:/usr/local/bin"
+
 # Install PHP dependencies using Composer
-RUN composer install
+RUN composer install --no-scripts --no-autoloader
 
 # Ensure proper permissions for storage and cache directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
@@ -38,9 +41,11 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Install ReactPHP and any other PHP dependencies
 RUN composer require react/react
 
+# Generate Composer autoload files
+RUN composer dump-autoload --optimize
+
 # Expose port 80 for Apache
 EXPOSE 80
-
 
 # Start Apache in the foreground
 CMD ["apache2-foreground"]
