@@ -46,8 +46,8 @@ class SubjectsController extends Controller
             return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
         }
 
-        $res = Subjects::where('subjectcode', $request->subjectcode)->first();
-        if($res != null){
+        $existing = Subjects::where('subjectcode', $request->subjectcode)->first();
+        if($existing != null){
             return response()->json([['status' => 'conflict'], "subject already existing"] ,409);
         }
 

@@ -244,5 +244,4 @@ Route::controller(EnlistmentController::class)
 
     Route::delete('/{id}', 'destroy')
         ->middleware('auth.anyrole:Admin,Staff');
-
  });

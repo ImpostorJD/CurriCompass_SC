@@ -98,6 +98,7 @@ class SemSyController extends Controller
             if($existing_record && $existing_record->semsyid != $id){
                 return response()->json([['status' => 'duplicate'], $validate->errors()] ,409);
             }
+
             return response()->json([
                 ['status' => 'success'],
                 $record->update([

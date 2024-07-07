@@ -133,7 +133,8 @@ class CourseAvailabilityController extends Controller
                 ->where('semsyid', $request['semsyid'])
                 ->where('time', $request['time'])
                 ->where('section', $request['section'])
-                ->first('days', $request['days']);
+                ->where('days', $request['days'])
+                ->first();
 
             if($existingRecord && $existingRecord->caid != $record->caid) return response()
                 ->json([

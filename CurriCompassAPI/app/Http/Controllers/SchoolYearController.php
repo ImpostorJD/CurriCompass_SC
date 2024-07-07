@@ -90,13 +90,11 @@ class SchoolYearController extends Controller
         $currentRecord = SchoolYear::where('sy', $id)->first();
 
         if($currentRecord){
-            $existing = SchoolYear::where('sy_end', $request->sy_end)
-                ->where('sy_start', $request->sy_start)
+            $existing = SchoolYear::whereYear('sy_end', '=', date('Y', strtotime($request->sy_end)))
+                ->whereYear('sy_start', '=', date('Y', strtotime($request->sy_start)))
                 ->first();
 
-            if($existing &&
-            ($currentRecord->sy_start != $request->sy_start &&
-            $currentRecord->sy_end != $request->sy_end)){
+            if($existing && $currentRecord->sy != $existing->sy){
                 return response()->json([
                     ['status' => 'Conflict'],
                     ["message" => "Duplicate in combination of year start and year end."]

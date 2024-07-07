@@ -84,7 +84,8 @@ class EnlistmentController extends Controller
 
         if(Enlistment::where('srid', $targetStudent->srid)
             ->where('semsyid', $currentsemsy->semsyid)
-            ->first() != null){
+            ->first() != null)
+        {
             return response()->json(["status" => "record already exists"], 409);
         }
 

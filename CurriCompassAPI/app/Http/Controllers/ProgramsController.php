@@ -69,20 +69,20 @@ class ProgramsController extends Controller
             return response()->json([['status' => 'bad request'], $validate->errors()], 400);
         }
 
-        $program = Programs::find($id);
+        $program = Programs::where('programid', $id)->first();
+        $existing = Programs::where('programcode', $request->programcode)->first();
 
         if($program) {
-            if($program->programcode != $request->programcode && Programs::where('programcode', $request->programcode)->first() != null) {
+            if($existing != null && $program->programid != $existing->existing->programid && $program->programcode == $existing->programcode) {
                 return response()->json([['status' => 'conflict'], "Program code is already in use."], 409);
             }
 
             return response()->json([
                 ['status' => 'success'],
-
-            $program->update([
-                'programcode' => $request->programcode,
-                'programdesc' => $request->programdesc,
-            ])
+                $program->update([
+                    'programcode' => $request->programcode,
+                    'programdesc' => $request->programdesc,
+                ])
             ], 200);
         }
         return response()->json(['status' => 'not found'], 404);

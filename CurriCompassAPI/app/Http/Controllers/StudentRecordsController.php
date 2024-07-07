@@ -178,18 +178,18 @@ class StudentRecordsController extends Controller
             ], 404);
         }
 
+        $existing_record = User::where('email', $request->email)->first();
         $conflict_errors = [];
-        if($user->email != $request->email &&
-        User::where('email', $request->email)->first() != null) {
+        if($existing_record && $existing_record->userid != $user->userid && $user->email != $request->email) {
             $conflict_errors['email'] = "email is already in use.";
         }
 
+        $existing_record = User::whereHas(
+                'student_record', function($query) use ($request) {
+                $query->where('student_no', $request->studentid);
+            })->first();
 
-        if($user->student_record->student_no != $request->studentid &&
-        User::whereHas(
-            'student_record', function($query) use ($request) {
-            $query->where('student_no', $request->studentid);
-        })->first() != null) {
+        if($existing_record && $existing_record->userid != $user->userid && $user->student_record->student_no != $request->studentid) {
             $conflict_errors["studentid"] = "Student ID is already in use.";
         }
 
