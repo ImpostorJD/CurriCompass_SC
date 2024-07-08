@@ -273,7 +273,7 @@ class CourseSeeder extends Seeder
                 'subjectunitlec' => 2,
                 'subjecthourslec' => 2.67,
                 'subjecthourslab' => 4,
-                //pre-req: 2, tsaka ICT 5... (excluded kasi di ko makita)
+                //pre-req: 7 and 9
             ],
 
             [
@@ -381,7 +381,7 @@ class CourseSeeder extends Seeder
                 'subjectunitlec' => 2,
                 'subjecthourslec' => 2.67,
                 'subjecthourslab' => 4,
-                //pre-req: ICT 5... di ko makita
+                //pre-req: 9 COMP 14
             ],
 
             [
@@ -597,7 +597,7 @@ class CourseSeeder extends Seeder
                 'subjectunitlec' => 2,
                 'subjecthourslec' => 2.67,
                 'subjecthourslab' => 4,
-                //pre-req: ICT 5... di ko makita
+                //pre-req: 9
             ],
 
             [
@@ -969,6 +969,124 @@ class CourseSeeder extends Seeder
                 'subjecthourslec' => 4,
                 'subjecthourslab' => 0,
                 //pre-req: none
+            ],
+
+            //start of CS SD
+            //81
+            [
+                "subjectname" => "Introduction to Computer Simulation and Modeling",
+                "subjectcode" => "SD 1",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 0,
+                'subjectunitlec' => 3,
+                'subjecthourslec' => 4,
+                'subjecthourslab' => 0,
+                //pre-req: 2, 5
+            ],
+
+            //82
+            [
+                "subjectname" => "Introduction to Computer Simulation and Modeling",
+                "subjectcode" => "SD 3",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: 45
+            ],
+
+            //83
+            [
+                "subjectname" => "Software Development and Emerging Technologies 2",
+                "subjectcode" => "SDET 2",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: 45
+            ],
+
+             //84
+             [
+                "subjectname" => "Software Development and Emerging Technologies 3",
+                "subjectcode" => "SDET 3",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: 39
+            ],
+
+            //85
+            [
+                "subjectname" => "Software Development and Quality Assurance",
+                "subjectcode" => "SD 6",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: 84
+            ],
+
+            //Start of BSIT NAS
+            //86
+            [
+                "subjectname" => "Networking 3",
+                "subjectcode" => "NAS 1",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: 30
+            ],
+            //87
+            [
+                "subjectname" => "Cybersecurity",
+                "subjectcode" => "NAS 2",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: 30
+            ],
+            //88
+            [
+                "subjectname" => "Networking 4",
+                "subjectcode" => "NAS 3",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: 87
+            ],
+            //89
+            [
+                "subjectname" => "Linux Essentials",
+                "subjectcode" => "NAS 5",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: 87
+            ],
+            //90
+            [
+                "subjectname" => "CCNA Security",
+                "subjectcode" => "NAS 6",
+                'subjectcredits' => 3,
+                'subjectunitlab' => 2,
+                'subjectunitlec' => 1,
+                'subjecthourslec' => 2.67,
+                'subjecthourslab' => 4,
+                //pre-req: NAS 4 is missing, I'll use NAS 5 instead 89
             ],
         ]);
 
@@ -1377,6 +1495,56 @@ class CourseSeeder extends Seeder
                 'year_level_id' => null,
                 //'completion' => null
             ],
+            [
+                'subjectid' => 81,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 82,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 83,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 84,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 85,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 86,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 87,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 88,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 89,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
+            [
+                'subjectid' => 90,
+                'year_level_id' => null,
+                //'completion' => null
+            ],
         ]);
 
         DB::table('pre__requisites__subjects')->insert([
@@ -1406,7 +1574,7 @@ class CourseSeeder extends Seeder
             ],
             [
                 'prid' => 22,
-                'subjectid' => 2,
+                'subjectid' => 7,
             ],
             [
                 'prid' => 22,
@@ -1583,6 +1751,50 @@ class CourseSeeder extends Seeder
             [
                 'prid' => 79,
                 'subjectid' => 54,
+            ],
+            [
+                'prid' => 81,
+                'subjectid' => 2,
+            ],
+            [
+                'prid' => 81,
+                'subjectid' => 5,
+            ],
+            [
+                'prid' => 82,
+                'subjectid' => 45,
+            ],
+            [
+                'prid' => 83,
+                'subjectid' => 45,
+            ],
+            [
+                'prid' => 84,
+                'subjectid' => 39,
+            ],
+            [
+                'prid' => 85,
+                'subjectid' => 84,
+            ],
+            [
+                'prid' => 86,
+                'subjectid' => 30,
+            ],
+            [
+                'prid' => 87,
+                'subjectid' => 30,
+            ],
+            [
+                'prid' => 88,
+                'subjectid' => 87,
+            ],
+            [
+                'prid' => 89,
+                'subjectid' => 87,
+            ],
+            [
+                'prid' => 90,
+                'subjectid' => 89,
             ],
         ]);
 

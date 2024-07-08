@@ -22,6 +22,10 @@ class ProgramSeeder extends Seeder
                 "programcode" => "BSCS",
                 "programdesc" => "Bachelor of Science in Computer Science",
             ],
+            // [
+            //     "programcode" => "ACT",
+            //     "programdesc" => "Associate in Computer Technology",
+            // ],
         ]);
     }
 }
