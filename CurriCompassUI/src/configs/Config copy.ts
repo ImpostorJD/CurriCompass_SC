@@ -17,13 +17,13 @@ enum EnvironmentType {
     DEV = "dev",
   }
   const apiUrls: Record<EnvironmentType, string> = {
-    [EnvironmentType.PROD]: "http://www.example.com",
+    [EnvironmentType.PROD]: "https://www.api.curricompass.online/api/",
     [EnvironmentType.LOCAL]: "",
     [EnvironmentType.DEV]: "http://127.0.0.1:8000/api/"
   };
 
   export const environment = {
-    environment: EnvironmentType.DEV,
-    apiUrl: apiUrls[EnvironmentType.DEV],
+    environment: EnvironmentType.PROD,
+    apiUrl: apiUrls[EnvironmentType.PROD],
   };
 
