@@ -230,7 +230,7 @@ export class StudentRecordManagementComponent {
   }
 
   handleSubmit(){
-    console.log(this.studentProfileField.value);
+
     if(this.studentProfileField.status == "INVALID") {
       markFormGroupAsDirtyAndInvalid(this.studentProfileField);
       return;

@@ -135,6 +135,21 @@ composer install
 ```shell
   php artisan app:init-db
 ```
+or 
+```shell
+  php artisan app:init-sample
+```
+- by default, init-sample will seed mock data, but you can filter out the generation by passing a flag listed as follows:
+```shell
+ php artisan app:init-sample --no-course-availability=true # removes the course availability seed
+ php artisan app:init-sample --no-course=true # removes the course and course availability seed including dependent tables such as curriculum and student_profile tables
+ php artisan app:init-sample --no-student-record=true # removes the sample students
+ php artisan app:init-sample --no-program=true # removes the programs seed along with curriculum and student_profile tables
+ php artisan app:init-sample --no-curriculum=true # removes the curriculum seed along with sample student profile data
+ php artisan app:init-sample --no-school-year=true # removes the school year seed along with sample students, and dependent tables such as curriculum
+```
+- you can also leave the flag empty and it will generate all sample data.
+
 - given that you already setup the backend, you can freely serve via:
 ```bash
 php artisan serve
