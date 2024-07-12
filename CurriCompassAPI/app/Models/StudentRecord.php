@@ -25,7 +25,7 @@ class StudentRecord extends Model
     }
 
     public function subjects_taken() {
-        return $this->hasMany(subjectsTaken::class, 'srid', 'srid');
+        return $this->hasMany(SubjectsTaken::class, 'srid', 'srid');
     }
 
     public function user() {

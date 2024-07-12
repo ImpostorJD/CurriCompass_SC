@@ -12,6 +12,7 @@ RUN apt-get update && \
 
 # Set the Apache document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+ENV VIRTUAL_HOST_CONFIG=/etc/apache2/sites-available/api.curricompass.online.conf
 
 # Update Apache configuration files to use the new document root
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
