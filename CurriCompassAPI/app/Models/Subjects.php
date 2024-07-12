@@ -22,7 +22,7 @@ class Subjects extends Model
 
     public function subjectsTaken()
     {
-        return $this->hasMany(subjectsTaken::class, 'subjectid', 'subjectid');
+        return $this->hasMany(SubjectsTaken::class, 'subjectid', 'subjectid');
     }
 
     public function curriculumsubjects()
