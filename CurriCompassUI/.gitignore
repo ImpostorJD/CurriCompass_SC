@@ -41,5 +41,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-/src/app/utils/Config.ts
+#/src/app/utils/Config.ts
 .vercel
