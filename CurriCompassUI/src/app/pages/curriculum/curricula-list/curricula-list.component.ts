@@ -34,10 +34,9 @@ export class CurriculaListComponent {
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
   private auth: AuthService = inject(AuthService);
   modalUtility: ModalUtilityService = inject(ModalUtilityService);
-
+  showError = false;
   searchCurricula: string = '';
   curricula: any  = null;
-  iterates: Array<number> = Array.from({ length: 20 }, (_, i) => i + 1);
 
   getCurricula(){
     this.req.getResource('curriculum', httpOptions(this.auth.getCookie('user'))).subscribe({
@@ -57,7 +56,12 @@ export class CurriculaListComponent {
         this.getCurricula();
       },
 
-      error: error => console.error(error),
+      error: error => {
+        if (error.status === 409){
+          this.loading.endLoading();
+          this.showError = true;
+        }
+      },
     });
     this.modalUtility.disableModal();
   }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Curriculum;
 use App\Models\Programs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -90,8 +91,15 @@ class ProgramsController extends Controller
 
     public function destroy(Request $request, String $id){
         $program = Programs::find($id);
-
         if($program){
+
+            if(Curriculum::where('programid', $program->programid)->count() != 0){
+
+                return response()->json([
+                    ['status' => 'conflict'],
+                ], 409);
+            }
+
             return response()->json([
                 ['status' => 'success'],
             $program->delete()

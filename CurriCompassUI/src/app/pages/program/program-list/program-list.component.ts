@@ -35,6 +35,7 @@ export class ProgramListComponent {
 
   searchProgram:string = "";
   programs :any = null;
+  showError = false;
 
   getPrograms(){
     this.req.getResource('programs', httpOptions(this.auth.getCookie('user'))).subscribe({
@@ -53,8 +54,13 @@ export class ProgramListComponent {
       next: () => {
         this.getPrograms();
       },
+      error: error => {
 
-      error: error => console.error(error),
+        if (error.status === 409){
+          this.loading.endLoading();
+          this.showError = true;
+        }
+      },
     });
     this.modalUtility.disableModal();
   }

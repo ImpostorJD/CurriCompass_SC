@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curriculum;
+use App\Models\StudentRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -92,6 +93,9 @@ class CurriculumController extends Controller
         $curriculum = Curriculum::where('cid', $id)->first();
 
         if ($curriculum != null){
+            if (StudentRecord::where('cid', $curriculum->cid)->count() > 0){
+                return response()->json(['status' => 'conflict'], 409);
+            }
             $curriculum->delete();
             return response()->json(['status' => 'successfully deleted'], 200);
         }

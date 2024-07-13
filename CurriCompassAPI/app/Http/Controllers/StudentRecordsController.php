@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curriculum;
+use App\Models\Enlistment;
 use App\Models\StudentRecord;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -246,8 +247,13 @@ class StudentRecordsController extends Controller
     }
 
     public function destroy(Request $request, String $id){
-        $user = User::where('userid', $id)->first();
+        $user = User::where('userid', $id)->with('student_record')->first();
         if($user) {
+            if(Enlistment::where('srid', $user->student_record->srid)->count() > 0){
+                return response()->json([
+                    ['status' => 'enlistment records existing, cannot be deleted.'],
+                ], 409);
+            }
             return response()->json([
                 ['status' => 'success'],
                 $user->delete()

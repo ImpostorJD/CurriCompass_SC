@@ -36,6 +36,7 @@ export class StudentsListingComponent {
 
   searchStudent:string = '';
   students:any = null;
+  showError:boolean = false;
 
   deleteStudent(id: number){
     this.modalUtility.disableModal();
@@ -44,8 +45,12 @@ export class StudentsListingComponent {
         this.loading.initLoading();
         this.getStudents();
       },
-
-      error: error => console.error(error),
+      error: error => {
+        if (error.status === 409){
+          this.loading.endLoading();
+          this.showError = true;
+        }
+      },
     });
   }
 
