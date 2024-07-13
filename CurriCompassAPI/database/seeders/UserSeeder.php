@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
         'userlname' => "Staff",
         'usermiddle' => "Sample",
         'contact_no' => "091234567",
-        'email' => "samplestaff@gmail.com",
+        'email' => "samplestaff@baliuagu.edu.ph",
         'password' => Hash::make("staff"),
         ]);
 
