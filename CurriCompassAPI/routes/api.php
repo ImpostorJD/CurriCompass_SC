@@ -169,19 +169,19 @@ Route::controller(SemSyController::class)
         Route::get('/current', 'latest');
 
         Route::get('/{id}', 'show')
-        ->middleware('auth.anyrole:Admin,Staff');
+        ->middleware('auth.anyrole:Admin');
 
         Route::post('/', 'store')
-            ->middleware('auth.anyrole:Admin,Staff');
+            ->middleware('auth.anyrole:Admin');
 
         Route::post('/generate-latest', 'generateLatest')
-            ->middleware('auth.anyrole:Admin,Staff');
+            ->middleware('auth.anyrole:Admin');
 
         Route::delete('/{id}', 'destroy')
-            ->middleware('auth.anyrole:Admin,Staff');
+            ->middleware('auth.anyrole:Admin');
 
         Route::patch('/{id}', 'update')
-            ->middleware('auth.anyrole:Admin,Staff');
+            ->middleware('auth.anyrole:Admin');
     });
 
 Route::controller(CurriculumController::class)

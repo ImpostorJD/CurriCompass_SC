@@ -105,7 +105,7 @@ export class NavigationComponent {
     },
     {
       name : "Semester Management",
-      allowedRoles: ['Admin', 'Staff'],
+      allowedRoles: ['Admin'],
       icon_type: "material-symbols-outlined",
       icon: "calendar_view_month",
       path: "/semester-management",
