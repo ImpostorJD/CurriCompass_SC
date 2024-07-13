@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
         'usermiddle' => "Sample",
         'contact_no' => "091234567",
         'email' => "samplestaff@gmail.com",
-        'password' => Hash::make("admin"),
+        'password' => Hash::make("staff"),
         ]);
 
         DB::table('user__roles')->insert([
