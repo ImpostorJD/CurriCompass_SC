@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 
-    'allowed_origins' => ['http://localhost:4200', 'https://www.curricompass.online'],
+    'allowed_origins' => ['https://www.curricompass.online'],
 
     'allowed_origins_patterns' => [],
 
