@@ -200,7 +200,7 @@
               <div class="flex flex-row gap-2">
                 <div class="flex flex-col gap-1 w-full">
                   <select class="w-full border-[1px] border-slate-400 rounded-md py-2"
-                    (change)="courseSelected(outerIndex, $event)"
+                    (change)="courseSelected(outerIndex)"
                     [formControl]="getReqCourseControl(outerIndex)">
                     <option [ngValue]="null" disabled>
                       Please Select

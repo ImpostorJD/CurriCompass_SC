@@ -124,14 +124,22 @@ export class StudentConsultationComponent {
     const courseid = this.getReqCourseControl(index).value;
     this.selectedCourses[index] = parseInt(courseid);
     let subjectselected:any = this.getSubject(courseid);
+    //reset value
+    this.enlistedSlot = {};
 
     this.currentUnits = 0;
     for(const c of this.selectedCourses) {
       this.currentUnits += this.getSubject(c).subjects.subjectcredits;
     }
 
+    //filter out same subjects
     this.selectedCourses[index] = parseInt(subjectselected.subjects.subjectid);
-    this.enlistedSlot[courseid] = [subjectselected.time, subjectselected.days];
+    this.reqCourseArray.controls.forEach((e) => {
+      const subjectsEnlisted = e.get('caid')?.value;
+      let subjectselected:any = this.getSubject(subjectsEnlisted);
+      this.enlistedSlot[courseid] = [subjectselected.time, subjectselected.days];
+
+    })
   }
 
   isCourseSelected(courseid: number): boolean {

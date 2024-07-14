@@ -1,4 +1,4 @@
-<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative" [formGroup]="courseField" (submit)="handleSubmit()">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative" [formGroup]="courseField">
   @if(loading.loading){
     <app-loading-component></app-loading-component>
   }
@@ -195,7 +195,7 @@
                 <div class="flex flex-row gap-2">
                   <div class="flex flex-col gap-1 w-full">
                     <select class="w-full border-[1px] border-slate-400 rounded-md py-2"
-                      (change)="courseSelected(outerIndex, $event)"
+                      (change)="courseSelected(outerIndex)"
                       [formControl]="getReqCourseControl(outerIndex)">
                       <option [value]="null" disabled>
                         Please Select

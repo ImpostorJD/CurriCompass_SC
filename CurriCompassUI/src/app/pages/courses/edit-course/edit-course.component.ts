@@ -76,10 +76,11 @@ export class EditCourseComponent {
     this.fac.popControl(this.reqCourseArray, index);
   }
 
-  courseSelected(index: number, event: any) {
-    const courseid = event.target.value;
+  courseSelected(index: number) {
+    const courseid = this.getReqCourseControl(index).value;
     this.selectedCourses[index] = parseInt(courseid);
   }
+
 
   isCourseSelected(courseid: number): boolean {
     const course:any = this.selectedCourses.find((c:number) =>  c === courseid);

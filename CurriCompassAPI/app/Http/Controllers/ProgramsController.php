@@ -72,9 +72,9 @@ class ProgramsController extends Controller
 
         $program = Programs::where('programid', $id)->first();
         $existing = Programs::where('programcode', $request->programcode)->first();
-        if($program) {
 
-            if($existing != null && $program->programid != $existing->programid && $program->programcode == $existing->programcode) {
+        if($program) {
+            if($existing != null && $program->programid != $existing->programid && $request->programcode == $existing->programcode) {
                 return response()->json([['status' => 'conflict'], "Program code is already in use."], 409);
             }
 

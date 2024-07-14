@@ -155,7 +155,7 @@ class SubjectsController extends Controller
                 //'completion' => $request->completion,
             ]);
 
-            Pre_Requisites_Subjects::where('prid', $pre_requisite->prid)->delete();
+            $pre_requisite->pre_requisites_subjects()->delete();
 
             if(sizeof($request->subjects) > 0) {
                 foreach($request->subjects as $subject){

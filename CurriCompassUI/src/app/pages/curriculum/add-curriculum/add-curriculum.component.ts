@@ -71,8 +71,8 @@ export class AddCurriculumComponent {
     this.fac.popControl(this.csubjectsFormArray, index);
   }
 
-  courseSelected(index: number, event: any) {
-    const courseid = event.target.value;
+  courseSelected(index: number) {
+    const courseid = this.getCsubjectsControl(index)?.value;
     this.selectedCourses[index] = parseInt(courseid);
   }
 
@@ -109,7 +109,6 @@ export class AddCurriculumComponent {
     }
     const filteredCourses = this.coursePipe.transform(this.courses, this.searchCourse);
     return !filteredCourses.find(course => course.subjectid === selectedCourseId)? true : false;
-
   }
 
   getSelectedCourse(i: number){

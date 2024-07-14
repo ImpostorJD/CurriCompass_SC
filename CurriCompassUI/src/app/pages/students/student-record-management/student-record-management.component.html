@@ -207,6 +207,14 @@
                     </option>
                   }
                 </select>
+                @if(studentProfileField.get('specialization')?.invalid) {
+                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 group-focus/program:opacity-100 group-hover/program:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/program:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/program:opacity-100">
+                    Specialization is required!
+                  </div>
+                }
               </td>
               <td class="border-slate-600 border h-[9.09%] relative group/year_level">
                 <select class="w-full p-2 h-full group/year_level"

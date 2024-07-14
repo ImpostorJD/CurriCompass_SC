@@ -78,8 +78,8 @@ export class EditCurriculumComponent {
     this.fac.popControl(this.csubjectsFormArray, index);
   }
 
-  courseSelected(index: number, event: any) {
-    const courseid = event.target.value;
+  courseSelected(index: number) {
+    const courseid = this.getCsubjectsControl(index).value;
     this.selectedCourses[index] = parseInt(courseid);
   }
 
