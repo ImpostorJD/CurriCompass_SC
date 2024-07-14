@@ -59,7 +59,7 @@
                 <th class="border border-slate-600  w-[16.67%] flex items-center justify-center">
                   <button
                       class="border-[1px] rounded-md shadow-md flex items-center justify-center px-4 py-2"
-                      [ngClass]="{'border-green-400 text-green-400 bg-green-100' :  ((currentUnits >= 21  || reqCourseArray.length == 7)  && studentSelected.student_record.year_level_id != 4) || reqCourseArray.length >= subjectNotTaken, 'border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all' : ((currentUnits < 21 && reqCourseArray.length < 7) || studentSelected.student_record.year_level_id != 4)  && reqCourseArray.length < subjectNotTaken }"
+                      [ngClass]="{'border-green-400 text-green-400 bg-green-100' :  ((currentUnits >= 21  || reqCourseArray.length == 7)  && studentSelected.student_record.year_level_id != 4) || reqCourseArray.length >= subjectNotTaken, 'border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all' : (currentUnits < 21 && reqCourseArray.length < 7) && reqCourseArray.length < subjectNotTaken }"
                       [disabled]="((currentUnits >= 21  || reqCourseArray.length == 7) && studentSelected.student_record.year_level_id != 4) || reqCourseArray.length >= subjectNotTaken"
                       (click)="addReqCourseArray()"
                     >
