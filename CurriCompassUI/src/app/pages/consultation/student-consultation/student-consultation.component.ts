@@ -37,7 +37,7 @@ export class StudentConsultationComponent {
     private coursePipe: CourseAvailableFilterPipe,
     private fac: FormArrayControlUtilsService,
     public rs: RemoveInputErrorService,
-    public loading: SystemLoadingService
+    public loading: SystemLoadingService,
   ){}
 
   searchCourse = "";
@@ -157,6 +157,15 @@ export class StudentConsultationComponent {
 
   }
 
+  enableSubjectControl(index: number) {
+    this.getReqCourseControl(index)?.enable({ emitEvent: false });
+
+  }
+
+  disableSubjectControl(index: number) {
+    this.getReqCourseControl(index)?.disable({ emitEvent: false });
+  }
+
   generateEnlistment(){
     this.loading.initLoading();
     this.disableEnlistment = true;
@@ -181,6 +190,7 @@ export class StudentConsultationComponent {
     this.showError = false;
     this.message = "";
   }
+
 
   getUser(){
     this.reqCourseArray.clear();
@@ -238,6 +248,9 @@ export class StudentConsultationComponent {
         'grade' : new FormControl(subjectTaken),
       });
 
+      if(csubject.get('grade')?.value != null){
+        csubject.get('caid')?.disable({ emitEvent: false })
+      }
       this.currentUnits += subjectselected.subjects.subjectcredits;
       this.selectedCourses[i] = parseInt(subjectselected.subjects.subjectid);
       this.enlistedSlot[data.caid] = [data.course_availability.time, data.course_availability.days];
@@ -295,6 +308,9 @@ export class StudentConsultationComponent {
       return;
     }
 
+    this.reqCourseArray.controls.forEach((element : any) => {
+      element.get('caid').enable({enable: false});
+    });
     this.req.patchResource('enlistment/' + this.routeId,
       this.userEnlistment.value,
       httpOptions(this.auth.getCookie('user'))
@@ -308,6 +324,14 @@ export class StudentConsultationComponent {
     })
 
 
+  }
+
+  handleEnlistment(index:number){
+    if(this.getReqCourseGradeControl(index)?.value != null){
+      this.disableSubjectControl(index);
+    }else{
+      this.enableSubjectControl(index);
+    }
   }
 
   ngOnInit(){

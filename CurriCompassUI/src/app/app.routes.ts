@@ -64,7 +64,7 @@ export const routes: Routes = [
         },
         {
           path: 'semester-management',
-          canActivate: [AuthGuard(['Admin', 'Staff'])],
+          canActivate: [AuthGuard(['Admin'])],
           loadChildren: () => import('./pages/school-year/semester-management.routes')
             .then(mod => mod.semesterRoutes)
         },

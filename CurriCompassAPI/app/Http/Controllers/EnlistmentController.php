@@ -168,23 +168,33 @@ class EnlistmentController extends Controller
         }
         $enlistment = Enlistment::whereHas('student_record', function($query) use ($id){
             $query->where('student_no', $id);
-        })->where('peid', $request->enlistmentId)->first();
+        })->where('peid', $request->enlistmentId)->with(['enlistment_subjects' => function ($query){
+            $query->with('course_availability');
+        }])->first();
 
 
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
         $taken_at = $currentsemsy->semid == 1 ? "Sem 1" : ($currentsemsy->semid == 2 ? "Sem 2" : "Sem 3");
         if($enlistment) {
           //update logic
+
+          //delete all enlisted subjects taken record
+          foreach($enlistment->enlistment_subjects as $en){
+            $subject_taken = SubjectsTaken::where('subjectid', $en->course_availability->subjectid)->where('srid', $enlistment->srid)->first();
+            if($subject_taken){
+                $subject_taken->delete();
+            }
+          }
+
           $enlistment->enlistment_subjects()->delete();
 
+          $studentRecord = StudentRecord::where('student_no', $id)->first();
 
           foreach($request->subjects as $es) {
             EnlistmentSubjects::create([
                 'peid' => $enlistment->peid,
                 'caid' => $es['caid'],
             ]);
-
-            $studentRecord = StudentRecord::where('student_no', $id)->first();
 
             if($es['grade'] != null) {
                 $grade = $es['grade'];
@@ -197,7 +207,7 @@ class EnlistmentController extends Controller
                     ($grade == "x" ? "Incomplete" : "Withdrawn"))))));
 
                 $normalized_grade = is_numeric($grade) ? floatval($grade) : null;
-                $subjectTaken = SubjectsTaken::where('subjectid', $es['subjectid'])->where('srid',$studentRecord->srid)->first();
+                $subjectTaken = SubjectsTaken::where('subjectid', $es['subjectid'])->where('srid', $studentRecord->srid)->first();
                 if($subjectTaken) {
                     $subjectTaken->delete();
                 }

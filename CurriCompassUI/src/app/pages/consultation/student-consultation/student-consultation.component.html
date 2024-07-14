@@ -127,7 +127,7 @@
                   </td>
                   @if(gradeEncode){
                     <td class="border border-slate-600  w-[16.67%] flex items-center justify-center group relative">
-                      <select class="w-full h-full p-2 border-[1px] border-slate-700" [formControl]="getReqCourseGradeControl(outerindex)">
+                      <select class="w-full h-full p-2 border-[1px] border-slate-700" [formControl]="getReqCourseGradeControl(outerindex)"(change)="handleEnlistment(outerindex)">
                         @for(grade of enlistmentGradeSelection; track $index){
                           <option [ngValue]="grade">
                             {{grade ? grade : "None" }}
