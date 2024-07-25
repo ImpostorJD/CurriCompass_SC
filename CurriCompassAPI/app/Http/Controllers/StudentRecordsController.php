@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Curriculum;
 use App\Models\Enlistment;
+use App\Models\Role;
+use App\Models\SchoolYear;
 use App\Models\StudentRecord;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -81,7 +84,7 @@ class StudentRecordsController extends Controller
             'roles' => ['required','array'],
             'roles.*.roleid' => ['required', 'integer'],
             "studentid" => ['required', 'string'],
-            "status" => ['required','string'],
+            // "status" => ['required','string'],
         ]);
 
         if($validate->fails()){
@@ -133,7 +136,7 @@ class StudentRecordsController extends Controller
             StudentRecord::create([
                 'userid' => $user->userid,
                 'year_level_id' => null,
-                'status' => $request->status,
+                // 'status' => $request->status,
                 'student_no' => $request->studentid,
                 'cid' => null,
             ])
@@ -150,7 +153,7 @@ class StudentRecordsController extends Controller
             'contact_no' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
             "studentid" => ['required', 'string'],
             'sy'=> ['required','integer'],
-            "status" => ['required','string'],
+            // "status" => ['required','string'],
             "program" => ['required','integer'],
             "specialization" => ['nullable','string'],
             "subjects_taken" => ['nullable','array'],
@@ -217,7 +220,7 @@ class StudentRecordsController extends Controller
 
         $user->student_record()->update([
             'year_level_id' => $request['year_level_id'],
-            'status' => $request['status'],
+            // 'status' => $request['status'],
             'student_no' => $request['studentid'],
             'cid' => $curriculum['cid'],
             'sy' => $request['sy']
@@ -262,6 +265,95 @@ class StudentRecordsController extends Controller
         return response()->json([
             'status' => 'not found',
         ], 404);
+    }
+
+    public function bulk(Request $request)
+    {
+        // Validate the request to ensure a file is uploaded
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:csv',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => 'Invalid file upload',
+                'details' => $validator->errors()
+            ], 400);
+        }
+
+        // Get the uploaded file
+        $file = $request->file('file');
+
+        // Open and read the file content
+        $csvData = array_map('str_getcsv', file($file->getRealPath()));
+
+        // Process the CSV data
+        $header = array_shift($csvData);
+        $processedData = array_map(function($row) use ($header) {
+            return array_combine($header, $row);
+        }, $csvData);
+
+        // Register users
+        $users = [];
+        $role = Role::where('rolename', 'Student')->get();
+        $year_of_admission = SchoolYear::orderBy('sy', 'desc')->first();
+        foreach ($processedData as $data) {
+            $validator = Validator::make($data, [
+                'First Name' => ['required','string','max:255'],
+                'Last Name' => ['required','string','max:255'],
+                'Middle Name' => ['nullable','string','max:255'],
+                'Program' => ['nullable','string','max:255'],
+                'Email' => ['required','string','email','max:255'],
+                'Contact No' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
+                "Student Number" => ['required', 'string'],
+                "Year Level" => ['required', 'integer'],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'error' => 'Invalid user data',
+                    'details' => $validator->errors()
+                ], 422);
+            }
+
+            $curriculum = Curriculum::whereHas('program', function($query) use ($data) {
+                $query->where('programcode', $data['Program']);
+            })->first();
+
+            try{
+                if(User::where('email', $data["Email"])->first() == null && StudentRecord::where('student_no', $data["Student Number"])->first() == null){
+                    $user = User::create([
+                        'userfname' => $data["First Name"],
+                        'userlname' => $data["Last Name"],
+                        'usermiddle' => $data["Middle Name"],
+                        'email' => $data["Email"],
+                        'contact_no' => $data["Contact No"],
+                        'password' => Hash::make($data["Student Number"]),
+                    ]);
+
+                    foreach($role as $r) {
+                        $user->user_roles()->attach($r);
+                    }
+                    StudentRecord::create([
+                        'userid' => $user->userid,
+                        'year_level_id' =>  $data["Year Level"],
+                        // 'status' => $request->status,
+                        'sy' => $year_of_admission->sy,
+                        'student_no' => $data["Student Number"],
+                        'cid' => $curriculum->cid,
+                    ]);
+                }
+
+                $users[] = $user;
+            }catch(Exception $e){
+                dd($e->getMessage());
+            }
+
+        }
+        // Return the registered users as a JSON response
+       return response()->json([
+            'message' => 'CSV file processed and users registered successfully',
+        ]);
     }
 
 }

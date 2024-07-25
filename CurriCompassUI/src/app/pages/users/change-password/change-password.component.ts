@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions } from '../../../../configs/Constants';
+import { passwordValidator } from '../../../services/validators/password-validator';
 
 @Component({
   selector: 'app-change-password',
@@ -38,7 +39,7 @@ export class ChangePasswordComponent {
 
   currentUser: any = null;
   changePassPayload = this.fb.group({
-    newPasswordField: new FormControl('', Validators.required),
+    newPasswordField: new FormControl('', [Validators.required, passwordValidator()]),
     confirmPasswordField: new FormControl('', Validators.required),
   });
 
@@ -54,7 +55,16 @@ export class ChangePasswordComponent {
 
     this.req.postResource('users/change-password/' + this.currentUser.userid, this.changePassPayload.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        alert("please log in again.");
+        this.auth.logout().subscribe({
+          next: ()=> {
+            this.auth.deleteCookie('user');
+            this.auth.removeUserContext();
+            this.router.navigate(['/login']);
+          },
+          error: err => console.error(err),
+        });
+        // this.router.navigate(['/']);
       },
       error: err => console.error(err)
     });
@@ -62,6 +72,6 @@ export class ChangePasswordComponent {
   }
 
   async ngOnInit(){
-    this.currentUser = await this.auth.getUser()
+    this.currentUser = await this.auth.getUser();
   }
 }

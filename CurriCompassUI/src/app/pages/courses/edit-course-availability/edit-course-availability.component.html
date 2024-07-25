@@ -1,67 +1,40 @@
 <div class="bg-slate-100 p-4 w-full h-full relative">
   <h1 class="text-[2rem] font-bold mb-2">
-    Course Availability
+    {{ courseAvailability.get('coursecode')?.value }}
   </h1>
 
-  @if(loading.loading){
-    <app-loading-component></app-loading-component>
-  }  <div class="flex flex-col h-[8rem] border-slate-400 p-4 rounded-md border-[1px] bg-white mb-2">
-    <span>Filter Course</span>
-    <div class="relative w-full">
-      <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchCourse" [ngModelOptions]="{standalone:true}">
-      <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
-        Search
-      </i>
-    </div>
-  </div>
   <form class="flex flex-col gap-3" [formGroup]="courseAvailability">
-    <div>
-      Course
-      <div class="relative w-full">
-        <select formControlName="subjectid"
-          class="p-2 w-full h-full border-[1px] border-black rounded-md">
-          <option selected [ngValue]="null" disabled>
-            Please Select
-          </option>
-           @for(c of courseList | coursePipe:searchCourse; track $index){
-              <option [ngValue]="c.subjectid">
-                  {{ c.subjectcode + " - " + c.subjectname }}
-              </option>
-           }
-        </select>
-        <div class="text-red-600">
-          @if(courseAvailability.get('subjectid')?.hasError('required')){
-            Course is required!
-          }@else if (courseAvailability.get('subjectid')?.hasError('duplicate')) {
-            Course with the following data already exists!
-          }
-        </div>
-      </div>
-    </div>
-    <div>
-      School Year and Semester
+
+    <div class="flex flex-col gap-1">
+      <span class="flex flex-row">
+        School Year and Semester
+        <span class="text-red-600">*</span>
+      </span>
       <select formControlName="semsyid"
           class="p-2 w-full h-full border-[1px] border-black rounded-md">
-          <option selected [ngValue]="null" disabled>
+          <option selected [ngValue]="''" disabled>
             Please Select
           </option>
            @for(s of semsy; track $index){
               <option [ngValue]="s.semsyid">
-                 {{ "SY: " + dateformat.formatToYear(s.school_year.sy_start) + " - " + dateformat.formatToYear(s.school_year.sy_end) + " Sem: " + s.semester.semdesc }}
+                 {{ "SY: " + s.school_year.sy_start+ " - " + s.school_year.sy_end + " for " + s.semester.semdesc }}
               </option>
            }
-        </select>
+      </select>
       @if(courseAvailability.get('semsyid')?.hasError('required')){
         <div class="text-red-600">
           Semester - School Year is required!
         </div>
       }
     </div>
-    <div>
-      Time Period
+    <div class="flex flex-col gap-1">
+      <span class="flex flex-row">
+        Time Period
+        <span class="text-red-600">*</span>
+      </span>
       <select
-      class="p-2 w-full h-full border-[1px] border-black rounded-md" formControlName="time">
-      <option selected [ngValue]="null" disabled>
+        class="p-2 w-full h-full border-[1px] border-black rounded-md" formControlName="time">
+      <option selected [ngValue]="''" disabled>
         Please Select
       </option>
       @if(isLabHoursGreaterThanLecHours()){
@@ -77,6 +50,7 @@
           </option>
         }
       }
+
     </select>
     @if(courseAvailability.get('time')?.hasError('required')){
       <div class="text-red-600">
@@ -84,8 +58,11 @@
       </div>
     }
     </div>
-    <div>
-      Section
+    <div class="flex flex-col gap-1">
+      <span class="flex flex-row">
+        Section
+        <span class="text-red-600">*</span>
+      </span>
       <input class="w-full p-2 border-[1px] border-black rounded-md" formControlName="section">
       @if(courseAvailability.get('section')?.hasError('required')){
         <div class="text-red-600">
@@ -93,17 +70,27 @@
         </div>
       }
     </div>
-    <div>
-      Section Limit
-      <input class="w-full p-2 border-[1px] border-black rounded-md" formControlName="limit" type="number" min="0">
-
+    <div class="flex flex-col gap-1">
+      <span class="flex flex-row">
+        Section Limit
+        <span class="text-red-600">*</span>
+      </span>
+      <input class="w-full p-2 border-[1px] border-black rounded-md" formControlName="section_limit" type="number" min="0">
+      @if(courseAvailability.get('section_limit')?.hasError('invalidLimit')){
+        <div class="text-red-600">
+          Limit can not be lower or equal to zero!
+        </div>
+      }
     </div>
-    <div>
-      Days
+    <div class="flex flex-col gap-1">
+      <span class="flex flex-row">
+        Days
+        <span class="text-red-600">*</span>
+      </span>
       <select
         formControlName="days"
           class="p-2 w-full h-full border-[1px] border-black rounded-md">
-          <option selected [ngValue]="null" disabled>
+          <option selected [ngValue]="''" disabled>
             Please Select
           </option>
           <option [ngValue]="'M-Th'">
@@ -141,9 +128,13 @@
       >
         <i class="material-symbols-outlined">edit</i>
         <span class="hidden lg:block">
-          Edit Course
+          Save Changes
         </span>
       </button>
     </div>
+
   </form>
+  @if(loading.loading){
+    <app-loading-component></app-loading-component>
+   }
 </div>

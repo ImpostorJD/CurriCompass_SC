@@ -13,8 +13,8 @@ export class CourseFilterPipe implements PipeTransform {
 
     search = search.toLowerCase();
     return value.filter(item => {
-      const courseCodeLower = (item as any).subjectcode?.toLowerCase() || '';
-      const subjectDescLower = (item as any).subjectname?.toLowerCase() || '';
+      const courseCodeLower = (item as any).coursecode?.toLowerCase() || '';
+      const subjectDescLower = (item as any).coursedescription?.toLowerCase() || '';
       const combinedString = courseCodeLower + ' ' + subjectDescLower;
 
       return combinedString.includes(search);

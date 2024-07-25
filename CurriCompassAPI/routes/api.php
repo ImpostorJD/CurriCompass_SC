@@ -12,8 +12,13 @@ use App\Http\Controllers\StudentRecordsController;
 use App\Http\Controllers\SubjectsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\YearLevelController;
+use App\Imports\CurriculumImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 //TODO: Add Documentation
 /*
@@ -33,6 +38,17 @@ Route::get('/test', function (Request $request){
         "hello world"
     ], 200);
 });
+
+Route::get('/sample-csv', function () {
+    $path = storage_path('app/public/sample.csv');
+    return response()->file($path);
+});
+
+Route::get('/sample-csv-curricula', function () {
+    $path = storage_path('app/public/sample-curriculum.xlsx');
+    return response()->file($path);
+});
+
 Route::controller(YearLevelController::class)
     ->prefix('/year-level')
     ->group(function(){
@@ -193,6 +209,8 @@ Route::controller(CurriculumController::class)
 
         Route::post('/', 'store')
             ->middleware('auth.anyrole:Admin,Staff');
+        Route::post('/bulk', 'bulk')
+            ->middleware('auth.anyrole:Admin,Staff');
 
         Route::delete('/{id}', 'destroy')
             ->middleware('auth.anyrole:Admin,Staff');
@@ -211,7 +229,8 @@ Route::controller(StudentRecordsController::class)
 
         Route::post('/', 'store')
             ->middleware('auth.anyrole:Admin,Staff');
-
+            Route::post('/bulk', 'bulk')
+            ->middleware('auth.anyrole:Admin,Staff');
         Route::delete('/{id}', 'destroy')
             ->middleware('auth.anyrole:Admin,Staff');
 

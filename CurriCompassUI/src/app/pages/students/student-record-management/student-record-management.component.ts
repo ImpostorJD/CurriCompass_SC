@@ -11,6 +11,8 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { allOrNoneValidator } from '../../../services/validators/all-or-none.validator';
 import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
 import { SystemLoadingService } from '../../../services/system-loading.service';
+import { idValidator } from '../../../services/validators/id-validator';
+import { emailDomainValidator } from '../../../services/validators/domain-validator';
 
 @Component({
   selector: 'app-student-record-management',
@@ -55,17 +57,17 @@ export class StudentRecordManagementComponent {
   gradeEditable: boolean = false;
 
   studentProfileField =  this.fb.group({
-    "studentid" : new FormControl('', [Validators.required]),
+    "studentid" : new FormControl('', [Validators.required, idValidator()]),
     "userfname" : new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
     "userlname" : new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
     "usermiddle" : new FormControl('', [Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
     "sy": new FormControl(null, [Validators.required]),
     "contact_no" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
-    "email" : new FormControl('', [Validators.required, Validators.email]),
+    "email" : new FormControl('', [Validators.required, Validators.email, emailDomainValidator()]),
     "program" : new FormControl('', [Validators.required]),
     "specialization" : new FormControl(null, [Validators.required]),
     "year_level_id" : new FormControl(null, [Validators.required]),
-    "status" : new FormControl(null, [Validators.required]),
+     "status" : new FormControl(null, [Validators.required]),
     "subjects_taken" : this.fb.array([]),
   });
 

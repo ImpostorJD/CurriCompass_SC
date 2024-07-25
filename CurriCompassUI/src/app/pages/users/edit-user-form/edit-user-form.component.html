@@ -6,7 +6,10 @@
         <h2 class="font-bold text-[1.33rem]">Basic Information</h2>
         <div class="flex flex-col">
           <div class="flex flex-col">
-            <span class="capitalize">First Name</span>
+            <span class="capitalize">
+              First Name
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userfname"/>
             @if(
               userField.get('userfname')?.invalid &&
@@ -40,7 +43,10 @@
             }
           </div>
           <div class="flex flex-col">
-            <span class="capitalize">Surname</span>
+            <span class="capitalize">
+              Surname
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userlname"/>
             @if(
               userField.get('userlname')?.invalid &&
@@ -62,7 +68,10 @@
         <h2 class="font-bold text-[1.33rem]">Credentials</h2>
         <div class="flex flex-col">
           <div class="flex flex-col">
-            <span class="capitalize">Email</span>
+            <span class="capitalize">
+              Email
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email"/>
             @if(
               userField.get('email')?.invalid &&
@@ -79,11 +88,17 @@
                 @else if(userField.get('email')?.hasError('duplicate')){
                   Email is already in use!
                 }
+                @else if(userField.get('email')?.hasError('emailDomain')){
+                  Email only accepts Baliuag University Email Address!
+                }
               </div>
             }
           </div>
           <div class="flex flex-col">
-            <span class="capitalize">Contact Number</span>
+            <span class="capitalize">
+              Contact Number
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="contact_no"/>
             @if(
               userField.get('contact_no')?.invalid &&
@@ -95,7 +110,7 @@
                   Contact number is required!
                 }
                 @else if(userField.get('contact_no')?.hasError('pattern')){
-                  Contct number is in invalid format!
+                  Contact number is in invalid format!
                 }
               </div>
             }

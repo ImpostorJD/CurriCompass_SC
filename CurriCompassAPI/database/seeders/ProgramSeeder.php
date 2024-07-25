@@ -16,16 +16,16 @@ class ProgramSeeder extends Seeder
         DB::table('programs')->insert([
             [
                 "programcode" => "BSIT",
-                "programdesc" => "Bachelor of Science in Information Technology",
+                "programdesc" => "BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY",
             ],
             [
                 "programcode" => "BSCS",
-                "programdesc" => "Bachelor of Science in Computer Science",
+                "programdesc" => "BACHELOR OF SCIENCE IN COMPUTER SCIENCE",
             ],
-            // [
-            //     "programcode" => "ACT",
-            //     "programdesc" => "Associate in Computer Technology",
-            // ],
+            [
+                "programcode" => "ACT",
+                "programdesc" => "ASSOCIATE IN COMPUTER TECHNOLOGY",
+            ],
         ]);
     }
 }

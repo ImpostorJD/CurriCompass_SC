@@ -25,6 +25,7 @@ export class NavigationComponent {
     ) {}
 
   private auth: AuthService = inject(AuthService);
+  currentUser: any = null;;
 
   panelToggled?: boolean;
   initialCheckDone: boolean = false;
@@ -32,7 +33,7 @@ export class NavigationComponent {
   readonly buttons: Array<NavigationItems> = [
 
     {
-      name : "Consulatation",
+      name : "Academic Advising",
       allowedRoles: ['Admin','Staff','Student'],
       icon_type: "material-symbols-outlined",
       icon: "explore",
@@ -87,14 +88,14 @@ export class NavigationComponent {
       path: "/programs",
       hoverGroup: 'programs',
     },
-    {
-      name : "Courses",
-      allowedRoles: ['Admin'],
-      icon_type: "material-symbols-outlined",
-      icon: "book_5",
-      path: "/courses",
-      hoverGroup: 'courses',
-    },
+    // {
+    //   name : "Courses",
+    //   allowedRoles: ['Admin'],
+    //   icon_type: "material-symbols-outlined",
+    //   icon: "book_5",
+    //   path: "/courses",
+    //   hoverGroup: 'courses',
+    // },
     {
       name : "School Year",
       allowedRoles: ['Admin'],
@@ -122,8 +123,9 @@ export class NavigationComponent {
 
   ];
 
-  ngOnInit(){
+  async ngOnInit(){
     this.panelToggled = true;
+    this.currentUser = await this.auth.getUser();
   }
 
   ngDoCheck(){

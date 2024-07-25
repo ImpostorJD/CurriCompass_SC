@@ -22,6 +22,11 @@ class CourseAvailabilityController extends Controller
     {
 
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
+        if(!$currentsemsy){
+            return response()->json([
+             "no semester school year yet"
+            ], 200);
+        }
         return response()->json([
             ['status' => 'success'],
             CourseAvailability::whereHas('semester_sy', function($query) use($currentsemsy){
@@ -30,8 +35,7 @@ class CourseAvailabilityController extends Controller
             ->with(['semester_sy'=> function($query){
                 $query->with('school_year');
                 $query->with('semester');
-            }])->with('subjects')
-                ->get()
+            }])->get()
         ], 200);
     }
 
@@ -41,11 +45,11 @@ class CourseAvailabilityController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'subjectid' => ['required', 'integer'],
+            'coursecode' => ['required', 'string'],
             'semsyid' => ['required', 'integer'],
             'time' => ['required', 'string'],
             'section' => ['required', 'string'],
-            'limit' => ['required', 'integer'],
+            'section_limit' => ['required', 'integer'],
             'days' => ['required', 'string'],
         ]);
 
@@ -53,7 +57,7 @@ class CourseAvailabilityController extends Controller
             return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
         }
 
-        $current_record = CourseAvailability::where('subjectid', $request['subjectid'])
+        $current_record = CourseAvailability::where('coursecode', $request['coursecode'])
             ->where('semsyid', $request['semsyid'])
             ->where('time', $request['time'])
             ->where('section', $request['section'])
@@ -67,11 +71,12 @@ class CourseAvailabilityController extends Controller
         return response()->json([
             ['status' => 'success'],
             CourseAvailability::create([
-                'subjectid' => $request['subjectid'],
+                'coursecode' => $request['coursecode'],
                 'semsyid' => $request['semsyid'],
+                'lab' => $request['lab'],
                 'time' => $request['time'],
                 'section' => $request['section'],
-                'limit' => $request['limit'],
+                'section_limit' => $request['section_limit'],
                 'days' => $request['days'],
             ]),
         ], 200);
@@ -87,7 +92,6 @@ class CourseAvailabilityController extends Controller
                 $query->with('school_year');
                 $query->with('semester');
             }])
-            ->with('subjects')
             ->first();
 
         if($record){
@@ -108,11 +112,10 @@ class CourseAvailabilityController extends Controller
     public function update(Request $request, string $id)
     {
         $validate = Validator::make($request->all(), [
-            'subjectid' => ['required', 'integer'],
             'semsyid' => ['required', 'integer'],
             'time' => ['required', 'string'],
             'section' => ['required', 'string'],
-            'limit' => ['required', 'integer'],
+            'section_limit' => ['required', 'integer'],
             'days' => ['required', 'string'],
         ]);
 
@@ -124,12 +127,10 @@ class CourseAvailabilityController extends Controller
             ->with(['semester_sy'=> function($query){
                 $query->with('school_year');
                 $query->with('semester');
-            }])
-            ->with('subjects')
-            ->first();
+            }])->first();
 
         if($record){
-            $existingRecord = CourseAvailability::where('subjectid', $request['subjectid'])
+            $existingRecord = CourseAvailability::where('coursecode', $request['coursecode'])
                 ->where('semsyid', $request['semsyid'])
                 ->where('time', $request['time'])
                 ->where('section', $request['section'])
@@ -144,11 +145,10 @@ class CourseAvailabilityController extends Controller
             return response()->json([
                 ['status' => 'success'],
                 $record->update([
-                    'subjectid' => $request['subjectid'],
                     'semsyid' => $request['semsyid'],
                     'time' => $request['time'],
                     'section' => $request['section'],
-                    'limit' => $request['limit'],
+                    'section_limit' => $request['section_limit'],
                     'days' => $request['days'],
                 ])
             ], 200);

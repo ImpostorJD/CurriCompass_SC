@@ -6,7 +6,10 @@
         <h2 class="font-bold text-[1.33rem]">Basic Information</h2>
         <div class="flex flex-col">
           <div class="flex flex-col">
-            <span class="capitalize">first name</span>
+            <span class="capitalize">
+              first name
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userfname"/>
             @if(
                 userField.get('userfname')?.invalid &&
@@ -34,7 +37,10 @@
             </div>
           </div>
           <div class="flex flex-col">
-            <span class="capitalize">surname</span>
+            <span class="capitalize">
+              surname
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userlname"/>
             @if(
               userField.get('userlname')?.invalid &&
@@ -58,7 +64,10 @@
         <h2 class="font-bold text-[1.33rem]">Credentials</h2>
         <div class="flex flex-col">
           <div class="flex flex-col">
-            <span class="capitalize">email</span>
+            <span class="capitalize">
+              email
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email"/>
             @if(
               userField.get('email')?.invalid &&
@@ -75,11 +84,17 @@
                 @else if(userField.get('email')?.hasError('duplicate')){
                   Email is already in use!
                 }
+                @else if(userField.get('email')?.hasError('emailDomain')){
+                  Email only accepts Baliuag University Email Address!
+                }
               </div>
             }
           </div>
           <div class="flex flex-col">
-            <span class="capitalize">password</span>
+            <span class="capitalize">
+              password
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" type="password" formControlName="password"/>
             @if(
               userField.get('password')?.invalid &&
@@ -87,12 +102,19 @@
               userField.get('password')?.dirty)
             ){
               <div class="text-red-600">
-                Password is required!
+                @if(userField.get('password')?.hasError('required')){
+                  Password is required!
+                }@else if (userField.get('password')?.hasError('passwordStrength')) {
+                  Password must be at least 8 characters long, contain at least one number, one uppercase letter, and one special character.
+                }
               </div>
             }
           </div>
           <div class="flex flex-col">
-            <span class="capitalize">contact number</span>
+            <span class="capitalize">
+              contact number
+              <span class="text-red-600">*</span>
+            </span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="contactno"/>
             @if(
               userField.get('contactno')?.invalid &&
@@ -105,7 +127,7 @@
                   Contact number is required!
                 }
                 @else if(userField.get('contactno')?.hasError('pattern')){
-                  Contct number is in invalid format!
+                  Contact number is in invalid format!
                 }
               </div>
             }

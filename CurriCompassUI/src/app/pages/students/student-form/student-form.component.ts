@@ -6,6 +6,8 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
 import { AuthService } from '../../../services/auth/auth.service';
+import { idValidator } from '../../../services/validators/id-validator';
+import { emailDomainValidator } from '../../../services/validators/domain-validator';
 
 
 @Component({
@@ -30,14 +32,14 @@ export class StudentFormComponent {
   private auth: AuthService = inject(AuthService);
 
   userField =  this.fb.group({
-    "studentid" : new FormControl('', [Validators.required]),
+    "studentid" : new FormControl('', [Validators.required, idValidator()]),
     "userfname" : new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
     "userlname" : new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
     "usermiddle" : new FormControl('', [Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
     "contactno" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
-    "email" : new FormControl('', [Validators.required, Validators.email]),
+    "email" : new FormControl('', [Validators.required, Validators.email, emailDomainValidator()]),
     "password" : new FormControl('', [Validators.required]),
-    "status" : new FormControl(null, [Validators.required]),
+    // "status" : new FormControl(null, [Validators.required]),
     "roles" : this.fb.array([
       this.fb.group({
         roleid: new FormControl(3)

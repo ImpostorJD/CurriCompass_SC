@@ -167,35 +167,35 @@ class SemSyController extends Controller
                 ->with('school_year')
                 ->first();
 
-            $student_records = StudentRecord::where('status', "!=", "Graduated")
-                ->where('status', "!=", "Inactive")
-                ->whereHas('enlistment', function($query) use ($semsy){
-                    $query->where('semsyid', $semsy->semsyid);
-                    })
-                ->with(['enlistment'=> function($query){
-                    $query->with(['enlistment_subjects' => function($query){
-                        $query->with('course_availability');
-                    }]);
-                }])->get()->keyBy('srid')->toArray();
+            // $student_records = StudentRecord::where('status', "!=", "Graduated")
+            //     ->where('status', "!=", "Inactive")
+            //     ->whereHas('enlistment', function($query) use ($semsy){
+            //         $query->where('semsyid', $semsy->semsyid);
+            //         })
+            //     ->with(['enlistment'=> function($query){
+            //         $query->with(['enlistment_subjects' => function($query){
+            //             $query->with('course_availability');
+            //         }]);
+            //     }])->get()->keyBy('srid')->toArray();
 
-            //synchronous: use promise to iterate over students not marked as inactive, graduate and::
-            //promise: check if enlisted subjects of students (iteratively) have recorded corresponding subject_taken
-            $checkGradedEnlistmentPromises = array_map(
-                fn($ref) => CompareSubjectTakenAndEnlistedSubject::compareAsync($ref),
-                $student_records
-            );
+            // //synchronous: use promise to iterate over students not marked as inactive, graduate and::
+            // //promise: check if enlisted subjects of students (iteratively) have recorded corresponding subject_taken
+            // $checkGradedEnlistmentPromises = array_map(
+            //     fn($ref) => CompareSubjectTakenAndEnlistedSubject::compareAsync($ref),
+            //     $student_records
+            // );
 
-            $checkGradedEnlistment = $this->collectPromises($checkGradedEnlistmentPromises);
-            $checkGradedEnlistment = $this->flattenArray($checkGradedEnlistment);
-            $checkGradedEnlistment = array_filter($checkGradedEnlistment, function($value) {
-                return $value != true;
-            });
+            // $checkGradedEnlistment = $this->collectPromises($checkGradedEnlistmentPromises);
+            // $checkGradedEnlistment = $this->flattenArray($checkGradedEnlistment);
+            // $checkGradedEnlistment = array_filter($checkGradedEnlistment, function($value) {
+            //     return $value != true;
+            // });
 
-            $messages = [];
-            if (count($checkGradedEnlistment) > 0) {
-                $messages['student_records'] = ["The following students have not yet been graded:" => array_keys($checkGradedEnlistment)];
-                $createable = false;
-            }
+            // $messages = [];
+            // if (count($checkGradedEnlistment) > 0) {
+            //     $messages['student_records'] = ["The following students have not yet been graded:" => array_keys($checkGradedEnlistment)];
+            //     $createable = false;
+            // }
             $latestSy = SchoolYear::where('sy', '>', $semsy->sy)->first();
 
             if($semsy->semid == 3){
@@ -210,24 +210,10 @@ class SemSyController extends Controller
                 $messages
             ], 400);
 
-            //dunno if applicable, increment year level id however i do think this
-            //should be applied in the enlistment part so leave as a comment for now,
-            // will uncomment once this is deemed needed
-            // if($semsy->semid == 3){
-            //     // Update year_level_id for students
-            //     foreach (array_keys($student_records) as $srid) {
-            //         $studentRecord = StudentRecord::where('srid', $srid)->first();
-            //         if ($studentRecord && $studentRecord->year_level_id < 4) {
-            //             $studentRecord->year_level_id + 1;
-            //             $studentRecord->save();
-            //         }
-            //     }
-
-            // }
 
             return response()->json([
                 //job: use promise to iterate over students that has no enlistment, mark as inactive
-                MarkStudentAsInactive::dispatch($semsy),
+                // MarkStudentAsInactive::dispatch($semsy),
                 SemSy::create([
                     'sy' => $semsy->semid != 3 ? $semsy->sy : $latestSy->sy,
                     'semid' => $semsy->semid != 3 ? $semsy->semid + 1 : 1,

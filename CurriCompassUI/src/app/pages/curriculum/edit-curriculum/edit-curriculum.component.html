@@ -1,16 +1,16 @@
-<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative" [formGroup]="curriculum">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="curriculum">
   <h1 class="font-bold font-sans text-2xl uppercase">Edit Curriculum</h1>
   <div class="flex lg:flex-row gap-2 flex-col bg-white mx-2">
     <div class="border-slate-400 border-1 w-full p-5 border-[1px] rounded-sm shadow-lg">
       <div class="flex xl:flex-row flex-col justify-center gap-2">
         <div class="w-full flex flex-col">
-          <span>Program</span>
+          <span>Program<span class="text-red-600">*</span></span>
           <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="programid">
-            <option [value]="null" disabled selected>
+            <option [ngValue]="null" disabled selected>
               Please Select
             </option>
             @for(program of programs; track $index){
-              <option [value]="program.programid">
+              <option [ngValue]="program.programid">
                 {{program.programdesc }}
               </option>
             }
@@ -22,14 +22,14 @@
           }
         </div>
         <div class="w-full flex flex-col">
-          <span>Curriculum Year</span>
+          <span>Curriculum Year<span class="text-red-600">*</span></span>
           <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="sy">
             <option [ngValue]="null" disabled selected>
               Please Select
             </option>
             @for(sy of school_years; track $index){
               <option [ngValue]="sy.sy">
-                {{ dateformat.formatToYear(sy.sy_start)  + " - " + dateformat.formatToYear(sy.sy_end) }}
+                {{ sy.sy_start  + " - " + sy.sy_end }}
               </option>
             }
           </select>
@@ -47,144 +47,163 @@
             (focus)="rs.removeError(curriculum.get('specialization'), {'duplicate' : false})"/>
           @if(curriculum.get('specialization')?.hasError('duplicate')){
             <div class="text-red-600">
-              Combination of specialization and program is already in use!
+              Combination of specialization and program is already in use in the school year provided!
             </div>
           }
         </div>
       </div>
     </div>
   </div>
-  <div class="flex flex-col h-[8rem] border-slate-400 p-4 rounded-md border-[1px] mx-2 bg-white">
-    <span>Search For Courses</span>
-    <div class="relative w-full">
-      <input class="w-full p-2 border-[1px] border-slate-400 rounded-md" [(ngModel)]="searchCourse" [ngModelOptions]="{standalone:true}">
-      <i class="text-slate-400 material-symbols-outlined absolute right-[0.5%] bottom-[20%]">
-        search
-      </i>
-    </div>
-  </div>
-  <div class=" border-slate-400 border-[1px] rounded-md mx-2 min-h-[25vh] lg:min-h-[25rem] bg-white overflow-hidden">
-    <table class="table-auto w-full h-full border-collapse border border-slate-300">
-      <thead  class="bg-slate-200 h-[3rem]">
-        <tr class="flex flex-row py-2">
-          <th class="w-[20%] py-2">
-            Course Code
-          </th>
-          <th class="w-[20%] py-2">
-            Semester
-          </th>
-          <th class="w-[20%] py-2">
-            Year Level
-          </th>
-          <th class="flex-auto flex justify-center items-center">
-            <button
-              class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
-              (click)="addCsubjectsArray()">
+  <div>
+    @if(canAddMoreTables()){
+      <button
+        class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
+        (click)="addCsubjectsArray()"
+        [disabled]=""
+      >
+        <i class="material-symbols-outlined">add</i>
+        <span class="lg:inline hidden">Add Table</span>
+      </button>
+    }
 
-              <i class="material-symbols-outlined">add</i>
-              <span class="lg:inline hidden">Add Course</span>
-            </button>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="flex flex-col h-full overflow-y-auto">
-        @if(csubjectsFormArray.controls.length <= 0){
-          <tr>
-            <td>
-              <div class="text-red-600">
-                Courses are required!
-              </div>
-            </td>
-          </tr>
-        }
-        @for(csubject of csubjectsFormArray.controls; let outerIndex = $index; track outerIndex){
-          <tr class="flex flex-row bg-white py-2 hover:bg-slate-100">
-            <td class="w-[20%] px-1 flex flex-col">
-              <select class="w-full py-2 px-4" (change)="courseSelected(outerIndex)" [formControl]="getCsubjectsControl(outerIndex)">
-                <option [ngValue]="null" disabled selected>
-                  Please Select
-                </option>
-                @if(searchCourse.trim().length > 0 &&
-                      isSelectedCourseFiltered(outerIndex) == true &&
-                      getCsubjectsControl(outerIndex).value != null &&
-                      getCsubjectsControl(outerIndex).value != "null"
-                    ){
-                      <option
-                        [disabled]="isCourseSelected(getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectid)"
-                        [ngValue]="getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectid">
-                        <!--[selected]="getReqCourseControl(outerIndex).value !== undefined && getSelectedCourse(getReqCourseControl(outerIndex).value).subjectid"-->
-                        {{ getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectcode }}
-                      </option>
-                    }
-                @if(searchCourse.trim().length > 0 &&
-                  getCsubjectsControl(outerIndex).value != null &&
-                  !isSelectedCourseFiltered(outerIndex)
-                ){
-                  <option [disabled]="isCourseSelected(getCsubjectsControl(outerIndex).value)"
-                  [ngValue]="getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectid">
-                    {{ getSelectedCourse(getCsubjectsControl(outerIndex).value).subjectcode }}
-                  </option>
-                }
-                @for(course of courses | coursePipe:searchCourse; track $index){
-                  <option [ngValue]="course.subjectid" [disabled]="isCourseSelected(course.subjectid)">
-                    {{ course.subjectcode }}
-                  </option>
-                }
-              </select>
-              @if(csubject.get('subjectid')?.invalid){
-                <div class="text-red-600">
-                  Course is required!
-                </div>
-              }
-            </td>
-            <td class="w-[20%] px-1">
-              <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getCsemControl(outerIndex)">
-                <option [ngValue]="null" disabled selected>
-                  Please Select
-                </option>
-                @for(sem of semesters; track $index){
-                  <option [ngValue]="sem.semid">
-                    {{ sem.semdesc }}
-                  </option>
-                }
-              </select>
-              @if(csubject.get('semid')?.invalid){
-                <div class="text-red-600">
-                  Semester is required!
-                </div>
-              }
-            </td>
-            <td class="w-[20%] px-1">
-              <select class="w-full py-2 px-4" [selectedIndex]="null" [formControl]="getYearLevelControl(outerIndex)">
-                <option [value]="null" disabled selected>
-                  Please Select
-                </option>
-                @for(y of year_levels; track $index){
-                  <option [ngValue]="y.year_level_id">
-                    {{y.year_level_desc}}
-                  </option>
-                }
-              </select>
-              @if(csubject.get('year_level_id')?.invalid){
-                <div class="text-red-600">
-                  Year Level is required!
-                </div>
-              }
-            </td>
-            <td class="flex-auto flex justify-center items-center px-1">
-              <button class="bg-red-500 flex items-center justify-center p-2 h-full text-white hover:bg-red-600 lg:px-4 rounded-md" (click)="popCsubjectsArray(outerIndex)">
-                <i class="material-symbols-outlined">
-                  delete
-                </i>
-                <span class="md:inline hidden ml-1">
-                  Delete
-                </span>
+  </div>
+  <div class="w-full flex p-2">
+    <span class="me-2 font-bold">Total Units: </span>
+    <span>{{ totalUnits() }}</span>
+  </div>
+  <div class="border-slate-400 border-[1px] p-1 rounded-md mx-2 min-h-[60vh] bg-white overflow-y-auto">
+    @for(c of csubjectsFormArray.controls; track $index){
+      <table class="table-auto w-full border-collapse border border-slate-300">
+        <thead  class="h-[3rem]">
+          <tr class="flex flex-row p-2 w-full border-b-[1px] border-slate-300 relative">
+            <th class="flex justify-center w-full">
+             LEVEL {{
+              c.get('level')?.value  == 1 ? 'I' :
+              (c.get('level')?.value  == 2 ? 'II':
+              (c.get('level')?.value  == 3 ? 'III':
+               'IV'))
+              }}
+            </th>
+            <div class="absolute top-0 right-0 flex flex-row gap-2">
+              <button class="flex justify-center items-center gap-1 border-green-600 rounded-md border-[1px] p-2 text-green-500 hover:bg-green-600 hover:text-white transition-all"
+              (click)="enableModalAndSetEditable($index)">
+                <i class="material-symbols-outlined">edit</i>
               </button>
+              <button class="flex justify-center items-center gap-1 border-red-600 rounded-md border-[1px] p-2 text-red-500 hover:bg-red-600 hover:text-white transition-all" (click)="popCsubjectsArray($index)">
+                <i class="material-symbols-outlined">delete</i>
+              </button>
+            </div>
+          </tr>
+          <tr class="flex flex-row py-2 w-full border-b-[1px] border-slate-300">
+            <th class="flex justify-center w-full">
+               {{
+                  c.get('semester')?.value  == 1 ? '1ST' :
+                (c.get('semester')?.value  == 2 ? '2ND':
+                '3RD')
+              }} TRIMESTER
+            </th>
+          </tr>
+          <tr class="flex flex-row border-b-[1px] border-slate-300">
+            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+              Course Code
+            </th>
+            <th class="w-[40%] border-slate-300 border-[1px] flex items-center justify-center">
+              Course Title
+            </th>
+            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+              Units
+            </th>
+            <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+              <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Units</span>
+              <div class="flex flex-row w-full">
+                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                  Lec
+                </span>
+                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                  Lab
+                </span>
+              </div>
+            </th>
+            <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+              <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Hours</span>
+              <div class="flex flex-row w-full">
+                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                  Lec
+                </span>
+                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                  Lab
+                </span>
+              </div>
+            </th>
+            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+              Prerequisite/s
+            </th>
+          </tr>
+        </thead>
+        <tbody class="flex flex-col w-full">
+          @for(s of getsubjectsFormArray($index).controls; let i = $index; track i){
+            <tr class="flex flex-row border-b-[1px] border-slate-300">
+              <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                {{ s.get('coursecode')!.value }}
+              </td>
+              <td class="w-[40%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                {{ s.get('coursedescription')!.value }}
+              </td>
+              <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                {{ s.get('units')!.value }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ s.get('unitslec')!.value }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ s.get('unitslab')!.value }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ s.get('hourslec')!.value }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ s.get('hourslab')!.value }}
+              </td>
+              <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                {{ !s.get('prerequisites')?.value ? "None" : s.get('prerequisites')?.value }}
+              </td>
+            </tr>
+          }
+
+        </tbody>
+        <tfoot class="flex flex-col w-full">
+          <tr class="flex flex-row border-b-[1px] border-slate-300 w-full">
+            <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+            </td>
+            <td class="w-[40%] p-2 border-slate-300 border-[1px] flex items-center justify-center font-bold">
+              Total
+            </td>
+            <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+              {{ totalSum($index, 'units') }}
+            </td>
+            <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+              {{ totalSum($index, 'unitslec') }}
+            </td>
+            <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+              {{ totalSum($index, 'unitslab') }}
+            </td>
+            <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+              {{ totalSum($index, 'hourslec') }}
+            </td>
+            <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+              {{ totalSum($index, 'hourslab') }}
+            </td>
+            <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
             </td>
           </tr>
-        }
-      </tbody>
-    </table>
+          <tr class="flex w-full min-h-[1.23rem] bg-slate-200">
+            <td class="w-full bg-slate-200 border-[1px] flex items-center justify-center">
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    }
+
   </div>
   <div class="flex flex-row justify-center gap-2 py-2 mx-2">
     <a
@@ -198,14 +217,45 @@
         Cancel
       </span>
     </a>
-    <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase" (click)="handleSubmit()">
+    <button class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center text-white uppercase border-[1px] rounded-md " (click)="handleSubmit()"
+     [ngClass]="{'cursor-not-allowed bg-green-300' : curriculum.status === 'INVALID' || csubjectsFormArray.length == 0, 'bg-green-600 transition-all hover:bg-green-800' : curriculum.status === 'VALID' &&  csubjectsFormArray.length != 0}">
       <i class="material-symbols-outlined">edit</i>
       <span class="hidden lg:block">
-        Edit Curriculum
+        Save Changes
       </span>
     </button>
   </div>
-  @if(loading.loading){
-    <app-loading-component></app-loading-component>
-  }
 </form>
+@if(selectedTable != null){
+  <app-curriculum-course-table [selection]="csubjectsFormArray" [selectedForm]="selectedTable" (collapseModal)="selectedTable = null" (setCurriculumSubject)="setCurriculumSubject($event)"></app-curriculum-course-table>
+}
+
+@if(error){
+  <div class="absolute top-0 right-0 w-[100vw] h-[100vh] bg-black bg-opacity-75 flex items-center justify-center">
+    <div class="h-[20rem] w-[25rem] p-4 text-center rounded-lg shadow bg-slate-200 sm:p-5 border-[1px] border-slate-800 flex flex-col overflow-hidden justify-between relative">
+      <span class="text-2xl font-bold w-full flex justify-start">NOTICE!</span>
+      <span class="flex w-full justify-start">
+        The tables may not contain any courses, or has missing pre-requisites. Please add them before proceeding.
+      </span>
+      <div class="flex flex-col h-full flex-auto w-full overflow-y-auto">
+        <ul>
+          @for(error of errorMessage; track $index){
+            <li>{{error}}</li>
+          }
+        </ul>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button type="button" class="w-full py-2 px-3 text-sm font-medium text-green-600 border-[1px] rounded-md border-green-600 hover:bg-green-600 transition-all hover:text-white" (click)="resetError()">
+          Dismiss
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+}
+
+@if(loading.loading){
+  <app-loading-component></app-loading-component>
+}

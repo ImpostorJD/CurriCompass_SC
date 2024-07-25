@@ -11,10 +11,17 @@ class CurriculumSubjects extends Model
 
     public $timestamps = false;
     public $incrementing = false;
-    protected $primaryKey = ['cid', 'subjectid'];
-    protected $fillables = [
+    protected $primaryKey = ['cid', 'coursecode'];
+    protected $fillable = [
         'cid',
-        'subjectid',
+        'coursecode',
+        'coursedescription',
+        'prerequisites',
+        'units',
+        'unitslab',
+        'unitslec',
+        'hourslab',
+        'hourslec',
         'semid',
         'year_level_id',
     ];
@@ -23,7 +30,7 @@ class CurriculumSubjects extends Model
     {
         $query
             ->where('cid', '=', $this->getAttribute('cid'))
-            ->where('subjectid', '=', $this->getAttribute('subjectid'));
+            ->where('coursecode', '=', $this->getAttribute('coursecode'));
 
         return $query;
     }
@@ -32,9 +39,6 @@ class CurriculumSubjects extends Model
         return $this->belongsTo(Curriculum::class, 'cid', 'cid');
     }
 
-    public function subjects(){
-        return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
-    }
 
     public function semesters(){
         return $this->belongsTo(Semesters::class, 'semid', 'semid');

@@ -61,13 +61,16 @@ export class CourseAvailabilityComponent {
   getCourseAvailability(){
     this.req.getResource('course-availability', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
-        this.courses = res[1].sort((a:any,b:any) => {
-          if (a.semester_sy.semester.semid !== b.semester_sy.semester.semid) {
-            return a.semester_sy.semester.semid - b.semester_sy.semester.semid;
-          } else {
-            return a.subjects.subjectcode.localeCompare(b.subjects.subjectcode);
-          }
-        });
+        if(res[1]){
+          this.courses = res[1].sort((a:any,b:any) => {
+            if (a.semester_sy.semester.semid !== b.semester_sy.semester.semid) {
+              return a.semester_sy.semester.semid - b.semester_sy.semester.semid;
+            } else {
+              return a.subjects.subjectcode.localeCompare(b.subjects.subjectcode);
+            }
+          });
+        }
+
         this.loading.endLoading();
 
       },

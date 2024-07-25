@@ -9,10 +9,21 @@
       </i>
     </div>
   </div>
+  <div class="flex p-2">
+    <button
+     (click)="importModalShow = true"
+      class="gap-2 border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
+    >
+    <i class="material-symbols-outlined">
+      Upload
+    </i>
+      Import Students
+    </button>
+  </div>
   <div class=" border-slate-400 border-[1px] rounded-md mx-1 lg:overflow-y-auto h-auto bg-white">
     <!-- Add a table to display students -->
     <table class="table-auto w-full border-collapse border border-slate-300">
-      <thead class="bg-slate-300">
+    <thead class="bg-slate-300">
         <tr class="flex flex-row py-2">
           <th class="w-[20%] py-2 hidden lg:block">
             Student ID
@@ -50,7 +61,7 @@
               <span>{{ student.userfname + " " + (student.usermiddle ? student.usermiddle : " ") + " " + student.userlname }}</span>
             </td>
             <td class="w-[20%] px-1 hidden lg:flex items-center">
-              <span>{{ student.student_record.cid != null ? student.student_record.curriculum.program.programcode : "Not Yet Set" }}</span>
+              <span>{{ student.student_record.cid != null ? student.student_record.curriculum.program.programcode + " - " + student.student_record.curriculum.specialization: "Not Yet Set" }}</span>
             </td>
             <td class="w-[15%] px-1 hidden lg:flex items-center">
               <span>{{ student.student_record?.year_level != null ? student.student_record.year_level.year_level_desc : "Not Yet Set" }}</span>
@@ -95,4 +106,7 @@
 </div>
 @if(modalUtility.modalEnabled) {
   <app-delete-modal [item]="modalUtility.selectedItem" (deleteItem)="deleteStudent($event)" (collapseModal)="modalUtility.disableModal()"></app-delete-modal>
+}
+@if(importModalShow) {
+  <app-student-bulk-registration-modal (collapseModal)="importModalShow = false" (refetch)="getStudents()"></app-student-bulk-registration-modal>
 }

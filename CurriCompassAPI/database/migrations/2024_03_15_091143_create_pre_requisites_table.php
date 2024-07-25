@@ -11,21 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pre__requisites', function (Blueprint $table) {
-            $table->id('prid');
-            $table->unsignedBigInteger('subjectid')->unique();
-            $table->unsignedBigInteger('year_level_id')->nullable();
-            //$table->double('completion')->nullable();
-            $table->foreign('subjectid')
-                ->references('subjectid')
-                ->on('subjects')
-                ->onDelete('cascade');
+        // Schema::create('pre__requisites', function (Blueprint $table) {
+        //     $table->id('prid');
+        //     $table->unsignedBigInteger('subjectid')->unique();
+        //     $table->unsignedBigInteger('year_level_id')->nullable();
+        //     //$table->double('completion')->nullable();
+        //     $table->foreign('subjectid')
+        //         ->references('subjectid')
+        //         ->on('subjects')
+        //         ->onDelete('cascade');
 
-            $table->foreign('year_level_id')
-                ->references('year_level_id')
-                ->on('year_levels')
-                ->onDelete('restrict');
-        });
+        //     $table->foreign('year_level_id')
+        //         ->references('year_level_id')
+        //         ->on('year_levels')
+        //         ->onDelete('restrict');
+        // });
     }
 
     /**

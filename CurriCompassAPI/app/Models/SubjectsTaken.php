@@ -12,21 +12,18 @@ class SubjectsTaken extends Model
     public $table = "subjects_taken";
     public $incrementing = false;
     public $timestamps = false;
-    protected $primaryKey = ['srid', 'subjectid'];
+    protected $primaryKey = ['srid', 'coursecode'];
     protected $fillable = [
         'srid',
-        'subjectid',
-        'taken_at',
+        'coursecode',
         'grade',
-        'sy',
-        'remark'
     ];
 
     protected function setKeysForSaveQuery($query)
     {
         $query
             ->where('srid', '=', $this->getAttribute('srid'))
-            ->where('subjectid', '=', $this->getAttribute('subjectid'));
+            ->where('coursecode', '=', $this->getAttribute('coursecode'));
 
         return $query;
     }
@@ -35,9 +32,9 @@ class SubjectsTaken extends Model
         return $this->belongsTo(StudentRecord::class, 'srid', 'srid');
     }
 
-    public function subjects(){
-        return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
-    }
+    // public function subjects(){
+    //     return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
+    // }
 
     public function school_year() {
         return $this->belongsTo(SchoolYear::class, 'sy', 'sy');

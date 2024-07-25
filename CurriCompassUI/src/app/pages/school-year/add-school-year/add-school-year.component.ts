@@ -28,8 +28,8 @@ export class AddSchoolYearComponent {
     private req: HttpReqHandlerService = inject(HttpReqHandlerService);
 
   schoolYearField = this.fb.group({
-    sy_start: new FormControl('', [Validators.required]),
-    sy_end: new FormControl('', [Validators.required]),
+    sy_start: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{4}$/)]),
+    sy_end: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{4}$/)]),
   });
 
   setYearStart(value: string) {
@@ -46,9 +46,10 @@ export class AddSchoolYearComponent {
   }
 
   handleSubmit(){
-    let date1 = moment(this.schoolYearField.get('sy_start')!.value, "YYYY/MM/DD");
-    let date2 = moment(this.schoolYearField.get('sy_end')!.value, "YYYY/MM/DD");
-    const datediff = date2.diff(date1, "years", true);
+    let date1 = parseInt(this.schoolYearField.get('sy_start')!.value!);
+    let date2 =  parseInt(this.schoolYearField.get('sy_end')!.value!);
+
+    let datediff = date2 - date1;
 
     if(datediff < 0){
       this.schoolYearField.get('sy_start')!.setErrors({'less_than': true});

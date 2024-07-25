@@ -5,7 +5,10 @@
       <h2 class="font-bold text-[1.33rem]">Basic Information</h2>
       <div class="flex flex-col gap-1">
         <div class="flex flex-col">
-          <span class="capitalize">Student ID</span>
+          <span class="capitalize">
+            Student ID
+            <span class="text-red-600">*</span>
+          </span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="studentid"/>
           @if(
             userField.get('studentid')?.invalid &&
@@ -16,14 +19,20 @@
               @if(userField.get('studentid')?.hasError('required')){
                 Student ID is required!
               }
-              @if(userField.get('studentid')?.hasError('duplicate')){
+              @else if(userField.get('studentid')?.hasError('duplicate')){
                 Student ID is already in use!
+              }
+              @else if(userField.get('studentid')?.hasError('invalidId')){
+                Student ID is in invalid format!
               }
             </div>
           }
         </div>
         <div class="flex flex-col">
-          <span class="capitalize">first name</span>
+          <span class="capitalize">
+            first name
+            <span class="text-red-600">*</span>
+          </span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userfname"/>
           @if(
             userField.get('userfname')?.invalid &&
@@ -57,7 +66,10 @@
           }
         </div>
         <div class="flex flex-col">
-          <span class="capitalize">surname</span>
+          <span class="capitalize">
+            surname
+            <span class="text-red-600">*</span>
+          </span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="userlname"/>
           @if(
             userField.get('userlname')?.invalid &&
@@ -79,7 +91,10 @@
       <h2 class="font-bold text-[1.33rem]">Credentials</h2>
       <div class="flex flex-col">
         <div class="flex flex-col">
-          <span class="capitalize">email</span>
+          <span class="capitalize">
+            email
+            <span class="text-red-600">*</span>
+          </span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="email"/>
           @if(
             userField.get('email')?.invalid &&
@@ -93,6 +108,9 @@
               @else if(userField.get('email')?.hasError('email')){
                 Email is in invalid format!
               }
+              @else if(userField.get('email')?.hasError('emailDomain')){
+                Email only accepts Baliuag University Email Address!
+              }
               @else if(userField.get('email')?.hasError('duplicate')){
                 Email is already in use!
               }
@@ -100,20 +118,31 @@
           }
         </div>
         <div class="flex flex-col">
-          <span class="capitalize">password</span>
+          <span class="capitalize">
+            password
+            <span class="text-red-600">*</span>
+          </span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" type="password" formControlName="password"/>
           @if(
             userField.get('password')?.invalid &&
             (userField.get('password')?.touched ||
             userField.get('password')?.dirty)
           ){
+
             <div class="text-red-600">
-              Password is required!
+              @if(userField.get('password')?.hasError('required')){
+                Password is required!
+              }@else if (userField.get('password')?.hasError('passwordStrength')){
+                Password must be at least 8 characters long, contain at least one number, one uppercase letter, and one special character.
+              }
             </div>
           }
         </div>
         <div class="flex flex-col">
-          <span class="capitalize">contact number</span>
+          <span class="capitalize">
+            contact number
+            <span class="text-red-600">*</span>
+          </span>
           <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="contactno"/>
           @if(
             userField.get('contactno')?.invalid &&
@@ -130,7 +159,7 @@
             </div>
           }
         </div>
-        <div class="flex flex-col">
+        <!-- <div class="flex flex-col">
           <span>Status</span>
           <select class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="status">
             <option [value]="null" disabled selected>
@@ -152,7 +181,7 @@
               Status is required!
             </div>
           }
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -167,14 +196,14 @@
         Cancel
       </span>
     </a>
-    <button
+    <!-- <button
       (click)="handleSubmit('no_record')"
       class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center border-green-600 border-[1px] rounded-md text-green-600 transition-all hover:bg-green-600 hover:text-white uppercase">
       <i class="material-symbols-outlined">person_add</i>
       <span class="hidden lg:block">
         Save Without Student Information
       </span>
-    </button>
+    </button> -->
     <button
       (click)="handleSubmit('with_record')"
       class="w-full flex flex-row gap-2 px-4 py-2 bg-green-600 items-center justify-center rounded-md text-white hover:bg-green-800 transition-all uppercase">

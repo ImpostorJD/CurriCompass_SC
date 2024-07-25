@@ -3,7 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+/**
+ * Deprecated migration
+ */
 return new class extends Migration
 {
     /**
@@ -11,18 +13,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->id('subjectid');
-            $table->string('subjectcode')->unique();
-            $table->string('subjectname');
-            $table->integer('subjectcredits');
-            $table->integer('subjectunitlec');
-            $table->integer('subjectunitlab');
-            $table->float('subjecthourslec');
-            $table->float('subjecthourslab');
+        // Schema::create('subjects', function (Blueprint $table) {
+        //     $table->id('subjectid');
+        //     $table->string('subjectcode')->unique();
+        //     $table->string('subjectname');
+        //     $table->integer('subjectcredits');
+        //     $table->integer('subjectunitlec');
+        //     $table->integer('subjectunitlab');
+        //     $table->float('subjecthourslec');
+        //     $table->float('subjecthourslab');
 
-            $table->timestamps();
-        });
+        //     $table->timestamps();
+        // });
     }
 
     /**

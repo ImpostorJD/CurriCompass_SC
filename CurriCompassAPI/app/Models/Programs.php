@@ -17,6 +17,6 @@ class Programs extends Model
     ];
 
     public function curriculum() {
-        return $this->hasOne(curriculum::class, 'programid', 'programid');
+        return $this->hasMany(Curriculum::class, 'programid', 'programid');
     }
 }

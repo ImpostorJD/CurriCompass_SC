@@ -40,8 +40,8 @@ class SchoolYearController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'sy_start' => ['required', 'date_format:Y/m/d'],
-            'sy_end' => ['required', 'date_format:Y/m/d'],
+            'sy_start' => ['required', 'integer'],
+            'sy_end' => ['required', 'integer'],
         ]);
 
         if($validator->fails()){
@@ -54,8 +54,8 @@ class SchoolYearController extends Controller
         // $existing = SchoolYear::where('sy_end', $request->sy_end)
         //     ->where('sy_start', $request->sy_start)
         //     ->first();
-        $existing = SchoolYear::whereYear('sy_end', '=', date('Y', strtotime($request->sy_end)))
-            ->whereYear('sy_start', '=', date('Y', strtotime($request->sy_start)))
+        $existing = SchoolYear::where('sy_end', $request->sy_end)
+            ->where('sy_start', $request->sy_start)
             ->first();
 
         if($existing){
@@ -76,8 +76,8 @@ class SchoolYearController extends Controller
     public function update(Request $request, String $id)
     {
         $validator = Validator::make($request->all(), [
-            'sy_start' => ['required', 'date_format:Y/m/d'],
-            'sy_end' => ['required', 'date_format:Y/m/d'],
+            'sy_start' => ['required', 'integer'],
+            'sy_end' => ['required', 'integer'],
         ]);
 
         if($validator->fails()){
@@ -90,8 +90,8 @@ class SchoolYearController extends Controller
         $currentRecord = SchoolYear::where('sy', $id)->first();
 
         if($currentRecord){
-            $existing = SchoolYear::whereYear('sy_end', '=', date('Y', strtotime($request->sy_end)))
-                ->whereYear('sy_start', '=', date('Y', strtotime($request->sy_start)))
+            $existing = SchoolYear::where('sy_end', '=', $request->sy_end)
+                ->where('sy_start', '=', $request->sy_start)
                 ->first();
 
             if($existing && $currentRecord->sy != $existing->sy){
@@ -120,7 +120,6 @@ class SchoolYearController extends Controller
         $currentRecord = SchoolYear::where('sy', $id)
             ->with('student_records')
             ->with('curriculum')
-            ->with('subjects_taken')
             ->with('semsy')
             ->first();
 
@@ -137,10 +136,7 @@ class SchoolYearController extends Controller
                 $deletable = false;
             }
 
-            if ($currentRecord->subjects_taken()->count() > 0) {
-                $messages['subjects_taken'] = "School year currently have subjects taken.";
-                $deletable = false;
-            }
+
             if ($currentRecord->semsy()->count() > 0) {
                 $messages['semsy'] = "School year currently have subjects taken.";
                 $deletable = false;

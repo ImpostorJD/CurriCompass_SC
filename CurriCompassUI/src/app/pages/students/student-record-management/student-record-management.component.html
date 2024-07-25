@@ -6,37 +6,37 @@
           <thead class="flex flex-col h-full justify-around w-[25%]">
             <tr class="w-full h-full">
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center flex-wrap">
-                Student No
+                Student No<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                First Name
+                First Name<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
                 Middle Name
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Last Name
+                Last Name<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Contact No.
+                Contact No.<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Email
+                Email<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Enrolled at:
+                Year of Admission<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Program
+                Program<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Specialization
+                Specialization<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Year Level
+                Year Level<span class="text-red-600">*</span>
               </th>
               <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Status
+                Status<span class="text-red-600">*</span>
               </th>
             </tr>
           </thead>
@@ -56,6 +56,8 @@
                         Student ID is required!
                       }@else if (studentProfileField.get('studentid')?.hasError('duplicate')){
                         Student ID is already in use!
+                      }@else if(studentProfileField.get('studentid')?.hasError('invalidId')){
+                        Student ID is in invalid format!
                       }
                     </div>
 
@@ -144,7 +146,10 @@
                         Email is required!
                       }@else if(studentProfileField.get('email')?.hasError('email')){
                         Email is in invalid format!
-                      }@else if(studentProfileField.get('email')?.hasError('duplicate')){
+                      } @else if(studentProfileField.get('email')?.hasError('emailDomain')){
+                        Email only accepts Baliuag University Email Address!
+                      }
+                      @else if(studentProfileField.get('email')?.hasError('duplicate')){
                         Email is already in use!
                       }
                     </div>
@@ -159,7 +164,7 @@
                   </option>
                   @for(sy of school_years; track $index){
                     <option [ngValue]="sy.sy">
-                      {{ dateformat.formatToYear(sy.sy_start)  + " - " + dateformat.formatToYear(sy.sy_end) }}
+                      {{ sy.sy_start  + " - " + sy.sy_end }}
                     </option>
                   }
                 </select>
@@ -168,7 +173,7 @@
                   <div class="w-0 h-0 opacity-0 group-focus/sy:opacity-100 group-hover/sy:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
                   </div>
                   <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/sy:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/sy:opacity-100">
-                    Enrolled at is required!
+                    Year of admission is required!
                   </div>
                 }
               </td>
@@ -195,7 +200,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[9.09%]">
+              <td class="border-slate-600 border h-[9.09%] relative">
                 <select class="w-full p-2 h-full border-[0px]" formControlName="specialization"
                 (change)="changeSpecialization()">
                   <option [ngValue]="null" disabled selected>
@@ -203,7 +208,7 @@
                   </option>
                   @for(c of specializations; track $index){
                     <option [ngValue]="c.specialization">
-                      {{ (c.specialization != null ? c.specialization : "None")  +  " (" + dateformat.formatToYear(c.school_year.sy_start)  + " - " + dateformat.formatToYear(c.school_year.sy_end) + ")"}}
+                      {{ (c.specialization != null ? c.specialization : "None")  +  " (" + c.school_year.sy_start  + " - " + c.school_year.sy_end + ")"}}
                     </option>
                   }
                 </select>
@@ -239,7 +244,10 @@
                 }
               </td>
               <td class="border-slate-600 border h-[9.09%] relative group/status">
-                <select class="w-full p-2 h-full group/status"
+                <span class="flex items-center w-full h-full p-2">
+                  {{studentProfileField.get('status')?.value }}
+                </span>
+                <!-- <select class="w-full p-2 h-full group/status"
                 [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('status')?.invalid }"
                 formControlName="status">
                   <option [value]="''" disabled selected>
@@ -257,7 +265,7 @@
                   <option value="Inactive">
                     Inactive
                   </option>
-                </select>
+                </select> -->
                 @if(studentProfileField.get('status')?.invalid) {
                   <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
                   <div class="w-0 h-0 opacity-0 group-focus/status:opacity-100 group-hover/status:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
@@ -279,7 +287,7 @@
                 Course Code
               </th>
               <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-                Units
+                Course Description
               </th>
               <th class="border border-slate-600 w-[10%] flex items-center justify-center">
                 Year Level
@@ -287,18 +295,14 @@
               <th class="border border-slate-600 w-[10%] flex items-center justify-center">
                 Semester
               </th>
+
               <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-                SY Taken
-              </th>
-              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-                Sem Taken
+                Prerequisites
               </th>
               <th class="border border-slate-600 w-[15%] flex items-center justify-center">
                 Grade
               </th>
-              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-                Remark
-              </th>
+
             </tr>
           </thead>
           <tbody class="h-[25rem] overflow-y-auto">
