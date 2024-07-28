@@ -5,15 +5,11 @@ FROM php:8.2-apache
 RUN apt-get update && \
     apt-get install -y \
     libzip-dev \
-    zip \
     libpq-dev \
-    libgd-dev \
-    git \
     && docker-php-ext-install pdo_pgsql zip gd
 
 # Set the Apache document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-ENV VIRTUAL_HOST_CONFIG=/etc/apache2/sites-available/api.curricompass.online.conf
 
 # Update Apache configuration files to use the new document root
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
@@ -37,7 +33,12 @@ ENV PATH="${PATH}:/usr/local/bin"
 # Install PHP dependencies using Composer
 RUN composer install --no-scripts --no-autoloader
 
-# Install specific PHP packages
-RUN composer require react/react phpoffice/phpspreadsheet maatwebsite/excel
+# Ensure proper permissions for storage and cache directories
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Ensure proper permissions for
+# Expose port 80 for Apache
+EXPOSE 80
+EXPOSE 443
+
+# Start Apache in the foreground
+CMD ["apache2-foreground"]
