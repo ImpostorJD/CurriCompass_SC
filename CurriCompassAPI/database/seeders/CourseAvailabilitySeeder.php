@@ -6,7 +6,6 @@ use App\Models\CourseAvailability;
 use App\Models\Curriculum;
 use App\Models\CurriculumSubjects;
 use App\Models\SemSy;
-use App\Models\Subjects;
 use Illuminate\Database\Seeder;
 
 class CourseAvailabilitySeeder extends Seeder
@@ -30,31 +29,31 @@ class CourseAvailabilitySeeder extends Seeder
         $semSy = SemSy::orderBy('semsyid', 'desc')->first();
 
         foreach ($curricula as $curriculum) {
+
             $curriculum_subjects = CurriculumSubjects::where('cid', $curriculum->cid)->get();
 
             foreach ($curriculum_subjects as $csubject) {
-                if ($csubject->semid == $semSy->semid){
+                if ($csubject->semid == $semSy->semid) {
 
-                    $subject = Subjects::where('subjectid', $csubject->subjectid)->first();
-                    $secLimit = $subject->subjecthourslab > $subject->subjecthourslec ? rand(26, 45) : 0;
+                    $secLimit = $csubject->hourslab > $csubject->hourslec ? 45 : 50;
 
                     // Initialize an array to keep track of used combinations for this subject
                     $usedCombinations = [];
 
-                    $time_range = $subject->subjecthourslab > $subject->subjecthourslec ? $this->time_range_lab : $this->time_range_lec;
+                    $time_range = $csubject->hourslab > $csubject->hourslec ? $this->time_range_lab : $this->time_range_lec;
 
                     // Counter for time slots and day pairings
                     $timeCounter = 0;
                     $dayPairingCounter = 0;
 
                     // Systematically iterate over time slots and day pairings
-                    for ($i = 0; $i < count($time_range) * count($this->days_pairing); $i++) {
+                    while ($timeCounter < count($time_range) && $dayPairingCounter < count($this->days_pairing)) {
                         $timeSlot = $time_range[$timeCounter];
                         $daysPairing = $this->days_pairing[$dayPairingCounter];
                         $combinationKey = $daysPairing . '-' . $timeSlot;
 
                         // Check if this specific availability already exists
-                        $existingCourseAvailability = CourseAvailability::where('subjectid', $subject->subjectid)
+                        $existingCourseAvailability = CourseAvailability::where('coursecode', $csubject->coursecode)
                             ->where('days', $daysPairing)
                             ->where('time', $timeSlot)
                             ->first();
@@ -63,12 +62,13 @@ class CourseAvailabilitySeeder extends Seeder
                         if (!in_array($combinationKey, $usedCombinations) && $existingCourseAvailability === null) {
                             // Create new CourseAvailability entry
                             CourseAvailability::create([
-                                'subjectid' => $subject->subjectid,
+                                'coursecode' => $csubject->coursecode,
                                 'time' => $timeSlot,
                                 'semsyid' => $semSy->semsyid,
-                                'section' => "CITE - " . $csubject->year_level_id . "-year",
+                                'section' => "CITE - " . $csubject->year_level_id,
                                 'section_limit' => $secLimit,
-                                'days' => $daysPairing
+                                'days' => $daysPairing,
+                                'lab' => $csubject->hourslab > $csubject->hourslec,
                             ]);
 
                             // Mark this combination as used for this subject
@@ -76,51 +76,14 @@ class CourseAvailabilitySeeder extends Seeder
                         }
 
                         // Update counters for the next iteration
-                        $timeCounter = ($timeCounter + 1) % count($time_range);
-                        if ($timeCounter === 0) {
-                            $dayPairingCounter = ($dayPairingCounter + 1) % count($this->days_pairing);
+                        $timeCounter++;
+                        if ($timeCounter >= count($time_range)) {
+                            $timeCounter = 0;
+                            $dayPairingCounter++;
                         }
                     }
                 }
             }
-
-        // $semSy = SemSy::orderBy('semsyid', 'desc')->first();
-
-        // foreach ($curricula as $curriculum){
-        //     $curriculum_subjects = CurriculumSubjects::where('cid', $curriculum->cid)
-        //         ->get();
-
-        //     $numOfSec = rand(1, 2);
-        //     foreach($curriculum_subjects as $csubject){
-        //         $subject = Subjects::where('subjectid', $csubject->subjectid)->first();
-        //         $secLimit = $subject->subjecthourslab > $subject->subjecthourslec ? rand(26, 45) : 0;
-        //         for($i = 0; $i < $numOfSec; $i++){
-        //             $daysPairing = $this->days_pairing[rand(0, count($this->days_pairing) - 1)];
-        //             $timeSlot = $subject->subjecthourslab > $subject->subjecthourslec ? $this->time_range_lab[rand(0, count($this->time_range_lab) - 1)] : $this->time_range_lec[rand(0, count($this->time_range_lec) - 1)];
-
-        //             $existingCourseAvailability = CourseAvailability::where('subjectid', $subject->subjectid)
-        //                 ->where('days', $daysPairing)
-        //                 ->where('time', $timeSlot)
-        //                 ->first();
-
-        //             if($existingCourseAvailability == null) {
-        //                 CourseAvailability::create([
-        //                     'subjectid' => $subject->subjectid,
-        //                     'time' => $timeSlot,
-        //                     'semsyid' => $semSy->semsyid,
-        //                     'section' => "CITE" . ($i + 1),
-        //                     'section_limit' => $secLimit,
-        //                     'days' => $daysPairing
-        //                 ]);
-        //             }
-        //         }
-        //         // if ($csubject->semid == $semSy->semid){
-
-        //         // }
-
-        //     }
-
-        // }
+        }
     }
-}
 }

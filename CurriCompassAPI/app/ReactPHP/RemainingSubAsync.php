@@ -8,7 +8,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 class RemainingSubAsync {
     public static function getRemainingSubCount($courses, $targetStudent){
-        $subCount = CurriculumSubjects::whereIn('subjectid', $courses)
+        $subCount = CurriculumSubjects::whereIn('coursecode', $courses)
             ->where('cid', $targetStudent->cid)->count();
 
         return $subCount;

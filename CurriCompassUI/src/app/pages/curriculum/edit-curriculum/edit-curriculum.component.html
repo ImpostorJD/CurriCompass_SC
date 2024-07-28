@@ -1,4 +1,4 @@
-<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto" [formGroup]="curriculum">
+<form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative"  [formGroup]="curriculum">
   <h1 class="font-bold font-sans text-2xl uppercase">Edit Curriculum</h1>
   <div class="flex lg:flex-row gap-2 flex-col bg-white mx-2">
     <div class="border-slate-400 border-1 w-full p-5 border-[1px] rounded-sm shadow-lg">
@@ -71,140 +71,142 @@
     <span class="me-2 font-bold">Total Units: </span>
     <span>{{ totalUnits() }}</span>
   </div>
-  <div class="border-slate-400 border-[1px] p-1 rounded-md mx-2 min-h-[60vh] bg-white overflow-y-auto">
-    @for(c of csubjectsFormArray.controls; track $index){
-      <table class="table-auto w-full border-collapse border border-slate-300">
-        <thead  class="h-[3rem]">
-          <tr class="flex flex-row p-2 w-full border-b-[1px] border-slate-300 relative">
-            <th class="flex justify-center w-full">
-             LEVEL {{
-              c.get('level')?.value  == 1 ? 'I' :
-              (c.get('level')?.value  == 2 ? 'II':
-              (c.get('level')?.value  == 3 ? 'III':
-               'IV'))
-              }}
-            </th>
-            <div class="absolute top-0 right-0 flex flex-row gap-2">
-              <button class="flex justify-center items-center gap-1 border-green-600 rounded-md border-[1px] p-2 text-green-500 hover:bg-green-600 hover:text-white transition-all"
-              (click)="enableModalAndSetEditable($index)">
-                <i class="material-symbols-outlined">edit</i>
-              </button>
-              <button class="flex justify-center items-center gap-1 border-red-600 rounded-md border-[1px] p-2 text-red-500 hover:bg-red-600 hover:text-white transition-all" (click)="popCsubjectsArray($index)">
-                <i class="material-symbols-outlined">delete</i>
-              </button>
-            </div>
-          </tr>
-          <tr class="flex flex-row py-2 w-full border-b-[1px] border-slate-300">
-            <th class="flex justify-center w-full">
-               {{
-                  c.get('semester')?.value  == 1 ? '1ST' :
-                (c.get('semester')?.value  == 2 ? '2ND':
-                '3RD')
-              }} TRIMESTER
-            </th>
-          </tr>
-          <tr class="flex flex-row border-b-[1px] border-slate-300">
-            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
-              Course Code
-            </th>
-            <th class="w-[40%] border-slate-300 border-[1px] flex items-center justify-center">
-              Course Title
-            </th>
-            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
-              Units
-            </th>
-            <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
-              <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Units</span>
-              <div class="flex flex-row w-full">
-                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
-                  Lec
-                </span>
-                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
-                  Lab
-                </span>
+  @if(!loading.loading){
+    <div class="border-slate-400 border-[1px] p-1 rounded-md mx-2 min-h-[50vh] bg-white overflow-y-auto">
+      @for(c of csubjectsFormArray.controls; track $index){
+        <table class="table-auto w-full border-collapse border border-slate-300">
+          <thead  class="h-[3rem]">
+            <tr class="flex flex-row p-2 w-full border-b-[1px] border-slate-300 relative">
+              <th class="flex justify-center w-full">
+               LEVEL {{
+                c.get('level')?.value  == 1 ? 'I' :
+                (c.get('level')?.value  == 2 ? 'II':
+                (c.get('level')?.value  == 3 ? 'III':
+                 'IV'))
+                }}
+              </th>
+              <div class="absolute top-0 right-0 flex flex-row gap-2">
+                <button class="flex justify-center items-center gap-1 border-green-600 rounded-md border-[1px] p-2 text-green-500 hover:bg-green-600 hover:text-white transition-all"
+                (click)="enableModalAndSetEditable($index)">
+                  <i class="material-symbols-outlined">edit</i>
+                </button>
+                <button class="flex justify-center items-center gap-1 border-red-600 rounded-md border-[1px] p-2 text-red-500 hover:bg-red-600 hover:text-white transition-all" (click)="popCsubjectsArray($index)">
+                  <i class="material-symbols-outlined">delete</i>
+                </button>
               </div>
-            </th>
-            <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
-              <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Hours</span>
-              <div class="flex flex-row w-full">
-                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
-                  Lec
-                </span>
-                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
-                  Lab
-                </span>
-              </div>
-            </th>
-            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
-              Prerequisite/s
-            </th>
-          </tr>
-        </thead>
-        <tbody class="flex flex-col w-full">
-          @for(s of getsubjectsFormArray($index).controls; let i = $index; track i){
+            </tr>
+            <tr class="flex flex-row py-2 w-full border-b-[1px] border-slate-300">
+              <th class="flex justify-center w-full">
+                 {{
+                    c.get('semester')?.value  == 1 ? '1ST' :
+                  (c.get('semester')?.value  == 2 ? '2ND':
+                  '3RD')
+                }} TRIMESTER
+              </th>
+            </tr>
             <tr class="flex flex-row border-b-[1px] border-slate-300">
+              <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                Course Code
+              </th>
+              <th class="w-[40%] border-slate-300 border-[1px] flex items-center justify-center">
+                Course Title
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                Units
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Units</span>
+                <div class="flex flex-row w-full">
+                  <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                    Lec
+                  </span>
+                  <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                    Lab
+                  </span>
+                </div>
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Hours</span>
+                <div class="flex flex-row w-full">
+                  <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                    Lec
+                  </span>
+                  <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                    Lab
+                  </span>
+                </div>
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                Prerequisite/s
+              </th>
+            </tr>
+          </thead>
+          <tbody class="flex flex-col w-full">
+            @for(s of getsubjectsFormArray($index).controls; let i = $index; track i){
+              <tr class="flex flex-row border-b-[1px] border-slate-300">
+                <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                  {{ s.get('coursecode')!.value }}
+                </td>
+                <td class="w-[40%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                  {{ s.get('coursedescription')!.value }}
+                </td>
+                <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                  {{ s.get('units')!.value }}
+                </td>
+                <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                  {{ s.get('unitslec')!.value }}
+                </td>
+                <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                  {{ s.get('unitslab')!.value }}
+                </td>
+                <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                  {{ s.get('hourslec')!.value }}
+                </td>
+                <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                  {{ s.get('hourslab')!.value }}
+                </td>
+                <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                  {{ !s.get('prerequisites')?.value ? "None" : s.get('prerequisites')?.value }}
+                </td>
+              </tr>
+            }
+
+          </tbody>
+          <tfoot class="flex flex-col w-full">
+            <tr class="flex flex-row border-b-[1px] border-slate-300 w-full">
               <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
-                {{ s.get('coursecode')!.value }}
               </td>
-              <td class="w-[40%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
-                {{ s.get('coursedescription')!.value }}
-              </td>
-              <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
-                {{ s.get('units')!.value }}
-              </td>
-              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
-                {{ s.get('unitslec')!.value }}
-              </td>
-              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
-                {{ s.get('unitslab')!.value }}
-              </td>
-              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
-                {{ s.get('hourslec')!.value }}
-              </td>
-              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
-                {{ s.get('hourslab')!.value }}
+              <td class="w-[40%] p-2 border-slate-300 border-[1px] flex items-center justify-center font-bold">
+                Total
               </td>
               <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
-                {{ !s.get('prerequisites')?.value ? "None" : s.get('prerequisites')?.value }}
+                {{ totalSum($index, 'units') }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ totalSum($index, 'unitslec') }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ totalSum($index, 'unitslab') }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ totalSum($index, 'hourslec') }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ totalSum($index, 'hourslab') }}
+              </td>
+              <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
               </td>
             </tr>
-          }
+            <tr class="flex w-full min-h-[1.23rem] bg-slate-200">
+              <td class="w-full bg-slate-200 border-[1px] flex items-center justify-center">
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      }
 
-        </tbody>
-        <tfoot class="flex flex-col w-full">
-          <tr class="flex flex-row border-b-[1px] border-slate-300 w-full">
-            <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
-            </td>
-            <td class="w-[40%] p-2 border-slate-300 border-[1px] flex items-center justify-center font-bold">
-              Total
-            </td>
-            <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
-              {{ totalSum($index, 'units') }}
-            </td>
-            <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
-              {{ totalSum($index, 'unitslec') }}
-            </td>
-            <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
-              {{ totalSum($index, 'unitslab') }}
-            </td>
-            <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
-              {{ totalSum($index, 'hourslec') }}
-            </td>
-            <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
-              {{ totalSum($index, 'hourslab') }}
-            </td>
-            <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
-            </td>
-          </tr>
-          <tr class="flex w-full min-h-[1.23rem] bg-slate-200">
-            <td class="w-full bg-slate-200 border-[1px] flex items-center justify-center">
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    }
-
-  </div>
+    </div>
+  }
   <div class="flex flex-row justify-center gap-2 py-2 mx-2">
     <a
       class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase"
@@ -225,6 +227,10 @@
       </span>
     </button>
   </div>
+  @if(loading.loading){
+    <app-loading-component></app-loading-component>
+  }
+
 </form>
 @if(selectedTable != null){
   <app-curriculum-course-table [selection]="csubjectsFormArray" [selectedForm]="selectedTable" (collapseModal)="selectedTable = null" (setCurriculumSubject)="setCurriculumSubject($event)"></app-curriculum-course-table>
@@ -256,6 +262,3 @@
   </div>
 }
 
-@if(loading.loading){
-  <app-loading-component></app-loading-component>
-}

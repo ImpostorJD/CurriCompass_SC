@@ -46,12 +46,12 @@ export class StudentConsultationComponent {
 
   private routeId = "";
   disableEnlistment = false;
-  courses: any = null;
+  courses: any = null; //course availability
+  courseSelection:any = [];
   selectedCourses: Array<any> = [];
   studentSelected:any = null;
   currentSemSy: any = null;
   currentUnits = 0;
-  searchCourses = "";
   subjectNotTaken = 0;
   enlistedSlot:any = {};
   showError = false;
@@ -73,30 +73,15 @@ export class StudentConsultationComponent {
     return this.userEnlistment.get('subjects') as FormArray;
   }
 
-  enlistmentGradeSelection = [
-    null,
-    1.00,
-    1.25,
-    1.50,
-    1.75,
-    2.00,
-    2.25,
-    2.50,
-    2.75,
-    3.00,
-    5.00,
-    "x",
-    "w",
-  ];
-
   popReqCourseArray(index : number){
     this.selectedCourses.splice(index, 1)[0];
     let courseavailabilityselected = this.getReqCourseControl(index).value;
 
-    let selected = this.courses.find((c:any) => c?.caid == courseavailabilityselected);
+    let selected = this.studentSelected.student_record.curriculum.curriculum_subjects.find((c:any) => c.coursecode == courseavailabilityselected);
+
     if(selected){
-      delete this.enlistedSlot[selected.caid];
-      this.currentUnits -= selected.subjects.subjectcredits;
+      delete this.enlistedSlot[selected.coursecode];
+      this.currentUnits -= parseInt(selected.units);
     }
 
     this.fac.popControl(this.reqCourseArray, index);
@@ -104,16 +89,28 @@ export class StudentConsultationComponent {
 
   addReqCourseArray() {
     const csubject = this.fb.group({
-      'caid' : new FormControl(null, [Validators.required]),
-      'subjectid' : new FormControl(null, [Validators.required]),
-      'grade' : new FormControl(null),
+      'coursecode' : new FormControl(null, [Validators.required]),
+      'time' : new FormControl(null, [Validators.required]),
+      'day' : new FormControl(null, [Validators.required]),
     });
     this.fac.addControl(this.reqCourseArray, csubject);
   }
 
   getReqCourseControl(index: number): FormControl{
-    return this.fac.getFormControl(index, this.reqCourseArray, "caid");
+    return this.fac.getFormControl(index, this.reqCourseArray, "coursecode");
   }
+
+
+  getReqCourseTimeControl(index: number): FormControl{
+    return this.fac.getFormControl(index, this.reqCourseArray, "time");
+  }
+
+
+  getReqCourseDayControl(index: number): FormControl{
+    return this.fac.getFormControl(index, this.reqCourseArray, "day");
+  }
+
+
 
   getReqCourseGradeControl(index: number): FormControl{
     return this.fac.getFormControl(index, this.reqCourseArray, "grade");
@@ -122,56 +119,67 @@ export class StudentConsultationComponent {
   courseSelected(index: number) {
 
     const courseid = this.getReqCourseControl(index).value;
-    this.selectedCourses[index] = parseInt(courseid);
-    let subjectselected:any = this.getSubject(courseid);
+    this.selectedCourses[index] = courseid;
     //reset value
     this.enlistedSlot = {};
-
+    this.getReqCourseDayControl(index).patchValue(null);
+    this.getReqCourseTimeControl(index).patchValue(null);
     this.currentUnits = 0;
     for(const c of this.selectedCourses) {
-      this.currentUnits += this.getSubject(c).subjects.subjectcredits;
+      this.currentUnits += parseInt(this.getSubject(c).units);
     }
 
-    //filter out same subjects
-    this.selectedCourses[index] = parseInt(subjectselected.subjects.subjectid);
-    this.reqCourseArray.controls.forEach((e) => {
-      const subjectsEnlisted = e.get('caid')?.value;
-      let subjectselected:any = this.getSubject(subjectsEnlisted);
-      this.enlistedSlot[courseid] = [subjectselected.time, subjectselected.days];
-
-    })
+    this.reqCourseArray.controls.forEach(e => {
+      if(e.get('time')?.value){
+        this.enlistedSlot[e.get('coursecode')?.value] = [e.get('time')?.value, e.get('day')?.value];
+      }
+    });
   }
 
-  isCourseSelected(courseid: number): boolean {
-    const course:any = this.selectedCourses.find((c:number) =>  c === courseid);
+  isCourseSelected(courseid: string): boolean {
+    const course:any = this.selectedCourses.find((c:string) =>  c === courseid);
+
     return (course != null && typeof course != "undefined");
   }
 
-  getSelectedCourse(i: number | string) {
-    if (typeof i == "string"){
-      i = parseInt(i);
-    }
-    let selected = this.courses.find((c:any) => c?.subjects?.subjectid === i);
-    return selected;
-  }
-
   isSelectedCourseFiltered(index: number): boolean {
-    const selectedCourseId = parseInt(this.getSelectedCourse(this.getSubject(this.getReqCourseControl(index).value).subjects.subjectid).subjectid);
-    if (typeof selectedCourseId != "number") {
-      return false;
-    }
-    const filteredCourses = this.coursePipe.transform(this.courses, this.searchCourse);
-    return typeof filteredCourses.find(course => course.subjectid === selectedCourseId) == "undefined" ? false: true;
+
+    const filteredCourses = this.coursePipe.transform(this.courseSelection, this.searchCourse);
+    return typeof filteredCourses.find(course => course === this.getReqCourseControl(index).value) == "undefined" ? false: true;
 
   }
 
-  enableSubjectControl(index: number) {
-    this.getReqCourseControl(index)?.enable({ emitEvent: false });
-
+  getTimeSelection(coursecode: string, day: string){
+    return Array.from(new Set(this.courses
+      .filter((item:any) => item.coursecode === coursecode && item.days === day)
+      .map((item:any) => item.time)));
   }
 
-  disableSubjectControl(index: number) {
-    this.getReqCourseControl(index)?.disable({ emitEvent: false });
+  getDaySelection(coursecode: string){
+    return Array.from(new Set(this.courses
+      .filter((item:any) => item.coursecode === coursecode)
+      .map((item:any) => item.days)));
+  }
+
+  getSectionDisplay(index: number){
+    const course = this.courses.find((e:any) => e.coursecode === this.reqCourseArray.at(index).get('coursecode')?.value &&
+    e.time === this.reqCourseArray.at(index).get('time')?.value &&
+    e.days === this.reqCourseArray.at(index).get('day')?.value);
+
+    if(!course) return "Not yet set";
+
+    return course.section;
+  }
+
+  resetTimeControl(index: number){
+    this.getReqCourseTimeControl(index).patchValue(null);
+  }
+
+  getUnits(index: number){
+    const course = this.studentSelected.student_record.curriculum.curriculum_subjects.find((e:any) => e.coursecode === this.reqCourseArray.at(index).get('coursecode')?.value);
+    if(!course) return 0;
+
+    return course.units;
   }
 
   generateEnlistment(){
@@ -193,7 +201,6 @@ export class StudentConsultationComponent {
       });
   }
 
-
   resetError(){
     this.showError = false;
     this.message = "";
@@ -211,30 +218,19 @@ export class StudentConsultationComponent {
       },
       error: (err:any) => {
         console.log(err);
-        this.loading.endLoading();
-      }
+      },
+      complete: () => this.loading.endLoading(),
     });
   }
 
-  getSubject(caid:number){
-    let course = this.courses.find((s:any) => s.caid === caid);
+  getSubject(coursecode:string){
+    let course = this.studentSelected.student_record.curriculum.curriculum_subjects.find((s:any) => s.coursecode === coursecode);
     if(course){
       return course;
     }
     return null;
   }
 
-  getSubjectTakenGrade(subjectid: number) {
-    let course = this.studentSelected.student_record.subjects_taken.find((s:any) => s.subjectid === subjectid);
-    if(course){
-      if(course.grade != null){
-        return parseFloat(course.grade);
-      }
-
-      return course.remark == "Withdrawn" ? "w" : "x";
-    }
-    return null;
-  }
 
   setEnlistment(){
 
@@ -247,34 +243,27 @@ export class StudentConsultationComponent {
     this.userEnlistment.get('enlistmentId')?.patchValue(this.studentSelected.student_record.enlistment[0].peid);
     this.studentSelected.student_record.enlistment[0].enlistment_subjects.forEach((data:any, i: number) => {
 
-      let subjectselected:any = this.getSubject(data.caid);
-      let subjectTaken:any = this.getSubjectTakenGrade(subjectselected.subjectid);
-
+      let subjectselected:any = this.getSubject(data.course_availability.coursecode);
+      this.selectedCourses.push(subjectselected.coursecode);
       const csubject = this.fb.group({
-        'caid' : new FormControl(data.caid, [Validators.required]),
-        'subjectid' : new FormControl(subjectselected.subjects.subjectid, [Validators.required]),
-        'grade' : new FormControl(subjectTaken),
+        'coursecode' : new FormControl(data.course_availability.coursecode, [Validators.required]),
+        'day' : new FormControl(data.course_availability.days, [Validators.required]),
+        'time' : new FormControl(data.course_availability.time, [Validators.required]),
       });
 
-      if(csubject.get('grade')?.value != null){
-        csubject.get('caid')?.disable({ emitEvent: false })
-      }
-      this.currentUnits += subjectselected.subjects.subjectcredits;
-      this.selectedCourses[i] = parseInt(subjectselected.subjects.subjectid);
-      this.enlistedSlot[data.caid] = [data.course_availability.time, data.course_availability.days];
+      this.currentUnits += parseInt(subjectselected.units);
+
+      this.enlistedSlot[data.course_availability.coursecode] = [data.course_availability.time, data.course_availability.days];
       this.fac.addControl(this.reqCourseArray, csubject);
     });
+
     this.loading.endLoading();
   }
 
-  checkSubjectOverlap(caid: string) {
-    let course = this.courses.find((c:any) => c.caid == caid);
+  checkSubjectOverlap(index: number, time:any) {
     let subjectOverlap = false;
-
-    if(!course) return false;
-
-    for (const [key, values] of Object.entries(this.enlistedSlot)) {
-      subjectOverlap = this.isDayTimeOverlap(values, [course.time, course.days]);
+    for (const [_, values] of Object.entries(this.enlistedSlot)) {
+      subjectOverlap = this.isDayTimeOverlap(values, [time, this.reqCourseArray.at(index).get('day')?.value]);
       if(subjectOverlap) break;
     }
 
@@ -295,9 +284,14 @@ export class StudentConsultationComponent {
     return keys;
   }
 
+  addEnlistedSlot(index:number){
+    this.enlistedSlot[this.reqCourseArray.at(index).get('coursecode')?.value] = [this.reqCourseArray.at(index).get('time')?.value, this.reqCourseArray.at(index).get('day')?.value];
+  }
 
   private isDayTimeOverlap(enlistedTimeDay: any, timeDay:any) {
+
       let checkOverlap = this.getTimeKeysForValue(enlistedTimeDay[0]);
+
       let timeOverlap = false;
       timeOverlap = checkOverlap.some(t => this.time_range[t].includes(timeDay[0]));
 
@@ -316,9 +310,6 @@ export class StudentConsultationComponent {
       return;
     }
 
-    this.reqCourseArray.controls.forEach((element : any) => {
-      element.get('caid').enable({enable: false});
-    });
     this.req.patchResource('enlistment/' + this.routeId,
       this.userEnlistment.value,
       httpOptions(this.auth.getCookie('user'))
@@ -334,14 +325,6 @@ export class StudentConsultationComponent {
 
   }
 
-  handleEnlistment(index:number){
-    if(this.getReqCourseGradeControl(index)?.value != null){
-      this.disableSubjectControl(index);
-    }else{
-      this.enableSubjectControl(index);
-    }
-  }
-
   ngOnInit(){
 
     this.loading.initLoading();
@@ -352,9 +335,12 @@ export class StudentConsultationComponent {
         .subscribe({
           next: (data: any) => {
             this.courses = data[1];
+            this.courseSelection = Array.from(new Set(this.courses.map((item:any) => item.coursecode)));
+
             this.getUser()
           },
-          error: console.error
+          error: console.error,
+          complete: () => this.loading.endLoading()
         })
     });
 

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpReqHandlerService } from '../../../services/http-req-handler.service';
 import { RemoveInputErrorService } from '../../../services/remove-input-error.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -22,6 +22,7 @@ import { emailDomainValidator } from '../../../services/validators/domain-valida
     ReactiveFormsModule,
     RouterLink,
     LoadingComponentComponent,
+    FormsModule
   ],
   providers: [
     RemoveInputErrorService,
@@ -51,7 +52,7 @@ export class StudentRecordManagementComponent {
 
   school_years: any = null;
   curricula:any = null;
-  curriculumSubjects:any = null;
+  curriculumSubjects:any = [];
   subjectTaken: any = null;
   year_levels: any = null;
   gradeEditable: boolean = false;
@@ -64,10 +65,7 @@ export class StudentRecordManagementComponent {
     "sy": new FormControl(null, [Validators.required]),
     "contact_no" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
     "email" : new FormControl('', [Validators.required, Validators.email, emailDomainValidator()]),
-    "program" : new FormControl('', [Validators.required]),
-    "specialization" : new FormControl(null, [Validators.required]),
-    "year_level_id" : new FormControl(null, [Validators.required]),
-     "status" : new FormControl(null, [Validators.required]),
+    "curriculum" : new FormControl('', [Validators.required]),
     "subjects_taken" : this.fb.array([]),
   });
 
@@ -75,161 +73,42 @@ export class StudentRecordManagementComponent {
     return this.studentProfileField.get('subjects_taken') as FormArray;
   }
 
-  addSubjectsTaken(element: any){
-    const subject_taken = this.studentProfile.student_record.subjects_taken;
-    let subject = subject_taken.length > 0 ?
-      subject_taken.find((s:any) => s.subjectid === element.subjectid) : null;
-    let taken_at = null;
-    let remark = null;
-    let sy = null;
-    let grade = null;
-
-    if(subject != null && typeof subject != "undefined"){
-      taken_at = subject.taken_at;
-      remark = subject.remark;
-      sy = subject.sy;
-      grade = parseFloat(subject.grade);
-    }
-
-    const subjectField = this.fb.group({
-      "subjectid": new FormControl(element.subjectid),
-      "taken_at": new FormControl(taken_at),
-      "remark": new FormControl(remark),
-      "sy": new FormControl(sy),
-      "grade": new FormControl(grade),
-    },  { validators: [allOrNoneValidator(['taken_at', 'sy'], 'subjectid')] });
-
-    if(!this.gradeEditable){
-      subjectField.get('grade')?.disable({ emitEvent: false })
-      subjectField.get('remark')?.disable({ emitEvent: false })
-    }
-    this.fac.addControl(this.subjectsTakenArray, subjectField);
+  getSubjectTakenValue(coursecode: string) {
+    const value = this.subjectTaken.find((s:any) => s.coursecode == coursecode);
+    return value ? value.grade : '';
   }
 
-  popSubjectsTaken(index: number){
-    this.fac.popControl(this.subjectsTakenArray, index);
-  }
+  handleGradeControl(coursecode: string, event:any) {
 
-  clearAllSubjectsTaken(){
-    this.fac.clearControls(this.subjectsTakenArray);
-  }
+    let value = event.target.value;
 
-  getRemarkControl(index: number): FormControl{
-    return this.fac.getFormControl(index, this.subjectsTakenArray, 'remark');
-  }
-
-  getGradeControl(index: number): FormControl{
-    return this.fac.getFormControl(index, this.subjectsTakenArray, 'grade');
-  }
-
-  getTakenAtControl(index: number): FormControl{
-    return this.fac.getFormControl(index, this.subjectsTakenArray, 'taken_at');
-  }
-
-  getSchoolYearControl(index: number): FormControl {
-    return this.fac.getFormControl(index, this.subjectsTakenArray, 'sy');
-  }
-
-  getGradeOfSubject(subjectid: number) {
-    return this.curriculumSubjects.find((s:any) => s.subjectid === subjectid).grade;
-  }
-
-  getRemarkOfSubject(subjectid: number) {
-    return this.curriculumSubjects.find((s:any) => s.subjectid === subjectid).remark;
-  }
-
-  changeGradeRemark(index: number){
-
-    if (this.getGradeControl(index).invalid) return;
-
-    const grade = this.getGradeControl(index).value;
-    let remark = grade == 1 ? "Excellent" :
-    (grade == 1.25 || grade == 1.50 ? "Very Good" :
-    (grade == 1.75 || grade == 2 || grade == 2.25 ? "Good" :
-    (grade == 2.5 ? "Fair" :
-    (grade == 2.75 || grade == 3 ? "Passing" : "Failed"))));
-
-    this.getRemarkControl(index).patchValue(remark);
-  }
-
-  getCurriculumSubjects(id: number){
-    this.clearAllSubjectsTaken();
-    this.req.getResource('curriculum/' + id, httpOptions(this.auth.getCookie('user'))).subscribe({
-      next: (res: any) => {
-        this.curriculumSubjects = res[1].curriculum_subjects
-        .sort((a: any, b: any) =>  sortSemester(a.semesters.semdesc, b.semesters.semdesc))
-        .sort((a: any, b: any) => yearLevel(a.year_level.year_level_desc, b.year_level.year_level_desc));
-        this.curriculumSubjects.forEach((element:any) => {
-          this.addSubjectsTaken(element);
-        });
-        this.loading.endLoading();
-      },
-      error: (err: any) => console.error(err),
-    });
-  }
-
-  setSpecializationsEvent(event: any){
-    this.curriculumSubjects = null;
-    this.setSpecializations(parseInt(event.target.value));
-    this.changeSpecialization();
-  }
-
-  changeSpecialization() {
-    const specialization = this!.studentProfileField!.get('specialization')!.value != "null" ?
-    this.studentProfileField.get('specialization')?.value
-      : null;
-    const programid = parseInt(this!.studentProfileField!.get('program')!.value!);
-    try{
-      this.getCurriculumSubjects(
-        this.curricula.find((e:any) => e.specialization === specialization && e.programid === programid)!.cid
-      );
-
-    }catch(err){
-    }
-  }
-
-  setSpecializations(programid: number){
-    this.specializations = this.curricula
-      .filter((e:any) => e.program.programid === programid)
-      .sort((a:any, b:any) => {
-        if (a.specialization === null) {
-          return -1;
-        } else if (b.specialization === null) {
-          return 1;
+    let subjectFound = false;
+    this.subjectsTakenArray.controls.forEach((control, index) => {
+      if(control.get('coursecode')?.value == coursecode){
+        subjectFound = true;
+        if(value != '') {
+          control.get('grade')?.patchValue(value);
+        }else{
+          this.subjectsTakenArray.removeAt(index);
         }
-        return a.specialization.localeCompare(b.specialization);
-      });
-      this!.studentProfileField!.get('specialization')!.patchValue(null);
-  }
+      }
 
-  enableGradeAndRemarkControls() {
-    this.subjectsTakenArray.controls.forEach((control) => {
-      control.get('grade')?.enable({ emitEvent: false });
-      control.get('remark')?.enable({ emitEvent: false });
     });
-  }
 
-  disableGradeAndRemarkControls() {
-    if (!this.gradeEditable) {
-      this.subjectsTakenArray.controls.forEach((control) => {
-        control.get('grade')?.disable({ emitEvent: false });
-        control.get('remark')?.disable({ emitEvent: false });
+    if(subjectFound) return;
+
+    if(value != "None") {
+      const subjectField = this.fb.group({
+        "coursecode": new FormControl(coursecode),
+        "grade": new FormControl(value),
       });
+
+      this.fac.addControl(this.subjectsTakenArray, subjectField);
     }
   }
 
-  patchGradeAndRemarkValues() {
-    this.subjectsTakenArray.controls.forEach((control) => {
-      const gradeControl = control.get('grade');
-      const remarkControl = control.get('remark');
 
-      // Patch values directly if controls are disabled
-      control.patchValue({
-        grade: gradeControl?.value,
-        remark: remarkControl?.value
-      }, { emitEvent: false });
-    });
-  }
+  grades = ['1', '1.25', '1.5', '1.75', '2', '2.25', '2.5', '2.75', '3', '5', 'x', 'w'];
 
   handleSubmit(){
 
@@ -238,27 +117,14 @@ export class StudentRecordManagementComponent {
       return;
     }
 
-    this.enableGradeAndRemarkControls();
+    // this.enableGradeAndRemarkControls();
 
     let data = this.studentProfileField.value;
+    data.subjects_taken = data.subjects_taken?.filter((e:any) => e.grade != '');
 
-    // let remarkFilled = true;
-
-    // data.subjects_taken!.forEach((e:any, index: number) => {
-    //   if(e.taken_at != null && e.remark == null) {
-    //     this.getRemarkControl(index).setErrors({"required": true});
-    //     remarkFilled = false;
-    //   }
-    // });
-
-    // console.log(remarkFilled);
-    // if (!remarkFilled) return;
-    // this.patchGradeAndRemarkValues();
-    data.subjects_taken = data.subjects_taken!.filter((e:any) => e.taken_at !== null)!;
     this.req.patchResource('student-records/' + this.studentProfile.userid, data, httpOptions(this.auth.getCookie('user')))
       .subscribe({
         next: () => {
-          this.disableGradeAndRemarkControls();
           this.router.navigateByUrl('/students');
         },
 
@@ -275,7 +141,57 @@ export class StudentRecordManagementComponent {
       });
   }
 
+  changeCurriculum(){
+    this.loading.initLoading();
+    this.req.getResource('curriculum/' + this.studentProfileField.get('curriculum')?.value , httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (res: any) => {
+        this.curriculumSubjects = [];
+        const csub = res[1];
+
+        csub.curriculum_subjects.forEach((e: any) => {
+          const table:any = this.curriculumSubjects.find((a:any) => a.semester == e.semid && a.year == e.year_level_id)
+
+          if(table){
+            table['subjects'].push(e);
+          }else{
+            const table:any = {"year" : e.year_level_id, "semester" : e.semid, "subjects" : []}
+            table['subjects'].push(e);
+            this.curriculumSubjects.push(table);
+          }
+
+          this.curriculumSubjects.sort((a:any, b:any) => {
+            const aLevel = a.year;
+            const bLevel = b.year;
+            const aSemester = a.semester;
+            const bSemester = b.semester;
+
+            if (aLevel === bLevel) {
+              return aSemester - bSemester;
+            }
+            return aLevel - bLevel;
+          });
+
+        });
+
+      },
+      error: (err: any) => console.error(err),
+      complete: () => this.loading.endLoading(),
+    });
+  }
+
+  totalSum(index:number, controlname:string){
+    let total = 0;
+
+    this.curriculumSubjects[index]['subjects'].forEach((c:any) => {
+      const value = parseFloat(c[controlname]);
+      total+= value;
+    });
+
+    return Math.round(total * 100) /100;
+  }
+
   async ngOnInit() {
+
     this.loading.initLoading();
     const user = await this.auth.getUser();
     user.user_roles.forEach((e:any) => {
@@ -319,25 +235,47 @@ export class StudentRecordManagementComponent {
           this.studentProfile = res[1];
           this.studentProfileField.patchValue(this.studentProfile);
           this.studentProfileField.get('studentid')?.patchValue(this.studentProfile.student_record.student_no);
-          this.studentProfileField.get('year_level_id')?.patchValue(this.studentProfile.student_record?.year_level?.year_level_id);
-          this.studentProfileField.get('status')?.patchValue(this.studentProfile.student_record.status);
           this.studentProfileField.get('sy')?.patchValue(this.studentProfile.student_record.sy);
+          this.studentProfileField.get('curriculum')?.patchValue(this.studentProfile.student_record.cid);
           this.subjectTaken = this.studentProfile.student_record.subjects_taken;
 
-          if (this.studentProfile.student_record.cid != null) {
-            this.studentProfileField.get('program')?.patchValue(this.studentProfile.student_record.curriculum.program.programid);
-            this.setSpecializations(this.studentProfile.student_record.curriculum.program.programid);
-            this.studentProfileField.get('specialization')?.patchValue(this.studentProfile.student_record.curriculum.specialization);
-            this.getCurriculumSubjects(this.studentProfile.student_record.cid);
-          }
+          this.subjectTaken.forEach((e:any) => {
+            const subjectField = this.fb.group({
+              "coursecode": new FormControl(e.coursecode),
+              "grade": new FormControl(e.grade),
+            });
 
-          this.loading.endLoading();
+            this.fac.addControl(this.subjectsTakenArray, subjectField);
+          });
 
+          this.studentProfile.student_record.curriculum.curriculum_subjects.forEach((e: any) => {
+            const table:any = this.curriculumSubjects.find((a:any) => a.semester == e.semid && a.year == e.year_level_id)
+
+            if(table){
+              table['subjects'].push(e);
+            }else{
+              const table:any = {"year" : e.year_level_id, "semester" : e.semid, "subjects" : []}
+              table['subjects'].push(e);
+              this.curriculumSubjects.push(table);
+            }
+
+          });
+          this.curriculumSubjects.sort((a:any, b:any) => {
+            const aLevel = a.year;
+            const bLevel = b.year;
+            const aSemester = a.semester;
+            const bSemester = b.semester;
+
+            if (aLevel === bLevel) {
+              return aSemester - bSemester;
+            }
+            return aLevel - bLevel;
+          });
         },
         error: (err: any) => console.error(err),
+        complete: () => this.loading.endLoading(),
       })
     })
-
 
   }
 }

@@ -86,13 +86,15 @@ export class PreRequisiteModalComponent {
     let year_standing_string = "";
 
     if (this.preRequisite.get('year-standing')!.value == "1") {
-      year_standing_string = "1ST YEAR STANDING";
+      year_standing_string = "1st YEAR STANDING";
     }else if (this.preRequisite.get('year-standing')!.value == "2") {
-      year_standing_string = "2ND YEAR STANDING";
+      year_standing_string = "2nd YEAR STANDING";
     }else if (this.preRequisite.get('year-standing')!.value == "3") {
-      year_standing_string = "3RD YEAR STANDING";
+      year_standing_string = "3rd YEAR STANDING";
     }else if (this.preRequisite.get('year-standing')!.value == "4") {
-      year_standing_string = "4TH YEAR STANDING";
+      year_standing_string = "4th YEAR STANDING";
+    }else if (this.preRequisite.get('year-standing')!.value == "GRADUATING"){
+      year_standing_string = 'GRADUATING';
     }
 
     let prerequisitestring = year_standing_string;
@@ -116,16 +118,18 @@ export class PreRequisiteModalComponent {
       let prereqs = this.selectedForm!.get('prerequisites')?.value.split(" & ");
       console.log(prereqs);
       prereqs.forEach((e:any) => {
-        if (e.includes("STANDING")){
-
-          if (e == "1ST YEAR STANDING") {
-            this.preRequisite.get('year-standing')!.setValue("1");
-          }else if (e == "2ND YEAR STANDING") {
-            this.preRequisite.get('year-standing')!.setValue("2");
-          }else if (e == "3RD YEAR STANDING") {
-            this.preRequisite.get('year-standing')!.setValue("3");
-          }else if (e == "4TH YEAR STANDING") {
-            this.preRequisite.get('year-standing')!.setValue("4");
+        if (e.includes("STANDING") || e.includes("GRADUATING")){
+          console.log('here');
+          if (e == "1st YEAR STANDING") {
+            this.preRequisite.get('year-standing')?.patchValue("1");
+          }else if (e == "2nd YEAR STANDING") {
+            this.preRequisite.get('year-standing')?.patchValue("2");
+          }else if (e == "3rd YEAR STANDING") {
+            this.preRequisite.get('year-standing')?.patchValue("3");
+          }else if (e == "4th YEAR STANDING") {
+            this.preRequisite.get('year-standing')?.patchValue("4");
+          }else if (e == "GRADUATING"){
+            this.preRequisite.get('year-standing')?.patchValue("GRADUATING");
           }
 
         }else{

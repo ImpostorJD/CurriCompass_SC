@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\CourseAvailability;
 use App\Models\Curriculum;
 use App\Models\EnlistmentSubjects;
+use App\Models\SemSy;
 use App\Models\StudentRecord;
 use App\Models\Subjects;
 use App\ReactPHP\CalculateSimilarityAsync;
@@ -18,6 +19,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use React\Promise;
 
 class EnlistmentAlgorithm implements ShouldQueue
@@ -61,6 +63,7 @@ class EnlistmentAlgorithm implements ShouldQueue
             return $value != 0;
         });
 
+
         //retrieve courses from the curriculum
         $curriculum = Curriculum::where('cid', $this->targetStudent->cid)
             ->with('curriculum_subjects')
@@ -69,9 +72,10 @@ class EnlistmentAlgorithm implements ShouldQueue
         //retrieve courses with the following criteria: failed, withdrawn
         //handle asynchronously
         $subjectPromises = array_map(
-            fn($course) => IdentifyMissingCourseAsync::identifyMissingCourse($course->subjectid, $this->targetStudent),
+            fn($course) => IdentifyMissingCourseAsync::identifyMissingCourse($course->coursecode, $this->targetStudent),
             $curriculum->curriculum_subjects->all()
         );
+
         //get all subjects taken
         $subjectsNotTaken = $this->collectPromises($subjectPromises);
 
@@ -85,6 +89,7 @@ class EnlistmentAlgorithm implements ShouldQueue
             fn($sub) => PredictiveGradeAsync::gradedWeightAverage($sub, $euclideanDistance),
             $subjectsNotTaken
         );
+
         //retrieve result of predicted GWA
         $predictedGwa = $this->collectPromises($weightedGradePromises);
         $predictedGwa = $this->flattenArray($predictedGwa);
@@ -108,6 +113,7 @@ class EnlistmentAlgorithm implements ShouldQueue
         $courseAvailability = $this->flattenArray($courseAvailability);
         $courseAvailability = SortByCurriculumSubjectAsync::courseSorting($courseAvailability);
 
+
         //loop through this
         $time_range = [
             '8-11' => ['8-10', '8-11', '9-11', '10-12'],
@@ -121,7 +127,6 @@ class EnlistmentAlgorithm implements ShouldQueue
         $dayPairings = ['M-Th', 'T-F', 'W-S'];
 
         $remainingSub = RemainingSubAsync::getRemainingSubCount($subjectsNotTaken, $this->targetStudent);
-
 
         // Process enlistment
         $this->processEnlistment($this->targetStudent, $dayPairings, $courseAvailability, $this->enlistment, $time_range, $remainingSub);
@@ -151,7 +156,11 @@ class EnlistmentAlgorithm implements ShouldQueue
 
      private function processEnlistment($targetStudent, $dayPairings, $courses, $enlistment, $timeRangeMap, $remainingSub)
      {
-         $maxUnits = $targetStudent->year_level_id < 4 ? 21 : PHP_INT_MAX; // Max units for 1st-3rd year, unlimited for 4th year
+        $currentsemsy = SemSy::orderBy('semsyid', 'desc')
+            ->with('semester')
+            ->with('school_year')
+            ->first();
+         $maxUnits = $targetStudent->year_level_id < 4 ? ($targetStudent->year_level_id == 1 && $currentsemsy->semester->semid == 1 ? 18 :  21) : PHP_INT_MAX; // Max units for 1st-3rd year, unlimited for 4th year
          $unitCount = 0;
          $enlistedSubjects = [];
          $flattenedTimeRange = $this->flattenArrayUnique($timeRangeMap);
@@ -165,15 +174,14 @@ class EnlistmentAlgorithm implements ShouldQueue
              foreach ($flattenedTimeRange as $time) {
                  foreach ($dayPairings as $dayPairing) { // iterate over M-Th, T-F, W-S
                      foreach ($courses as $subjectId) { // iterate over subjects
-                         $subject = Subjects::where('subjectcode', $subjectId)->first();
-                         if (!array_key_exists($subjectId, $enlistedSubjects)) {
-                             $availability = CourseAvailability::where('subjectid', $subject->subjectid)
+                         if (!array_key_exists($subjectId, $enlistedSubjects)) { //checks if already enlisted
+                             $availability = CourseAvailability::where('coursecode', $subjectId)
                                  ->where('time', $time)
                                  ->where('days', $dayPairing)
                                  ->first();
-
                              if ($availability != null && $this->checkAvailabilityLimit($availability)) {
-                                 $subjectUnits = $subject->subjectcredits;
+                                 $sub = $targetStudent->curriculum->curriculum_subjects->firstWhere('coursecode', $subjectId);
+                                 $subjectUnits = $sub ? $sub->units : 0;
 
                                  // Check for overlap with already enlisted subjects
                                  $subjectOverlap = false;

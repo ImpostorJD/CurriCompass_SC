@@ -207,7 +207,7 @@ export class EditCurriculumComponent {
         if (prval){
           let pr = prval.split(' & ');
           let filtered = pr.filter((string:any) => {
-            return !string.includes("STANDING");
+            return !string.includes("STANDING") && !string.includes("GRADUATING");
           });
 
           filtered.forEach((string:any) => {
@@ -216,14 +216,12 @@ export class EditCurriculumComponent {
               let inc = c.get('subjects') as FormArray;
               inc.controls.forEach((control) => {
                 let code = control.get('coursecode')?.value;
-                console.log(code);
-                if (code == string){
+                if (code == string.trim()){
                   subject = code;
                 }
               });
             })
 
-            console.log(subject);
 
             if(!subject){
               this.error = true;
@@ -257,6 +255,8 @@ export class EditCurriculumComponent {
 
   ngOnInit() {
     this.loading.initLoading();
+
+    // Fetch resources
     this.req.getResource('year-level', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res: any) => {
         this.year_levels = res[1];
@@ -284,6 +284,7 @@ export class EditCurriculumComponent {
       },
       error: err => console.error(err),
     });
+
     this.activatedRoute.params.subscribe(params => {
       this.routeId = params['id'];
       this.req.getResource('curriculum/' + this.routeId, httpOptions(this.auth.getCookie('user'))).subscribe({
@@ -305,37 +306,35 @@ export class EditCurriculumComponent {
                 });
 
                 this.csubjectsFormArray.push(csub); // Add the new group to the form array
-
-                // Add subjects to the new control
-                const subs = csub.get('subjects') as FormArray;
-                const subject = this.fb.group({
-                  'coursecode': new FormControl(cs.coursecode, [Validators.required]),
-                  'coursedescription': new FormControl(cs.coursedescription, [Validators.required]),
-                  'prerequisites': new FormControl(cs.prerequisites == "NONE" ? '' : cs.prerequisites),
-                  'units': new FormControl(cs.units, [Validators.required, Validators.pattern("^[0-9]*$")]),
-                  'unitslab': new FormControl(cs.unitslab, [Validators.required, Validators.pattern("^[0-9]*$")]),
-                  'unitslec': new FormControl(cs.unitslec, [Validators.required, Validators.pattern("^[0-9]*$")]),
-                  'hourslab': new FormControl(cs.hourslab, [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
-                  'hourslec': new FormControl(cs.hourslec, [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
-                });
-
-                subs.push(subject); // Add the subject to the new control
-              } else {
-                // If control exists, add the subject to it
-                const subs = csub.get('subjects') as FormArray;
-                const subject = this.fb.group({
-                  'coursecode': new FormControl(cs.coursecode, [Validators.required]),
-                  'coursedescription': new FormControl(cs.coursedescription, [Validators.required]),
-                  'prerequisites': new FormControl(cs.prerequisites == "NONE" ? '' : cs.prerequisites),
-                  'units': new FormControl(cs.units, [Validators.required, Validators.pattern("^[0-9]*$")]),
-                  'unitslab': new FormControl(cs.unitslab, [Validators.required, Validators.pattern("^[0-9]*$")]),
-                  'unitslec': new FormControl(cs.unitslec, [Validators.required, Validators.pattern("^[0-9]*$")]),
-                  'hourslab': new FormControl(cs.hourslab, [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
-                  'hourslec': new FormControl(cs.hourslec, [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
-                });
-
-                subs.push(subject); // Add the subject to the existing control
               }
+
+              // Add subjects to the control
+              const subs = csub.get('subjects') as FormArray;
+              const subject = this.fb.group({
+                'coursecode': new FormControl(cs.coursecode, [Validators.required]),
+                'coursedescription': new FormControl(cs.coursedescription, [Validators.required]),
+                'prerequisites': new FormControl(cs.prerequisites === "NONE" ? '' : cs.prerequisites),
+                'units': new FormControl(cs.units, [Validators.required, Validators.pattern("^[0-9]*$")]),
+                'unitslab': new FormControl(cs.unitslab, [Validators.required, Validators.pattern("^[0-9]*$")]),
+                'unitslec': new FormControl(cs.unitslec, [Validators.required, Validators.pattern("^[0-9]*$")]),
+                'hourslab': new FormControl(cs.hourslab, [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
+                'hourslec': new FormControl(cs.hourslec, [Validators.required, Validators.pattern("^[0-9]+(\.?[0-9]+)?")]),
+              });
+
+              subs.push(subject); // Add the subject to the control
+            });
+
+            // Sort the csubjectsFormArray controls
+            this.csubjectsFormArray.controls.sort((a, b) => {
+              const aLevel = a.get('level')?.value;
+              const bLevel = b.get('level')?.value;
+              const aSemester = a.get('semester')?.value;
+              const bSemester = b.get('semester')?.value;
+
+              if (aLevel === bLevel) {
+                return aSemester - bSemester;
+              }
+              return aLevel - bLevel;
             });
           }
           this.loading.endLoading();

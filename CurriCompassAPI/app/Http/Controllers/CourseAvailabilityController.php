@@ -201,49 +201,48 @@ class CourseAvailabilityController extends Controller
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
         $currentsem = $currentsemsy->semid ==  1 ? "Sem 1" : ($currentsemsy->semid ==  2 ? "Sem 2" : "Sem 3");
         $studentRecord = StudentRecord::where('student_no', $srid)
-            ->with(['subjects_taken' => function ($query) use ($currentsemsy, $currentsem){
-                $query->where('sy', '!=', $currentsemsy->sy);
-                $query->where('taken_at', '!=', $currentsem);
-                $query->where('remark', '!=', "Withdrawn");
-                $query->where('remark', '!=', "Incomplete");
-                $query->where('remark', '!=', "Fail");
-
+            ->with(['curriculum' => function ($query){
+                $query->with('curriculum_subjects');
             }])
-            ->first();
+            ->with(['subjects_taken' => function ($query){
+                $query->where('grade', '!=', "w");
+                $query->where('grade', '!=', "x");
+                $query->where('grade', '!=', "5");
+
+            }])->first();
         $cav = CourseAvailability::whereHas('semester_sy', function($query) use($currentsemsy){
             $query->where('semsyid', $currentsemsy->semsyid);
-        })
-            ->whereHas('subjects', function($query) use($studentRecord){
-                $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
-                $query->whereHas('curriculumsubjects', function($query) use($studentRecord){
-                    $query->where('cid', $studentRecord->cid);
-                });
-                // commented this out to allow irregular with not taken pre-requisite to take left subjects
-                // $query->whereHas('pre_requisites', function($query) use($studentRecord){
-                //     $query->where('year_level_id', null)
-                //         ->orWhere('year_level_id', "<=", $studentRecord->year_level_id)
-                //         ->orWhere(function($query) use($studentRecord){
-                //             $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
-                //         })
-                //         ->orWhere(function($query) use($studentRecord){
-                //             //check if studentrecord subject taken is passed or not
-                //             $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray())
-                //                 ->whereHas('subjects', function($query) use($studentRecord){
-                //                     $query->whereHas('subjectsTaken', function($query) use($studentRecord){
-                //                         $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid'))
-                //                             ->where('grade', "!=", null)
-                //                             ->orWhere('grade', ">=", 3);
-                //                     });
-                //                 });
-                //         });
+        })->whereNotIn('coursecode', $studentRecord->subjects_taken->pluck('coursecode')->toArray())
+        ->whereIn('coursecode', $studentRecord->curriculum->curriculum_subjects->pluck('coursecode')->toArray())
+            // ->whereHas('subjects', function($query) use($studentRecord){
+            //     $query->whereNotIn('subjectid', );
+            //     $query->whereHas('curriculumsubjects', function($query) use($studentRecord){
+            //         $query->where('cid', $studentRecord->cid);
+            //     });
+            //     // commented this out to allow irregular with not taken pre-requisite to take left subjects
+            //     // $query->whereHas('pre_requisites', function($query) use($studentRecord){
+            //     //     $query->where('year_level_id', null)
+            //     //         ->orWhere('year_level_id', "<=", $studentRecord->year_level_id)
+            //     //         ->orWhere(function($query) use($studentRecord){
+            //     //             $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
+            //     //         })
+            //     //         ->orWhere(function($query) use($studentRecord){
+            //     //             //check if studentrecord subject taken is passed or not
+            //     //             $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray())
+            //     //                 ->whereHas('subjects', function($query) use($studentRecord){
+            //     //                     $query->whereHas('subjectsTaken', function($query) use($studentRecord){
+            //     //                         $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid'))
+            //     //                             ->where('grade', "!=", null)
+            //     //                             ->orWhere('grade', ">=", 3);
+            //     //                     });
+            //     //                 });
+            //     //         });
 
-                // });
-        })
+            //     // });
         ->with(['semester_sy'=> function($query){
             $query->with('school_year');
             $query->with('semester');
-        }])->with('subjects')
-            ->get();
+        }])->get();
 
         $filteredCav = [];
         foreach($cav as $c){

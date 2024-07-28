@@ -13,25 +13,17 @@ class SortByCurriculumSubjectAsync {
         // Extract course codes
         $courseCodes = array_keys($coursesWithGwa);
 
-        // Retrieve subject ids based on course codes
-        $subjects = Subjects::whereIn('subjectcode', $courseCodes)
-            ->get()
-            ->keyBy('subjectcode'); // Preserve subject code as key
-
         // Retrieve and sort curriculum subjects
-        $curriculumSubjects = CurriculumSubjects::whereIn('subjectid', $subjects->pluck('subjectid'))
+        $curriculumSubjects = CurriculumSubjects::whereIn('coursecode', $courseCodes)
             ->orderBy('year_level_id', 'asc')
             ->orderBy('semid', 'asc')
             ->get();
 
-        // Map subject IDs to their codes
-        $subjectIdToCode = $subjects->pluck('subjectcode', 'subjectid');
 
         // Create a combined array to hold curriculum order and GWA
         $combinedCourses = [];
         foreach ($curriculumSubjects as $curriculumSubject) {
-            $subjectId = $curriculumSubject->subjectid;
-            $subjectCode = $subjectIdToCode[$subjectId] ?? null;
+            $subjectCode = $curriculumSubject->coursecode;
             if ($subjectCode && isset($coursesWithGwa[$subjectCode])) {
                 $combinedCourses[] = [
                     'subjectcode' => $subjectCode,

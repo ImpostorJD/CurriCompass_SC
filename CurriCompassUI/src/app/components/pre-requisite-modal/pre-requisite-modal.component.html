@@ -8,14 +8,15 @@
         </span>
         <select formControlName="year-standing" class="w-full p-2 border-slate-300 border-[1px] rounded-md">
           <option [ngValue]="''" selected>None</option>
-          <option [ngValue]="'1'">1st Year Standing</option>
-          <option [ngValue]="'2'">2nd Year Standing</option>
-          <option [ngValue]="'3'">3rd Year Standing</option>
-          <option [ngValue]="'4'">4th Year Standing</option>
+          <option [ngValue]="'1'">1ST YEAR STANDING</option>
+          <option [ngValue]="'2'">2ND YEAR STANDING</option>
+          <option [ngValue]="'3'">3RD YEAR STANDING</option>
+          <option [ngValue]="'4'">4TH YEAR STANDING </option>
+          <option [ngValue]="'GRADUATING'">GRADUATING</option>
         </select>
       </div>
       <div class="flex">
-        <button class="px-4 py-2 border-green-600 border-[1px] rounded-md text-green-600 hover:bg-green-600 hover:text-white transition-all" (click)="addCourse()">
+      <button class="px-4 py-2 border-green-600 border-[1px] rounded-md text-green-600 hover:bg-green-600 hover:text-white transition-all" (click)="addCourse()">
           Add Course Pre-requisite
         </button>
       </div>

@@ -282,14 +282,12 @@ class UserController extends Controller
             })->with(['student_record' => function($query) {
                 $query->with('enlistment');
                 $query->with(['subjects_taken' => function($query){
-                    $query->with('subjects');
                     $query->with('school_year');
                 }]);
                 $query->with(['curriculum' => function($query){
                     $query->with('school_year');
                     $query->with('program');
                     $query->with(['curriculum_subjects' => function($query){
-                        $query->with('subjects');
                         $query->with('semesters');
                         $query->with('year_level');
                     }]);

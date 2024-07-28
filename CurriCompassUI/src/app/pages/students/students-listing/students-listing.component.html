@@ -53,7 +53,7 @@
       </thead>
       <tbody class="flex flex-col md:h-[30rem] h-[20rem] overflow-y-auto">
         @for(student of students| studentFilter:searchStudent; track $index){
-          <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
+          <tr class="flex flex-row bg-white min-h-[4rem] hover:bg-green-100">
             <td class="w-[20%] px-1 hidden lg:flex items-center">
               <span>{{ student.student_record.student_no }}</span>
             </td>
@@ -71,14 +71,14 @@
             </td>
             <td class="w-[25%] flex justify-center items-center px-1 lg:gap-2 gap-1">
               <a
-                class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white h-full transition-all flex flex-col p-2 lg:px-4 rounded-md items-center justify-center"
+                class="border-[1px] border-green-600 bg-transparent text-green-600 hover:bg-green-600 hover:text-white transition-all flex flex-col p-2 rounded-md items-center justify-center"
                 [routerLink]="'/students/' + student.student_record.student_no"
               >
                 <i class="material-symbols-outlined">
                   visibility
                 </i>
               </a>
-              <button class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"  (click)="modalUtility.enableModal(student.userid)">
+              <button class="bg-red-500 flex items-center justify-center p-2 flex-col text-white hover:bg-red-600 rounded-md"  (click)="modalUtility.enableModal(student.userid)">
                   <i class="material-symbols-outlined">
                     delete
                   </i>

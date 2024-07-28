@@ -28,7 +28,7 @@ export const routes: Routes = [
         },
 
         { path: 'users',
-          canActivate: [AuthGuard(['Admin'])],
+          canActivate: [AuthGuard(['Admin', 'Staff', 'Student'])],
           loadChildren: () => import('./pages/users/users.routes')
             .then((mod) => mod.usersRoutes)
         },

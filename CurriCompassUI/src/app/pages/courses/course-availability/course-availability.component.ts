@@ -66,15 +66,15 @@ export class CourseAvailabilityComponent {
             if (a.semester_sy.semester.semid !== b.semester_sy.semester.semid) {
               return a.semester_sy.semester.semid - b.semester_sy.semester.semid;
             } else {
-              return a.subjects.subjectcode.localeCompare(b.subjects.subjectcode);
+              return a.coursecode.localeCompare(b.coursecode);
             }
           });
         }
 
-        this.loading.endLoading();
 
       },
       error: err => console.error(err),
+      complete: () => this.loading.endLoading(),
     });
   }
 

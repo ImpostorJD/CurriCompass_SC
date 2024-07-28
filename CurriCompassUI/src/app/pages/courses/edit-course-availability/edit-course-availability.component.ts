@@ -124,7 +124,7 @@ export class EditCourseAvailabilityComponent {
       },
       error: (err:any) => {
         if(err.status == 409){
-          this.courseAvailability.get('coursecode')!.setErrors({'duplicate' :true});
+          this.courseAvailability.get('time')!.setErrors({'duplicate' :true});
         }
       }
     });

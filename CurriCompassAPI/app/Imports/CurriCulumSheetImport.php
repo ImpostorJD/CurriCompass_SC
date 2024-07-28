@@ -131,7 +131,7 @@ class CurriculumSheetImport implements ToCollection
             if ($rowArray[1] === null || $rowArray[1] === '') {
                 // Merge description into the previous row and skip current row
                 if ($previousRow) {
-                    $previousRow[2] .= ' / ' . $rowArray[2];
+                    $previousRow[2] .= '' . $rowArray[2];
                 }
                 continue;
             }
@@ -245,7 +245,9 @@ class CurriculumSheetImport implements ToCollection
                     }
 
                     foreach ($sub as $subjects) {
-                        $cs = CurriculumSubjects::create([
+
+
+                        CurriculumSubjects::create([
                             'cid' => $curriculum->cid,
                             'coursecode' => $subjects[1],
                             'coursedescription' => $subjects[2],

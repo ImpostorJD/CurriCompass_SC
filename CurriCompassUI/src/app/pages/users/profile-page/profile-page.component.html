@@ -27,7 +27,7 @@
               Contact Number
             </th>
             <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center" *appRolesToRender="['Student']">
-              Enrolled At
+              Year of Admission
             </th>
             <th class="p-2 h-[3.55rem] flex border border-slate-600 items-center" *appRolesToRender="['Student']">
               Program
@@ -58,7 +58,7 @@
               {{ user?.contact_no }}
             </td>
             <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
-              {{ user?.student_record.school_year != null ? formatDate.formatToYear(user.student_record.school_year.sy_start) + " - " + formatDate.formatToYear(user.student_record.school_year.sy_end) : "Not yet set." }}
+              {{ user?.student_record.school_year != null ? user.student_record.school_year.sy_start + " - " + user.student_record.school_year.sy_end : "Not yet set." }}
             </td>
             <td class="border-slate-600 border h-[3.55rem] p-2" *appRolesToRender="['Student']">
               {{ user?.student_record != null && user?.student_record?.curriculum == null ? "Not yet set" : user?.student_record?.curriculum.program.programdesc  }}
@@ -73,68 +73,136 @@
   </div>
 @if(user?.student_record && user.student_record.cid != null){
     <div class="h-auto w-full" *appRolesToRender="['Student']">
-      <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
-        <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
-          <tr class="h-full w-full flex flex-row">
-            <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-              Course Code
-            </th>
-            <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-              Credits
-            </th>
-            <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-              Year Level
-            </th>
-            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-              Semester
-            </th>
-            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-              SY Taken
-            </th>
-            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-              Sem Taken
-            </th>
-            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-              Grade
-            </th>
-            <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-              Remark
-            </th>
-          </tr>
-        </thead>
-        <tbody class="h-[25rem] overflow-y-auto">
-          @if(user.student_record.cid != null){
-            @for(cs of user.student_record.curriculum.curriculum_subjects; track $index){
-              <tr class="flex flex-row w-full hover:bg-green-300">
-                <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                  {{ cs.subjects.subjectcode }}
+      @for(c of curriculumSubjects; track $index){
+        <table class="table-auto w-full border-collapse border border-slate-300">
+          <thead  class="h-[3rem]">
+            <tr class="flex flex-row p-2 w-full border-b-[1px] border-slate-300 relative">
+              <th class="flex justify-center w-full">
+               LEVEL {{
+                c.year  == 1 ? 'I' :
+                (c.year  == 2 ? 'II':
+                (c.year  == 3 ? 'III':
+                 'IV'))
+                }}
+              </th>
+
+            </tr>
+            <tr class="flex flex-row py-2 w-full border-b-[1px] border-slate-300">
+              <th class="flex justify-center w-full">
+                 {{
+                  c.semester  == 1 ? '1ST' :
+                  (c.semester == 2 ? '2ND':
+                  '3RD')
+                }} TRIMESTER
+              </th>
+            </tr>
+            <tr class="flex flex-row border-b-[1px] border-slate-300">
+              <th class="w-[10%] border-slate-300 border-[1px] flex items-center justify-center">
+                Grade
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                Course Code
+              </th>
+              <th class="w-[30%] border-slate-300 border-[1px] flex items-center justify-center">
+                Course Title
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                Units
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Units</span>
+                <div class="flex flex-row w-full">
+                  <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                    Lec
+                  </span>
+                  <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                    Lab
+                  </span>
+                </div>
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Hours</span>
+                <div class="flex flex-row w-full">
+                  <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                    Lec
+                  </span>
+                  <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                    Lab
+                  </span>
+                </div>
+              </th>
+              <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                Prerequisite/s
+              </th>
+            </tr>
+          </thead>
+          <tbody class="flex flex-col w-full">
+            @for(s of c.subjects; let i = $index; track i){
+              <tr class="flex flex-row border-b-[1px] border-slate-300">
+                <td class="w-[10%] border-slate-300 border-[1px] flex items-center justify-center">
+                 {{ getSubjectGrade(s.coursecode) }}
                 </td>
-                <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                  {{ cs.subjects.subjectcredits }}
+                <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                  {{ s.coursecode }}
                 </td>
-                <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                  {{ cs.year_level.year_level_desc }}
+                <td class="w-[30%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                  {{ s.coursedescription }}
                 </td>
-                <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                  {{ cs.semesters.semdesc }}
+                <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                  {{ s.units }}
                 </td>
-                <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                  {{ user.student_record.subjects_taken.length != 0 && getSubjectTakenItem(cs.subjects.subjectid) ? formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_start) + " - " + formatDate.formatToYear(getSubjectTakenItem(cs.subjects.subjectid).school_year.sy_end): 'not yet taken' }}
+                <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                  {{ s.unitslec }}
                 </td>
-                <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                  {{ user.student_record.subjects_taken.length != 0 && getSubjectTakenItem(cs.subjects.subjectid) ? takenAtNormalize(getSubjectTakenItem(cs.subjects.subjectid).taken_at) : 'not yet taken' }}
+                <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                  {{ s.unitslab }}
                 </td>
-                <td class="border border-slate-600 w-[15%] flex items-center justify-center">
-                  {{ user.student_record.subjects_taken.length != 0 && getSubjectTakenItem(cs.subjects.subjectid) ? getSubjectTakenItem(cs.subjects.subjectid).grade : 'not yet taken' }}
+                <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                  {{ s.hourslec }}
                 </td>
-                <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group/remark">
-                  {{ user.student_record.subjects_taken.length != 0 && getSubjectTakenItem(cs.subjects.subjectid) ? getSubjectTakenItem(cs.subjects.subjectid).remark : "none" }}
+                <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                  {{ s.hourslab }}
+                </td>
+                <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                  {{ s.prerequisites }}
                 </td>
               </tr>
             }
-          }
-        </tbody>
-      </table>
+          </tbody>
+          <tfoot class="flex flex-col w-full">
+            <tr class="flex flex-row border-b-[1px] border-slate-300 w-full">
+              <td class="w-[10%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+              </td>
+              <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+              </td>
+              <td class="w-[30%] p-2 border-slate-300 border-[1px] flex items-center justify-center font-bold">
+                Total
+              </td>
+              <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                {{ totalSum($index, 'units') }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ totalSum($index, 'unitslec') }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ totalSum($index, 'unitslab') }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ totalSum($index, 'hourslec') }}
+              </td>
+              <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                {{ totalSum($index, 'hourslab') }}
+              </td>
+              <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+              </td>
+            </tr>
+            <tr class="flex w-full min-h-[1.23rem] bg-slate-200">
+              <td class="w-full bg-slate-200 border-[1px] flex items-center justify-center">
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      }
     </div>
   }
 </div>

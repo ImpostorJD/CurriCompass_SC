@@ -17,6 +17,7 @@ export class CurriculaBulkComponent {
   @Output() refetch = new EventEmitter<boolean>();
   selectedFile: File | null = null;
 
+  loading = false;
   constructor(private fb: FormBuilder, private req: HttpReqHandlerService, private auth: AuthService) {
 
   }
@@ -62,8 +63,7 @@ export class CurriculaBulkComponent {
     if (this.fileForm.valid && this.selectedFile) {
       const formData = new FormData();
       formData.append('file', this.selectedFile, this.selectedFile.name);
-
-      console.log('File submitted:', this.selectedFile);
+      this.loading = true;
       this.req.postResource('curriculum/bulk', formData, httpOptions(this.auth.getCookie('user'), true))
         .subscribe({
           next: (data: any) => {
