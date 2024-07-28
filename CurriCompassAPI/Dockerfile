@@ -8,7 +8,8 @@ RUN apt-get update && \
     zip \
     libpq-dev \
     git \
-    && docker-php-ext-install pdo_pgsql zip
+    libgd-dev \
+    && docker-php-ext-install pdo_pgsql zip gdz
 
 # Set the Apache document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
@@ -41,6 +42,9 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 # Install ReactPHP and any other PHP dependencies
 RUN composer require react/react
+RUN composer require phpoffice/phpspreadsheet
+RUN composer require maatwebsite/excel
+
 
 # Generate Composer autoload files
 RUN composer dump-autoload --optimize
