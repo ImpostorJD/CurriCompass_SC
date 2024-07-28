@@ -1,13 +1,12 @@
 ![Hero](https://www.helpforassessment.com/blog/wp-content/uploads/2020/08/how-to-do-a-capstone-project.jpg)
 
-[![Progress - In Development](https://img.shields.io/badge/Progress-In_Development-D30000?style=for-the-badge)]()
+[![Progress - Major Revision Checking (Pending)](https://img.shields.io/badge/Progress-Major_Revision_Checking_(Pending)-FF751F?style=for-the-badge)]()
 
 ***
 # CurriCompass
 
 ## Overview
-This project entitled CurriCompass is a Capstone project in compliance with the requirements for Capstone Project 1 and 2 (CAP 1 - 2). The goal of this project is to streamline the pre-advisement process of students for the upcoming semestral enrollment. 
-
+This project entitled CurriCompass is a Capstone project in compliance with the requirements for Capstone Project 1 and 2 (CAP 1 - 2). The goal of this project is to streamline the pre-advisement process of students for the upcoming semestral enrollment. [You can access the production version of this website via this link.](https://www.curricompass.online/)
 ## PLEASE READ THE INSTRUCTIONS BEFORE PROCEEDING!
 [![UI Instructions](https://img.shields.io/badge/UI-Instructions-ffffff)](https://github.com/JohnDanielTejero/CurriCompass_SC/blob/main/CurriCompassUI/README.md)
 [![API Instructions](https://img.shields.io/badge/API-Instructions-ff3421)](https://github.com/JohnDanielTejero/CurriCompass_SC/tree/main/CurriCompassAPI)
