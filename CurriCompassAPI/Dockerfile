@@ -7,8 +7,7 @@ RUN apt-get update && \
     libzip-dev \
     libpq-dev \
     libpng-dev \
-    && docker-php-ext-install pdo_pgsql zip gd \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install pdo_pgsql zip gd
 
 # Set the Apache document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
@@ -37,6 +36,9 @@ RUN composer install --no-scripts --no-autoloader
 
 # Ensure proper permissions for storage and cache directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Create a symlink for public storage
+RUN ln -s /var/www/html/storage/app/public /var/www/html/public/storage
 
 # Install additional PHP dependencies
 RUN composer require react/react phpoffice/phpspreadsheet maatwebsite/excel
