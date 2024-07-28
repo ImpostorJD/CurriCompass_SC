@@ -37,9 +37,6 @@ RUN composer install --no-scripts --no-autoloader
 # Ensure proper permissions for storage and cache directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Create a symlink for public storage
-RUN ln -s /var/www/html/storage/app/public /var/www/html/public/storage
-
 # Install additional PHP dependencies
 RUN composer require react/react phpoffice/phpspreadsheet maatwebsite/excel
 
