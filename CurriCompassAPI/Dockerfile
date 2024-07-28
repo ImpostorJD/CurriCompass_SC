@@ -37,6 +37,8 @@ RUN composer install --no-scripts --no-autoloader
 # Ensure proper permissions for storage and cache directories
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Install additional PHP dependencies
+RUN composer require react/react phpoffice/phpspreadsheet maatwebsite/excel
 # Expose port 80 for Apache
 EXPOSE 80
 EXPOSE 443
