@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 //TODO: Add Documentation
@@ -35,7 +36,18 @@ class UserController extends Controller
                 'message' => 'Not found.',
             ], 404);
         }
+
         $credentials = $request->only('email', 'password');
+
+        $student = User::where('email', $request->email)->with('student_record')->first();
+        if ($student->student_record){
+            if($student->student_record->status === "Pending"){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Account not activated.',
+                ], 409);
+            }
+        }
 
         $token = Auth::attempt($credentials);
 

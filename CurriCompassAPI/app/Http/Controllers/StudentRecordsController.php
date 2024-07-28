@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curriculum;
+use App\Models\CurriculumSubjects;
 use App\Models\Enlistment;
 use App\Models\Role;
 use App\Models\SchoolYear;
@@ -20,7 +21,7 @@ class StudentRecordsController extends Controller
 {
 
     public function __construct(){
-        $this->middleware(['auth:api']);
+        $this->middleware(['auth:api'])->except(['registerStudent']);
     }
 
     public function index(){
@@ -71,6 +72,25 @@ class StudentRecordsController extends Controller
         return response()->json([
             'status' => 'not found',
         ], 404);
+    }
+
+    public function getPendingStudents(Request $request){
+        return response()->json([
+            ['status' => 'success'],
+            User::whereHas('user_roles', function($query){
+               $query->where('rolename', '=', 'Student');
+            })->whereHas('student_record', function ($query) {
+                $query->where('status', '=', 'Pending');
+            })
+            ->with(['student_record' => function($query){
+                $query->with(['curriculum' => function($query){
+                    $query->with('program');
+                    $query->with('curriculum_subjects');
+                    $query->with('school_year');
+                }]);
+                $query->with('year_level');
+            }])->get()
+        ], 200);
     }
 
     public function store(Request $request) {
@@ -135,8 +155,72 @@ class StudentRecordsController extends Controller
             ['status' => 'student record created successfully.'],
             StudentRecord::create([
                 'userid' => $user->userid,
-                'year_level_id' => null,
+                'year_level_id' => 1,
                 // 'status' => $request->status,
+                'student_no' => $request->studentid,
+                'cid' => null,
+            ])
+        ], 200);
+    }
+
+    public function registerStudent(Request $request) {
+        $validate = Validator::make($request->all(), [
+            'userfname' => ['required','string','max:255'],
+            'userlname' => ['required','string','max:255'],
+            'usermiddle' => ['nullable','string','max:255'],
+            'email' => ['required','string','email','max:255'],
+            'contactno' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
+            'password' => ['required','string'],
+            "studentid" => ['required', 'string'],
+        ]);
+
+        if($validate->fails()){
+            return response()
+                ->json([
+                    ['status' => 'bad request'],
+                    $validate->errors()
+                ], 400);
+        }
+
+        $conflict_errors = [];
+        if(User::where('email', $request->email)->first() != null) {
+            $conflict_errors['email'] = "email is already in use.";
+        }
+
+        $existing_user = User::whereHas(
+            'student_record', function($query) use ($request) {
+            $query->where('student_no', $request->studentid);
+        })->first();
+
+        if($existing_user != null) {
+            $conflict_errors["studentid"] = "Student ID is already in use.";
+        }
+
+        if(sizeof($conflict_errors) > 0){
+            return response()
+                ->json([
+                    ['status' => 'conflict'],
+                    $conflict_errors
+                ], 409);
+        }
+
+        $user = User::create([
+            'userfname' => $request->userfname,
+            'userlname' => $request->userlname,
+            'usermiddle' => $request->usermiddle ? $request->usermiddle : null,
+            'contact_no' => $request->contactno,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $user->user_roles()->attach(['roleid' => 3]);
+
+        return response()->json([
+            ['status' => 'student record created successfully.'],
+            StudentRecord::create([
+                'userid' => $user->userid,
+                'year_level_id' => 1,
+                'status' => "Pending",
                 'student_no' => $request->studentid,
                 'cid' => null,
             ])
@@ -146,16 +230,63 @@ class StudentRecordsController extends Controller
     public function update(Request $request, String $id){
 
         // Validation logic remains the same
+        $validate = Validator::make($request->all(), [
+            'userfname' => ['required','string','max:255'],
+            'userlname' => ['required','string','max:255'],
+            'usermiddle' => ['nullable','string','max:255'],
+            'email' => ['required','string','email','max:255'],
+            'contact_no' => ['required','string', 'regex:/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/'],
+            "studentid" => ['required', 'string'],
+            'sy'=> ['required','integer'],
+            "curriculum" => ['required','integer'],
+            "subjects_taken" => ['nullable','array'],
+            "subjects_taken*.coursecode" => ['required','string'],
+            "subjects_taken*.grade" => ['required','string'],
+        ]);
+
+        if($validate->fails()){
+            return response()
+            ->json([
+                ['status' => 'bad request'],
+                $validate->errors()
+            ], 400);
+        }
 
         $user = User::with(['student_record' => function ($query) {
             $query->with(['curriculum' => function ($query) {
                 $query->with('curriculum_subjects');
             }]);
-        }])
-        ->where('userid', $id)
-        ->first();
+        }])->where('userid', $id)->first();
 
-        // Conflict checking logic remains the same
+
+        if(!$user){
+            return response()->json([
+                'status' => 'not found',
+            ], 404);
+        }
+
+        $existing_record = User::where('email', $request->email)->first();
+        $conflict_errors = [];
+        if($existing_record && $existing_record->userid != $user->userid && $user->email != $request->email) {
+            $conflict_errors['email'] = "email is already in use.";
+        }
+
+        $existing_record = User::whereHas(
+                'student_record', function($query) use ($request) {
+                $query->where('student_no', $request->studentid);
+            })->first();
+
+        if($existing_record && $existing_record->userid != $user->userid && $user->student_record->student_no != $request->studentid) {
+            $conflict_errors["studentid"] = "Student ID is already in use.";
+        }
+
+        if(sizeof($conflict_errors) > 0){
+            return response()
+                ->json([
+                    ['status' => 'conflict'],
+                    $conflict_errors
+                ], 409);
+        }
 
         // Update user and student record
         $user->update([
@@ -169,7 +300,8 @@ class StudentRecordsController extends Controller
         $user->student_record()->update([
             'student_no' => $request['studentid'],
             'cid' => $request['curriculum'],
-            'sy' => $request['sy']
+            'sy' => $request['sy'],
+            'status' => $user->student_record->status  == "Pending" ? "Regular" :  $user->student_record->status,
         ]);
 
         // Delete old subjects and insert new ones
@@ -192,7 +324,8 @@ class StudentRecordsController extends Controller
         $year3Completion = 0;
         $year4Completion = 0;
 
-        foreach($user->student_record->curriculum->curriculum_subjects as $cs){
+        $curriculum_subjects = CurriculumSubjects::where('cid', $request['curriculum'])->get();
+        foreach($curriculum_subjects as $cs){
             if($cs->year_level_id <= 4){
                 $year4Completion += $cs->units;
             }
@@ -219,7 +352,7 @@ class StudentRecordsController extends Controller
 
 
         foreach($subjects_taken as $taken) {
-            $subject_t = $user->student_record->curriculum->curriculum_subjects->firstWhere('coursecode', $taken->coursecode);
+            $subject_t = $curriculum_subjects->firstWhere('coursecode', $taken->coursecode);
             if(!$subject_t){
                 continue;
             }
@@ -239,7 +372,7 @@ class StudentRecordsController extends Controller
                 }
 
                 if (!$containsExcludedCode) {
-                    foreach($user->student_record->curriculum->curriculum_subjects as $cs){
+                    foreach($curriculum_subjects as $cs){
                         $pre_req = $cs->prerequisites != null || $cs->prerequisites != "None" ? explode(" & ", $cs->prerequisites) : null;
 
                         if($pre_req){

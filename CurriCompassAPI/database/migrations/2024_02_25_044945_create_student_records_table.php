@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('srid');
             $table->string('student_no')->unique();
             $table->unsignedBigInteger('year_level_id')->nullable();
-            $table->enum('status', ['Regular', 'Irregular', 'Graduated', 'Inactive'])->default('Regular');
+            $table->enum('status', ['Regular', 'Irregular', 'Graduated', 'Inactive', 'Pending'])->default('Regular');
             $table->unsignedBigInteger('userid');
             $table->unsignedBigInteger('sy')->nullable();
             $table->unsignedBigInteger('cid')->nullable();

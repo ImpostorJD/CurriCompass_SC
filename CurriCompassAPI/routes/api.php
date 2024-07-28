@@ -225,12 +225,19 @@ Route::controller(StudentRecordsController::class)
         Route::get('/', 'index')
             ->middleware('auth.anyrole:Admin,Staff');
 
+        Route::get('/pending', 'getPendingStudents')
+            ->middleware('auth.anyrole:Admin,Staff');
+
         Route::get('/{id}', 'show');
 
         Route::post('/', 'store')
             ->middleware('auth.anyrole:Admin,Staff');
-            Route::post('/bulk', 'bulk')
+
+        Route::post('/register-student', 'registerStudent');
+
+        Route::post('/bulk', 'bulk')
             ->middleware('auth.anyrole:Admin,Staff');
+
         Route::delete('/{id}', 'destroy')
             ->middleware('auth.anyrole:Admin,Staff');
 

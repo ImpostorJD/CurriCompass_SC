@@ -6,6 +6,7 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 import { AnonGuard } from './services/auth/anon-access.guard';
 import { AuthGuard } from './services/auth/auth-access.guard';
+import { StudentRegistrationComponent } from './pages/users/student-registration/student-registration.component';
 
 
 export const routes: Routes = [
@@ -81,6 +82,11 @@ export const routes: Routes = [
     {
       path: 'login',
       component: LoginUiComponent,
+      canActivate: [AnonGuard]
+    },
+    {
+      path: 'student-register',
+      component: StudentRegistrationComponent,
       canActivate: [AnonGuard]
     },
 

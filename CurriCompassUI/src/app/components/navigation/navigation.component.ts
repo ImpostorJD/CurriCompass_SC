@@ -65,6 +65,14 @@ export class NavigationComponent {
       hoverGroup: 'students',
     },
     {
+      name : "Pending",
+      allowedRoles: ['Admin', 'Staff'],
+      icon_type: "material-symbols-outlined",
+      icon: "person_alert",
+      path: "/users/pending-students",
+      hoverGroup: 'pending-students',
+    },
+    {
       name : "Course Availability",
       allowedRoles: ['Admin', 'Staff'],
       icon_type: "material-symbols-outlined",

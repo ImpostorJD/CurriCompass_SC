@@ -199,7 +199,7 @@
 
               <td class="border-slate-600 border h-[10%] relative group/year_level">
                 <span class="flex items-start w-full h-full p-2">
-                  {{ studentProfile?.student_record.year_level.year_level_desc }}
+                  {{ studentProfile?.student_record?.year_level ?  studentProfile?.student_record?.year_level?.year_level_desc : "To be determined" }}
                 </span>
 
               </td>

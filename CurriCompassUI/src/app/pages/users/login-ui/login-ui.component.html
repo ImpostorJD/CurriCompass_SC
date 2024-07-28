@@ -5,7 +5,7 @@
     <img class="md:h-40 h-[5rem]" src="../../assets/CompassPreAdvisingNoBgAlt.png">
     <span class="text-white sm:text-[2rem] font-bold font-poppins text-[1.33rem] uppercase">CurriCompass</span>
   </div>
-  <form class="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-[45%] border-0 lg:h-[50vh] lg:w-[30rem] h-[80%] w-[90vw] md:w-[70vw] md:h-[60vh] xl:p-[3rem] p-6 flex flex-col justify-around" [formGroup]="loginPayload">
+  <form class="bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-[45%] border-0 lg:h-[60vh] lg:w-[30rem] h-[80%] w-[90vw] md:w-[70vw] md:h-[60vh] xl:p-[3rem] p-6 flex flex-col justify-around" [formGroup]="loginPayload">
     <div *ngIf="isLockedOut" class="text-red-600 mb-4">
       Too many failed attempts. Please try again in {{ remainingTime }} seconds.
     </div>
@@ -17,6 +17,7 @@
         <div *ngIf="loginPayload.get('email')?.hasError('required')">Email is required!</div>
         <div *ngIf="loginPayload.get('email')?.hasError('email')">Email is in invalid format!</div>
         <div *ngIf="loginPayload.get('email')?.hasError('not found')">User with the given email address does not exist!</div>
+        <div *ngIf="loginPayload.get('email')?.hasError('inactive')">User with the given email address is not active!</div>
       </div>
     </div>
     <div class="relative h-[3rem] after:absolute after:w-full after:h-full after:z-20 cursor-pointer" (click)="toggleFormActive($event)">
@@ -43,6 +44,9 @@
       [ngClass]="{ 'bg-emerald-600 hover:bg-emerald-700': !isLockedOut, 'bg-green-200 cursor-not-allowed': isLockedOut }">
       SIGN IN
     </button>
-
+    <span class="flex w-full justify-end text-green-800 gap-1">
+      <span>Are you a student?</span>
+      <a [routerLink]="'/student-register'" class="underline text-green-800 hover:text-green-600 hover:font-bold transition-all">Register</a>
+    </span>
   </form>
 </div>

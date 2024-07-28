@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth/auth.service';
 
@@ -9,7 +9,8 @@ import { AuthService } from '../../../services/auth/auth.service';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './login-ui.component.html',
   styleUrls: ['./login-ui.component.css']
@@ -18,6 +19,7 @@ export class LoginUiComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder,
+
   ){}
 
   @ViewChild('password') passwordElement!: ElementRef;
@@ -71,6 +73,8 @@ export class LoginUiComponent {
             this.loginPayload.get('password')?.setErrors({'incorrect': true});
           }else if (err.status == 404){
             this.loginPayload.get('email')?.setErrors({'not found': true});
+          }else if(err.status == 409){
+            this.loginPayload.get('email')?.setErrors({'inactive': true});
           }
           this.attempt++;
           if (this.attempt >= this.maxAttempts) {
