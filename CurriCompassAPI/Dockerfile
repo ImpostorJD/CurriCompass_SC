@@ -7,9 +7,9 @@ RUN apt-get update && \
     libzip-dev \
     zip \
     libpq-dev \
-    git \
     libgd-dev \
-    && docker-php-ext-install pdo_pgsql zip gdz
+    git \
+    && docker-php-ext-install pdo_pgsql zip gd
 
 # Set the Apache document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
@@ -37,20 +37,7 @@ ENV PATH="${PATH}:/usr/local/bin"
 # Install PHP dependencies using Composer
 RUN composer install --no-scripts --no-autoloader
 
-# Ensure proper permissions for storage and cache directories
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Install specific PHP packages
+RUN composer require react/react phpoffice/phpspreadsheet maatwebsite/excel
 
-# Install ReactPHP and any other PHP dependencies
-RUN composer require react/react
-RUN composer require phpoffice/phpspreadsheet
-RUN composer require maatwebsite/excel
-
-
-# Generate Composer autoload files
-RUN composer dump-autoload --optimize
-
-# Expose port 80 for Apache
-EXPOSE 80
-
-# Start Apache in the foreground
-CMD ["apache2-foreground"]
+# Ensure proper permissions for
