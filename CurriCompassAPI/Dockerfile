@@ -6,6 +6,7 @@ RUN apt-get update && \
     apt-get install -y \
     libzip-dev \
     libpq-dev \
+    libpng-dev \
     && docker-php-ext-install pdo_pgsql zip gd
 
 # Set the Apache document root
