@@ -27,6 +27,7 @@
         "psr-4": {
             "App\\": "app/",
             "App\\ReactPHP\\": "app/ReactPHP/",
+            "App\\Imports\\": "app/Imports/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
