@@ -52,6 +52,9 @@ return [
             'test_auto_detect'       => true,
         ],
 
+        'xlsx' => Excel::XLSX,
+        'xls' => Excel::XLS,
+
         /*
         |--------------------------------------------------------------------------
         | Worksheet properties
