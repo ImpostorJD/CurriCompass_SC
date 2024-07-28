@@ -12,20 +12,20 @@ class CalculateSimilarityAsync {
         $similarity = 0;
 
         $targetCourses = SubjectsTaken::where('srid', $targetStudent['srid'])
-                ->where('grade', '<=', 3)
-                ->get()
-                ->keyBy('subjectid');
+                ->where('grade', '!=', "w")
+                ->where('grade', '!=', "x")
+                ->where('grade', '!=', "5")
+                ->get();
 
             // Retrieve reference student's subjects taken and grades
             $referenceCourses = SubjectsTaken::where('srid', $referenceStudent['srid'])
-                ->whereIn('subjectid', $targetCourses->keys())
-                ->get()
-                ->keyBy('subjectid');
+                ->whereIn('coursecode', $targetCourses->pluck('coursecode')->toArray())
+                ->get();
 
-            foreach ($targetCourses as $subjectId => $course) {
-                if (isset($referenceCourses[$subjectId])) {
-                    $referenceGrade = $referenceCourses[$subjectId]->grade;
-                    $targetGrade = $course->grade;
+            foreach ($targetCourses as $coursecode => $course) {
+                if (isset($referenceCourses[$coursecode])) {
+                    $referenceGrade = floatval($referenceCourses[$coursecode]->grade);
+                    $targetGrade = floatval($course->grade);
                     $similarity += pow($referenceGrade - $targetGrade, 2);
                 }
             }

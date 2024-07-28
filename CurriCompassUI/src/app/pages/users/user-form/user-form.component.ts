@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormArrayControlUtilsService } from '../../../services/form-array-control-utils.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { emailDomainValidator } from '../../../services/validators/domain-validator';
+import { passwordValidator } from '../../../services/validators/password-validator';
 
 @Component({
   selector: 'app-user-form',
@@ -35,8 +37,8 @@ export class UserFormComponent {
       "userlname" : new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
       "usermiddle" : new FormControl('', [Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
       "contactno" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
-      "email" : new FormControl('', [Validators.required, Validators.email]),
-      "password" : new FormControl('', [Validators.required]),
+      "email" : new FormControl('', [Validators.required, Validators.email, emailDomainValidator()]),
+      "password" : new FormControl('', [Validators.required, passwordValidator()]),
       "roles" : this.fb.array([]),
     })
 

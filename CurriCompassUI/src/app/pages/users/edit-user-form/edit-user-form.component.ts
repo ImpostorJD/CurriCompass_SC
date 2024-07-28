@@ -8,6 +8,7 @@ import { FormArrayControlUtilsService } from '../../../services/form-array-contr
 import { AuthService } from '../../../services/auth/auth.service';
 import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
 import { SystemLoadingService } from '../../../services/system-loading.service';
+import { emailDomainValidator } from '../../../services/validators/domain-validator';
 
 @Component({
   selector: 'app-edit-user-form',
@@ -42,7 +43,7 @@ export class EditUserFormComponent {
       "userlname" : new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
       "usermiddle" : new FormControl('', [Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ]+([ \'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*[A-Za-zÀ-ÖØ-öø-ÿ]$/)]),
       "contact_no" : new FormControl('', [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)]),
-      "email" : new FormControl('', [Validators.required, Validators.email]),
+      "email" : new FormControl('', [Validators.required, Validators.email, emailDomainValidator()]),
       "roles" : this.fb.array([]),
     })
 

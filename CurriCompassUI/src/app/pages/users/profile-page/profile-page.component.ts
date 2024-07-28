@@ -25,32 +25,53 @@ export class ProfilePageComponent {
   ){}
 
   auth: AuthService = inject(AuthService);
-
+  curriculumSubjects:any = [];
   user:any;
 
-  getSubjectTakenItem(index: number){
-    let course = this.user.student_record.subjects_taken
-    .find((s:any) => s.subjectid === index);
-    return course;
+  getSubjectGrade(coursecode: string){
+    const course  = this.user.student_record.subjects_taken.find((s:any) => s.coursecode == coursecode)
+    return course ? course.grade : '';
   }
 
-  takenAtNormalize(sem: string){
-    if(sem === "Sem 1"){
-      return "1st Trimester"
-    }
-    if(sem === "Sem 2"){
-      return "2nd Trimester"
-    }
-    if(sem === "Sem 3"){
-      return "3rd Trimester"
-    }
+  totalSum(index:number, controlname:string){
+    let total = 0;
 
-    return "Credited"
+    this.curriculumSubjects[index]['subjects'].forEach((c:any) => {
+      const value = parseFloat(c[controlname]);
+      total+= value;
+    });
+
+    return Math.round(total * 100) /100;
   }
-
   async ngOnInit(){
     this.loading.initLoading();
     this.user = await this.auth.getUser();
+    if(this.user.student_record){
+      this.user.student_record.curriculum.curriculum_subjects.forEach((e: any) => {
+        const table:any = this.curriculumSubjects.find((a:any) => a.semester == e.semid && a.year == e.year_level_id)
+
+        if(table){
+          table['subjects'].push(e);
+        }else{
+          const table:any = {"year" : e.year_level_id, "semester" : e.semid, "subjects" : []}
+          table['subjects'].push(e);
+          this.curriculumSubjects.push(table);
+        }
+
+      });
+      this.curriculumSubjects.sort((a:any, b:any) => {
+        const aLevel = a.year;
+        const bLevel = b.year;
+        const aSemester = a.semester;
+        const bSemester = b.semester;
+
+        if (aLevel === bLevel) {
+          return aSemester - bSemester;
+        }
+        return aLevel - bLevel;
+      });
+    }
+
     this.loading.endLoading();
   }
 }

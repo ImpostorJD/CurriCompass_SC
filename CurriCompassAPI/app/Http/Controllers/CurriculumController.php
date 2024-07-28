@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\CurriculumImport;
 use App\Models\Curriculum;
+use App\Models\CurriculumSubjects;
 use App\Models\StudentRecord;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 //TODO: Add documentation
 class CurriculumController extends Controller
@@ -29,7 +35,6 @@ class CurriculumController extends Controller
         $curriculum = Curriculum::where('cid', $id)
             ->with('school_year')
             ->with(['curriculum_subjects'=> function($query) {
-                $query->with('subjects');
                 $query->with('semesters');
                 $query->with('year_level');
             }])->first();
@@ -50,9 +55,17 @@ class CurriculumController extends Controller
             'specialization' => ['nullable', 'string'],
             'sy' => ['required', 'integer'],
             'curriculum_subjects' => ['required', 'array'],
-            'curriculum_subjects*.semid' => ['required', 'integer'],
-            'curriculum_subjects*.subjectid' => ['required', 'integer'],
-            'curriculum_subjects*.year_level_id' => ['required', 'integer'],
+            'curriculum_subjects*.semester' => ['required', 'integer'],
+            'curriculum_subjects*.level' => ['required', 'integer'],
+            'curriculum_subjects*.subjects' => ['required', 'array'],
+            'curriculum_subjects*.subjects*.coursecode' => ['required', 'string'],
+            'curriculum_subjects*.subjects*.coursedescription' => ['required', 'string'],
+            'curriculum_subjects*.subjects*.hourslab' => ['required', 'decimal:0'],
+            'curriculum_subjects*.subjects*.hourslec' => ['required', 'decimal:0'],
+            'curriculum_subjects*.subjects*.units' => ['required', 'integer'],
+            'curriculum_subjects*.subjects*.unitslab' => ['required', 'integer'],
+            'curriculum_subjects*.subjects*.unitslec' => ['required', 'integer'],
+            'curriculum_subjects*.subjects*.prerequisites' => ['required', 'string'],
         ]);
 
         if($validate->fails()){
@@ -74,13 +87,22 @@ class CurriculumController extends Controller
             'sy' => $request->sy,
         ]);
 
-        foreach($request->curriculum_subjects as $subject) {
-            $curriculum->curriculum_subjects()->insert([
-                'cid' => $curriculum->cid,
-                'subjectid' => $subject['subjectid'],
-                'semid' => $subject['semid'],
-                'year_level_id'=>$subject['year_level_id'],
-            ]);
+        foreach ($request->curriculum_subjects as $cs){
+            foreach ($cs['subjects'] as $subject){
+                CurriculumSubjects::create([
+                    'cid' => $curriculum->cid,
+                    'coursecode' => $subject['coursecode'],
+                    'coursedescription' => $subject['coursedescription'],
+                    'prerequisites' => $subject['prerequisites'],
+                    'units' => $subject['units'],
+                    'unitslab' => $subject['unitslab'],
+                    'unitslec' => $subject['unitslec'],
+                    'hourslab' => $subject['hourslab'],
+                    'hourslec' => $subject['hourslec'],
+                    'semid' => $cs['semester'],
+                    'year_level_id' => $cs['level'],
+                ]);
+            }
         }
 
         return response()->json([
@@ -89,6 +111,32 @@ class CurriculumController extends Controller
         ], 200);
     }
 
+    public function bulk(Request $request){
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:xlsx',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => 'Invalid file upload',
+                'details' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            // Read the file to get the sheet count
+            $path = $request->file('file')->getRealPath();
+            $reader = new Xlsx();
+            $spreadsheet = $reader->load($path);
+            $sheetCount = $spreadsheet->getSheetCount();
+            // Perform the import with the correct sheet count
+            Excel::import(new CurriculumImport($sheetCount), $request->file('file'));
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
+        return response()->json(['status' => 'success'], 200);
+    }
     public function destroy(Request $request, String $id){
         $curriculum = Curriculum::where('cid', $id)->first();
 
@@ -109,14 +157,23 @@ class CurriculumController extends Controller
             'specialization' => ['nullable', 'string'],
             'sy' => ['required', 'integer'],
             'curriculum_subjects' => ['required', 'array'],
-            'curriculum_subjects*.semid' => ['required', 'integer'],
-            'curriculum_subjects*.subjectid' => ['required', 'integer'],
-            'curriculum_subjects*.year_level_id' => ['required', 'integer'],
+            'curriculum_subjects*.semester' => ['required', 'integer'],
+            'curriculum_subjects*.level' => ['required', 'integer'],
+            'curriculum_subjects*.subjects' => ['required', 'array'],
+            'curriculum_subjects*.subjects*.coursecode' => ['required', 'string'],
+            'curriculum_subjects*.subjects*.coursedescription' => ['required', 'string'],
+            'curriculum_subjects*.subjects*.hourslab' => ['required', 'decimal:0'],
+            'curriculum_subjects*.subjects*.hourslec' => ['required', 'decimal:0'],
+            'curriculum_subjects*.subjects*.units' => ['required', 'integer'],
+            'curriculum_subjects*.subjects*.unitslab' => ['required', 'integer'],
+            'curriculum_subjects*.subjects*.unitslec' => ['required', 'integer'],
+            'curriculum_subjects*.subjects*.prerequisites' => ['required', 'string'],
         ]);
 
         if($validate->fails()){
             return response()->json([['status' => 'bad request'], $validate->errors()], 400);
         }
+
         $existing = Curriculum::where('programid', $request->programid)
             ->where('specialization', $request->specialization)
             ->where('sy', $request->sy)
@@ -128,10 +185,10 @@ class CurriculumController extends Controller
             return response()->json(['status' => 'not found'], 404);
         }
 
-        if($existing != null &&
-            ($existing->programid != $curriculum->programid &&
-            $existing->specialization != $curriculum->specialization &&
-            $existing->sy != $curriculum->sy)) {
+        if($existing != null && $existing->cid != $id &&
+            ($existing->programid == $request->programid &&
+            $existing->specialization == $request->specialization &&
+            $existing->sy == $request->sy)) {
             return response()->json([['status' => 'conflict'], "Combination already exists."], 409);
         }
 
@@ -143,13 +200,22 @@ class CurriculumController extends Controller
 
         $curriculum->curriculum_subjects()->delete();
 
-        foreach($request->curriculum_subjects as $subject) {
-            $curriculum->curriculum_subjects()->insert([
-                'cid' => $curriculum->cid,
-                'subjectid' => $subject['subjectid'],
-                'semid' => $subject['semid'],
-                'year_level_id'=>$subject['year_level_id'],
-            ]);
+        foreach ($request->curriculum_subjects as $cs){
+            foreach ($cs['subjects'] as $subject){
+                CurriculumSubjects::create([
+                    'cid' => $curriculum->cid,
+                    'coursecode' => $subject['coursecode'],
+                    'coursedescription' => $subject['coursedescription'],
+                    'prerequisites' => $subject['prerequisites'],
+                    'units' => $subject['units'],
+                    'unitslab' => $subject['unitslab'],
+                    'unitslec' => $subject['unitslec'],
+                    'hourslab' => $subject['hourslab'],
+                    'hourslec' => $subject['hourslec'],
+                    'semid' => $cs['semester'],
+                    'year_level_id' => $cs['level'],
+                ]);
+            }
         }
 
         return response()->json([

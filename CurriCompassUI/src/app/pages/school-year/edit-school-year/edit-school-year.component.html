@@ -1,18 +1,17 @@
 
-<form  class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative" [formGroup]="schoolYearField">
-  @if(loading.loading){
-    <app-loading-component></app-loading-component>
-  }
+<form  class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto"[formGroup]="schoolYearField">
   <h1 class="font-bold font-sans text-[2rem] uppercase">Edit School Year</h1>
   <div class="flex gap-4 flex-col bg-white mx-2 min-h-[30rem] p-4">
-    <div>
-      <span class="font-bold">School Year Start</span>
-      @if(schoolYear){
-        <app-date-picker (yearInput)="setYearStart($event)" [yearData]="schoolYear.sy_start"></app-date-picker>
-      }
+    <div class="flex flex-col gap-1">
+      <span class="font-bold">School Year Start <span class="text-red-600">*</span></span>
+      <input class="border-[1px] rounded-md border-slate-400 p-2" formControlName="sy_start">
       @if(this.schoolYearField.get('sy_start')?.invalid){
         <div class="text-red-600">
-          @if(this.schoolYearField.get('sy_start')?.getError('less_than') == true){
+          @if(this.schoolYearField.get('sy_start')?.hasError('required')){
+            School Year start is required!
+          }@else if (this.schoolYearField.get('sy_start')?.hasError('pattern')){
+            School Year is in invalid format!
+          }@else if(this.schoolYearField.get('sy_start')?.getError('less_than') == true){
             School year start should not be greater than the year end.
           }@else if (this.schoolYearField.get('sy_start')?.getError('equal') == true){
             School year start should not be the same as the year end.
@@ -22,13 +21,20 @@
         </div>
       }
     </div>
-    <div>
-      <span class="font-bold">School Year End</span>
-      @if(schoolYear){
-        <app-date-picker (yearInput)="setYearEnd($event)" [yearData]="schoolYear.sy_end"></app-date-picker>
-
+    <div class="flex flex-col gap-1">
+      <span class="font-bold">School Year End <span class="text-red-600">*</span></span>
+      <input class="border-[1px] rounded-md border-slate-400 p-2" formControlName="sy_end">
+      @if(this.schoolYearField.get('sy_end')?.invalid){
+        <div class="text-red-600">
+          @if(this.schoolYearField.get('sy_end')?.hasError('required')){
+            School Year end is required!
+          }@else if (this.schoolYearField.get('sy_end')?.hasError('pattern')){
+            School Year is in invalid format!
+          }
+        </div>
       }
     </div>
+
   </div>
   <div class="flex flex-row justify-center gap-2 py-2 mx-2">
     <a
@@ -44,7 +50,7 @@
     <button (click)="handleSubmit()" class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
       <i class="material-symbols-outlined">edit</i>
       <span class="hidden lg:block">
-        Edit School Year
+        Save Changes
       </span>
     </button>
   </div>

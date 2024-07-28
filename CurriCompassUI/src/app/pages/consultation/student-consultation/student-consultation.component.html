@@ -9,7 +9,7 @@
       {{ !studentSelected ? "" :  studentSelected!.student_record!.year_level!.year_level_desc }}
   </span>
   <span class="text-slate-700">
-      SY {{ !studentSelected ? "" : dateformat.formatToYear(currentSemSy?.school_year?.sy_start)  + " - " + dateformat.formatToYear(currentSemSy?.school_year?.sy_end) + " - " + currentSemSy?.semester?.semdesc }}
+      SY {{ !studentSelected ? "" : currentSemSy?.school_year?.sy_start  + " - " + currentSemSy?.school_year?.sy_end + " - " + currentSemSy?.semester?.semdesc }}
   </span>
   @if(currentSemSy){
     @if(studentSelected && studentSelected!.student_record!.enlistment.length == 0){
@@ -19,9 +19,9 @@
     }@else {
 
      <form class="w-full h-full flex flex-col gap-2" [formGroup]="userEnlistment">
-        <button class = "bg-green-500 transition-all hover:bg-green-600 w-full p-2 rounded-md text-white" (click)="gradeEncode = !gradeEncode">
+        <!-- <button class = "bg-green-500 transition-all hover:bg-green-600 w-full p-2 rounded-md text-white" (click)="gradeEncode = !gradeEncode">
           {{!gradeEncode ? "Encode Grade" : "Edit Enlistment" }}
-        </button>
+        </button> -->
         @if(!gradeEncode){
           <div class="w-full mx-1 border-slate-400 rounded-md border-[1px] p-2 bg-white h-[5rem] flex flex-col">
             <span>Search For Courses</span>
@@ -39,14 +39,15 @@
               <th class="border border-slate-600 w-[16.67%] flex items-center justify-center">
                 Course Code
               </th>
-              <th class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                Section
+              <th class="border border-slate-600 w-[16.67%] flex items-center justify-center">
+                Day
               </th>
               <th class="border border-slate-600 w-[16.67%] flex items-center justify-center">
                 Time
               </th>
-              <th class="border border-slate-600 w-[16.67%] flex items-center justify-center">
-                Day
+
+              <th class="border border-slate-600  w-[16.67%] flex items-center justify-center">
+                Section
               </th>
               <th class="border border-slate-600 w-[16.67%] flex items-center justify-center">
                 Units
@@ -57,15 +58,16 @@
                 </th>
               }@else{
                 <th class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                  <button
-                      class="border-[1px] rounded-md shadow-md flex items-center justify-center px-4 py-2"
-                      [ngClass]="{'border-green-400 text-green-400 bg-green-100' :  ((currentUnits >= 21  || reqCourseArray.length == 7)  && studentSelected.student_record.year_level_id != 4) || reqCourseArray.length >= subjectNotTaken, 'border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all' : (currentUnits < 21 && reqCourseArray.length < 7) && reqCourseArray.length < subjectNotTaken }"
-                      [disabled]="((currentUnits >= 21  || reqCourseArray.length == 7) && studentSelected.student_record.year_level_id != 4) || reqCourseArray.length >= subjectNotTaken"
-                      (click)="addReqCourseArray()"
-                    >
-                      <i class="material-symbols-outlined">add</i>
-                      <span class="lg:inline hidden">Add Course</span>
-                </button>
+                  @if(((currentUnits < 21  && reqCourseArray.length < 7)  && studentSelected.student_record.year_level_id != 4) || reqCourseArray.length >= subjectNotTaken){
+                    <button
+                        class="border-[1px] rounded-md shadow-md flex items-center justify-center px-4 py-2 border-green-600 text-green-600 bg-green-100 hover:text-white hover:bg-green-600 transition-all"
+                        [disabled]="((currentUnits >= 21  || reqCourseArray.length == 7) && studentSelected.student_record.year_level_id != 4) || reqCourseArray.length >= subjectNotTaken"
+                        (click)="addReqCourseArray()"
+                      >
+                        <i class="material-symbols-outlined">add</i>
+                        <span class="lg:inline hidden">Add Course</span>
+                     </button>
+                  }
                 </th>
               }
             </tr>
@@ -84,23 +86,24 @@
                       (change)="courseSelected(outerindex)"
                       [formControl]="getReqCourseControl(outerindex)">
                       <option [ngValue]="null" disabled>Please select</option>
-                      @if(searchCourse.trim().length > 0 &&
-                        isSelectedCourseFiltered(outerindex) == false &&
-                        getReqCourseControl(outerindex).value != null &&
-                        getReqCourseControl(outerindex).value != "null"
-                      ){
-                        <option
-                          [disabled]="!getReqCourseControl(outerindex).value ? false : isCourseSelected(getSelectedCourse(getSubject(getReqCourseControl(outerindex).value).subjects.subjectid).subjects.subjectid) || checkSubjectOverlap(getReqCourseControl(outerindex).value)"
-                          [ngValue]="getReqCourseControl(outerindex).value">
-                          {{ getSelectedCourse(getSubject(getReqCourseControl(outerindex).value).subjects.subjectid).subjects.subjectcode }}
-                        </option>
-                      }
+                        <!-- TO retain selection when filtered -->
+                        @if(searchCourse.trim().length > 0 &&
+                          isSelectedCourseFiltered(outerindex) == false &&
+                          getReqCourseControl(outerindex).value != null &&
+                          getReqCourseControl(outerindex).value != "null"
+                        ){
+                          <option
+                            [disabled]="!getReqCourseControl(outerindex).value ? false : isCourseSelected(getReqCourseControl(outerindex).value)"
+                            [ngValue]="getReqCourseControl(outerindex).value">
+                            {{ getReqCourseControl(outerindex).value }}
+                          </option>
+                        }
 
-                      @for(c of courses | courseAvailableFilter: searchCourse; track $index){
+                      @for(c of courseSelection | courseAvailableFilter: searchCourse; track $index){
                         <option
-                          [disabled]="isCourseSelected(getSelectedCourse(getSubject(c.caid).subjects.subjectid).subjectid) || checkSubjectOverlap(c.caid)"
-                          [ngValue]="c.caid">
-                          {{ c.subjects.subjectcode }}
+                          [disabled]="isCourseSelected(c)"
+                          [ngValue]="c">
+                          {{ c }}
                         </option>
                       }
                     </select>
@@ -113,41 +116,64 @@
                       </div>
                     }
                   </td>
+                  <td class="border border-slate-600  w-[16.67%] flex items-center justify-center relative">
+                    <select class="w-full h-full"
+                      [ngClass]="{'border-red-600 border-[1px]': getReqCourseDayControl(outerindex).invalid }"
+                      [formControl]="getReqCourseDayControl(outerindex)"
+                      (change)="resetTimeControl(outerindex)">
+                      <option [ngValue]="null" disabled>Please Select</option>
+                      @for(d of getDaySelection(getReqCourseControl(outerindex).value); track $index){
+                        <option [ngValue]="d">
+                          {{ d }}
+                        </option>
+                      }
+                    </select>
+                    @if(getReqCourseDayControl(outerindex).invalid) {
+                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                      </div>
+                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
+                        Day is required!
+                      </div>
+                    }
+                  </td>
+                  <td class="border border-slate-600  w-[16.67%] flex items-center justify-center relative">
+                    <select class="w-full h-full"
+                      [ngClass]="{'border-red-600 border-[1px]': getReqCourseTimeControl(outerindex).invalid }"
+                      [formControl]="getReqCourseTimeControl(outerindex)"
+                      (change)="addEnlistedSlot(outerindex)">
+                      <option [ngValue]="null" disabled>Please Select</option>
+                      @for(t of getTimeSelection(getReqCourseControl(outerindex).value, getReqCourseDayControl(outerindex).value); track $index){
+                        <option [ngValue]="t" [disabled]="checkSubjectOverlap(outerindex, t)">
+                          {{ t }}
+                        </option>
+                      }
+                    </select>
+                    @if(getReqCourseTimeControl(outerindex).invalid) {
+                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                      </div>
+                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
+                        Time is required!
+                      </div>
+                    }
+                  </td>
+
                   <td class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                    {{ !getSubject(sub.get('caid')?.value) ? "not yet set" : getSubject(sub.get('caid')?.value).section }}
+                    {{ getSectionDisplay(outerindex) }}
                   </td>
                   <td class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                    {{ !getSubject(sub.get('caid')?.value) ? "not yet set" : getSubject(sub.get('caid')?.value).time }}
+                    {{ getUnits(outerindex) }}
                   </td>
                   <td class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                    {{ !getSubject(sub.get('caid')?.value) ? "not yet set" : getSubject(sub.get('caid')?.value).days }}
+                    <button
+                      class=" flex items-center justify-center p-2 h-full flex-col text-white  lg:px-4 rounded-md bg-red-500 hover:bg-red-600"
+                      (click)="popReqCourseArray(outerindex)">
+                      <i class="material-symbols-outlined">
+                        delete
+                      </i>
+                    </button>
                   </td>
-                  <td class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                    {{ !getSubject(sub.get('caid')?.value) ? "not yet set" : getSubject(sub.get('caid')?.value).subjects.subjectcredits }}
-                  </td>
-                  @if(gradeEncode){
-                    <td class="border border-slate-600  w-[16.67%] flex items-center justify-center group relative">
-                      <select class="w-full h-full p-2 border-[1px] border-slate-700" [formControl]="getReqCourseGradeControl(outerindex)"(change)="handleEnlistment(outerindex)">
-                        @for(grade of enlistmentGradeSelection; track $index){
-                          <option [ngValue]="grade">
-                            {{grade ? grade : "None" }}
-                          </option>
-                        }
-                      </select>
-                    </td>
-                  }@else{
-                    <td class="border border-slate-600  w-[16.67%] flex items-center justify-center">
-                      <button
-                        class=" flex items-center justify-center p-2 h-full flex-col text-white  lg:px-4 rounded-md"
-                        [ngClass]="{'bg-red-500 hover:bg-red-600': !getReqCourseGradeControl(outerindex).value, 'bg-red-300' : getReqCourseGradeControl(outerindex).value}"
-                        (click)="popReqCourseArray(outerindex)"
-                        [disabled]="getReqCourseGradeControl(outerindex).value">
-                        <i class="material-symbols-outlined">
-                          delete
-                        </i>
-                      </button>
-                    </td>
-                  }
                 </tr>
               }
             }

@@ -12,80 +12,107 @@ import { AuthService } from '../../../services/auth/auth.service';
     CommonModule
   ],
   templateUrl: './login-ui.component.html',
-  styleUrl: './login-ui.component.css'
+  styleUrls: ['./login-ui.component.css']
 })
 export class LoginUiComponent {
-    constructor(
-      private router: Router,
-      private fb: FormBuilder,
-    ){}
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+  ){}
 
-    @ViewChild('password') passwordElement!: ElementRef;
+  @ViewChild('password') passwordElement!: ElementRef;
 
-    auth: AuthService = inject(AuthService);
-    showPass:boolean = false;
+  auth: AuthService = inject(AuthService);
+  showPass: boolean = false;
 
-    loginPayload = this.fb.group({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-    });
+  attempt = 0;
+  maxAttempts = 3;
+  lockoutDuration = 60; // 60 seconds
+  isLockedOut = false;
+  remainingTime = 0;
 
-    toggleVisibility(e:any){
-      if(this.showPass){
-        e.target.innerHTML = "password";
-      }else{
-        e.target.innerHTML = "visibility_lock";
-      }
-      this.showPass = !this.showPass;
+  loginPayload = this.fb.group({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+  });
+
+  toggleVisibility(e: any){
+    if(this.showPass){
+      e.target.innerHTML = "password";
+    }else{
+      e.target.innerHTML = "visibility_lock";
+    }
+    this.showPass = !this.showPass;
+  }
+
+  onLoginAttempt() {
+    if (this.isLockedOut) {
+      return;
     }
 
-    onLoginAttempt() {
-      if(this.loginPayload.status === "INVALID"){
-        return;
-      }
+    if(this.loginPayload.status === "INVALID"){
+      return;
+    }
 
-      this.auth.login(
-        this.loginPayload.get('email')?.value!,
-        this.loginPayload.get('password')?.value!).subscribe({
-          next: async (res:any) => {
-            this.auth.setCookie('user', res.authorisation.token);
-            const user = await this.auth.getUser();
-            if(user.firstlogin){
-              this.router.navigate(['/users/change-password']);
-            }else{
-              this.router.navigate(['/'])
-            }
-
-          },
-          error: err => {
-            if (err.status == 401){
-              this.loginPayload.get('password')?.setErrors({'incorrect': true});
-            }else if (err.status == 404){
-              this.loginPayload.get('email')?.setErrors({'not found': true});
-            }
+    this.auth.login(
+      this.loginPayload.get('email')?.value!,
+      this.loginPayload.get('password')?.value!).subscribe({
+        next: async (res: any) => {
+          this.auth.setCookie('user', res.authorisation.token);
+          const user = await this.auth.getUser();
+          if(user.firstlogin){
+            this.router.navigate(['/users/change-password']);
+          }else{
+            this.router.navigate(['/'])
           }
-        })
-    }
+        },
+        error: err => {
+          if (err.status == 401){
+            this.loginPayload.get('password')?.setErrors({'incorrect': true});
+          }else if (err.status == 404){
+            this.loginPayload.get('email')?.setErrors({'not found': true});
+          }
+          this.attempt++;
+          if (this.attempt >= this.maxAttempts) {
+            this.startCountdown();
+          }
+        }
+      });
+  }
 
-    checkIfActive() {
-      const e = this.passwordElement?.nativeElement;
+  startCountdown() {
+    this.isLockedOut = true;
+    this.remainingTime = this.lockoutDuration;
 
-      if(!e){
-        return false;
+    const interval = setInterval(() => {
+      this.remainingTime--;
+      if (this.remainingTime <= 0) {
+        clearInterval(interval);
+        this.isLockedOut = false;
+        this.attempt = 0;
       }
-      return e.classList.contains('active');
-    }
+    }, 1000);
+  }
 
-    makeFormActive(event: any): void {
-      if(event.targe?.value?.trim().length !== 0){
-        event.target?.classList.add('active');
-        return;
-      }
-      event.target?.classList.remove('active');
-    }
+  checkIfActive() {
+    const e = this.passwordElement?.nativeElement;
 
-    toggleFormActive(event: any): void {
-      event.target.children[0].focus();
-      this.makeFormActive( event.target.children[0]);
+    if (!e) {
+      return false;
     }
+    return e.classList.contains('active');
+  }
+
+  makeFormActive(event: any): void {
+    if(event.target?.value?.trim().length !== 0){
+      event.target?.classList.add('active');
+      return;
+    }
+    event.target?.classList.remove('active');
+  }
+
+  toggleFormActive(event: any): void {
+    event.target.children[0].focus();
+    this.makeFormActive(event.target.children[0]);
+  }
 }

@@ -12,7 +12,7 @@
       <div class="border-slate-400 border-1 w-full p-5 border-[1px] rounded-sm shadow-lg">
         <div class="flex flex-col">
           <div class="flex flex-col">
-            <span>Program Code</span>
+            <span>Program Code <span class="text-red-600">*</span></span>
             <input
               class="border-slate-500 border-[1px] rounded-sm p-2 my-4"
               formControlName="programcode"/>
@@ -36,7 +36,7 @@
             }
           </div>
           <div class="flex flex-col">
-            <span>Program Description</span>
+            <span>Program Description <span class="text-red-600">*</span></span>
             <input class="border-slate-500 border-[1px] rounded-sm p-2 my-4" formControlName="programdesc"/>
             @if(
               programsField.get('programdesc')?.invalid &&
@@ -65,7 +65,7 @@
       <button (click)="handleSubmit()" class="w-full flex flex-row gap-2 px-4 py-2 items-center justify-center bg-green-600 border-[1px] rounded-md text-white transition-all hover:bg-green-800 uppercase">
         <i class="material-symbols-outlined">edit</i>
         <span class="hidden lg:block">
-           Edit Program
+           Save Changes
         </span>
       </button>
     </div>

@@ -19,19 +19,22 @@
           <th class="lg:w-[20%] py-2 flex-auto">
             Section
           </th>
-          <th class="lg:w-[20%] py-2 flex-auto md:block hidden">
+          <th class="lg:w-[20%] py-2 flex-auto md:block ">
             Day
           </th>
-          <th class="md:w-[20%] flex-auto py-2 md:flex justify-center hidden">
+          <th class="md:w-[20%] flex-auto py-2 flex justify-center ">
             Time
           </th>
-          <th class="w-[20%] p-2 md:flex items-center justify-center">
+          <th class="w-[30%] flex-auto py-2 flex justify-center ">
+            Availability
+          </th>
+          <th class="w-[20%] p-2 flex items-center justify-center">
             <a
             class="border-[1px] rounded-md shadow-md border-green-600 text-green-600 flex items-center justify-center px-4 py-2 hover:bg-green-600 hover:text-white transition-all"
            [routerLink]="'/course-availability/add-course-availability'"
          >
            <i class="material-symbols-outlined">add</i>
-           <span class="lg:inline hidden">Add Course Availability</span>
+           <span class="lg:inline ">Add Course Availability</span>
          </a>
           </th>
         </tr>
@@ -40,9 +43,9 @@
         @for(course of courses|courseAvailableFilter:searchCourse; track $index){
           <tr class="flex flex-row bg-white h-[4rem] hover:bg-green-100">
             <td class="w-[20%] flex px-1 items-center">
-              <span>{{ course.subjects.subjectcode }}</span>
+              <span>{{ course.coursecode }}</span>
             </td>
-            <td class="lg:w-[20%] hidden lg:flex px-1 items-center">
+            <td class="lg:w-[20%]  lg:flex px-1 items-center">
               <span>{{ course.section }}</span>
             </td>
             <td class="lg:w-[20%] flex-auto px-1 flex items-center justify-center">
@@ -50,6 +53,9 @@
             </td>
             <td class="w-[20%] flex justify-center items-center px-1 lg:gap-2 gap-1">
               <span>{{ course.time }}</span>
+            </td>
+            <td class="w-[30%] flex justify-center items-center px-1 lg:gap-2 gap-1">
+              <span>{{ course.semester_sy.school_year.sy_start + " - "  + course.semester_sy.school_year.sy_end + ": " + course.semester_sy.semester.semdesc }}</span>
             </td>
 
             <td class="w-[20%] flex justify-center items-center px-1 lg:gap-2 gap-1">

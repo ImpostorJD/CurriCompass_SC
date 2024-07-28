@@ -1,0 +1,59 @@
+<div class="absolute top-0 right-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center z-50">
+  <div class="h-[60vh] min-w-[85vw] p-4 text-center rounded-lg shadow bg-slate-200 sm:p-5 border-[1px] border-slate-800 flex flex-col justify-between overflow-hidden">
+    <form [formGroup]="preRequisite" class="flex flex-col gap-2 h-full w-full">
+      <h1 class="text-2xl capitalize font-bold">Pre requisite for {{ selectedForm!.get('coursecode')!.value  + " - " + selectedForm!.get('coursedescription')!.value}}</h1>
+      <div class="flex flex-col gap-1 w-full items-start">
+        <span class="font-bold">
+          Year Standing
+        </span>
+        <select formControlName="year-standing" class="w-full p-2 border-slate-300 border-[1px] rounded-md">
+          <option [ngValue]="''" selected>None</option>
+          <option [ngValue]="'1'">1ST YEAR STANDING</option>
+          <option [ngValue]="'2'">2ND YEAR STANDING</option>
+          <option [ngValue]="'3'">3RD YEAR STANDING</option>
+          <option [ngValue]="'4'">4TH YEAR STANDING </option>
+          <option [ngValue]="'GRADUATING'">GRADUATING</option>
+        </select>
+      </div>
+      <div class="flex">
+      <button class="px-4 py-2 border-green-600 border-[1px] rounded-md text-green-600 hover:bg-green-600 hover:text-white transition-all" (click)="addCourse()">
+          Add Course Pre-requisite
+        </button>
+      </div>
+      <div class="flex flex-col h-[30vh] overflow-y-auto">
+        @for(c of courses.controls; track $index){
+          <div class="flex flex-col gap-2 items-start">
+            <span class="font-bold">
+              Course Code <span class="text-red-600">*</span>
+            </span>
+            <div class="flex flex-row gap-1 w-full">
+              <input class="p-2 border-[1px] border-slate-300 rounded-md w-full" [formControl]="getCourseCodeControl($index)" (change)="handleChange($index)">
+              <button class="flex justify-center items-center gap-1 border-red-600 rounded-md border-[1px] p-2 text-red-500 hover:bg-red-600 hover:text-white transition-all" (click)="popCourse($index)">
+                <i class="material-symbols-outlined">delete</i>
+              </button>
+            </div>
+            @if(getCourseCodeControl($index).invalid){
+              <div class="text-red-600">
+                @if(getCourseCodeControl($index).hasError('required')){
+                  Course Code is required!
+                }@else if(getCourseCodeControl($index).hasError('nonexistent')){
+                  Course Code specified does not exist in the previous selections!
+                }@else if (getCourseCodeControl($index).hasError('target')) {
+                  Course code cannot be the same as the target course!
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </form>
+    <div class="flex items-center gap-2">
+      <button type="button" class="w-full py-2 px-3 text-sm font-medium text-green-600 border-[1px] rounded-md border-green-600 hover:bg-green-600 transition-all hover:text-white" (click)="collapseModalEvent()">
+        Cancel
+      </button>
+      <button type="submit" class="w-full py-2 px-3 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-900" (click)="onSubmit()">
+        Save Changes
+      </button>
+    </div>
+  </div>
+</div>

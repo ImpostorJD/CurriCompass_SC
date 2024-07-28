@@ -22,12 +22,13 @@ export const routes: Routes = [
 
         {
           path : 'profile',
+          canActivate: [AuthGuard(['Admin', 'Staff', 'Student'])],
           loadComponent : () => import('./pages/users/profile-page/profile-page.component')
             .then((mod) => mod.ProfilePageComponent)
         },
 
         { path: 'users',
-          canActivate: [AuthGuard(['Admin'])],
+          canActivate: [AuthGuard(['Admin', 'Staff', 'Student'])],
           loadChildren: () => import('./pages/users/users.routes')
             .then((mod) => mod.usersRoutes)
         },
@@ -39,11 +40,11 @@ export const routes: Routes = [
             .then((mod) => mod.programsRoutes)
         },
 
-        { path: 'courses',
-          canActivate: [AuthGuard(['Admin'])],
-          loadChildren: () => import('./pages/courses/courses.routes')
-            .then((mod) => mod.coursesRoutes)
-        },
+        // { path: 'courses',
+        //   canActivate: [AuthGuard(['Admin'])],
+        //   loadChildren: () => import('./pages/courses/courses.routes')
+        //     .then((mod) => mod.coursesRoutes)
+        // },
 
         { path: 'curricula',
           canActivate: [AuthGuard(['Admin'])],

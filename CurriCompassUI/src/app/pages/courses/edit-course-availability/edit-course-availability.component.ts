@@ -11,6 +11,7 @@ import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs
 import { FormatDateService } from '../../../services/format/format-date.service';
 import { SystemLoadingService } from '../../../services/system-loading.service';
 import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { limitValidator } from '../../../services/validators/limit-validator';
 
 @Component({
   standalone: true,
@@ -32,7 +33,6 @@ import { LoadingComponentComponent } from '../../../components/loading-component
 })
 export class EditCourseAvailabilityComponent {
   constructor(
-    private activatedRoute: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private coursesService: CoursesServiceService,
@@ -40,25 +40,18 @@ export class EditCourseAvailabilityComponent {
     private coursePipe: CourseFilterPipe,
     public dateformat: FormatDateService,
     public loading: SystemLoadingService,
+    private activatedRoute: ActivatedRoute
   ){
 
   }
   private req: HttpReqHandlerService = inject(HttpReqHandlerService);
   private auth: AuthService = inject(AuthService);
-  routerId!: number;
-  courseList: any = null;
+
   searchCourse: string = '';
+  selectedCurricula:string|null = "";
+
+  routerId = null;
   semsy: any = null;
-
-  courseAvailability =  this.fb.group({
-    subjectid: new FormControl('', [Validators.required]),
-    semsyid: new FormControl('', [Validators.required]),
-    time: new FormControl('', [Validators.required]),
-    section: new FormControl('', [Validators.required]),
-    limit: new FormControl("0", [Validators.required]),
-    days: new FormControl('', [Validators.required]),
-  });
-
   timeSlot = {
     lab: [
       {
@@ -102,11 +95,28 @@ export class EditCourseAvailabilityComponent {
     ]
 
   }
+
+  courseAvailability =  this.fb.group({
+    coursecode: new FormControl(''),
+    semsyid: new FormControl('', [Validators.required]),
+    time: new FormControl('', [Validators.required]),
+    section: new FormControl('', [Validators.required]),
+    lab: new FormControl(false),
+    section_limit: new FormControl(0, [Validators.required, limitValidator]),
+    days: new FormControl('', [Validators.required]),
+  });
+
+  isLabHoursGreaterThanLecHours(): boolean {
+    return this.courseAvailability.get('lab')?.value as boolean;
+  }
+
+
   handleSubmit(){
     if(this.semsy.status == "INVALID") {
       markFormGroupAsDirtyAndInvalid(this.courseAvailability);
       return;
     }
+    console.log(this.courseAvailability.value);
 
     this.req.patchResource('course-availability/' + this.routerId, this.courseAvailability.value, httpOptions(this.auth.getCookie('user'))).subscribe({
       next: () => {
@@ -114,7 +124,7 @@ export class EditCourseAvailabilityComponent {
       },
       error: (err:any) => {
         if(err.status == 409){
-          this.courseAvailability.get('subjectid')!.setErrors({'duplicate' :true});
+          this.courseAvailability.get('time')!.setErrors({'duplicate' :true});
         }
       }
     });
@@ -122,18 +132,15 @@ export class EditCourseAvailabilityComponent {
 
   }
 
-  isLabHoursGreaterThanLecHours(): boolean {
-    const subjectId = this.courseAvailability.get('subjectid')?.value;
-    const course = this.courseList.find((e: any) => e.subjectid === subjectId);
-    if (!course) {
-      return false; // or handle the case when course is not found
-    }
-    return course.subjecthourslab > course.subjecthourslec;
-  }
-
   ngOnInit(){
     this.loading.initLoading();
+    this.req.getResource('semester-management', httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (s:any) => {
+        this.semsy = s[1];
+      },
+      error: (err:any) => console.log(err),
 
+    });
     this.activatedRoute.params.subscribe(params => {
       this.routerId = params['id'];
       this.req.getResource('course-availability/' + this.routerId, httpOptions(this.auth.getCookie('user'))).subscribe({
@@ -145,20 +152,8 @@ export class EditCourseAvailabilityComponent {
       })
     })
 
-    this.coursesService.getCourses().subscribe({
-      next: (c:any) => {
-        this.courseList = c;
-      },
-      error: (err:any) => console.log(err),
-    });
 
-    this.req.getResource('semester-management', httpOptions(this.auth.getCookie('user'))).subscribe({
-      next: (s:any) => {
-        this.semsy = s[1];
-      },
-      error: (err:any) => console.log(err),
 
-    });
   }
 
 }

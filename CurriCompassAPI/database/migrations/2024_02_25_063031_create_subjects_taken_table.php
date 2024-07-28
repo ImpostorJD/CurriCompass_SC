@@ -14,24 +14,13 @@ return new class extends Migration
     {
         Schema::create('subjects_taken', function (Blueprint $table) {
             $table->unsignedBigInteger('srid');
-            $table->unsignedBigInteger('subjectid');
-            $table->enum('taken_at', ['Sem 1', 'Sem 2', 'Sem 3', 'Credited']);
-            $table->unsignedBigInteger('sy');
-            $table->double('grade')->nullable();
-            $table->enum('remark', ["Excellent", "Very Good", "Good", "Fair", "Passing", "Failed", "Withdrawn", "Incomplete"])->nullable();
+            $table->string('coursecode');
+            $table->string('grade')->nullable();
             $table->foreign('srid')
                 ->references('srid')
                 ->on('student_records')
                 ->onDelete('cascade');
-            $table->foreign('sy')
-                ->references('sy')
-                ->on('school_years')
-                ->onDelete('restrict');
-            $table->foreign('subjectid')
-                ->references('subjectid')
-                ->on('subjects')
-                ->onDelete('cascade');
-            $table->primary(['srid', 'subjectid']);
+            $table->primary(['srid', 'coursecode']);
         });
     }
 

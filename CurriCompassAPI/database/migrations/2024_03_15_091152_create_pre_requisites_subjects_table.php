@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pre__requisites__subjects', function (Blueprint $table) {
-            $table->unsignedBigInteger('subjectid');
-            $table->unsignedBigInteger('prid');
-            $table->primary(['subjectid', 'prid']);
-            $table->foreign('subjectid')
-                ->references('subjectid')
-                ->on('subjects')
-                ->onDelete('cascade');
-            $table->foreign('prid')
-                ->references('prid')
-                ->on('pre__requisites')
-                ->onDelete('cascade');
-        });
+        // Schema::create('pre__requisites__subjects', function (Blueprint $table) {
+        //     $table->unsignedBigInteger('subjectid');
+        //     $table->unsignedBigInteger('prid');
+        //     $table->primary(['subjectid', 'prid']);
+        //     $table->foreign('subjectid')
+        //         ->references('subjectid')
+        //         ->on('subjects')
+        //         ->onDelete('cascade');
+        //     $table->foreign('prid')
+        //         ->references('prid')
+        //         ->on('pre__requisites')
+        //         ->onDelete('cascade');
+        // });
     }
 
     /**

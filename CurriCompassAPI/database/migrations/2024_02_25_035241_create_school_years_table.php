@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('school_years', function (Blueprint $table) {
             $table->id('sy');
-            $table->datetime('sy_start');
-            $table->datetime('sy_end');
+            $table->integer('sy_start');
+            $table->integer('sy_end');
             $table->unique(['sy_start', 'sy_end']);
             $table->timestamps();
         });

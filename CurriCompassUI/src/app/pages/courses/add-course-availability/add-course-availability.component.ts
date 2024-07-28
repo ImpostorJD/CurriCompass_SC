@@ -9,6 +9,7 @@ import { HttpReqHandlerService } from '../../../services/http-req-handler.servic
 import { AuthService } from '../../../services/auth/auth.service';
 import { httpOptions, markFormGroupAsDirtyAndInvalid } from '../../../../configs/Constants';
 import { FormatDateService } from '../../../services/format/format-date.service';
+import { limitValidator } from '../../../services/validators/limit-validator';
 
 @Component({
   selector: 'app-add-course-availability',
@@ -42,7 +43,9 @@ export class AddCourseAvailabilityComponent {
   private auth: AuthService = inject(AuthService);
 
   courseList: any = null;
+  curricula: any = null;
   searchCourse: string = '';
+  selectedCurricula:string|null = "";
   semsy: any = null;
   timeSlot = {
     lab: [
@@ -89,23 +92,41 @@ export class AddCourseAvailabilityComponent {
   }
 
   courseAvailability =  this.fb.group({
-    subjectid: new FormControl('', [Validators.required]),
+    coursecode: new FormControl('', [Validators.required]),
     semsyid: new FormControl('', [Validators.required]),
-    time: new FormControl(null, [Validators.required]),
+    time: new FormControl('', [Validators.required]),
+    lab: new FormControl(false),
     section: new FormControl('', [Validators.required]),
-    limit: new FormControl("0", [Validators.required]),
+    section_limit: new FormControl(0, [Validators.required, limitValidator]),
     days: new FormControl('', [Validators.required]),
   });
 
   isLabHoursGreaterThanLecHours(): boolean {
-    const subjectId = this.courseAvailability.get('subjectid')?.value;
-    const course = this.courseList.find((e: any) => e.subjectid === subjectId);
+    const subjectId = this.courseAvailability.get('coursecode')?.value;
+    const course = this.courseList.find((e: any) => e.coursecode === subjectId);
     if (!course) {
       return false; // or handle the case when course is not found
     }
-    return course.subjecthourslab > course.subjecthourslec;
+    let lab = course.hourslab > course.hourslec;
+
+    if(lab){
+      this.courseAvailability.get('lab')?.patchValue(true)
+    }else{
+      this.courseAvailability.get('lab')?.patchValue(false)
+    }
+    return lab;
   }
 
+  handleCurriculaChange(){
+    this.req.getResource('curriculum/' + this.selectedCurricula, httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (data:any) => {
+        this.courseList = data[1].curriculum_subjects;
+      },
+      error: (err:any) => {
+
+      }
+    });
+  }
   handleSubmit(){
     if(this.semsy.status == "INVALID") {
       markFormGroupAsDirtyAndInvalid(this.courseAvailability);
@@ -118,7 +139,7 @@ export class AddCourseAvailabilityComponent {
       },
       error: (err:any) => {
         if(err.status == 409){
-          this.courseAvailability.get('subjectid')!.setErrors({'duplicate' :true});
+          this.courseAvailability.get('coursecode')!.setErrors({'duplicate' :true});
         }
       }
     });
@@ -127,11 +148,13 @@ export class AddCourseAvailabilityComponent {
   }
 
   ngOnInit(){
-    this.coursesService.getCourses().subscribe({
-      next: (c:any) => {
-        this.courseList = c;
+
+    this.req.getResource('curriculum', httpOptions(this.auth.getCookie('user'))).subscribe({
+      next: (s:any) => {
+        this.curricula = s[1];
       },
       error: (err:any) => console.log(err),
+
     });
 
     this.req.getResource('semester-management', httpOptions(this.auth.getCookie('user'))).subscribe({
@@ -141,6 +164,6 @@ export class AddCourseAvailabilityComponent {
       error: (err:any) => console.log(err),
 
     });
-  }
 
+  }
 }

@@ -10,7 +10,7 @@ export const consultationRoutes: Routes = [
     component: ConsultationPageComponent
   },
   {
-    path: 'consultation/:id',
+    path: 'advising/:id',
     canActivate: [AuthGuard(['Admin', 'Staff'])],
     component: StudentConsultationComponent
   }

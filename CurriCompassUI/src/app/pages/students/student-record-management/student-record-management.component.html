@@ -1,48 +1,44 @@
 <form class="w-full h-full rounded-sm bg-slate-100 p-5 flex flex-col gap-4 overflow-x-auto relative" [formGroup]="studentProfileField">
-    <h1 class="font-bold font-sans text-2xl uppercase">Student Records</h1>
     <div class="flex-auto rounded-md w-full flex gap-2 p-2 flex-col">
       <div class="h-[30rem] w-full flex bg-white shadow-lg">
         <table class="h-full border border-collapse flex w-full table-condensed">
           <thead class="flex flex-col h-full justify-around w-[25%]">
             <tr class="w-full h-full">
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center flex-wrap">
-                Student No
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start flex-wrap">
+                Student No<span class="text-red-600">*</span>
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                First Name
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
+                First Name<span class="text-red-600">*</span>
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
                 Middle Name
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Last Name
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
+                Last Name<span class="text-red-600">*</span>
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Contact No.
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
+                Contact No.<span class="text-red-600">*</span>
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Email
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
+                Email<span class="text-red-600">*</span>
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Enrolled at:
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
+                Year of Admission<span class="text-red-600">*</span>
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Program
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
+                Curriculum<span class="text-red-600">*</span>
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
-                Specialization
-              </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
                 Year Level
               </th>
-              <th class="p-2 h-[9.09%] flex border border-slate-600 items-center">
+              <th class="p-2 h-[10%] flex border border-slate-600 items-start">
                 Status
               </th>
             </tr>
           </thead>
           <tbody class="flex-auto flex flex-col h-full">
             <tr class="w-full h-full flex flex-col">
-              <td class="border-slate-600 border h-[9.09%] relative group/studentid">
+              <td class="border-slate-600 border h-[10%] relative group/studentid">
                 <input
                   class="w-full p-2 h-full group/studentid"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('studentid')?.invalid }"
@@ -56,12 +52,14 @@
                         Student ID is required!
                       }@else if (studentProfileField.get('studentid')?.hasError('duplicate')){
                         Student ID is already in use!
+                      }@else if(studentProfileField.get('studentid')?.hasError('invalidId')){
+                        Student ID is in invalid format!
                       }
                     </div>
 
                   }
               </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/userfname">
+              <td class="border-slate-600 border h-[10%] relative group/userfname">
                 <input
                   class="w-full p-2 h-full group/userfname"
                   formControlName="userfname"
@@ -79,7 +77,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/usermiddle">
+              <td class="border-slate-600 border h-[10%] relative group/usermiddle">
                 <input class="w-full p-2 h-full group/usermiddle"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('usermiddle')?.invalid }"
                   formControlName="usermiddle"/>
@@ -96,7 +94,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/userlname">
+              <td class="border-slate-600 border h-[10%] relative group/userlname">
                 <input class="w-full p-2 h-full group/userlname"
                 [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('userlname')?.invalid }"
                 formControlName="userlname"/>
@@ -113,7 +111,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/contact_no">
+              <td class="border-slate-600 border h-[10%] relative group/contact_no">
                 <input class="w-full p-2 h-full group/contact_no"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('contact_no')?.invalid }"
                   formControlName="contact_no"/>
@@ -131,7 +129,7 @@
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/email">
+              <td class="border-slate-600 border h-[10%] relative group/email">
                 <input class="w-full p-2 h-full group/email"
                   [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('email')?.invalid }"
                   formControlName="email"/>
@@ -144,13 +142,16 @@
                         Email is required!
                       }@else if(studentProfileField.get('email')?.hasError('email')){
                         Email is in invalid format!
-                      }@else if(studentProfileField.get('email')?.hasError('duplicate')){
+                      } @else if(studentProfileField.get('email')?.hasError('emailDomain')){
+                        Email only accepts Baliuag University Email Address!
+                      }
+                      @else if(studentProfileField.get('email')?.hasError('duplicate')){
                         Email is already in use!
                       }
                     </div>
                   }
               </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/sy">
+              <td class="border-slate-600 border h-[10%] relative group/sy">
                 <select class="w-full p-2 h-full group/sy"
                 [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('sy')?.invalid }"
                 formControlName="sy">
@@ -159,7 +160,7 @@
                   </option>
                   @for(sy of school_years; track $index){
                     <option [ngValue]="sy.sy">
-                      {{ dateformat.formatToYear(sy.sy_start)  + " - " + dateformat.formatToYear(sy.sy_end) }}
+                      {{ sy.sy_start  + " - " + sy.sy_end }}
                     </option>
                   }
                 </select>
@@ -168,302 +169,192 @@
                   <div class="w-0 h-0 opacity-0 group-focus/sy:opacity-100 group-hover/sy:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
                   </div>
                   <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/sy:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/sy:opacity-100">
-                    Enrolled at is required!
+                    Year of admission is required!
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/program">
+              <td class="border-slate-600 border h-[10%] relative group/program">
                 <select class="w-full p-2 h-full border-[0px] group/program"
-                  [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('program')?.invalid }"
-                  (change)="setSpecializationsEvent($event)"
-                  formControlName="program">
+                  [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('curriculum')?.invalid }"
+                  (change)="changeCurriculum()"
+                  formControlName="curriculum">
                   <option [ngValue]="null" disabled selected>
                     N/A
                   </option>
-                  @for(program of programs; track $index){
-                    <option [ngValue]="program.programid">
-                      {{program.programdesc}}
+                  @for(curriculum of curricula; track $index){
+                    <option [ngValue]="curriculum.cid">
+                      {{curriculum.program.programcode + (curriculum.specialization ? curriculum.specialization : "") + " (" + curriculum.school_year.sy_start + " - " + curriculum.school_year.sy_end + ")"  }}
                     </option>
                   }
                 </select>
-                @if(studentProfileField.get('program')?.invalid) {
+                @if(studentProfileField.get('curriculum')?.invalid) {
                   <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
                   <div class="w-0 h-0 opacity-0 group-focus/program:opacity-100 group-hover/program:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
                   </div>
                   <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/program:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/program:opacity-100">
-                    Program is required!
+                    Curriculum is required!
                   </div>
                 }
               </td>
-              <td class="border-slate-600 border h-[9.09%]">
-                <select class="w-full p-2 h-full border-[0px]" formControlName="specialization"
-                (change)="changeSpecialization()">
-                  <option [ngValue]="null" disabled selected>
-                    N/A
-                  </option>
-                  @for(c of specializations; track $index){
-                    <option [ngValue]="c.specialization">
-                      {{ (c.specialization != null ? c.specialization : "None")  +  " (" + dateformat.formatToYear(c.school_year.sy_start)  + " - " + dateformat.formatToYear(c.school_year.sy_end) + ")"}}
-                    </option>
-                  }
-                </select>
-                @if(studentProfileField.get('specialization')?.invalid) {
-                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                  <div class="w-0 h-0 opacity-0 group-focus/program:opacity-100 group-hover/program:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-                  </div>
-                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/program:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/program:opacity-100">
-                    Specialization is required!
-                  </div>
-                }
+
+              <td class="border-slate-600 border h-[10%] relative group/year_level">
+                <span class="flex items-start w-full h-full p-2">
+                  {{ studentProfile?.student_record.year_level.year_level_desc }}
+                </span>
+
               </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/year_level">
-                <select class="w-full p-2 h-full group/year_level"
-                [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('year_level_id')?.invalid }"
-                formControlName="year_level_id">
-                  <option [value]="null" selected disabled>
-                    None
-                  </option>
-                  @for(y of year_levels; track $index){
-                    <option [ngValue]="y.year_level_id">
-                      {{y.year_level_desc}}
-                    </option>
-                  }
-                </select>
-                @if(studentProfileField.get('year_level_id')?.invalid) {
-                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                  <div class="w-0 h-0 opacity-0 group-focus/year_level:opacity-100 group-hover/year_level:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-                  </div>
-                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/year_level:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/year_level:opacity-100">
-                    Year Level is required!
-                  </div>
-                }
-              </td>
-              <td class="border-slate-600 border h-[9.09%] relative group/status">
-                <select class="w-full p-2 h-full group/status"
-                [ngClass]="{'border-red-600 border-[1px]': studentProfileField.get('status')?.invalid }"
-                formControlName="status">
-                  <option [value]="''" disabled selected>
-                    Please Select
-                  </option>
-                  <option value="Regular">
-                    Regular
-                  </option>
-                  <option value="Irregular">
-                    Irregular
-                  </option>
-                  <option value="Graduated">
-                    Graduated
-                  </option>
-                  <option value="Inactive">
-                    Inactive
-                  </option>
-                </select>
-                @if(studentProfileField.get('status')?.invalid) {
-                  <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                  <div class="w-0 h-0 opacity-0 group-focus/status:opacity-100 group-hover/status:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-                  </div>
-                  <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus/status:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover/status:opacity-100">
-                    Status is required!
-                  </div>
-                }
+              <td class="border-slate-600 border h-[10%] relative group/status">
+                <span class="flex items-start w-full h-full p-2">
+                  {{ studentProfile?.student_record.status }}
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="h-auto w-full">
-        <table class="flex-auto flex flex-col w-full mb-[1rem] border-[1px] border-slate-400">
-          <thead class="w-full flex flex-row bg-slate-300 h-[3rem]">
-            <tr class="h-full w-full flex flex-row">
-              <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-                Course Code
-              </th>
-              <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-                Units
-              </th>
-              <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-                Year Level
-              </th>
-              <th class="border border-slate-600 w-[10%] flex items-center justify-center">
-                Semester
-              </th>
-              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-                SY Taken
-              </th>
-              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-                Sem Taken
-              </th>
-              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-                Grade
-              </th>
-              <th class="border border-slate-600 w-[15%] flex items-center justify-center">
-                Remark
-              </th>
-            </tr>
-          </thead>
-          <tbody class="h-[25rem] overflow-y-auto">
-            @if(curriculumSubjects != null && subjectsTakenArray.length > 0){
-              @for(cs of curriculumSubjects; track $index){
-                <tr class="flex flex-row w-full hover:bg-green-300">
-                  <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                    {{ cs.subjects.subjectcode }}
-                  </td>
-                  <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                    {{ cs.subjects.subjectcredits }}
-                  </td>
-                  <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                    {{ cs.year_level.year_level_desc }}
-                  </td>
-                  <td class="border border-slate-600 w-[10%] flex items-center justify-center">
-                    {{ cs.semesters.semdesc }}
-                  </td>
-                  <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group">
-                    <select
-                    [ngClass]="{'border-red-600 border-[1px]': getSchoolYearControl($index).invalid }"
-                      class="h-full w-full p-2" [formControl]="getSchoolYearControl($index)">
-                      <option [ngValue]="null" disabled selected>
-                        Please Select
-                      </option>
-                      @for(sy of school_years; track $index){
-                        <option [ngValue]="sy.sy">
-                          {{ dateformat.formatToYear(sy.sy_start)  + " - " + dateformat.formatToYear(sy.sy_end) }}
+      @if(!loading.loading){
+        <div class="h-[50rem] w-full border-[1px] border-slate-300 rounded-md bg-white overflow-y-scroll">
+          @for(c of curriculumSubjects; track $index){
+            <table class="table-auto w-full border-collapse border border-slate-300">
+              <thead  class="h-[3rem]">
+                <tr class="flex flex-row p-2 w-full border-b-[1px] border-slate-300 relative">
+                  <th class="flex justify-center w-full">
+                   LEVEL {{
+                    c.year  == 1 ? 'I' :
+                    (c.year  == 2 ? 'II':
+                    (c.year  == 3 ? 'III':
+                     'IV'))
+                    }}
+                  </th>
+
+                </tr>
+                <tr class="flex flex-row py-2 w-full border-b-[1px] border-slate-300">
+                  <th class="flex justify-center w-full">
+                     {{
+                      c.semester  == 1 ? '1ST' :
+                      (c.semester == 2 ? '2ND':
+                      '3RD')
+                    }} TRIMESTER
+                  </th>
+                </tr>
+                <tr class="flex flex-row border-b-[1px] border-slate-300">
+                  <th class="w-[10%] border-slate-300 border-[1px] flex items-center justify-center">
+                    Grade
+                  </th>
+                  <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                    Course Code
+                  </th>
+                  <th class="w-[30%] border-slate-300 border-[1px] flex items-center justify-center">
+                    Course Title
+                  </th>
+                  <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                    Units
+                  </th>
+                  <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                    <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Units</span>
+                    <div class="flex flex-row w-full">
+                      <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                        Lec
+                      </span>
+                      <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                        Lab
+                      </span>
+                    </div>
+                  </th>
+                  <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                    <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Hours</span>
+                    <div class="flex flex-row w-full">
+                      <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                        Lec
+                      </span>
+                      <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                        Lab
+                      </span>
+                    </div>
+                  </th>
+                  <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+                    Prerequisite/s
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="flex flex-col w-full">
+                @for(s of c.subjects; let i = $index; track i){
+                  <tr class="flex flex-row border-b-[1px] border-slate-300">
+                    <td class="w-[10%] border-slate-300 border-[1px] flex items-center justify-center">
+                      <select class="p-2 border-slate-300 border-[1px] w-full h-full" (change)="handleGradeControl(s.coursecode, $event)" [ngModel]="getSubjectTakenValue(s.coursecode)" [ngModelOptions]="{standalone:true}" [disabled]="!gradeEditable && getSubjectTakenValue(s.coursecode).length != 0">
+                        <option [value]="''">
+                          None
                         </option>
-                      }
-                    </select>
-                    @if(getSchoolYearControl($index).invalid){
-                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-                      </div>
-                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
-                        School Year is required!
-                      </div>
-                    }
+                        @for(g of grades; track $index){
+                          <option [value]="g">
+                            {{ g }}
+                          </option>
+                        }
+                      </select>
+                    </td>
+                    <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                      {{ s.coursecode }}
+                    </td>
+                    <td class="w-[30%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                      {{ s.coursedescription }}
+                    </td>
+                    <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                      {{ s.units }}
+                    </td>
+                    <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                      {{ s.unitslec }}
+                    </td>
+                    <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                      {{ s.unitslab }}
+                    </td>
+                    <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                      {{ s.hourslec }}
+                    </td>
+                    <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                      {{ s.hourslab }}
+                    </td>
+                    <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                      {{ s.prerequisites }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot class="flex flex-col w-full">
+                <tr class="flex flex-row border-b-[1px] border-slate-300 w-full">
+                  <td class="w-[10%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
                   </td>
-                  <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group">
-                    <select class="h-full w-full p-2"
-                      [ngClass]="{'border-red-600 border-[1px]': getTakenAtControl($index).invalid }"
-                      [formControl]="getTakenAtControl($index)">
-                      <option [ngValue]="null" disabled selected>
-                        Please Select
-                      </option>
-                      <option value="Credited">
-                        Credited
-                      </option>
-                      <option value="Sem 1">
-                        1st Trimester
-                      </option>
-                      <option value="Sem 2">
-                        2nd Trimester
-                      </option>
-                      <option value="Sem 3">
-                        3rd Trimester
-                      </option>
-                    </select>
-                    @if(getTakenAtControl($index).invalid){
-                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-                      </div>
-                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
-                        Taken at is required
-                      </div>
-                    }
+                  <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
                   </td>
-                  <td class="border border-slate-600 w-[15%] flex items-center justify-center group relative">
-                    <select
-                      class="h-full w-full p-2"
-                      [ngClass]="{'border-red-600 border-[1px]': getGradeControl($index).invalid }"
-                      [formControl]="getGradeControl($index)" (change)="changeGradeRemark($index)">
-                      <option [ngValue]="null" disabled selected>
-                        Please Select
-                      </option>
-                      <option [ngValue]="1">
-                        1
-                      </option>
-                      <option [ngValue]="1.25">
-                        1.25
-                      </option>
-                      <option [ngValue]="1.5">
-                        1.50
-                      </option>
-                      <option [ngValue]="1.75">
-                        1.75
-                      </option>
-                      <option [ngValue]="2">
-                        2
-                      </option>
-                      <option [ngValue]="2.25">
-                        2.25
-                      </option>
-                      <option [ngValue]="2.5">
-                        2.50
-                      </option>
-                      <option [ngValue]="2.75">
-                        2.75
-                      </option>
-                      <option [ngValue]="3">
-                        3
-                      </option>
-                      <option [ngValue]="5">
-                        5
-                      </option>
-                    </select>
-                    @if(getGradeControl($index).invalid){
-                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                      <div class="w-0 h-0 opacity-0 group-focus:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-                      </div>
-                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
-                        Grade is required
-                      </div>
-                    }
+                  <td class="w-[30%] p-2 border-slate-300 border-[1px] flex items-center justify-center font-bold">
+                    Total
                   </td>
-                  <td class="border border-slate-600 w-[15%] flex items-center justify-center relative group">
-                    <select
-                      class="w-full p-2 h-full group"
-                      [ngClass]="{'border-red-600 border-[1px]': getRemarkControl($index).invalid }"
-                      [formControl]="getRemarkControl($index)">
-                      <option value="None">
-                        None
-                      </option>
-                      <option value="Excellent">
-                        Excellent
-                      </option>
-                      <option value="Very Good">
-                        Very Good
-                      </option>
-                      <option value="Good">
-                        Good
-                      </option>
-                      <option value="Fair">
-                        Fair
-                      </option>
-                      <option value="Passing">
-                        Passing
-                      </option>
-                      <option value="Failed">
-                        Failed
-                      </option>
-                      <option value="Incomplete">
-                        Incomplete
-                      </option>
-                      <option value="Widthdrawn">
-                        Widthdrawn
-                      </option>
-                    </select>
-                    @if(getRemarkControl($index).invalid) {
-                      <img class="absolute right-0 top-0 h-full" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
-                      <div class="w-0 h-0 opacity-0 group-focus/remark:opacity-100 group-hover:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-                      </div>
-                      <div class="bg-black rounded-md absolute min-w-[20px] min-h-[30px] z-50 group-focus:opacity-100 text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100">
-                        Remark/s is required!
-                      </div>
-                    }
+                  <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                    {{ totalSum($index, 'units') }}
+                  </td>
+                  <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                    {{ totalSum($index, 'unitslec') }}
+                  </td>
+                  <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                    {{ totalSum($index, 'unitslab') }}
+                  </td>
+                  <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                    {{ totalSum($index, 'hourslec') }}
+                  </td>
+                  <td class="w-[6%] p-2 border-slate-300 border-[1px] flex flex-col items-center justify-center">
+                    {{ totalSum($index, 'hourslab') }}
+                  </td>
+                  <td class="w-[12%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
                   </td>
                 </tr>
-              }
-            }
-          </tbody>
-        </table>
-      </div>
+                <tr class="flex w-full min-h-[1.23rem] bg-slate-200">
+                  <td class="w-full bg-slate-200 border-[1px] flex items-center justify-center">
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          }
+        </div>
+      }
       <div class="flex h-[3rem] justify-end gap-2">
         <a [routerLink]="'/students'" class="w-full flex flex-row gap-2 items-center justify-center px-4 bg-slate-700 py-2 rounded-md text-white hover:bg-slate-900 transition-all uppercase">
           <i class="material-symbols-outlined">

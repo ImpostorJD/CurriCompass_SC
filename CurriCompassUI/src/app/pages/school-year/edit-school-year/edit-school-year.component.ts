@@ -35,14 +35,16 @@ export class EditSchoolYearComponent {
   schoolYear:any = null;
 
   schoolYearField = this.fb.group({
-    sy_start: new FormControl('', [Validators.required]),
-    sy_end: new FormControl('', [Validators.required]),
+    sy_start: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{4}$/)]),
+    sy_end: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{4}$/)]),
   });
 
   handleSubmit(){
-    let date1 = moment(this.schoolYearField.get('sy_start')!.value, "YYYY/MM/DD");
-    let date2 = moment(this.schoolYearField.get('sy_end')!.value, "YYYY/MM/DD");
-    const datediff = date2.diff(date1, "years", true);
+    let date1 = parseInt(this.schoolYearField.get('sy_start')!.value!);
+    let date2 =  parseInt(this.schoolYearField.get('sy_end')!.value!);
+
+    let datediff = date2 - date1;
+
 
     if(datediff < 0){
       this.schoolYearField.get('sy_start')!.setErrors({'less_than': true});
@@ -87,8 +89,8 @@ export class EditSchoolYearComponent {
       this.req.getResource('school-year/' + this.routerId, httpOptions(this.auth.getCookie('user'))).subscribe({
         next: (res:any) => {
           this.schoolYear = res[1];
-          this.schoolYearField.get('sy_start')!.patchValue(moment(res[1].sy_start).format("YYYY/MM/DD"));
-          this.schoolYearField.get('sy_end')!.patchValue(moment(res[1].sy_end).format("YYYY/MM/DD"));
+          this.schoolYearField.get('sy_start')!.patchValue(res[1].sy_start);
+          this.schoolYearField.get('sy_end')!.patchValue(res[1].sy_end);
           this.loading.endLoading();
         },
 

@@ -13,17 +13,21 @@ return new class extends Migration
     {
         Schema::create('curriculum_subjects', function (Blueprint $table) {
             $table->unsignedBigInteger('cid');
-            $table->unsignedBigInteger('subjectid');
             $table->unsignedBigInteger('semid');
+            $table->string('coursecode');
+            $table->string('coursedescription');
+            $table->double('units');
+            $table->double('unitslab');
+            $table->double('unitslec');
+            $table->double('hourslec');
+            $table->double('hourslab');
+            $table->string('prerequisites')->nullable();
             $table->unsignedBigInteger('year_level_id');
             $table->foreign('cid')
                 ->references('cid')
                 ->on('curricula')
                 ->onDelete('cascade');
-            $table->foreign('subjectid')
-                ->references('subjectid')
-                ->on('subjects')
-                ->onDelete('cascade');
+
             $table->foreign('semid')
                 ->references('semid')
                 ->on('semesters')
@@ -33,7 +37,7 @@ return new class extends Migration
                 ->on('year_levels')
                 ->onDelete('restrict');
 
-            $table->primary(['cid', 'subjectid']);
+            $table->primary(['cid', 'coursecode']);
         });
     }
 

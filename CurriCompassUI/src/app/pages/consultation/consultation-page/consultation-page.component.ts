@@ -86,19 +86,30 @@ export class ConsultationPageComponent {
     this.req.getResource('enlistment/' + this.currentLogged.student_record.student_no, httpOptions(this.auth.getCookie('user'))).subscribe((data:any)=>{
       this.studentSelected = data[1];
       this.currentSemSy = data[2];
-      this.studentSelected.student_record?.enlistment[0]?.enlistment_subjects.forEach((data:any)=>{
-        this.currentUnits += data.course_availability.subjects.subjectcredits;
+      this.studentSelected.student_record?.enlistment[0]?.enlistment_subjects.forEach((data:any) => {
+        const sub = this.studentSelected.student_record?.curriculum?.curriculum_subjects.find((cs:any) => cs.coursecode == data.course_availability.coursecode);
+        this.currentUnits += parseInt(sub.units);
       });
       this.loading.endLoading();
     });
   }
 
-  retrieveStudents(){
-    this.req.getResource('enlistment', httpOptions(this.auth.getCookie('user')))
-        .subscribe((data:any) => {
-          this.studentRecords = data[1].sort((a: any, b: any) => yearLevel(a.student_record.year_level.year_level_desc, b.student_record.year_level.year_level_desc));
-          this.loading.endLoading();
-        });
+  getCourseUnit(coursecode: string){
+    const sub = this.studentSelected.student_record?.curriculum?.curriculum_subjects.find((data:any) => data.coursecode == coursecode);
+    return sub.units;
+  }
+
+  navigateToStudentEnlistment(){
+    if(this.searchConsultation.trim().length == 0){
+      return;
+    }
+    const regex = /^[0-9]{3}-[0-9]{4}$/;
+
+    if(!regex.test(this.searchConsultation.trim())){
+      return;
+    }
+
+    this.router.navigateByUrl('/advising/' + this.searchConsultation.trim());
   }
 
   async ngOnInit() {
@@ -123,11 +134,8 @@ export class ConsultationPageComponent {
       }
     }
 
-    if(this.isAdmin) {
-      this.retrieveStudents();
-    }else{
+    if(!this.isAdmin){
       this.getUser();
-
     }
   }
 

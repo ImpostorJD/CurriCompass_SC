@@ -22,6 +22,11 @@ class CourseAvailabilityController extends Controller
     {
 
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
+        if(!$currentsemsy){
+            return response()->json([
+             "no semester school year yet"
+            ], 200);
+        }
         return response()->json([
             ['status' => 'success'],
             CourseAvailability::whereHas('semester_sy', function($query) use($currentsemsy){
@@ -30,8 +35,7 @@ class CourseAvailabilityController extends Controller
             ->with(['semester_sy'=> function($query){
                 $query->with('school_year');
                 $query->with('semester');
-            }])->with('subjects')
-                ->get()
+            }])->get()
         ], 200);
     }
 
@@ -41,11 +45,11 @@ class CourseAvailabilityController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'subjectid' => ['required', 'integer'],
+            'coursecode' => ['required', 'string'],
             'semsyid' => ['required', 'integer'],
             'time' => ['required', 'string'],
             'section' => ['required', 'string'],
-            'limit' => ['required', 'integer'],
+            'section_limit' => ['required', 'integer'],
             'days' => ['required', 'string'],
         ]);
 
@@ -53,7 +57,7 @@ class CourseAvailabilityController extends Controller
             return response()->json([['status' => 'bad request'], $validate->errors()] ,400);
         }
 
-        $current_record = CourseAvailability::where('subjectid', $request['subjectid'])
+        $current_record = CourseAvailability::where('coursecode', $request['coursecode'])
             ->where('semsyid', $request['semsyid'])
             ->where('time', $request['time'])
             ->where('section', $request['section'])
@@ -67,11 +71,12 @@ class CourseAvailabilityController extends Controller
         return response()->json([
             ['status' => 'success'],
             CourseAvailability::create([
-                'subjectid' => $request['subjectid'],
+                'coursecode' => $request['coursecode'],
                 'semsyid' => $request['semsyid'],
+                'lab' => $request['lab'],
                 'time' => $request['time'],
                 'section' => $request['section'],
-                'limit' => $request['limit'],
+                'section_limit' => $request['section_limit'],
                 'days' => $request['days'],
             ]),
         ], 200);
@@ -87,7 +92,6 @@ class CourseAvailabilityController extends Controller
                 $query->with('school_year');
                 $query->with('semester');
             }])
-            ->with('subjects')
             ->first();
 
         if($record){
@@ -108,11 +112,10 @@ class CourseAvailabilityController extends Controller
     public function update(Request $request, string $id)
     {
         $validate = Validator::make($request->all(), [
-            'subjectid' => ['required', 'integer'],
             'semsyid' => ['required', 'integer'],
             'time' => ['required', 'string'],
             'section' => ['required', 'string'],
-            'limit' => ['required', 'integer'],
+            'section_limit' => ['required', 'integer'],
             'days' => ['required', 'string'],
         ]);
 
@@ -124,12 +127,10 @@ class CourseAvailabilityController extends Controller
             ->with(['semester_sy'=> function($query){
                 $query->with('school_year');
                 $query->with('semester');
-            }])
-            ->with('subjects')
-            ->first();
+            }])->first();
 
         if($record){
-            $existingRecord = CourseAvailability::where('subjectid', $request['subjectid'])
+            $existingRecord = CourseAvailability::where('coursecode', $request['coursecode'])
                 ->where('semsyid', $request['semsyid'])
                 ->where('time', $request['time'])
                 ->where('section', $request['section'])
@@ -144,11 +145,10 @@ class CourseAvailabilityController extends Controller
             return response()->json([
                 ['status' => 'success'],
                 $record->update([
-                    'subjectid' => $request['subjectid'],
                     'semsyid' => $request['semsyid'],
                     'time' => $request['time'],
                     'section' => $request['section'],
-                    'limit' => $request['limit'],
+                    'section_limit' => $request['section_limit'],
                     'days' => $request['days'],
                 ])
             ], 200);
@@ -201,49 +201,48 @@ class CourseAvailabilityController extends Controller
         $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
         $currentsem = $currentsemsy->semid ==  1 ? "Sem 1" : ($currentsemsy->semid ==  2 ? "Sem 2" : "Sem 3");
         $studentRecord = StudentRecord::where('student_no', $srid)
-            ->with(['subjects_taken' => function ($query) use ($currentsemsy, $currentsem){
-                $query->where('sy', '!=', $currentsemsy->sy);
-                $query->where('taken_at', '!=', $currentsem);
-                $query->where('remark', '!=', "Withdrawn");
-                $query->where('remark', '!=', "Incomplete");
-                $query->where('remark', '!=', "Fail");
-
+            ->with(['curriculum' => function ($query){
+                $query->with('curriculum_subjects');
             }])
-            ->first();
+            ->with(['subjects_taken' => function ($query){
+                $query->where('grade', '!=', "w");
+                $query->where('grade', '!=', "x");
+                $query->where('grade', '!=', "5");
+
+            }])->first();
         $cav = CourseAvailability::whereHas('semester_sy', function($query) use($currentsemsy){
             $query->where('semsyid', $currentsemsy->semsyid);
-        })
-            ->whereHas('subjects', function($query) use($studentRecord){
-                $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
-                $query->whereHas('curriculumsubjects', function($query) use($studentRecord){
-                    $query->where('cid', $studentRecord->cid);
-                });
-                // commented this out to allow irregular with not taken pre-requisite to take left subjects
-                // $query->whereHas('pre_requisites', function($query) use($studentRecord){
-                //     $query->where('year_level_id', null)
-                //         ->orWhere('year_level_id', "<=", $studentRecord->year_level_id)
-                //         ->orWhere(function($query) use($studentRecord){
-                //             $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
-                //         })
-                //         ->orWhere(function($query) use($studentRecord){
-                //             //check if studentrecord subject taken is passed or not
-                //             $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray())
-                //                 ->whereHas('subjects', function($query) use($studentRecord){
-                //                     $query->whereHas('subjectsTaken', function($query) use($studentRecord){
-                //                         $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid'))
-                //                             ->where('grade', "!=", null)
-                //                             ->orWhere('grade', ">=", 3);
-                //                     });
-                //                 });
-                //         });
+        })->whereNotIn('coursecode', $studentRecord->subjects_taken->pluck('coursecode')->toArray())
+        ->whereIn('coursecode', $studentRecord->curriculum->curriculum_subjects->pluck('coursecode')->toArray())
+            // ->whereHas('subjects', function($query) use($studentRecord){
+            //     $query->whereNotIn('subjectid', );
+            //     $query->whereHas('curriculumsubjects', function($query) use($studentRecord){
+            //         $query->where('cid', $studentRecord->cid);
+            //     });
+            //     // commented this out to allow irregular with not taken pre-requisite to take left subjects
+            //     // $query->whereHas('pre_requisites', function($query) use($studentRecord){
+            //     //     $query->where('year_level_id', null)
+            //     //         ->orWhere('year_level_id', "<=", $studentRecord->year_level_id)
+            //     //         ->orWhere(function($query) use($studentRecord){
+            //     //             $query->whereNotIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray());
+            //     //         })
+            //     //         ->orWhere(function($query) use($studentRecord){
+            //     //             //check if studentrecord subject taken is passed or not
+            //     //             $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid')->toArray())
+            //     //                 ->whereHas('subjects', function($query) use($studentRecord){
+            //     //                     $query->whereHas('subjectsTaken', function($query) use($studentRecord){
+            //     //                         $query->whereIn('subjectid', $studentRecord->subjects_taken->pluck('subjectid'))
+            //     //                             ->where('grade', "!=", null)
+            //     //                             ->orWhere('grade', ">=", 3);
+            //     //                     });
+            //     //                 });
+            //     //         });
 
-                // });
-        })
+            //     // });
         ->with(['semester_sy'=> function($query){
             $query->with('school_year');
             $query->with('semester');
-        }])->with('subjects')
-            ->get();
+        }])->get();
 
         $filteredCav = [];
         foreach($cav as $c){

@@ -12,11 +12,12 @@ export function AuthGuard(allowedRoles: string[]): CanActivateFn {
   return async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree>  => {
 
     const getUserCookie = inject(AuthService).getCookie('user');
+    const router = inject(Router);
     try{
       const resp:any = await inject(AuthService).getUser();
 
       if (allowedRoles.length > 0) {
-        const user = await resp[1];
+        const user = await resp;
         if (user){
           for(let role of allowedRoles) {
 
@@ -28,7 +29,7 @@ export function AuthGuard(allowedRoles: string[]): CanActivateFn {
           }
         }
 
-        inject(Router).navigateByUrl('/');
+        router.navigateByUrl('/');
       }
 
     }catch(_){

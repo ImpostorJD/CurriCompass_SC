@@ -14,9 +14,10 @@ class CourseAvailability extends Model
 
 
     protected $fillable = [
-        'subjectid',
+        'coursecode',
         'time',
         'semsyid',
+        'lab',
         'section',
         'section_limit',
         'days'
@@ -38,7 +39,7 @@ class CourseAvailability extends Model
         return $this->belongsTo(SemSy::class, 'semsyid', 'semsyid');
     }
 
-    public function subjects() {
-        return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
-    }
+    // public function subjects() {
+    //     return $this->belongsTo(Subjects::class, 'subjectid', 'subjectid');
+    // }
 }

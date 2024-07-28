@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\EnlistmentAlgorithm;
 use App\Models\CourseAvailability;
+use App\Models\CurriculumSubjects;
 use App\Models\Enlistment;
 use App\Models\EnlistmentSubjects;
 use App\Models\SemSy;
@@ -63,7 +64,12 @@ class EnlistmentController extends Controller
 
         //Retrieve curriculum and student records synchronously
         $targetStudent = StudentRecord::where('student_no', $request['srid'])
-            ->first();
+            ->with(['curriculum' => function ($query){
+                $query->with('curriculum_subjects');
+            }])
+            ->with(['enlistment' => function ($query){
+                $query->with('enlistment_subjects');
+            }])->first();
 
         if($targetStudent == null){
             return response()->json(["status" => "not found"], 404);
@@ -120,9 +126,7 @@ class EnlistmentController extends Controller
             $query->with(['enlistment' => function ($query) use ($currentsemsy){
                 $query->where('semsyid', $currentsemsy->semsyid);
                 $query->with(['enlistment_subjects' => function ($query) {
-                    $query->with(['course_availability' => function ($query){
-                        $query->with('subjects');
-                    }]);
+                    $query->with('course_availability');
                 }]);
             }]);
             $query->with(['curriculum' => function($query){
@@ -133,10 +137,9 @@ class EnlistmentController extends Controller
         }])->first();
 
         if($user){
-            $subjectsNotTaken = Subjects::whereHas('curriculumsubjects', function($query) use ($user){
-                $query->where('cid', $user->student_record->cid);
-                $query->whereNotIn('subjectid', $user->student_record->subjects_taken->pluck('subjectid')->toArray());
-            })->count();
+
+            $subjectsNotTaken = CurriculumSubjects::where('cid', $user->student_record->cid)
+                ->whereNotIn('coursecode', $user->student_record->subjects_taken->pluck('coursecode')->toArray());
 
             return response()->json([
                 ['status' => 'success'],
@@ -157,8 +160,9 @@ class EnlistmentController extends Controller
         $validate = Validator::make($request->all(), [
             'enlistmentId' => ['required' => 'integer'],
             'subjects' => ['required' => 'array'],
-            'subjects*.caid' => ['required', 'integer'],
-            'subjects*.grade' => ['nullable', 'string'],
+            'subjects*.coursecode' => ['required', 'string'],
+            'subjects*.day' => ['required', 'string'],
+            'subjects*.time' => ['required', 'string'],
         ]);
 
         if($validate->fails()){
@@ -166,70 +170,34 @@ class EnlistmentController extends Controller
                 ['status' => 'bad request'],
             ], 400);
         }
+
         $enlistment = Enlistment::whereHas('student_record', function($query) use ($id){
             $query->where('student_no', $id);
         })->where('peid', $request->enlistmentId)->with(['enlistment_subjects' => function ($query){
             $query->with('course_availability');
         }])->first();
 
+        $enlistment->enlistment_subjects()->delete();
 
-        $currentsemsy = SemSy::orderBy('semsyid', 'desc')->first();
-        $taken_at = $currentsemsy->semid == 1 ? "Sem 1" : ($currentsemsy->semid == 2 ? "Sem 2" : "Sem 3");
-        if($enlistment) {
-          //update logic
+        if($enlistment){
 
-          //delete all enlisted subjects taken record
-          foreach($enlistment->enlistment_subjects as $en){
-            $subject_taken = SubjectsTaken::where('subjectid', $en->course_availability->subjectid)->where('srid', $enlistment->srid)->first();
-            if($subject_taken){
-                $subject_taken->delete();
-            }
-          }
-
-          $enlistment->enlistment_subjects()->delete();
-
-          $studentRecord = StudentRecord::where('student_no', $id)->first();
-
-          foreach($request->subjects as $es) {
-            EnlistmentSubjects::create([
-                'peid' => $enlistment->peid,
-                'caid' => $es['caid'],
-            ]);
-
-            if($es['grade'] != null) {
-                $grade = $es['grade'];
-                $remark = $es['grade'] == 1 ? "Excellent" :
-                    ($grade == 1.25 || $grade == 1.50 ? "Very Good" :
-                    ($grade == 1.75 || $grade == 2 || $grade == 2.25 ? "Good" :
-                    ($grade == 2.5 ? "Fair" :
-                    ($grade == 2.75 || $grade == 3 ? "Passing" :
-                    ($grade == 5 ? "Failed" :
-                    ($grade == "x" ? "Incomplete" : "Withdrawn"))))));
-
-                $normalized_grade = is_numeric($grade) ? floatval($grade) : null;
-                $subjectTaken = SubjectsTaken::where('subjectid', $es['subjectid'])->where('srid', $studentRecord->srid)->first();
-                if($subjectTaken) {
-                    $subjectTaken->delete();
-                }
-
-                SubjectsTaken::create([
-                    'srid' => $studentRecord->srid,
-                    'subjectid' => $es['subjectid'],
-                    'taken_at'=> $taken_at,
-                    'grade' => $normalized_grade,
-                    'sy' => $currentsemsy->sy,
-                    'remark' => $remark,
+            foreach($request->subjects as $es) {
+                $courseavailability = CourseAvailability::where('time', $es['time'])
+                    ->where('days', $es['day'])
+                    ->where('coursecode', $es['coursecode'])
+                    ->first();
+                EnlistmentSubjects::create([
+                    'peid' => $enlistment->peid,
+                    'caid' => $courseavailability->caid,
                 ]);
-
             }
-          }
 
-        return response()->json([
-            ['status' => 'success'],
-            $enlistment
-        ], 200);
-
+            return response()->json([
+                ['status' => 'success'],
+                $enlistment
+            ], 200);
         }
+
         return response()->json([
             ['status' => 'not found'],
         ], 404);

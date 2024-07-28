@@ -10,13 +10,16 @@ import { FormGroup } from "@angular/forms";
  * @author John Daniel Tejero
  * @param authToken
  */
-export const httpOptions = (authToken: string | null) => {
+export const httpOptions = (authToken: string | null, mime:boolean = false) => {
   const header:any =  {
     headers: {
-      'Content-Type': 'application/json',
       'accept': 'application/json',
     }
   };
+
+  if (!mime){
+    header.headers['Content-Type'] = 'application/json'
+  }
 
   if (authToken){
     header.headers['Authorization'] = `Bearer ${authToken}`;

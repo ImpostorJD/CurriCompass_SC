@@ -8,14 +8,14 @@ use App\Models\SubjectsTaken;
 class IdentifyMissingCourseAsync {
     public static function identifyMissingCourse($courseid, $targetStudent){
         $subject_taken = SubjectsTaken::where('srid', $targetStudent->srid)
-            ->where('subjectid', $courseid)
+            ->where('coursecode', $courseid)
             ->first();
 
         if($subject_taken == null){
             return $courseid;
         }
 
-        if($subject_taken->remark == "Failed" || $subject_taken->remark == "Withdrawn"){
+        if($subject_taken->grade == "w" || $subject_taken->remark == "x" || $subject_taken->remark == "5"){
             return $courseid;
         }
 

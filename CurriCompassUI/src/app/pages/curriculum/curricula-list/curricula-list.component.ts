@@ -10,6 +10,7 @@ import { ModalUtilityService } from '../../../services/modal-utility.service';
 import { DeleteModalPopupComponent } from '../../../components/delete-modal-popup/delete-modal-popup.component';
 import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
 import { SystemLoadingService } from '../../../services/system-loading.service';
+import { CurriculaBulkComponent } from "../../../components/curricula-bulk/curricula-bulk.component";
 
 @Component({
   selector: 'app-curricula-list',
@@ -21,7 +22,8 @@ import { SystemLoadingService } from '../../../services/system-loading.service';
     FormsModule,
     DeleteModalPopupComponent,
     LoadingComponentComponent,
-  ],
+    CurriculaBulkComponent
+],
 
   templateUrl: './curricula-list.component.html',
   styleUrl: './curricula-list.component.css'
@@ -37,8 +39,9 @@ export class CurriculaListComponent {
   showError = false;
   searchCurricula: string = '';
   curricula: any  = null;
-
+  importModalShow = false;
   getCurricula(){
+    this.loading.initLoading();
     this.req.getResource('curriculum', httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {
         this.curricula = res[1];

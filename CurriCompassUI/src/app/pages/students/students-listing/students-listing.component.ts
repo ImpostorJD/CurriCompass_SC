@@ -10,6 +10,7 @@ import { DeleteModalPopupComponent } from '../../../components/delete-modal-popu
 import { StudentFilterPipe } from '../../../services/filter/search-filters/student-filter.pipe';
 import { SystemLoadingService } from '../../../services/system-loading.service';
 import { LoadingComponentComponent } from '../../../components/loading-component/loading-component.component';
+import { StudentBulkRegistrationModalComponent } from '../../../components/student-bulk-registration-modal/student-bulk-registration-modal.component';
 
 @Component({
   selector: 'app-students-listing',
@@ -21,6 +22,7 @@ import { LoadingComponentComponent } from '../../../components/loading-component
     StudentFilterPipe,
     DeleteModalPopupComponent,
     LoadingComponentComponent,
+    StudentBulkRegistrationModalComponent
   ],
   templateUrl: './students-listing.component.html',
   styleUrl: './students-listing.component.css'
@@ -37,6 +39,7 @@ export class StudentsListingComponent {
   searchStudent:string = '';
   students:any = null;
   showError:boolean = false;
+  importModalShow: boolean = false;
 
   deleteStudent(id: number){
     this.modalUtility.disableModal();
@@ -55,6 +58,7 @@ export class StudentsListingComponent {
   }
 
   getStudents(){
+    this.loading.initLoading();
     this.req.getResource('student-records',
     httpOptions(this.auth.getCookie('user'))).subscribe({
       next: (res:any) => {

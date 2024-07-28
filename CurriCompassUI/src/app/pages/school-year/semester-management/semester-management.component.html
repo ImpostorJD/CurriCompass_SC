@@ -42,7 +42,7 @@
 
               <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
                 <span>
-                   {{ dateformat.formatToYear(s.school_year.sy_start) + " - " + dateformat.formatToYear(s.school_year.sy_end) }}
+                   {{ s.school_year.sy_start + " - " + s.school_year.sy_end }}
                   </span>
                 </td>
                 <td class="lg:w-[33.3%] flex-auto px-1 flex items-center">
@@ -59,14 +59,14 @@
                     visibility
                   </i>
                 </a> -->
-              <button
+              <!-- <button
                 class="bg-red-500 flex items-center justify-center p-2 h-full flex-col text-white hover:bg-red-600 lg:px-4 rounded-md"
                 (click)="modalUtility.enableModal(s.semsyid)"
               >
                   <i class="material-symbols-outlined">
                     delete
                   </i>
-                </button>
+              </button> -->
               </td>
             </tr>
           }
@@ -87,7 +87,6 @@
       </button>
     </div>
     <div class="bg-red-100 border border-red-400 text-red-700 rounded absolute bottom-0 right-0" role="alert">
-
     </div>
   }
 </div>

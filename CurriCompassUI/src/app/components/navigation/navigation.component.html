@@ -24,32 +24,62 @@
     [ngClass]="{'right-0 before:absolute before:bg-black before:bg-opacity-35 before:h-full before:w-[100vw] before:z-[-10] before:left-0': panelToggled, 'right-[100%] before:hidden': !panelToggled}"
   >
     <div class="flex-auto text-white flex flex-col gap-1 overflow-auto z-30">
-      @for (button of buttons; track $index) {
-        <div class="relative group">
-          <a
-            *appRolesToRender="button.allowedRoles"
-            [routerLink]="button.path"
-            class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl before:absolute before:h-full before:-z-10 hover:before:bg-green-600 transition-all"
-            [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl before:w-full': panelToggled, 'md:justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
-            routerLinkActive="before:bg-green-600 text-white"
-            [routerLinkActiveOptions]="{exact: true}"
-          >
-            <i class="{{button.icon_type}}">{{button.icon}}</i>
-            <span
-              [ngClass]="{'md:inline': panelToggled, 'md:hidden': !panelToggled}"
-            >{{button.name}}</span>
-          </a>
-          <div
-            [ngClass]="{'md:group-hover:block' : !panelToggled}"
-            class="w-0 h-0 hidden absolute top-[110%] right-[48%] border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
-          </div>
-          <div
-            [ngClass]="{'md:group-hover:block' : !panelToggled}"
-            class="hidden transition-all text-center absolute rounded-md bg-black min-w-[130px] w-auto h-auto text-white right-[50%] p-2 bottom-[-80%] translate-x-1/2 z-20 text-[0.66rem]">
-            {{button.name}}
-          </div>
-        </div>
+        @for (button of buttons; track $index) {
+          @if(currentUser?.firstlogin){
+            @if(button.name == "Change Password"){
+              <div class="relative group">
+                <a
+                  *appRolesToRender="button.allowedRoles"
+                  [routerLink]="button.path"
+                  class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl before:absolute before:h-full before:-z-10 hover:before:bg-green-600 transition-all"
+                  [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl before:w-full': panelToggled, 'md:justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
+                  routerLinkActive="before:bg-green-600 text-white"
+                  [routerLinkActiveOptions]="{exact: true}"
+                >
+                  <i class="{{button.icon_type}}">{{button.icon}}</i>
+                  <span
+                    [ngClass]="{'md:inline': panelToggled, 'md:hidden': !panelToggled}"
+                  >{{button.name}}</span>
+                </a>
+                <div
+                  [ngClass]="{'md:group-hover:block' : !panelToggled}"
+                  class="w-0 h-0 hidden absolute top-[110%] right-[48%] border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                </div>
+                <div
+                  [ngClass]="{'md:group-hover:block' : !panelToggled}"
+                  class="hidden transition-all text-center absolute rounded-md bg-black min-w-[130px] w-auto h-auto text-white right-[50%] p-2 bottom-[-80%] translate-x-1/2 z-20 text-[0.66rem]">
+                  {{button.name}}
+                </div>
+              </div>
+            }
+          }@else {
+            <div class="relative group">
+              <a
+                *appRolesToRender="button.allowedRoles"
+                [routerLink]="button.path"
+                class="z-10 flex flex-row h-[3rem] p-4 gap-2 items-center my-1 rounded-r-2xl before:absolute before:h-full before:-z-10 hover:before:bg-green-600 transition-all"
+                [ngClass]="{'justify-start before:-left-10 before:rounded-r-2xl before:w-full': panelToggled, 'md:justify-center before:rounded-[15rem] before:w-[50%]': !panelToggled}"
+                routerLinkActive="before:bg-green-600 text-white"
+                [routerLinkActiveOptions]="{exact: true}"
+              >
+                <i class="{{button.icon_type}}">{{button.icon}}</i>
+                <span
+                  [ngClass]="{'md:inline': panelToggled, 'md:hidden': !panelToggled}"
+                >{{button.name}}</span>
+              </a>
+              <div
+                [ngClass]="{'md:group-hover:block' : !panelToggled}"
+                class="w-0 h-0 hidden absolute top-[110%] right-[48%] border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+              </div>
+              <div
+                [ngClass]="{'md:group-hover:block' : !panelToggled}"
+                class="hidden transition-all text-center absolute rounded-md bg-black min-w-[130px] w-auto h-auto text-white right-[50%] p-2 bottom-[-80%] translate-x-1/2 z-20 text-[0.66rem]">
+                {{button.name}}
+              </div>
+            </div>
+          }
       }
+
     </div>
     <button
       class="m-1 bg-green-600 text-white flex h-10 justify-center items-center hover:bg-green-800 rounded-md border-emerald-800 hover:border-green-800 transition-all shadow-md shadow-green-950"

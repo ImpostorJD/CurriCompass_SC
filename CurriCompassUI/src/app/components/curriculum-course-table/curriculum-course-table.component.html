@@ -1,0 +1,243 @@
+<div class="absolute top-0 right-0 w-[100vw] h-[100vh] bg-black bg-opacity-75 flex items-center justify-center">
+  <div class="h-[70vh] min-w-[85vw] p-4 text-center rounded-lg shadow bg-slate-200 sm:p-5 border-[1px] border-slate-800 flex flex-col justify-between overflow-hidden relative">
+    <form [formGroup]="selectedForm!">
+      <table class="table-auto w-full h-full border-collapse border border-slate-300">
+        <thead  class="h-[3rem]">
+          <tr class="flex flex-row p-2 w-full border-b-[1px] border-slate-300 relative">
+            <th class="flex justify-center w-full">
+              LEVEL {{
+                selectedForm!.get('level')?.value  == 1 ? 'I' :
+                (selectedForm!.get('level')?.value  == 2 ? 'II':
+                (selectedForm!.get('level')?.value  == 3 ? 'III':
+                 'IV'))
+                }}
+            </th>
+          </tr>
+          <tr class="flex flex-row py-2 w-full border-b-[1px] border-slate-300">
+            <th class="flex justify-center w-full">
+              {{
+                 selectedForm!.get('semester')?.value  == 1 ? '1ST' :
+              ( selectedForm!.get('semester')?.value  == 2 ? '2ND':
+              '3RD')
+            }} TRIMESTER
+            </th>
+          </tr>
+          @if(subjectsFormArray.length < 7){
+            <tr class="flex flex-row py-2 w-full border-b-[1px] border-slate-300">
+              <th class="w-full">
+                <button class="flex justify-center rounded-md bg-green-600 text-white hover:bg-green-700 transition-all w-full py-2 px-4" (click)="addSubject()">
+                  Add Course
+                </button>
+              </th>
+            </tr>
+
+          }
+          <tr class="flex flex-row border-b-[1px] border-slate-300">
+            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+              Course Code
+            </th>
+            <th class="w-[30%] border-slate-300 border-[1px] flex items-center justify-center">
+              Course Title
+            </th>
+            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+              Units
+            </th>
+            <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+              <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Units</span>
+              <div class="flex flex-row w-full">
+                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                  Lec
+                </span>
+                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                  Lab
+                </span>
+              </div>
+            </th>
+            <th class="w-[12%] border-slate-300 border-[1px] flex flex-col items-center justify-center">
+              <span class="border-slate-300 border-[1px] w-full flex items-center justify-center" >Hours</span>
+              <div class="flex flex-row w-full">
+                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                  Lec
+                </span>
+                <span class="flex border-[1px] w-full border-slate-300 items-center justify-center">
+                  Lab
+                </span>
+              </div>
+            </th>
+            <th class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+              Prerequisite/s
+            </th>
+            <th class="w-[10%] border-slate-300 border-[1px] flex items-center justify-center">
+              Action
+            </th>
+          </tr>
+        </thead>
+        <tbody class="flex flex-col w-full h-[35vh] overflow-y-auto">
+          @for(sub of subjectsFormArray.controls; track $index){
+            <tr class="flex flex-row border-b-[1px] border-slate-300">
+              <td class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center relative group">
+                <input
+                  class="w-full p-2 h-full"
+                  (change)="handleCodeChange($index)"
+                  [ngClass]="{'border-red-600 border-[1px]': sub.get('coursecode')?.invalid }"
+                  [formControl]="getCourseCodeControl($index)"/>
+                  @if(sub.get('coursecode')?.invalid) {
+                    <img class="absolute right-0 top-50 h-[45%]" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                    <div class="w-0 h-0 opacity-0 studentid group-hover:opacity-100 group-focus:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                    </div>
+                    <div class="z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
+                      @if(sub.get('coursecode')?.hasError('required')){
+                        Course code is required!
+                      }@else if(sub.get('coursecode')?.hasError('existing')){
+                        Course code already exists in the list!
+                      }
+                    </div>
+
+                  }
+              </td>
+              <td class="w-[30%] border-slate-300 border-[1px] flex items-center justify-center relative group">
+                <input
+                class="w-full p-2 h-full"
+                [ngClass]="{'border-red-600 border-[1px]': sub.get('coursedescription')?.invalid }"
+                (change)="handleDescriptionChange($index)"
+                [formControl]="getCourseDescriptionControl($index)"/>
+                @if(sub.get('coursedescription')?.invalid) {
+                  <img class="absolute right-0 top-50 h-[45%]" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 studentid group-hover:opacity-100 group-focus:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
+                    @if(sub.get('coursedescription')?.hasError('required')){
+                      Course description is required!
+                    }@else if(sub.get('coursedescription')?.hasError('existing')){
+                      Course description already exists in the list!
+                    }
+                  </div>
+
+                }
+              </td>
+              <td class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center relative group">
+                <input
+                class="w-full p-2 h-full"
+                [ngClass]="{'border-red-600 border-[1px]': sub.get('units')?.invalid }"
+                [formControl]="getUnitsControl($index)"/>
+                @if(sub.get('units')?.invalid) {
+                  <img class="absolute right-0 top-50 h-[45%]" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 studentid group-hover:opacity-100 group-focus:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
+                    @if(sub.get('units')?.hasError('required')){
+                      Units is required!
+                    }@else if (sub.get('units')?.hasError('pattern')){
+                      Units is in incorrect format!
+                    }
+                  </div>
+
+                }
+              </td>
+              <td class="w-[6%] border-slate-300 border-[1px] flex flex-col items-center justify-center relative group">
+                <input
+                class="w-full p-2 h-full"
+                [ngClass]="{'border-red-600 border-[1px]': sub.get('unitslec')?.invalid }"
+                [formControl]="getUnitsLecControl($index)"/>
+                @if(sub.get('unitslec')?.invalid) {
+                  <img class="absolute right-0 top-50 h-[45%]" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 studentid group-hover:opacity-100 group-focus:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
+                    @if(sub.get('unitslec')?.hasError('required')){
+                      Units lecture is required!
+                    }@else if (sub.get('unitslec')?.hasError('pattern')){
+                      Units lecture is in incorrect format!
+                    }
+                  </div>
+
+                }
+              </td>
+              <td class="w-[6%] border-slate-300 border-[1px] flex flex-col items-center justify-center relative group">
+                <input
+                class="w-full p-2 h-full"
+                [ngClass]="{'border-red-600 border-[1px]': sub.get('unitslab')?.invalid }"
+                [formControl]="getUnitsLabControl($index)"/>
+                @if(sub.get('unitslab')?.invalid) {
+                  <img class="absolute right-0 top-50 h-[45%]" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 studentid group-hover:opacity-100 group-focus:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
+                    @if(sub.get('unitslab')?.hasError('required')){
+                      Units laboratory is required!
+                    }@else if (sub.get('unitslab')?.hasError('pattern')){
+                      Units laboratory is in incorrect format!
+                    }
+                  </div>
+
+                }
+              </td>
+              <td class="w-[6%] border-slate-300 border-[1px] flex flex-col items-center justify-center relative group">
+                <input
+                class="w-full p-2 h-full"
+                [ngClass]="{'border-red-600 border-[1px]': sub.get('hourslec')?.invalid }"
+                [formControl]="getHoursLecControl($index)"/>
+                @if(sub.get('hourslec')?.invalid) {
+                  <img class="absolute right-0 top-50 h-[45%]" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 studentid group-hover:opacity-100 group-focus:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
+                    @if(sub.get('hourslec')?.hasError('required')){
+                      Hours lecture is required!
+                    }@else if (sub.get('hourslec')?.hasError('pattern')){
+                      Hours lecture is in incorrect format!
+                    }
+                  </div>
+
+                }
+              </td>
+              <td class="w-[6%] border-slate-300 border-[1px] flex flex-col items-center justify-center relative group">
+                <input
+                class="w-full p-2 h-full"
+                [ngClass]="{'border-red-600 border-[1px]': sub.get('hourslab')?.invalid }"
+                [formControl]="getHoursLabControl($index)"/>
+                @if(sub.get('hourslab')?.invalid) {
+                  <img class="absolute right-0 top-50 h-[45%]" src="../../../assets/exclamation-mark-inside-a-circle-svgrepo-com.svg"/>
+                  <div class="w-0 h-0 opacity-0 studentid group-hover:opacity-100 group-focus:opacity-100 absolute top-[80%] right-4 border-l-[5px] border-l-transparent border-b-[10px] border-b-black border-r-[5px] border-r-transparent">
+                  </div>
+                  <div class="z-50 bg-black rounded-md absolute min-w-[20px] min-h-[30px] text-white top-[100%] right-0 p-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
+                    @if(sub.get('hourslab')?.hasError('required')){
+                      Units laboratory is required!
+                    }@else if (sub.get('hourslab')?.hasError('pattern')){
+                      Units laboratory is in incorrect format!
+                    }
+                  </div>
+
+                }
+              </td>
+              <td class="w-[12%] border-slate-300 border-[1px] flex items-center justify-center">
+               @if(sub.get('coursecode')?.value && sub.get('coursedescription')?.value){
+                <button class="text-green-600 w-full h-full py-2 px-3 text-sm font-medium text-center border-green-600 border-[1px] rounded-lg hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300" (click)="addPrerequisite($index)">
+                  {{ sub.get('prerequisites')?.value ? sub.get('prerequisites')?.value : "None set"}}
+                </button>
+               }
+              </td>
+              <td class="w-[10%] p-2 border-slate-300 border-[1px] flex items-center justify-center">
+                <button class="flex justify-center items-center gap-1 border-red-600 rounded-md border-[1px] p-2 text-red-500 hover:bg-red-600 hover:text-white transition-all" (click)="popsubjectsArray($index)">
+                  <i class="material-symbols-outlined">delete</i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+    </form>
+    <div class="flex items-center gap-2">
+      <!-- <button type="button" class="w-full py-2 px-3 text-sm font-medium text-green-600 border-[1px] rounded-md border-green-600 hover:bg-green-600 transition-all hover:text-white" (click)="collapseModalEvent()">
+        Cancel
+      </button> -->
+      <button type="submit" class="w-full py-2 px-3 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-900" (click)="onSubmit()">
+        Save and Close
+      </button>
+    </div>
+    @if(prerequisiteform){
+      <app-pre-requisite-modal (collapseModal)="prerequisiteform = null" [selectedForm]="prerequisiteform" [selection]="selection" (setCurriculumSubject)="updateForm($event)"></app-pre-requisite-modal>
+    }
+  </div>
+</div>
