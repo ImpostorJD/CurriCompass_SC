@@ -23,7 +23,7 @@ const apiUrls: Record<EnvironmentType, string> = {
 };
 
 export const environment = {
-  environment: EnvironmentType.DEV,
-  apiUrl: apiUrls[EnvironmentType.DEV],
+  environment: EnvironmentType.PROD,
+  apiUrl: apiUrls[EnvironmentType.PROD],
 };
 
