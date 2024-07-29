@@ -30,6 +30,7 @@ class CompareCourseAvailabilityAsync {
         //check if already was enlisted
         foreach($targetStudent->enlistment as $e){
             foreach($e->enlistment_subjects as $es){
+                Log::info(json_encode($es));
                 if($course_code == $es->coursecode && ($grade != "5" && $grade != "x" && $grade != "w")){
                     return null;
                 }

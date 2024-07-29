@@ -15,7 +15,7 @@ class IdentifyMissingCourseAsync {
             return $courseid;
         }
 
-        if($subject_taken->grade == "w" || $subject_taken->remark == "x" || $subject_taken->remark == "5"){
+        if($subject_taken->grade == "w" || $subject_taken->grade == "x" || $subject_taken->grade == "5"){
             return $courseid;
         }
 
