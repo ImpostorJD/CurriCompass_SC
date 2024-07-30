@@ -84,8 +84,15 @@ class EnlistmentController extends Controller
             ->with('school_year')
             ->first();
 
-        if(CourseAvailability::where('semsyid', $currentsemsy->semsyid)->count() == 0){
+        $cav = CourseAvailability::where('semsyid', $currentsemsy->semsyid)->get();
+        if($cav->count() == 0){
             return response()->json(["status" => "No course available set for the current semester."], 400);
+        }
+
+        foreach($cav as $c){
+            if($c->time == null || $c->days == null){
+                return response()->json(["status" => "Courses available is not properly set yet."], 400);
+            }
         }
 
         if(Enlistment::where('srid', $targetStudent->srid)

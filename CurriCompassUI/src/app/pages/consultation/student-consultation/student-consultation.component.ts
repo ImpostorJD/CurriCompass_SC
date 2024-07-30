@@ -191,13 +191,15 @@ export class StudentConsultationComponent {
           this.getUser();
         },
         error: (err:any) => {
+          this.loading.endLoading()
           if (err.status === 400) {
-
             let error_messages = err.error.status;
             this.message = error_messages;
             this.showError = true;
+            this.disableEnlistment = false;
           }
         },
+        complete: () => this.loading.endLoading(),
       });
   }
 

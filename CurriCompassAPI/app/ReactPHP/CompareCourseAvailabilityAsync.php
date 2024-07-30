@@ -12,7 +12,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 class CompareCourseAvailabilityAsync {
 
     public static function compareCourseAvailability($course_code, $targetStudent, $grade){
-        //check if courese is available
+        //check if courses is available
 
         $courseAvailability = count(CourseAvailability::where('coursecode', $course_code)->get());
 

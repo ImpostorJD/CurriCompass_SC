@@ -1,12 +1,16 @@
 ![Hero](https://www.helpforassessment.com/blog/wp-content/uploads/2020/08/how-to-do-a-capstone-project.jpg)
 
-[![Progress - Major Revision Checking (Pending)](https://img.shields.io/badge/Progress-Major_Revision_Checking_(Pending)-FF751F?style=for-the-badge)]()
+[![Progress - Completed](https://img.shields.io/badge/Progress-Completed_[as_of_2024]-21FA00?style=for-the-badge)]()
 
 ***
 # CurriCompass
 
 ## Overview
 This project entitled CurriCompass is a Capstone project in compliance with the requirements for Capstone Project 1 and 2 (CAP 1 - 2). The goal of this project is to streamline the pre-advisement process of students for the upcoming semestral enrollment. [You can access the production version of this website via this link.](https://www.curricompass.online/)
+
+## NOTICE:
+This project is by no means perfect, and may have issues/bugs/errors. Should you find any, please contact me via email address or via Github.
+
 ## PLEASE READ THE INSTRUCTIONS BEFORE PROCEEDING!
 [![UI Instructions](https://img.shields.io/badge/UI-Instructions-ffffff)](https://github.com/JohnDanielTejero/CurriCompass_SC/blob/main/CurriCompassUI/README.md)
 [![API Instructions](https://img.shields.io/badge/API-Instructions-ff3421)](https://github.com/JohnDanielTejero/CurriCompass_SC/tree/main/CurriCompassAPI)
@@ -141,7 +145,6 @@ or
 - by default, init-sample will seed mock data, but you can filter out the generation by passing a flag listed as follows:
 ```shell
  php artisan app:init-sample --no-course-availability=true # removes the course availability seed
- php artisan app:init-sample --no-course=true # removes the course and course availability seed including dependent tables such as curriculum and student_profile tables
  php artisan app:init-sample --no-student-record=true # removes the sample students
  php artisan app:init-sample --no-program=true # removes the programs seed along with curriculum and student_profile tables
  php artisan app:init-sample --no-curriculum=true # removes the curriculum seed along with sample student profile data

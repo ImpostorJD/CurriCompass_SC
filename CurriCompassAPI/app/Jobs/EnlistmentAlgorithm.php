@@ -160,7 +160,7 @@ class EnlistmentAlgorithm implements ShouldQueue
             ->with('semester')
             ->with('school_year')
             ->first();
-         $maxUnits = $targetStudent->year_level_id < 4 ? ($targetStudent->year_level_id == 1 && $currentsemsy->semester->semid == 1 ? 18 :  21) : PHP_INT_MAX; // Max units for 1st-3rd year, unlimited for 4th year
+         $maxUnits = $targetStudent->year_level_id < 4 ? ($targetStudent->year_level_id == 1 && $currentsemsy->semid == 1 ? 18 :  21) : PHP_INT_MAX; // Max units for 1st-3rd year, unlimited for 4th year
          $unitCount = 0;
          $enlistedSubjects = [];
          $flattenedTimeRange = $this->flattenArrayUnique($timeRangeMap);
@@ -178,6 +178,7 @@ class EnlistmentAlgorithm implements ShouldQueue
                              $availability = CourseAvailability::where('coursecode', $subjectId)
                                  ->where('time', $time)
                                  ->where('days', $dayPairing)
+                                 ->where('semsyid', $currentsemsy->semsyid)
                                  ->first();
                              if ($availability != null && $this->checkAvailabilityLimit($availability)) {
                                  $sub = $targetStudent->curriculum->curriculum_subjects->firstWhere('coursecode', $subjectId);
@@ -213,6 +214,11 @@ class EnlistmentAlgorithm implements ShouldQueue
                      }
                  }
              }
+         }
+
+
+         if (count($enlistedSubjects) == 0){
+            $this->enlistment->delete();
          }
      }
 
